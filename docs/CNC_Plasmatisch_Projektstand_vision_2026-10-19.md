@@ -98,7 +98,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 ### Zahnriemenantrieb
 
-- **HTD8M**, **20 mm breit**, für beide horizontalen Achsen.
+- **HTD5M**, **15 mm breit**, für beide horizontalen Achsen.
 - Vorläufig **24 Zähne** je Antriebsriemenscheibe.
 - Auf der Y-Achse (lang) je Seite ein eigener Motor, Treiber und Riemenantrieb.
 - Motoren möglichst stationär am Tisch; Riemen parallel und möglichst nahe an der Führungsebene.
@@ -158,7 +158,7 @@ Vorläufige Planungswerte:
 | 4 × separate Step/Dir-Treiber | Noch auszuwählen |
 | 48-V- und 24-V-Netzteile | Vorgesehen, noch zu dimensionieren |
 | HGR15-Schienen und Wagen | Bauart festgelegt, Längen offen |
-| HTD8M/20-mm-Riemen und Pulleys | Bauart festgelegt, Mengen/Längen offen |
+| HTD5M/15-mm-Riemen und Pulleys | Bauart festgelegt, Mengen/Längen offen |
 | Z-Spindel | SFU1204 vorgesehen, Details offen |
 | Endschalter, Schütz, Not-Aus, Verkabelung | Noch auszulegen |
 
@@ -167,7 +167,7 @@ Vorläufige Planungswerte:
 1. Gelieferte Wanne vermessen: Innen-/Außenmaße, Wandstärke, Randgeometrie, Bodenform.
 2. Rahmen und Portal in **FreeCAD** konstruieren.
 3. Verfahrwege, Schienenlängen und Befestigungsebenen festlegen.
-4. HTD8M-Riemenführung mit zwei Antrieben auf der langen Achse ausarbeiten.
+4. HTD5M-Riemenführung mit zwei Antrieben auf der langen Achse ausarbeiten.
 5. Passende **3-Nm-NEMA23-Open-Loop-Motoren** und separate Step/Dir-Treiber auswählen; Strom, Induktivität, Drehmoment-Drehzahl-Kennlinie und Versorgung prüfen.
 6. Motoransteuerung über die bereits vorhandene Mesa 7i96S testen.
 7. Z-Achse, Antastung und THCAD-Anbindung planen.
