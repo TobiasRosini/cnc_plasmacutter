@@ -7,8 +7,9 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | Eigenschaft | Festlegung |
 |---|---|
 | Nutzbarer Arbeitsbereich | 1000 × 600 mm |
-| Lange Achse | Portal fährt auf zwei parallelen Führungen; zwei getrennte Motoren |
-| Kurze Achse | Brennerwagen auf dem Portal; ein Motor |
+| Y-Achse (lange Achse) | Beidseitig angetriebenes Portal auf zwei parallelen Führungen; zwei getrennte Motoren |
+| X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
+| Portalbrücke | Aluprofil 20 × 40 × 4 mm als tragende Struktur |
 | Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
 | Rahmen | Geschweißtes Stahl-Vierkantrohr aus vorhandenem Material |
 | CAD | **FreeCAD** (statt Fusion 360) |
@@ -17,7 +18,17 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | Rechner | Vorhandener Lenovo ThinkCentre M929q (Intel Core i7, 8. Generation) |
 | Verfügbare Versorgung | 3 × 400 V, 43 A |
 
-Die Zuordnung X/Y ist softwareseitig frei; konstruktiv unterscheiden wir die lange Portal-Fahrachse und die kurze Querachse.
+**Achszuordnung festgelegt:** Y ist die lange Portal-Fahrachse (beidseitig angetrieben), X die kurze Querachse des Brennerwagens.
+
+### Verfügbare Fertigungsmöglichkeiten
+
+| Verfahren | Möglichkeit |
+|---|---|
+| 3D-Druck | Bauraum 200 × 200 × 150 mm |
+| Papierdruck | A4, farbig (z. B. Bohr- und Anreißschablonen 1:1) |
+| Drehen | Konventionelle Drehmaschine |
+
+Teile sind so zu konstruieren, dass sie mit diesen Mitteln (plus Schweißen des Stahlrahmens) herstellbar sind; größere Druckteile ggf. teilen.
 
 ## 2. Plasmaschneidgerät
 
@@ -52,9 +63,9 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 
 | Achse | Anzahl | Motor |
 |---|---:|---|
-| Lange Achse links | 1 | NEMA23, 3 Nm, Open Loop |
-| Lange Achse rechts | 1 | NEMA23, 3 Nm, Open Loop |
-| Kurze Achse | 1 | NEMA23, 3 Nm, Open Loop |
+| Y-Achse links | 1 | NEMA23, 3 Nm, Open Loop |
+| Y-Achse rechts | 1 | NEMA23, 3 Nm, Open Loop |
+| X-Achse | 1 | NEMA23, 3 Nm, Open Loop |
 | Z-Achse | 1 | NEMA23, 3 Nm, Open Loop (vorläufig einheitlich) |
 | **Gesamt** | **4** | **4 × NEMA23, 3 Nm** |
 
@@ -71,9 +82,17 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 
 | Achse | Schienen | Wagen | Grobe Schienenlänge |
 |---|---|---|---|
-| Lange Achse | 2 × HGR15 | 4 × HGH15 | 1200–1400 mm |
-| Kurze Achse | 2 × HGR15 | 4 × HGH15 | 800–900 mm |
+| Y-Achse (lang) | 2 × HGR15 | 4 × HGH15 (2 Wagen je Schiene) | 1200–1400 mm |
+| X-Achse (kurz) | 2 × HGR15 | 4 × HGH15 | 800–900 mm |
 | Z-Achse | 2 × HGR15 | 2–4 × HGH15 | 300–350 mm |
+
+**Lagerung Y festgelegt:** je Schiene 2 Wagen, insgesamt 4 Wagen für das Portal.
+
+### Portalbrücke
+
+- Tragende Struktur der Brücke: **Aluprofil 20 × 40 × 4 mm** (Rechteckrohr, 4 mm Wandstärke).
+- Trägt die X-Schienen und den Brennerwagen mit Z-Achse; Durchbiegung und Torsion in der FreeCAD-Konstruktion prüfen.
+- Anbindung an die Y-Wagen beidseitig über Portalwangen.
 
 Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabständen, Endanschlägen und dem nutzbaren Hub.
 
@@ -81,13 +100,13 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 - **HTD8M**, **20 mm breit**, für beide horizontalen Achsen.
 - Vorläufig **24 Zähne** je Antriebsriemenscheibe.
-- Auf der langen Achse je Seite ein eigener Motor, Treiber und Riemenantrieb.
+- Auf der Y-Achse (lang) je Seite ein eigener Motor, Treiber und Riemenantrieb.
 - Motoren möglichst stationär am Tisch; Riemen parallel und möglichst nahe an der Führungsebene.
 - Riemenlängen, Umlenkrollen und Spannvorrichtungen sind noch zu konstruieren.
 
 ### Gantry Squaring
 
-- Zwei unabhängige Referenzschalter für die lange Achse.
+- Zwei unabhängige Referenzschalter für die Y-Achse.
 - Eine Schalterposition fein einstellbar, um das Portal rechtwinklig auszurichten.
 - LinuxCNC referenziert beide Seiten getrennt und bewegt sie anschließend synchron.
 
