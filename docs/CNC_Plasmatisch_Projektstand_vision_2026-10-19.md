@@ -1,0 +1,159 @@
+# CNC-Plasmatisch – Projektstand 19.10.2026
+
+## 1. Projektziel und Grundkonzept
+
+Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Größere Werkstücke können bei Bedarf von Hand geschnitten werden.
+
+| Eigenschaft | Festlegung |
+|---|---|
+| Nutzbarer Arbeitsbereich | 1000 × 600 mm |
+| Lange Achse | Portal fährt auf zwei parallelen Führungen; zwei getrennte Motoren |
+| Kurze Achse | Brennerwagen auf dem Portal; ein Motor |
+| Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
+| Rahmen | Geschweißtes Stahl-Vierkantrohr aus vorhandenem Material |
+| CAD | **FreeCAD** (statt Fusion 360) |
+| Steuerung | LinuxCNC mit QtPlasmaC |
+| Motion-Controller | Mesa 7i96S über Ethernet |
+| Rechner | Vorhandener Lenovo ThinkCentre M929q (Intel Core i7, 8. Generation) |
+| Verfügbare Versorgung | 3 × 400 V, 43 A |
+
+Die Zuordnung X/Y ist softwareseitig frei; konstruktiv unterscheiden wir die lange Portal-Fahrachse und die kurze Querachse.
+
+## 2. Plasmaschneidgerät
+
+**Festgelegtes Modell:** SPARTUS XPro CUT 70CNC, vorgesehen mit geradem Maschinenbrenner SP80M. Das Gerät soll auch für manuelle Schnitte genutzt werden können; die Brennervarianten bzw. Lieferumfang sind vor Bestellung zu prüfen.
+
+- 400-V-Gerät mit HF-freier Pilotlichtbogenzündung laut Händlerbeschreibung.
+- CNC-Steueranschluss laut zuvor besprochener Handbuchabbildung:
+  - Pins 3/4: Start/Stop
+  - Pins 5 (−) / 6 (+): geteilte Lichtbogenspannung
+  - Pins 12/14: Transfer / Arc OK
+- Einstellbarer Spannungsteiler: 20:1, 30:1, 40:1 oder 50:1.
+- Geplanter Einsatz: unlegierter Stahl von ca. 2 bis 25 mm. Die tatsächlich erreichbare Schnittqualität und zulässigen Parameter bei 25 mm sind noch anhand der Schneidtabellen zu prüfen.
+- **Status:** Modell ausgewählt; Kauf noch nicht bestätigt.
+
+Herstellerseite: <http://spartus.pl/en/produkt/plasma-cutter-xpro-cut-70cnc/>
+
+Handbuch: <http://spartus.pl/wp-content/uploads/2026/05/spartus_xprocut70cnc_eng.pdf>
+
+## 3. Steuerung und Brennerhöhenregelung
+
+- **Mesa 7i96S:** Ethernet-Motion-Controller mit fünf Step/Dir-Kanälen; vier werden benötigt.
+- **LinuxCNC + QtPlasmaC:** Bewegungssteuerung, Referenzfahrt mit automatischer Portal-Rechtwinkligstellung, Plasmaschneidablauf und THC.
+- **Mesa THCAD:** Vorgesehen zur Erfassung der geteilten Lichtbogenspannung des SPARTUS. Die konkrete THCAD-Ausführung und Skalierung sind noch zu bestimmen.
+- Geplante Signale: Torch On, Arc OK, Arc Voltage, Referenzschalter, Endschalter und Sicherheitsstatus.
+- **Mesa 7i96S ist bereits geliefert** und soll direkt per Ethernet mit dem ThinkCentre verbunden werden.
+
+Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogenspannung. Die initiale Blechoberfläche wird über Floating Head oder ohmsche Antastung ermittelt; die endgültige Lösung ist offen.
+
+## 4. Antriebe – aktualisierte Festlegung
+
+**Neue Entscheidung: NEMA23-Schrittmotoren, Open Loop (offener Regelkreis), 3 Nm.** Die zuvor diskutierten Closed-Loop-Motoren mit integriertem Treiber entfallen.
+
+| Achse | Anzahl | Motor |
+|---|---:|---|
+| Lange Achse links | 1 | NEMA23, 3 Nm, Open Loop |
+| Lange Achse rechts | 1 | NEMA23, 3 Nm, Open Loop |
+| Kurze Achse | 1 | NEMA23, 3 Nm, Open Loop |
+| Z-Achse | 1 | NEMA23, 3 Nm, Open Loop (vorläufig einheitlich) |
+| **Gesamt** | **4** | **4 × NEMA23, 3 Nm** |
+
+- **4 separate digitale Step/Dir-Schrittmotortreiber** statt integrierter Closed-Loop-Treiber.
+- Treiber müssen hinsichtlich Phasenstrom, Versorgungsspannung und Step/Dir-Eingangspegel zu den konkret gewählten Motoren und zur Mesa 7i96S passen.
+- **48 V DC** als vorgesehene Motor-/Treiber-Versorgung; Netzteil-Leistung erst nach Treiberauswahl festlegen.
+- **24 V DC** für geeignete Sensorik und Steuerungs-I/O vorgesehen; Versorgung der Mesa gemäß Datenblatt auslegen.
+- Bei Open Loop gibt es keine automatische Rückmeldung über Schrittverluste. Deshalb Beschleunigung und Maximalgeschwindigkeit mit Reserve einstellen und die Mechanik leichtgängig ausführen.
+- Die bisher geplante Bestellung eines 2-Nm-Closed-Loop-Testmotors ist **hinfällig**.
+
+## 5. Linearführungen und Mechanik
+
+**Festgelegt: HGR15-Profilschienen auf allen Achsen.** Vorläufige Dimensionierung:
+
+| Achse | Schienen | Wagen | Grobe Schienenlänge |
+|---|---|---|---|
+| Lange Achse | 2 × HGR15 | 4 × HGH15 | 1200–1400 mm |
+| Kurze Achse | 2 × HGR15 | 4 × HGH15 | 800–900 mm |
+| Z-Achse | 2 × HGR15 | 2–4 × HGH15 | 300–350 mm |
+
+Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabständen, Endanschlägen und dem nutzbaren Hub.
+
+### Zahnriemenantrieb
+
+- **HTD8M**, **20 mm breit**, für beide horizontalen Achsen.
+- Vorläufig **24 Zähne** je Antriebsriemenscheibe.
+- Auf der langen Achse je Seite ein eigener Motor, Treiber und Riemenantrieb.
+- Motoren möglichst stationär am Tisch; Riemen parallel und möglichst nahe an der Führungsebene.
+- Riemenlängen, Umlenkrollen und Spannvorrichtungen sind noch zu konstruieren.
+
+### Gantry Squaring
+
+- Zwei unabhängige Referenzschalter für die lange Achse.
+- Eine Schalterposition fein einstellbar, um das Portal rechtwinklig auszurichten.
+- LinuxCNC referenziert beide Seiten getrennt und bewegt sie anschließend synchron.
+
+### Z-Achse
+
+- Kugelumlaufspindel, voraussichtlich **SFU1204**.
+- Zielwert ca. **100 mm nutzbarer Hub**.
+- Floating Head oder ohmsche Antastung; genaue Konstruktion offen.
+- Automatische Brennerhöhenregelung (THC) vorgesehen.
+
+## 6. Wasserbett
+
+**Bestellt:** stapelbare PE-Auffangwanne für Kleingebinde von Schäfer Shop, flacher Boden, laut bisheriger Auswahl **120 mm hoch**. Die exakten Innen- und Außenmaße müssen nach Lieferung vermessen werden, bevor die Rahmengeometrie endgültig festgelegt wird.
+
+Produkt: <https://www.schaefer-shop.de/p/auffangwanne-fuer-kleingebinde-stapelbar-polyethylen-schwarz-diverse-varianten?selectedItem=665409>
+
+Vorläufige Planungswerte:
+
+| Parameter | Wert |
+|---|---|
+| Wasserstand | ca. 95 mm über Wannenboden |
+| Abstand Wasseroberfläche zur Blechunterseite | ca. 10–15 mm |
+| Opferleisten (Slats) | ca. 35 × 3 mm Flachstahl |
+| Opferleisten-Abstand | ca. 50 mm |
+| Wasserinhalt | rechnerisch ca. 57 l bei 1000 × 600 mm **Innenfläche** und 95 mm Wasserstand |
+
+- Austauschbare Opferleisten auf separaten Stahlträgern; die PE-Wanne darf nicht die Werkstücklast tragen.
+- Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
+- **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Wannenboden und Seiten sind konstruktiv zu schützen; Wasserstand und Schnittbereich müssen das Risiko berücksichtigen. Wasserbett ersetzt keine geeignete Lüftung/Absaugung.
+
+## 7. Druckluft
+
+- Druckluft muss ausreichend trocken, sauber und ölfrei sein.
+- Vorgesehen: Wasserabscheider, Fein-/Koaleszenzfilter, Druckregler; bei Bedarf Kältetrockner.
+- Betriebsdruck und Luftverbrauch werden anhand des SPARTUS-Handbuchs festgelegt; vorhandenen Kompressor darauf prüfen.
+- Druckverlust in Schlauch und Anschlüssen unter Last berücksichtigen.
+
+## 8. Beschaffungsstand
+
+| Komponente | Status |
+|---|---|
+| Rahmenstahl | Vorhanden |
+| Lenovo ThinkCentre M929q | Vorhanden |
+| Mesa 7i96S | Geliefert |
+| PE-Wasserwanne, 120 mm | Bestellt |
+| SPARTUS XPro CUT 70CNC | Modell festgelegt, noch nicht als gekauft bestätigt |
+| Mesa THCAD | Vorgesehen, Variante offen |
+| 4 × NEMA23, 3 Nm, Open Loop | Neu festgelegt, noch auszuwählen/zu bestellen |
+| 4 × separate Step/Dir-Treiber | Noch auszuwählen |
+| 48-V- und 24-V-Netzteile | Vorgesehen, noch zu dimensionieren |
+| HGR15-Schienen und Wagen | Bauart festgelegt, Längen offen |
+| HTD8M/20-mm-Riemen und Pulleys | Bauart festgelegt, Mengen/Längen offen |
+| Z-Spindel | SFU1204 vorgesehen, Details offen |
+| Endschalter, Schütz, Not-Aus, Verkabelung | Noch auszulegen |
+
+## 9. Nächste Schritte
+
+1. Gelieferte Wanne vermessen: Innen-/Außenmaße, Wandstärke, Randgeometrie, Bodenform.
+2. Rahmen und Portal in **FreeCAD** konstruieren.
+3. Verfahrwege, Schienenlängen und Befestigungsebenen festlegen.
+4. HTD8M-Riemenführung mit zwei Antrieben auf der langen Achse ausarbeiten.
+5. Passende **3-Nm-NEMA23-Open-Loop-Motoren** und separate Step/Dir-Treiber auswählen; Strom, Induktivität, Drehmoment-Drehzahl-Kennlinie und Versorgung prüfen.
+6. Motoransteuerung über die bereits vorhandene Mesa 7i96S testen.
+7. Z-Achse, Antastung und THCAD-Anbindung planen.
+8. Schaltschrank, Erdung/EMV, Not-Aus und Sicherheitskreis auslegen.
+
+---
+
+**Leitlinie:** Solide, wartungsfreundliche und möglichst kompakte Eigenbau-Maschine. Festgelegte Komponenten nicht unnötig neu aufrollen; offene Maße und elektrische Detaildaten vor Bestellung anhand von Konstruktion und Herstellerunterlagen verifizieren.

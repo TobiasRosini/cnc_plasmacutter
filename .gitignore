@@ -1,0 +1,16 @@
+# FreeCAD
+*.FCBak
+*.FCStd1
+*.FCBak.*
+
+# LinuxCNC Laufzeitdateien
+*.var.bak
+linuxcnc/**/*.log
+linuxcnc/**/position.txt
+
+# Editor / System
+*~
+*.swp
+.DS_Store
+Thumbs.db
+__pycache__/
