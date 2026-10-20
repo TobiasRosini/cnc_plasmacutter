@@ -1,0 +1,13 @@
+Zuschnitt Rechteckrohr 40x40x3 Stahl, alle Schnitte gerade (90°)
+
+Teil                         Länge mm    Stk
+Längsträger oben               1320.0      2
+Längsrohr unten                1240.0      2
+Bein                            802.0      4
+Querträger oben                 640.0      2
+Querrohr unten                  640.0      2
+Querrohr Mitte (unten)          640.0      2
+
+Summe Rohr: 12.17 m (42.4 kg bei 3.49 kg/m), ohne Sägeverlust
+Fußplatten: 4x 100x100x8 mm, Bohrung Ø13
+Schienengewinde: 2x 22 x M4 (Kernloch Ø3.3), Teilung 60, erstes Loch 20 mm vom Schienenende

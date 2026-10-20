@@ -1,0 +1,242 @@
+# -*- coding: utf-8 -*-
+"""
+Grundrahmen des Plasmatisches aus Stahl-Rechteckrohr 40x40x3.
+
+Konzept (nur gerade Schnitte, keine Gehrungen, alles stumpf verschweißt):
+  - Oben: 2 Längsträger (Y) über die volle Länge, tragen die HGR15-Schienen;
+    M4-Gewinde direkt in die Rohroberseite geschnitten.
+    2 Querträger (X) stumpf zwischen die Längsträger.
+  - 4 Eckbeine stumpf unter die Längsträger, unten Fußplatten.
+  - Unten: Längs- und Querrohre stumpf zwischen die Beine, dazu
+    2 Mittelquerrohre als Auflage für den Wannenträger (folgt später).
+  - Die Wanne (HDPE, ca. 600 x 1200 x 150) liegt innen zwischen den Beinen
+    und kann zum Reinigen an der Stirnseite herausgezogen werden.
+
+Koordinaten: Ursprung = Außenecke am Boden. X = quer (kurz), Y = längs
+(Portal-Fahrachse), Z = oben.
+
+Aufruf (Flatpak-FreeCAD, headless):
+  flatpak run --command=FreeCADCmd org.freecad.FreeCAD $PWD/grundrahmen.py
+Erzeugt: grundrahmen.FCStd, grundrahmen.step, zuschnitt.txt, pruefung.txt
+"""
+import os
+import math
+import FreeCAD as App
+import Part
+
+V = App.Vector
+OUT = os.path.dirname(os.path.abspath(__file__))
+
+# ---------------------------------------------------------------- Parameter
+P = dict(
+    rohr=40.0,                  # Rechteckrohr 40 x 40
+    wand=3.0,
+    dichte=7.85e-6,             # kg/mm³ Stahl
+
+    # Wanne (grob, genaue Maße folgen)
+    wanne_x=600.0,
+    wanne_y=1200.0,
+    wanne_h=150.0,
+    wanne_spiel=20.0,           # je Seite zwischen Wanne und Rohr
+
+    # Höhe
+    hoehe_ok=850.0,             # Oberkante oberer Rahmen = Auflage der Schienen
+    fuss_dicke=8.0,             # Fußplatte unter jedem Bein
+    fuss_kante=100.0,
+    fuss_loch=13.0,             # z. B. Stellfuß M12 oder Lenkrolle
+    unten_uk=100.0,             # Unterkante unterer Rahmen über Boden
+
+    # Mittelquerrohre unten (Auflage Wannenträger), Lage als Anteil der Länge
+    mitte_quer=[1 / 3, 2 / 3],
+
+    # HGR15
+    schiene_laenge=1300.0,
+    schiene_breite=15.0,
+    schiene_hoehe=15.0,
+    schiene_teilung=60.0,
+    schiene_e=20.0,             # Abstand erstes Loch vom Schienenende
+    m4_kern=3.3,
+)
+
+
+def ableiten():
+    r, s = P["rohr"], P["wanne_spiel"]
+    P["innen_x"] = P["wanne_x"] + 2 * s
+    P["innen_y"] = P["wanne_y"] + 2 * s
+    P["aussen_x"] = P["innen_x"] + 2 * r
+    P["aussen_y"] = P["innen_y"] + 2 * r
+    P["schiene_x"] = [r / 2, P["aussen_x"] - r / 2]   # Schienenmitte = Rohrmitte
+
+
+# ---------------------------------------------------------------- Helfer
+def box(x0, x1, y0, y1, z0, z1):
+    return Part.makeBox(x1 - x0, y1 - y0, z1 - z0, V(x0, y0, z0))
+
+
+ZUSCHNITT = []
+
+
+def rohr(name, x0, y0, z0, laenge, achse):
+    """Hohlprofil r x r x wand, Länge entlang 'x', 'y' oder 'z' ab (x0, y0, z0)."""
+    r, t = P["rohr"], P["wand"]
+    d = {"x": (laenge, r, r), "y": (r, laenge, r), "z": (r, r, laenge)}[achse]
+    aussen = box(x0, x0 + d[0], y0, y0 + d[1], z0, z0 + d[2])
+    o = [t if d[i] == r else -1 for i in range(3)]
+    innen = box(x0 + o[0], x0 + d[0] - o[0], y0 + o[1], y0 + d[1] - o[1],
+                z0 + o[2], z0 + d[2] - o[2])
+    ZUSCHNITT.append((name, laenge))
+    return aussen.cut(innen)
+
+
+# ---------------------------------------------------------------- Rahmen
+def rahmen():
+    r = P["rohr"]
+    ax, ay = P["aussen_x"], P["aussen_y"]
+    z_ok = P["hoehe_ok"]
+    z_oben = z_ok - r                    # Unterkante obere Rohre
+    z_fuss = P["fuss_dicke"]
+    z_u = P["unten_uk"]
+    teile = {}
+
+    # Oben: Längsträger über volle Länge, mit Gewinden für die Schienen
+    for i, x0 in enumerate((0.0, ax - r)):
+        lt = rohr("Längsträger oben", x0, 0, z_oben, ay, "y")
+        for y in schienen_loecher():
+            lt = lt.cut(Part.makeCylinder(P["m4_kern"] / 2, P["wand"] + 2,
+                                          V(x0 + r / 2, y, z_ok - P["wand"] - 1)))
+        teile["Laengstraeger_oben_%s" % "LR"[i]] = lt
+    # Oben: Querträger stumpf dazwischen
+    for i, y0 in enumerate((0.0, ay - r)):
+        teile["Quertraeger_oben_%s" % "VH"[i]] = rohr(
+            "Querträger oben", r, y0, z_oben, ax - 2 * r, "x")
+
+    # Beine unter die Längsträger, auf Fußplatten
+    bein_l = z_oben - z_fuss
+    for i, (x0, y0) in enumerate([(0, 0), (ax - r, 0), (0, ay - r), (ax - r, ay - r)]):
+        teile["Bein_%d" % (i + 1)] = rohr("Bein", x0, y0, z_fuss, bein_l, "z")
+        fk = P["fuss_kante"]
+        fx = x0 + r / 2 - fk / 2
+        fy = y0 + r / 2 - fk / 2
+        # Fußplatte nach innen versetzt, damit sie nicht übersteht
+        fx = min(max(fx, 0), ax - fk)
+        fy = min(max(fy, 0), ay - fk)
+        fp = box(fx, fx + fk, fy, fy + fk, 0, z_fuss)
+        fp = fp.cut(Part.makeCylinder(P["fuss_loch"] / 2, z_fuss + 2,
+                                      V(x0 + r / 2, y0 + r / 2, -1)))
+        teile["Fussplatte_%d" % (i + 1)] = fp
+
+    # Unten: Längsrohre und Querrohre stumpf zwischen die Beine
+    for i, x0 in enumerate((0.0, ax - r)):
+        teile["Laengsrohr_unten_%s" % "LR"[i]] = rohr(
+            "Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
+    for i, y0 in enumerate((0.0, ay - r)):
+        teile["Querrohr_unten_%s" % "VH"[i]] = rohr(
+            "Querrohr unten", r, y0, z_u, ax - 2 * r, "x")
+    # Mittelquerrohre als Auflage für den Wannenträger
+    for i, a in enumerate(P["mitte_quer"]):
+        y0 = ay * a - r / 2
+        teile["Querrohr_mitte_%d" % (i + 1)] = rohr(
+            "Querrohr Mitte (unten)", r, y0, z_u, ax - 2 * r, "x")
+    return teile
+
+
+def schienen_loecher():
+    ay, L = P["aussen_y"], P["schiene_laenge"]
+    y0 = (ay - L) / 2
+    n = int((L - 2 * P["schiene_e"]) // P["schiene_teilung"]) + 1
+    return [y0 + P["schiene_e"] + i * P["schiene_teilung"] for i in range(n)]
+
+
+# ---------------------------------------------------------------- Dummies
+def dummies():
+    d = {}
+    ay, L, sb = P["aussen_y"], P["schiene_laenge"], P["schiene_breite"]
+    z = P["hoehe_ok"]
+    y0 = (ay - L) / 2
+    s = None
+    for xc in P["schiene_x"]:
+        k = box(xc - sb / 2, xc + sb / 2, y0, y0 + L, z, z + P["schiene_hoehe"])
+        s = k if s is None else s.fuse(k)
+    d["Dummy_Schienen_HGR15"] = s
+    # Wanne: Höhe hängt am Wannenträger, hier Oberkante 20 mm unter dem oberen Rahmen
+    r, sp = P["rohr"], P["wanne_spiel"]
+    zt = P["hoehe_ok"] - r - 20
+    d["Dummy_Wanne"] = box(r + sp, r + sp + P["wanne_x"], r + sp, r + sp + P["wanne_y"],
+                           zt - P["wanne_h"], zt)
+    return d
+
+
+# ---------------------------------------------------------------- Hauptteil
+def main():
+    ableiten()
+    teile = rahmen()
+    dm = dummies()
+
+    doc = App.newDocument("Grundrahmen")
+    for name, shp in list(teile.items()) + list(dm.items()):
+        doc.addObject("Part::Feature", name).Shape = shp
+    doc.recompute()
+    doc.saveAs(os.path.join(OUT, "grundrahmen.FCStd"))
+    Part.makeCompound(list(teile.values())).exportStep(
+        os.path.join(OUT, "grundrahmen.step"))
+
+    # Zuschnittliste
+    r, t = P["rohr"], P["wand"]
+    kg_m = (r * r - (r - 2 * t) ** 2) * 1000 * P["dichte"]
+    zus = {}
+    for name, l in ZUSCHNITT:
+        zus[(name, round(l, 1))] = zus.get((name, round(l, 1)), 0) + 1
+    gesamt = sum(l * n for (_, l), n in zus.items())
+    with open(os.path.join(OUT, "zuschnitt.txt"), "w") as f:
+        f.write("Zuschnitt Rechteckrohr %gx%gx%g Stahl, alle Schnitte gerade (90°)\n\n"
+                % (r, r, t))
+        f.write("%-26s %10s %6s\n" % ("Teil", "Länge mm", "Stk"))
+        for (name, l), n in sorted(zus.items(), key=lambda e: -e[0][1]):
+            f.write("%-26s %10.1f %6d\n" % (name, l, n))
+        f.write("\nSumme Rohr: %.2f m (%.1f kg bei %.2f kg/m), ohne Sägeverlust\n"
+                % (gesamt / 1000, gesamt / 1000 * kg_m, kg_m))
+        f.write("Fußplatten: 4x %gx%gx%g mm, Bohrung Ø%g\n"
+                % (P["fuss_kante"], P["fuss_kante"], P["fuss_dicke"], P["fuss_loch"]))
+        f.write("Schienengewinde: 2x %d x M4 (Kernloch Ø%.1f), Teilung %g, "
+                "erstes Loch %g mm vom Schienenende\n"
+                % (len(schienen_loecher()), P["m4_kern"], P["schiene_teilung"],
+                   P["schiene_e"]))
+
+    alle = Part.makeCompound(list(teile.values()))
+    bb = alle.BoundBox
+    with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
+        f.write("Außenmaß Rahmen: %.0f x %.0f x %.0f mm (X x Y x Z)\n"
+                % (bb.XLength, bb.YLength, bb.ZLength))
+        f.write("Lichtes Innenmaß zwischen den Rohren: %.0f x %.0f mm (Wanne %g x %g)\n"
+                % (P["innen_x"], P["innen_y"], P["wanne_x"], P["wanne_y"]))
+        f.write("Schienenabstand Mitte-Mitte: %.0f mm\n"
+                % (P["schiene_x"][1] - P["schiene_x"][0]))
+        f.write("Masse Stahl (Rohre + Fußplatten): %.1f kg\n"
+                % (alle.Volume * P["dichte"]))
+        f.write("Stirnöffnung zum Herausziehen der Wanne: %.0f breit x %.0f hoch\n"
+                % (P["innen_x"], P["hoehe_ok"] - r - (P["unten_uk"] + r)))
+        # Überschneidungen zwischen Rohren (soll 0 sein, nur Stoßflächen)
+        namen = list(teile)
+        ueber = 0.0
+        for i in range(len(namen)):
+            for j in range(i + 1, len(namen)):
+                a, b = teile[namen[i]], teile[namen[j]]
+                if a.BoundBox.intersect(b.BoundBox):
+                    v = a.common(b).Volume
+                    if v > 1e-3:
+                        f.write("Überschneidung %s / %s: %.1f mm³\n"
+                                % (namen[i], namen[j], v))
+                        ueber += v
+        f.write("Überschneidungen gesamt: %.3f mm³\n" % ueber)
+        f.write("Wanne / Rahmen: %.3f mm³\n" % alle.common(dm["Dummy_Wanne"]).Volume)
+        f.write("Durchbiegung Längsträger (Spannweite %.0f mm, 200 N mittig): %.3f mm\n"
+                % ((P["aussen_y"] - r), durchbiegung(200.0, P["aussen_y"] - r)))
+
+
+def durchbiegung(F, L):
+    r, t = P["rohr"], P["wand"]
+    I = (r ** 4 - (r - 2 * t) ** 4) / 12
+    return F * L ** 3 / (48 * 210000 * I)
+
+
+main()

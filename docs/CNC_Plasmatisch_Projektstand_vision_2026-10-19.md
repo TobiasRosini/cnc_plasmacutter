@@ -11,7 +11,9 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
 | Portalbrücke | Aluprofil 20 × 40 × 4 mm als tragende Struktur |
 | Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
-| Rahmen | Geschweißtes Stahl-Vierkantrohr aus vorhandenem Material |
+| Rahmen | Geschweißtes Stahl-Rechteckrohr 40 × 40 × 3, nur gerade Schnitte (keine Gehrungen) |
+| **Maximale Gesamtbreite** | **800 mm** über alles (Tür Werkstatt–Garage 820 mm lichte Weite) |
+| Aufstellung | Einstellfüße und Rollen: Zum Betrieb wird der Rahmen mit den Füßen über die Rollen angehoben und steht fest; zum Verfahren Füße hochdrehen |
 | CAD | **FreeCAD** (statt Fusion 360) |
 | Steuerung | LinuxCNC mit QtPlasmaC |
 | Motion-Controller | Mesa 7i96S über Ethernet |
