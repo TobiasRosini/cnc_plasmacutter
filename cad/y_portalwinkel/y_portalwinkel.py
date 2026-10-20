@@ -17,12 +17,15 @@ Aufruf (Flatpak-FreeCAD, headless):
 Erzeugt im selben Ordner: FCStd, STEP, STL, Bohrschablone (SVG).
 """
 import os
+import sys
 import math
 import FreeCAD as App
 import Part
 
 V = App.Vector
 OUT = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(OUT))
+import fc_dok  # noqa: E402
 
 # ---------------------------------------------------------------- Parameter
 P = dict(
@@ -478,12 +481,17 @@ def main():
     druck = {"winkel_druckteil": wi, "spannschlitten": sl,
              "klemmplatte_fest": kf, "klemmplatte_schlitten": ks}
 
-    doc = App.newDocument("Y_Portalwinkel")
-    for name, shp in ([("Flachstange_40x15", fl)] + list(druck.items())
-                      + list(dm.items())):
-        doc.addObject("Part::Feature", name).Shape = shp
-    doc.recompute()
-    doc.saveAs(os.path.join(OUT, "y_portalwinkel.FCStd"))
+    pfad = os.path.join(OUT, "y_portalwinkel.FCStd")
+    doc, offen = fc_dok.dokument(pfad)
+    fc_dok.teil(doc, "Flachstange_40x15", fl, "alu")
+    for name, shp in druck.items():
+        fc_dok.teil(doc, name, shp, "druck" if name == "winkel_druckteil" else "druck_hell")
+    farbe = {"Wagen_HGH15CA": "wagen", "Schiene_HGR15": "dummy",
+             "Bruecke_20x40x4": "alu", "Riemen_HTD5M_15": "riemen",
+             "Riemen_Ruecktrum": "riemen"}
+    for name, shp in dm.items():
+        fc_dok.teil(doc, name, shp, farbe.get(name, "dummy"))
+    fc_dok.speichern(doc, pfad, offen)
 
     fl.exportStep(os.path.join(OUT, "flachstange_40x15.step"))
     for name, shp in druck.items():

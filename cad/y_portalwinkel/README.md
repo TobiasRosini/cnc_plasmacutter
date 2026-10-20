@@ -6,8 +6,10 @@ Je Seite ein Satz: Alu-Flachstange 40×15 + 3D-gedruckter Winkel.
 Alles wird parametrisch aus `y_portalwinkel.py` erzeugt (Parameter oben im Skript):
 
 ```
-flatpak run --command=FreeCADCmd org.freecad.FreeCAD $PWD/y_portalwinkel.py
+python3 cad/live.py cad/y_portalwinkel/y_portalwinkel.py
 ```
+
+Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualisiert, sonst headless erzeugt. Die FCStd ist generiert: Änderungen gehören ins Skript.
 
 | Datei | Inhalt |
 |---|---|

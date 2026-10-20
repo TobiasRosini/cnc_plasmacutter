@@ -1,0 +1,9 @@
+Gesamtmaß: 820 (X) x 1320 (Y) x 947 (Z) mm
+Gesamtbreite 820 mm, Grenze 800 mm: ZU BREIT um 20 mm
+Rahmen außen 720, Portal steht je Seite 50 mm über
+Portalbrücke: 720 mm lang, OK 947 mm über Boden
+Y-Hub (Schiene 1300 − Flachstange 180): 1120 mm, gefordert 1100
+Wanne: Unterkante 671, Oberkante 790 mm über Boden (Wannenträger offen)
+Kollision Wanne / Rahmen: 0.000 mm³
+Kollision Wanne / Brücke: 0.000 mm³
+Abstand Brücke UK zu Rahmen OK: 57 mm

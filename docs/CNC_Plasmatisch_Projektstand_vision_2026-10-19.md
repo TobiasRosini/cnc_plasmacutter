@@ -6,7 +6,7 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 
 | Eigenschaft | Festlegung |
 |---|---|
-| Nutzbarer Arbeitsbereich | 1000 × 600 mm |
+| Verfahrbereich Düse | **1100 × 550 mm** (= Bodenfläche der Wanne innen), Y × X |
 | Y-Achse (lange Achse) | Beidseitig angetriebenes Portal auf zwei parallelen Führungen; zwei getrennte Motoren |
 | X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
 | Portalbrücke | Aluprofil 20 × 40 × 4 mm als tragende Struktur |
@@ -121,9 +121,21 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 ## 6. Wasserbett
 
-**Bestellt:** stapelbare PE-Auffangwanne für Kleingebinde von Schäfer Shop, flacher Boden, laut bisheriger Auswahl **120 mm hoch**. Die exakten Innen- und Außenmaße müssen nach Lieferung vermessen werden, bevor die Rahmengeometrie endgültig festgelegt wird.
+**Geliefert:** stapelbare PE-Auffangwanne für Kleingebinde von Schäfer Shop, flacher Boden. Modell: `cad/wanne/`.
 
 Produkt: <https://www.schaefer-shop.de/p/auffangwanne-fuer-kleingebinde-stapelbar-polyethylen-schwarz-diverse-varianten?selectedItem=665409>
+
+Aufmaß vom 20.10.2026:
+
+| Maß | Wert |
+|---|---|
+| Außen über Bördelrand | 597 × 1194 × 119 mm |
+| Bördelrand | Ø25 (Messschieber), flach gestaucht, Unterkante 110 mm über Standfläche |
+| Lichte Öffnung am Bördel | 540 mm breit (längs ca. 1142 mm gemessen); Wanne ist verformbar, maßgeblich sind Außenmaße und Bodenfläche |
+| Boden innen | 1100 × 550 mm, Übergang Boden/Wand ca. R8 |
+| Winkel Boden/Wand | ca. 97° |
+| Wandstärke | ca. 3 mm |
+| Spiel im Grundrahmen (lichte Weite 640 × 1240) | 21,5 mm quer / 23 mm längs je Seite |
 
 Vorläufige Planungswerte:
 
@@ -133,7 +145,7 @@ Vorläufige Planungswerte:
 | Abstand Wasseroberfläche zur Blechunterseite | ca. 10–15 mm |
 | Opferleisten (Slats) | ca. 35 × 3 mm Flachstahl |
 | Opferleisten-Abstand | ca. 50 mm |
-| Wasserinhalt | rechnerisch ca. 57 l bei 1000 × 600 mm **Innenfläche** und 95 mm Wasserstand |
+| Wasserinhalt | aus dem Modell ca. 58 l bei 95 mm Wasserstand über Standfläche (ca. 68 l bis Unterkante Bördel) |
 
 - Austauschbare Opferleisten auf separaten Stahlträgern; die PE-Wanne darf nicht die Werkstücklast tragen.
 - Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
@@ -153,7 +165,7 @@ Vorläufige Planungswerte:
 | Rahmenstahl | Vorhanden |
 | Lenovo ThinkCentre M929q | Vorhanden |
 | Mesa 7i96S | Geliefert |
-| PE-Wasserwanne, 120 mm | Bestellt |
+| PE-Wasserwanne 597 × 1194 × 119 | Geliefert, vermessen |
 | SPARTUS XPro CUT 70CNC | Modell festgelegt, noch nicht als gekauft bestätigt |
 | Mesa THCAD | Vorgesehen, Variante offen |
 | 4 × NEMA23, 3 Nm, Open Loop | Neu festgelegt, noch auszuwählen/zu bestellen |
@@ -166,7 +178,7 @@ Vorläufige Planungswerte:
 
 ## 9. Nächste Schritte
 
-1. Gelieferte Wanne vermessen: Innen-/Außenmaße, Wandstärke, Randgeometrie, Bodenform.
+1. ~~Gelieferte Wanne vermessen~~ (erledigt 20.10.2026, siehe Abschnitt 6).
 2. Rahmen und Portal in **FreeCAD** konstruieren.
 3. Verfahrwege, Schienenlängen und Befestigungsebenen festlegen.
 4. HTD5M-Riemenführung mit zwei Antrieben auf der langen Achse ausarbeiten.

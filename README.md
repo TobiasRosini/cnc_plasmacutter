@@ -2,7 +2,7 @@
 
 Kompakter, rollbarer CNC-Plasmaschneidtisch für die Werkstatt.
 
-- Arbeitsbereich: 1000 × 600 mm (Y lang, beidseitig angetriebenes Portal; X kurz)
+- Verfahrbereich Düse: 1100 × 550 mm (Y lang, beidseitig angetriebenes Portal; X kurz)
 - Plasmagerät: SPARTUS XPro CUT 70CNC
 - Steuerung: LinuxCNC mit QtPlasmaC, Mesa 7i96S
 - CAD: FreeCAD

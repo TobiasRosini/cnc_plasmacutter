@@ -4,8 +4,10 @@ Stahl-Rechteckrohr 40×40×3, nur gerade Schnitte (keine Gehrungen), alles stump
 Parametrisch aus `grundrahmen.py` (Parameter oben im Skript):
 
 ```
-flatpak run --command=FreeCADCmd org.freecad.FreeCAD $PWD/grundrahmen.py
+python3 cad/live.py cad/grundrahmen/grundrahmen.py
 ```
+
+Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualisiert, sonst headless erzeugt. Die FCStd ist generiert: Änderungen gehören ins Skript.
 
 | Datei | Inhalt |
 |---|---|

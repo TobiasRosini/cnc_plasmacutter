@@ -20,12 +20,15 @@ Aufruf (Flatpak-FreeCAD, headless):
 Erzeugt: grundrahmen.FCStd, grundrahmen.step, zuschnitt.txt, pruefung.txt
 """
 import os
+import sys
 import math
 import FreeCAD as App
 import Part
 
 V = App.Vector
 OUT = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(OUT))
+import fc_dok  # noqa: E402
 
 # ---------------------------------------------------------------- Parameter
 P = dict(
@@ -172,11 +175,13 @@ def main():
     teile = rahmen()
     dm = dummies()
 
-    doc = App.newDocument("Grundrahmen")
-    for name, shp in list(teile.items()) + list(dm.items()):
-        doc.addObject("Part::Feature", name).Shape = shp
-    doc.recompute()
-    doc.saveAs(os.path.join(OUT, "grundrahmen.FCStd"))
+    pfad = os.path.join(OUT, "grundrahmen.FCStd")
+    doc, offen = fc_dok.dokument(pfad)
+    for name, shp in teile.items():
+        fc_dok.teil(doc, name, shp, "stahl")
+    fc_dok.teil(doc, "Dummy_Schienen_HGR15", dm["Dummy_Schienen_HGR15"], "dummy")
+    fc_dok.teil(doc, "Dummy_Wanne", dm["Dummy_Wanne"], "wanne", 60)
+    fc_dok.speichern(doc, pfad, offen)
     Part.makeCompound(list(teile.values())).exportStep(
         os.path.join(OUT, "grundrahmen.step"))
 

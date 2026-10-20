@@ -1,0 +1,9 @@
+Wanne gültig: True, Außenmaß 597.0 x 1194.0 x 119.0 mm
+Bördelüberstand über Außenwand (abgeleitet): 7.4 mm
+Innenmaß oben unter dem Bördel: 576.3 x 1173.3 mm
+Lichte Öffnung am Bördel: 540.0 x 1137.0 mm (Bördel 28.5 breit, 18.1 nach innen über die Wand)
+Winkel Längswand 97.0° (gemessen), Stirnwand 108.9° (abgeleitet)
+Wasserinhalt bis 95 mm über Standfläche: 58.4 l
+Wasserinhalt bis 100 mm über Standfläche: 61.7 l
+Wasserinhalt bis 110 mm über Standfläche: 68.5 l
+Spiel im Grundrahmen (lichte Weite 640 x 1240): 21.5 / 23.0 mm je Seite
