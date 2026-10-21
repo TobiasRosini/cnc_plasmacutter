@@ -7,7 +7,7 @@ Die Teile werden als Verknüpfungen (App::Link) eingebunden, nicht kopiert:
 Lage und Maße werden aus der Geometrie der Einzelteile abgeleitet
 (Schienen im Rahmen, Schiene/Brücke im Portalwinkel-Dokument).
 
-Neu in diesem Dokument erzeugt: Portalbrücke 20x40x4 in voller Länge.
+Neu in diesem Dokument erzeugt: Portalbrücke 80x40x4 in voller Länge.
 
 Koordinaten wie Grundrahmen: Ursprung = Außenecke am Boden, X quer, Y längs.
 
@@ -27,19 +27,32 @@ import fc_dok  # noqa: E402
 
 P = dict(
     portal_y=None,              # Mitte Portal in Y; None = Rahmenmitte
-    wanne_ok_unter_rahmen=60.0,  # OK Wanne unter OK Rahmen (Wannenträger folgt)
     bruecke_wand=4.0,
+    wagen_x=None,               # Lage X-Wagen; None = Rahmenmitte
+    x_schiene=15.0,
+    x_riemen_dicke=3.8,
+    x_riemen_breite=15.0,
     max_breite=800.0,
 )
 
 RAHMEN = os.path.join(CAD, "grundrahmen", "grundrahmen.FCStd")
 WANNE = os.path.join(CAD, "wanne", "wanne.FCStd")
 WINKEL = os.path.join(CAD, "y_portalwinkel", "y_portalwinkel.FCStd")
+XWAGEN = os.path.join(CAD, "x_wagen", "x_wagen.FCStd")
+YANTRIEB = os.path.join(CAD, "y_antrieb", "y_antrieb.FCStd")
+ZACHSE = os.path.join(CAD, "z_achse", "z_achse.FCStd")
+KAEFIG = os.path.join(CAD, "wannenkaefig", "wannenkaefig.FCStd")
+XWAGEN_TEILE = ["x_deckplatte", "x_frontplatte", "x_bodenplatte", "x_motorbock",
+                "Wagen_X_oben", "Wagen_X_unten", "Riemenscheibe_X", "Umlenkrollen_X",
+                "Motor_X_NEMA23"]
 
 # aus den Einzelteilen übernommen
 RAHMEN_TEILE_AUS = {"Dummy_Wanne"}
-WINKEL_TEILE = ["Flachstange_40x15", "winkel_druckteil", "spannschlitten",
-                "klemmplatte_fest", "klemmplatte_schlitten", "Wagen_HGH15CA"]
+GEMEINSAM = ["Flachstange_40x15", "spannschlitten", "klemmplatte_fest",
+             "klemmplatte_schlitten", "Wagen_HGH15CA"]
+# rechts einfache Seite, links Kastenseite (Energieketten)
+SEITEN_TEILE = {"rechts": ["winkel_fest", "x_klemmplatte"],
+                "links": ["winkel_kasten", "x_klemmplatte_links"]}
 
 
 def gruppe(doc, name):
@@ -67,6 +80,7 @@ def main():
     dr = fc_dok.quelle(RAHMEN)
     dw = fc_dok.quelle(WANNE)
     dp = fc_dok.quelle(WINKEL)
+    dx = fc_dok.quelle(XWAGEN)
     pfad = os.path.join(OUT, "zusammenbau.FCStd")
     doc, offen = fc_dok.dokument(pfad)
 
@@ -80,7 +94,7 @@ def main():
         if o.Name not in RAHMEN_TEILE_AUS and o.Name != "Dummy_Schienen_HGR15":
             rahmen_bb.add(o.Shape.BoundBox)
     w_schiene = dp.getObject("Schiene_HGR15").Shape.BoundBox
-    w_bruecke = dp.getObject("Bruecke_20x40x4").Shape.BoundBox
+    w_bruecke = dp.getObject("Bruecke_80x40x4").Shape.BoundBox
     w_flach = dp.getObject("Flachstange_40x15").Shape.BoundBox
     dz = z_schiene_rahmen - w_schiene.ZMin
     py = P["portal_y"] if P["portal_y"] is not None else rahmen_bb.Center.y
@@ -96,17 +110,26 @@ def main():
     g_w = gruppe(doc, "Wanne")
     wobj = dw.getObject("Wanne")
     wh = bbox(wobj.Shape).ZLength
-    zw = rahmen_bb.ZMax - P["wanne_ok_unter_rahmen"] - wh
+    wy = dr.getObject("Dummy_Wanne").Shape.BoundBox.Center.y     # Wannenlage aus dem Rahmen
+    # Wannenkäfig hängt im Rahmen (Ring-OK = Rahmen-OK), Wanne steht darin
+    dk = fc_dok.quelle(KAEFIG)
+    plk = App.Placement(V(rahmen_bb.Center.x, wy, rahmen_bb.ZMax), App.Rotation())
+    link(doc, "W_Wannenkaefig", dk.getObject("Wannenkaefig"), plk, g_w)
+    link(doc, "W_Ablauf", dk.getObject("Ablauf"), plk, g_w)
+    zw = rahmen_bb.ZMax + dk.getObject("Wannenkaefig").Shape.BoundBox.ZMin + 20.0
     link(doc, "W_Wanne", wobj,
-         App.Placement(V(rahmen_bb.Center.x, rahmen_bb.Center.y, zw), App.Rotation()), g_w)
+         App.Placement(V(rahmen_bb.Center.x, wy, zw), App.Rotation()), g_w)
 
-    # --- Portal: rechts wie modelliert (+X außen), links um 180° gedreht
+    # --- Portal: rechts Motorseite, links Kastenseite (gespiegelt, Spannseite
+    # beider Winkel vorn = +Y)
     g_p = gruppe(doc, "Portal")
-    seiten = {"rechts": (sx[1], App.Rotation()),
-              "links": (sx[0], App.Rotation(V(0, 0, 1), 180))}
-    for seite, (x, rot) in seiten.items():
-        pl = App.Placement(V(x, py, dz), rot)
-        for n in WINKEL_TEILE:
+    for seite, x in (("rechts", sx[1]), ("links", sx[0])):
+        pl = App.Placement(V(x, py, dz), App.Rotation())
+        for n in GEMEINSAM:
+            link(doc, "P_%s_%s" % (seite, n), dp.getObject(n), pl, g_p)
+        # Die Verknüpfung ersetzt die Platzierung des Objekts (die Versetzung
+        # der Kastenseite im Teile-Dokument wirkt hier also nicht)
+        for n in SEITEN_TEILE[seite]:
             link(doc, "P_%s_%s" % (seite, n), dp.getObject(n), pl, g_p)
 
     # Brücke über die volle Breite: Außenkante Sattel links bis rechts
@@ -118,9 +141,78 @@ def main():
     br = Part.makeBox(x1 - x0, y1 - y0, z1 - z0, V(x0, y0, z0))
     br = br.cut(Part.makeBox(x1 - x0 + 2, y1 - y0 - 2 * t, z1 - z0 - 2 * t,
                              V(x0 - 1, y0 + t, z0 + t)))
-    b = fc_dok.teil(doc, "Portalbruecke_20x40x4", br, "alu")
+    b = fc_dok.teil(doc, "Portalbruecke_80x40x4", br, "alu")
     if b not in g_p.Group:
         g_p.addObject(b)
+
+    # --- X-Achse: Schienen oben/unten zwischen den Sätteln, Wagen, Riemen
+    g_x = gruppe(doc, "X_Achse")
+    sattel = dp.getObject("Flachstange_40x15").Shape.BoundBox.XMax   # Sattel ±20 um Schienenmitte
+    xs0, xs1 = sx[0] + sattel, sx[1] - sattel
+    hs = P["x_schiene"] / 2
+    yc = py + (w_bruecke.YMin + w_bruecke.YMax) / 2
+    sch = Part.makeBox(xs1 - xs0, 2 * hs, hs * 2, V(xs0, yc - hs, z1)).fuse(
+        Part.makeBox(xs1 - xs0, 2 * hs, hs * 2, V(xs0, yc - hs, z0 - 2 * hs)))
+    o = fc_dok.teil(doc, "X_Schienen_HGR15", sch, "dummy")
+    if o not in g_x.Group:
+        g_x.addObject(o)
+    xw = P["wagen_x"] if P["wagen_x"] is not None else rahmen_bb.Center.x
+    plw = App.Placement(V(xw, yc, z0), App.Rotation())
+    for n in XWAGEN_TEILE:
+        link(doc, "X_" + n, dx.getObject(n), plw, g_x)
+    # Z-Achse am X-Wagen (gleiche Koordinaten)
+    dz_ = fc_dok.quelle(ZACHSE)
+    g_z = gruppe(doc, "Z_Achse")
+    z_teile = [o.Name for o in dz_.Objects if o.TypeId == "Part::Feature"]
+    for n in z_teile:
+        link(doc, "Z_" + n if not n.startswith("Z_") else n, dz_.getObject(n), plw, g_z)
+    # X-Riemen hinter der Brücke (gerade Trume bis zu den Umlenkrollen)
+    rolle = dx.getObject("Umlenkrollen_X").Shape.BoundBox
+    deck = dx.getObject("x_deckplatte").Shape.BoundBox
+    rr = rolle.YLength / 2
+    y_rueck = yc + rolle.YMax + 0.05          # Riemenrücken liegt an den Rollen an
+    zr = z0 + rolle.Center.z
+    hb, td = P["x_riemen_breite"] / 2, P["x_riemen_dicke"]
+    xr_l = xw + rolle.XMin + rr
+    xr_r = xw + rolle.XMax - rr
+    riemen = Part.makeBox(xr_l - xs0, td, 2 * hb, V(xs0, y_rueck, zr - hb)).fuse(
+        Part.makeBox(xs1 - xr_r, td, 2 * hb, V(xr_r, y_rueck, zr - hb)))
+    o = fc_dok.teil(doc, "X_Riemen_HTD5M_15", riemen, "riemen")
+    if o not in g_x.Group:
+        g_x.addObject(o)
+
+    # --- Y-Antrieb: Motoren hinten (Schienenanfang), Umlenkung vorn, innen
+    dya = fc_dok.quelle(YANTRIEB)
+    g_y = gruppe(doc, "Y_Antrieb")
+    yb, yf = s_bb.YMin, s_bb.YMax
+    dreh = App.Rotation(V(0, 0, 1), 180)
+    for kurz, x, y, r, suf in (("hl", sx[0], yb, App.Rotation(), ""),
+                               ("hr", sx[1], yb, App.Rotation(), "_r"),
+                               ("vr", sx[1], yf, dreh, ""),
+                               ("vl", sx[0], yf, dreh, "_r")):
+        namen = (["y_motorhalter", "Motor_Y", "Riemenscheibe_Y"] if kurz[0] == "h"
+                 else ["y_umlenkhalter", "Umlenkrolle_Y"])
+        for n in namen:
+            link(doc, "Y_%s_%s" % (kurz, n), dya.getObject(n + suf),
+                 App.Placement(V(x, y, z_schiene_rahmen), r), g_y)
+    # Y-Riemen: Obertrum Scheibe -> Winkel (hinten) und Winkel -> Umlenkung (vorn),
+    # Rücktrum über die ganze Länge (Lage aus der Riemenscheibe)
+    sch = dya.getObject("Riemenscheibe_Y").Shape.BoundBox
+    za = z_schiene_rahmen + sch.Center.z
+    ya = sch.Center.y
+    teil_r = 24 * 5.0 / 3.141592653589793 / 2
+    hl = w_flach.YLength / 2
+    yr = None
+    for x in sx:
+        oben = Part.makeBox(15, (py - hl) - (yb + ya), 3.8,
+                            V(x - 7.5, yb + ya, za + teil_r - 2.1)).fuse(
+            Part.makeBox(15, (yf - ya) - (py + hl), 3.8, V(x - 7.5, py + hl, za + teil_r - 2.1)))
+        unten = Part.makeBox(15, (yf - ya) - (yb + ya), 3.8,
+                             V(x - 7.5, yb + ya, za - teil_r - 1.7))
+        yr = oben.fuse(unten) if yr is None else yr.fuse(oben).fuse(unten)
+    o = fc_dok.teil(doc, "Y_Riemen_HTD5M_15", yr, "riemen")
+    if o not in g_y.Group:
+        g_y.addObject(o)
 
     fc_dok.speichern(doc, pfad, offen)
 
@@ -149,7 +241,7 @@ def main():
         ls = s_bb.YLength
         f.write("Y-Hub (Schiene %.0f − Flachstange %.0f): %.0f mm, gefordert 1100\n"
                 % (ls, w_flach.YLength, ls - w_flach.YLength))
-        f.write("Wanne: Unterkante %.0f, Oberkante %.0f mm über Boden (Wannenträger offen)\n"
+        f.write("Wanne: Unterkante %.0f, Oberkante %.0f mm über Boden (im Wannenkäfig)\n"
                 % (zw, zw + wh))
         for o in portal:
             v = o.Shape.common(rahmen).Volume
@@ -158,6 +250,77 @@ def main():
         f.write("Kollision Wanne / Rahmen: %.3f mm³\n" % wanne.common(rahmen).Volume)
         f.write("Kollision Wanne / Brücke: %.3f mm³\n" % wanne.common(br).Volume)
         f.write("Abstand Brücke UK zu Rahmen OK: %.0f mm\n" % (z0 - rahmen_bb.ZMax))
+        # Alle Teile paarweise (außer Rahmenrohre untereinander: Stoßflächen)
+        teile = [o for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
+                 and o.Shape.Volume > 0]
+        n = 0
+        for i, a in enumerate(teile):
+            for c in teile[i + 1:]:
+                if a.Name.startswith("R_") and c.Name.startswith("R_"):
+                    continue
+                paar = a.Name + c.Name
+                if "Riemen_HTD5M" in paar and ("Riemenscheibe" in paar or "Umlenkrolle" in paar):
+                    continue            # Riemen greift in die Scheibe (gewollt)
+                if "Ablauf" in paar and "Wanne" in paar and "kaefig" not in paar:
+                    continue            # Ablauf geht durch den Wannenboden (gewollt)
+                if ("Kupplung" in paar and ("Spindel" in paar or "Motor" in paar)) \
+                        or ("Stäbe" in paar and "halter" in paar):
+                    continue            # Welle in Kupplung, Stäbe im Presssitz (gewollt)
+                if not a.Shape.BoundBox.intersect(c.Shape.BoundBox):
+                    continue
+                v = a.Shape.common(c.Shape).Volume
+                if v > 1e-2:
+                    f.write("Kollision %s / %s: %.1f mm³\n" % (a.Name, c.Name, v))
+                    n += 1
+        f.write("Kollisionen zwischen allen Teilen: %d\n" % n)
+
+        # X-Weg: Wagen an beide Enden schieben, bis er die Winkel berührt
+        wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
+                                  + [dz_.getObject(n).Shape for n in z_teile])
+        winkel = Part.makeCompound([o.Shape for o in doc.Objects
+                                    if o.Name.startswith("P_") and o.TypeId == "App::Link"])
+
+        def frei(x):
+            c = wagen.copy()
+            c.Placement = App.Placement(V(x, yc, z0), App.Rotation())
+            return c.common(winkel).Volume < 1e-2
+
+        def grenze(innen, aussen):
+            for _ in range(20):
+                m = (innen + aussen) / 2
+                innen, aussen = (m, aussen) if frei(m) else (innen, m)
+            return innen
+        xmin = grenze(rahmen_bb.Center.x, xs0)
+        xmax = grenze(rahmen_bb.Center.x, xs1)
+        f.write("X-Weg Wagenmitte: %.1f bis %.1f = %.1f mm (Wannenboden %.0f bis %.0f gefordert)\n"
+                % (xmin, xmax, xmax - xmin, rahmen_bb.Center.x - 275, rahmen_bb.Center.x + 275))
+
+        # Portal in beiden Y-Endlagen (Flachstange am Schienenende) gegen Rahmen,
+        # Y-Antrieb und Y-Riemen prüfen; X-Wagen dabei ganz links und ganz rechts
+        fest_teile = Part.makeCompound(
+            [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
+             and (o.Name.startswith("R_") or o.Name.startswith("Y_"))
+             and "Schienen" not in o.Name and o.Name != "Y_Riemen_HTD5M_15"])
+        portal_teile = [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
+                        and (o.Name.startswith("P_") or o.Name == "Portalbruecke_80x40x4"
+                             or o.Name == "X_Schienen_HGR15")]
+        for name, ylage in (("hinten", yb + hl), ("vorn", yf - hl)):
+            for xl in (xmin, xmax):
+                teile_l = [s.copy() for s in portal_teile]
+                w = wagen.copy()
+                w.Placement = App.Placement(V(xl, yc, z0), App.Rotation())
+                teile_l.append(w)
+                v = 0.0
+                for t in teile_l:
+                    t.translate(V(0, ylage - py, 0))
+                    v += t.common(fest_teile).Volume
+                f.write("Portal %s, X-Wagen bei %.0f: Kollision mit Rahmen/Y-Antrieb %.1f mm³\n"
+                        % (name, xl, v))
+        br_y = dz_.getObject("Brenner_SP80M").Shape.BoundBox.Center.y
+        f.write("Düse in Y: %.0f bis %.0f, Wannenboden %.0f bis %.0f\n"
+                % (yb + hl + br_y, yf - hl + br_y, wy - 550, wy + 550))
+        mo = doc.getObject("Y_hl_Motor_Y").Shape.BoundBox
+        f.write("Y-Motor hinten: Oberkante %.1f mm über Boden, innen bis x %.1f\n" % (mo.ZMax, mo.XMax))
 
 
 main()

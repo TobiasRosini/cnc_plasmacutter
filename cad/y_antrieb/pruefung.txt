@@ -1,0 +1,10 @@
+y_motorhalter    gültig: True, 48.5 x 64.0 x 97.0 mm
+Wand an Bohrungen y_motorhalter: ok (>= 3.0 mm)
+y_umlenkhalter   gültig: True, 48.5 x 64.0 x 97.0 mm
+Wand an Bohrungen y_umlenkhalter: ok (>= 3.0 mm)
+Kollision y_motorhalter / Motor_Y: 0.000 mm³
+Kollision y_motorhalter / Riemenscheibe_Y: 0.000 mm³
+Kollision Motor_Y / Riemenscheibe_Y: 0.000 mm³
+Kollision y_umlenkhalter / Umlenkrolle_Y: 0.000 mm³
+Achse Riemenscheibe: z 65.8 über Rahmen, y -32.0 vor dem Schienenende
+Motor innen bis x 140.5 ab Schienenmitte

@@ -16,16 +16,25 @@ geht beim nächsten Lauf verloren; Änderungen gehören ins Skript.
 """
 import os
 import FreeCAD as App
+import Part
 
+# Farbkonzept (festgelegt 20.10.2026): Stahl grau, Alu hellblau, 3D-Druck gelb,
+# Zukaufteile grün (wenn nicht anders festgelegt), Riemen lila, Wanne wie sie ist
+_STAHL = (0.55, 0.57, 0.60)
+_ALU = (0.62, 0.80, 0.95)
+_DRUCK = (0.98, 0.84, 0.18)
+_ZUKAUF = (0.30, 0.68, 0.36)
+_RIEMEN = (0.56, 0.32, 0.78)
 FARBEN = {
-    "stahl": (0.55, 0.57, 0.60),
-    "alu": (0.80, 0.81, 0.84),
-    "druck": (0.88, 0.48, 0.22),
-    "druck_hell": (0.95, 0.65, 0.35),
-    "wagen": (0.29, 0.44, 0.65),
-    "riemen": (0.15, 0.15, 0.15),
+    "stahl": _STAHL,
+    "alu": _ALU,
+    "druck": _DRUCK,
+    "druck_hell": _DRUCK,
+    "zukauf": _ZUKAUF,
+    "wagen": _ZUKAUF,
+    "dummy": _ZUKAUF,
+    "riemen": _RIEMEN,
     "wanne": (0.20, 0.20, 0.22),
-    "dummy": (0.70, 0.72, 0.75),
 }
 
 
@@ -95,3 +104,72 @@ def speichern(doc, pfad, war_offen):
         import FreeCADGui
         FreeCADGui.getDocument(doc.Name).activeView().viewIsometric()
         FreeCADGui.SendMsgToActiveView("ViewFit")
+
+
+def duenne_waende(shape, grenze=3.0, r_min=1.9):
+    """Sucht dünne Wände an Bohrungen: Abstand jeder Bohrung (Zylinderfläche,
+    Radius >= r_min), gemessen auf halber Bohrungslänge, zu allen anderen
+    Flächen. Nicht als Wand zählen: angrenzende Flächen, Flächen quer zur
+    Bohrung (Senkungsböden) und koaxiale Zylinder (Senkungen).
+    Gibt [(abstand, x, y, z, flächentyp)] zurück, je Bohrung der kleinste Wert."""
+    flaechen = shape.Faces
+    kanten = [set(e.hashCode() for e in f.Edges) for f in flaechen]
+    funde = {}
+    for i, f in enumerate(flaechen):
+        su = f.Surface
+        if "Cylinder" not in su.TypeId or su.Radius < r_min:
+            continue
+        achse, mitte = su.Axis, su.Center
+        ts = [(v.Point - mitte).dot(achse) for v in f.Vertexes]
+        if not ts:
+            continue
+        tm = (min(ts) + max(ts)) / 2
+        try:
+            ring = Part.Compound(f.slice(achse, mitte.dot(achse) + tm))
+        except Exception:
+            continue
+        if not ring.Edges:
+            continue
+        bb = f.BoundBox
+        bb.enlarge(grenze)
+        for j, g in enumerate(flaechen):
+            if i == j or kanten[i] & kanten[j] or not bb.intersect(g.BoundBox):
+                continue
+            gs = g.Surface
+            if "Plane" in gs.TypeId and abs(abs(gs.Axis.dot(achse)) - 1) < 1e-6:
+                continue
+            if "Cylinder" in gs.TypeId and abs(abs(gs.Axis.dot(achse)) - 1) < 1e-6:
+                w = gs.Center - mitte
+                if (w - achse * w.dot(achse)).Length < 1e-3:
+                    continue
+            tg = [(v.Point - mitte).dot(achse) for v in g.Vertexes]
+            if tg and not min(tg) - 0.01 <= tm <= max(tg) + 0.01:
+                continue                    # liegt nicht neben der Bohrung (z. B. Muttertasche)
+            d, punkte, _ = ring.distToShape(g)
+            if not 1e-4 < d < grenze:
+                continue
+            q = mitte + achse * tm
+            schluessel = (round(q.x, 1), round(q.y, 1), round(q.z, 1))
+            p = punkte[0][0]
+            if schluessel not in funde or d < funde[schluessel][0]:
+                funde[schluessel] = (d, p.x, p.y, p.z, gs.TypeId.split("::")[-1])
+    return sorted(funde.values())
+
+
+def schreibe_waende(f, name, shape, grenze=3.0):
+    """Schreibt das Ergebnis von duenne_waende in die Prüfdatei."""
+    funde = duenne_waende(shape, grenze)
+    if not funde:
+        f.write("Wand an Bohrungen %s: ok (>= %.1f mm)\n" % (name, grenze))
+    for d, x, y, z, typ in funde:
+        f.write("DÜNN %s: %.2f mm bei (%.1f, %.1f, %.1f) zu %s\n" % (name, d, x, y, z, typ))
+    return len(funde)
+
+
+def fest(shape):
+    """Platzierung in die Geometrie übernehmen. Nötig für Teile, auf die der
+    Zusammenbau verlinkt: App::Link übernimmt die Platzierung des Objekts nicht."""
+    m = shape.Placement.toMatrix()
+    s = shape.copy()
+    s.Placement = App.Placement()
+    return s.transformGeometry(m)

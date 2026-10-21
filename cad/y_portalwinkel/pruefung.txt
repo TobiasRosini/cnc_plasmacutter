@@ -1,19 +1,52 @@
-winkel_druckteil       gültig: True, 90.0 x 180.0 x 54.0 mm, PETG ca. 326 g (100 % Füllung)
-spannschlitten         gültig: True, 39.1 x 36.0 x 6.7 mm, PETG ca. 8 g (100 % Füllung)
-klemmplatte_fest       gültig: True, 38.0 x 34.0 x 6.0 mm, PETG ca. 9 g (100 % Füllung)
-klemmplatte_schlitten  gültig: True, 31.4 x 38.0 x 17.3 mm, PETG ca. 11 g (100 % Füllung)
+winkel_fest            gültig: True, 52.0 x 180.0 x 94.0 mm, PETG ca. 362 g (100 % Füllung)
+winkel_kasten          gültig: True, 54.0 x 180.0 x 94.0 mm, PETG ca. 377 g (100 % Füllung)
+spannschlitten         gültig: True, 43.1 x 24.0 x 6.7 mm, PETG ca. 6 g (100 % Füllung)
+klemmplatte_fest       gültig: True, 48.0 x 40.0 x 6.0 mm, PETG ca. 14 g (100 % Füllung)
+klemmplatte_schlitten  gültig: True, 35.4 x 28.0 x 17.3 mm, PETG ca. 9 g (100 % Füllung)
+x_klemmplatte          gültig: True, 40.0 x 6.0 x 36.0 mm, PETG ca. 11 g (100 % Füllung)
 Flachstange gültig: True
 
-Kollision Winkel / Wagen_HGH15CA: 0.000 mm³
-Kollision Winkel / Schiene_HGR15: 0.000 mm³
-Kollision Winkel / Bruecke_20x40x4: 0.000 mm³
-Kollision Winkel / Riemen_HTD5M_15: 0.000 mm³
-Kollision Winkel / Riemen_Ruecktrum: 0.000 mm³
-Kollision Winkel / Flachstange: 0.000 mm³
-Kollision Winkel / Spannschlitten: 0.000 mm³
+Wand an Bohrungen winkel_fest: ok (>= 3.0 mm)
+Wand an Bohrungen winkel_kasten: ok (>= 3.0 mm)
+Wand an Bohrungen spannschlitten: ok (>= 3.0 mm)
+Wand an Bohrungen klemmplatte_fest: ok (>= 3.0 mm)
+Wand an Bohrungen klemmplatte_schlitten: ok (>= 3.0 mm)
+Wand an Bohrungen x_klemmplatte: ok (>= 3.0 mm)
+Wand an Bohrungen flachstange: ok (>= 3.0 mm)
+
+Kollision Winkel Fest / Wagen_HGH15CA: 0.000 mm³
+Kollision Winkel Fest / Schiene_HGR15: 0.000 mm³
+Kollision Winkel Fest / Bruecke_80x40x4: 0.000 mm³
+Kollision Winkel Fest / Riemen_HTD5M_15: 0.000 mm³
+Kollision Winkel Fest / Riemen_Ruecktrum: 0.000 mm³
+Kollision Winkel Fest / Flachstange: 0.000 mm³
+Kollision Winkel Fest / Spannschlitten: 0.000 mm³
+Kollision Winkel Fest / Klemmplatte fest: 0.000 mm³
+Kollision Winkel Fest / Klemmplatte Schlitten: 0.000 mm³
+Kollision Winkel Fest / Riemen X: 0.000 mm³
+Kollision Winkel Kasten / Wagen_HGH15CA: 0.000 mm³
+Kollision Winkel Kasten / Schiene_HGR15: 0.000 mm³
+Kollision Winkel Kasten / Bruecke_80x40x4: 0.000 mm³
+Kollision Winkel Kasten / Riemen_HTD5M_15: 0.000 mm³
+Kollision Winkel Kasten / Riemen_Ruecktrum: 0.000 mm³
+Kollision Winkel Kasten / Flachstange: 0.000 mm³
+Kollision Winkel Kasten / Spannschlitten: 0.000 mm³
+Kollision Winkel Kasten / Klemmplatte fest: 0.000 mm³
+Kollision Winkel Kasten / Klemmplatte Schlitten: 0.000 mm³
+Kollision Winkel Kasten / Riemen X: 0.000 mm³
+Kollision Winkel Fest / X-Klemmplatte: 0.000 mm³
+Kollision Winkel Kasten / X-Klemmplatte: 0.000 mm³
+Kollision Riemen X / X-Klemmplatte: 300.000 mm³
+Kollision Riemen X / Spannschlitten: 0.000 mm³
+Kollision Riemen X / Klemmplatte Schlitten: 0.000 mm³
 Kollision Flachstange / Wagen: 0.000 mm³
 Kollision Spannschlitten / Riemen: 0.000 mm³
 (Klemmplatten liegen bewusst 0,7 mm auf dem Riemenrücken = Klemmweg)
-Spannweg 20.0 mm (4 Zähne), Widerlager y 17.0..27.0, Spannschraube M5 Kopf an y 17.0, Lasche außen bis y 57.0 (entspannt)
-Lage 0: Kollision Winkel/Klemmplatte+Lasche 0.000 mm³, Winkel/Schlitten 0.000 mm³
-Lage 1: Kollision Winkel/Klemmplatte+Lasche 0.000 mm³, Winkel/Schlitten 0.000 mm³
+Höhen über Flachstange-Unterseite: Rücktrum UK 17.0, Kanalboden Obertrum 56.9, Turm OK 57.9, Widerlager OK 75.9, X-Riemen Mitte 90.0 (y -30.0)
+(X-Klemmplatte liegt bewusst 0,5 mm auf dem Riemenrücken = Klemmweg)
+Schlitten entspannt: Außenende y 88.2 (Winkelende 90.0)
+Winkel Fest quer: x -26.0 bis 26.0 (Schienenmitte = 0)
+Winkel Kasten quer: x -28.0 bis 26.0 (Schienenmitte = 0)
+Spannweg 20.0 mm (4 Zähne), Widerlager y 30.2..38.2, Lasche außen bis y 65.2 (entspannt)
+Lage 0: Kollision Winkel Fest/Klemmplatte+Lasche 0.000 mm³, Winkel Fest/Schlitten 0.000 mm³
+Lage 1: Kollision Winkel Fest/Klemmplatte+Lasche 0.000 mm³, Winkel Fest/Schlitten 0.000 mm³

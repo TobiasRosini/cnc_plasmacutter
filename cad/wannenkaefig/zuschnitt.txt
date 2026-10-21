@@ -1,0 +1,11 @@
+Zuschnitt Rechteckrohr 20x20x2 Stahl, alle Schnitte gerade (90°)
+
+Teil                     Länge mm    Stk
+Ring oben längs            1235.2      2
+Rahmen unten längs         1235.2      2
+Ring oben quer              600.0      2
+Rahmen unten quer           600.0      2
+Querrohr Boden              600.0      6
+Pfosten                     100.0      6
+
+Summe Rohr: 11.54 m (13.0 kg bei 1.13 kg/m), ohne Sägeverlust

@@ -9,7 +9,7 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | Verfahrbereich Düse | **1100 × 550 mm** (= Bodenfläche der Wanne innen), Y × X |
 | Y-Achse (lange Achse) | Beidseitig angetriebenes Portal auf zwei parallelen Führungen; zwei getrennte Motoren |
 | X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
-| Portalbrücke | Aluprofil 20 × 40 × 4 mm als tragende Struktur |
+| Portalbrücke | Alu-Rechteckrohr **80 × 40 × 4 mm** (80 hoch, 40 tief), X-Schienen oben und unten |
 | Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
 | Rahmen | Geschweißtes Stahl-Rechteckrohr 40 × 40 × 3, nur gerade Schnitte (keine Gehrungen) |
 | **Maximale Gesamtbreite** | **800 mm** über alles (Tür Werkstatt–Garage 820 mm lichte Weite) |
@@ -67,8 +67,8 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 |---|---:|---|
 | Y-Achse links | 1 | NEMA23, 3 Nm, Open Loop |
 | Y-Achse rechts | 1 | NEMA23, 3 Nm, Open Loop |
-| X-Achse | 1 | NEMA23, 3 Nm, Open Loop |
-| Z-Achse | 1 | NEMA23, 3 Nm, Open Loop (vorläufig einheitlich) |
+| X-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm (fährt auf dem X-Wagen mit), Open Loop |
+| Z-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm, direkt über Kupplung auf SFU1204, Open Loop |
 | **Gesamt** | **4** | **4 × NEMA23, 3 Nm** |
 
 - **4 separate digitale Step/Dir-Schrittmotortreiber** statt integrierter Closed-Loop-Treiber.
@@ -92,7 +92,8 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 
 ### Portalbrücke
 
-- Tragende Struktur der Brücke: **Aluprofil 20 × 40 × 4 mm** (Rechteckrohr, 4 mm Wandstärke).
+- Tragende Struktur der Brücke: **Alu-Rechteckrohr 80 × 40 × 4 mm**, 80 hoch stehend (gewählt 20.10.2026 statt 20 × 40 × 4: ca. 10× steifer gegen Biegung und Verdrehung, 1,7 kg bei 720 mm).
+- X-Achse: HGR15 oben und unten auf der Brücke, Wagen aus Alu-Platten greift von vorn um die Brücke; vorn Z-Achse und Schneiddüse. **Omega-Antrieb** (20.10.2026, statt Motor am Brückenende, wegen 800 mm Gesamtbreite): X-Riemen hochkant hinter der Brücke, Enden an den Sätteln der Y-Winkel geklemmt; Motor hinten auf dem Wagen (gleicht Brenner und Z-Achse teilweise aus). X-Energiekette hinter der Brücke, Anschlusskasten auf der linken Portalseite.
 - Trägt die X-Schienen und den Brennerwagen mit Z-Achse; Durchbiegung und Torsion in der FreeCAD-Konstruktion prüfen.
 - Anbindung an die Y-Wagen beidseitig über Portalwangen.
 
@@ -101,7 +102,21 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 ### Zahnriemenantrieb
 
 - **HTD5M**, **15 mm breit**, für beide horizontalen Achsen.
-- Vorläufig **24 Zähne** je Antriebsriemenscheibe.
+- **Festgelegt: 24 Zähne** je Antriebsriemenscheibe (Teilkreis 38,2 mm, 120 mm Weg pro Umdrehung), Direktantrieb ohne Untersetzung, Bohrung passend zur Motorwelle.
+- Riemen über der Schienenmitte: Obertrum mit Zähnen nach unten an den Enden des Y-Winkels geklemmt, Rücktrum läuft durch einen Tunnel im Winkel über den Wagen zurück (Abstand der Trume = Teilkreis).
+
+### Fahrwerte (Richtwerte, mit den SPARTUS-Schneidtabellen abgleichen)
+
+| Größe | Richtwert |
+|---|---|
+| Schnittgeschwindigkeit 1–2 mm | bis 6–8 m/min |
+| 3 mm / 6 mm / 10 mm / 20 mm | ca. 3–4 / 1,5–2 / 1 / 0,3–0,4 m/min |
+| Eilgang | 10–15 m/min |
+| Beschleunigung | 1–3 m/s² |
+
+- Mit 24 Zähnen entsprechen 15 m/min nur 125 U/min; dort hat der NEMA23 mit 3 Nm nahezu sein volles Moment (> 100 N Vorschubkraft je Seite bei ca. 12–15 kg bewegter Portalmasse).
+- Auflösung 0,075 mm (1/8-Mikroschritt) bzw. ca. 0,04 mm (1/16).
+- Wegen der niedrigen Drehzahl Treiber mit Mikroschritt und Resonanzdämpfung wählen.
 - Auf der Y-Achse (lang) je Seite ein eigener Motor, Treiber und Riemenantrieb.
 - Motoren möglichst stationär am Tisch; Riemen parallel und möglichst nahe an der Führungsebene.
 - Riemenlängen, Umlenkrollen und Spannvorrichtungen sind noch zu konstruieren.
@@ -141,13 +156,15 @@ Vorläufige Planungswerte:
 
 | Parameter | Wert |
 |---|---|
-| Wasserstand | ca. 95 mm über Wannenboden |
-| Abstand Wasseroberfläche zur Blechunterseite | ca. 10–15 mm |
+| Wasserstand | ca. 105 mm über Wannenboden (knapp unter dem Bördel) |
+| Abstand Wasseroberfläche zur Blechunterseite | ca. 15 mm (Blech liegt 1 mm über dem Bördel, sonst trägt der Bördel breite Bleche) |
 | Opferleisten (Slats) | ca. 35 × 3 mm Flachstahl |
 | Opferleisten-Abstand | ca. 50 mm |
 | Wasserinhalt | aus dem Modell ca. 58 l bei 95 mm Wasserstand über Standfläche (ca. 68 l bis Unterkante Bördel) |
 
-- Austauschbare Opferleisten auf separaten Stahlträgern; die PE-Wanne darf nicht die Werkstücklast tragen.
+- **Wannenkäfig** aus Stahl-Rechteckrohr 20 × 20 × 2 (`cad/wannenkaefig/`): hängt mit dem oberen Ring im Grundrahmen, trägt den Wannenboden auf Querrohren und hält die Wände. Wanne steht 120 mm unter Rahmenoberkante, Blechunterseite = Rahmenoberkante.
+- Austauschbare Opferleisten auf Trägern, die im Wasser auf dem Wannenboden direkt über den Querrohren des Käfigs stehen; die Last geht durch den Boden ins Stahlrohr, die PE-Wände tragen nichts.
+- **Ablauf** mittig im Wannenboden, der Käfigboden ist dort frei.
 - Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
 - **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Wannenboden und Seiten sind konstruktiv zu schützen; Wasserstand und Schnittbereich müssen das Risiko berücksichtigen. Wasserbett ersetzt keine geeignete Lüftung/Absaugung.
 

@@ -20,6 +20,7 @@ def live(skript):
         f"sys.path.insert(0, {CAD!r})\n"
         f"sys.path.insert(0, {os.path.dirname(skript)!r})\n"
         "import fc_dok; importlib.reload(fc_dok)\n"
+        "import kaufteile; importlib.reload(kaufteile)\n"
         f"exec(compile(open({skript!r}).read(), {skript!r}, 'exec'), "
         f"{{'__file__': {skript!r}, '__name__': '__main__'}})\n"
     )

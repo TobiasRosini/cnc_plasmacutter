@@ -1,6 +1,6 @@
 # Zusammenbau
 
-Rahmen, Wanne und Portal (beide Y-Portalwinkel mit Wagen, Flachstange, Druckteilen) als Verknüpfungen auf die Einzelteil-Dokumente, dazu die Portalbrücke 20×40×4 in voller Länge.
+Rahmen, Wanne und Portal (beide Y-Portalwinkel mit Wagen, Flachstange, Druckteilen) als Verknüpfungen auf die Einzelteil-Dokumente, dazu die Portalbrücke 80×40×4 in voller Länge.
 
 ```
 python3 cad/live.py cad/zusammenbau/zusammenbau.py

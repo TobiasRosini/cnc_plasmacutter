@@ -41,6 +41,14 @@ P = dict(
     wanne_y=1200.0,
     wanne_h=150.0,
     wanne_spiel=20.0,           # je Seite zwischen Wanne und Rohr
+    # Längsaufteilung: Der Brenner sitzt 136 mm vor der Brückenmitte. Die Schienen
+    # liegen deshalb um diesen Betrag hinter der Wannenmitte, damit die Düse den
+    # ganzen Wannenboden erreicht. Hinter dem Schienenanfang Platz für die
+    # Y-Motoren, vor dem Schienenende für die Umlenkrollen.
+    brenner_versatz=136.0,
+    winkel_halb=90.0,           # halbe Länge Y-Winkel (Flachstange)
+    platz_hinten=70.0,          # Rahmenende bis Schienenanfang (Y-Motoren)
+    platz_vorn=70.0,            # Schienenende bis Rahmenende mindestens (Umlenkung)
 
     # Höhe
     hoehe_ok=850.0,             # Oberkante oberer Rahmen = Auflage der Schienen
@@ -65,9 +73,15 @@ P = dict(
 def ableiten():
     r, s = P["rohr"], P["wanne_spiel"]
     P["innen_x"] = P["wanne_x"] + 2 * s
-    P["innen_y"] = P["wanne_y"] + 2 * s
     P["aussen_x"] = P["innen_x"] + 2 * r
-    P["aussen_y"] = P["innen_y"] + 2 * r
+    # Wannenmitte so, dass Schienenanfang = platz_hinten
+    wm = P["platz_hinten"] + P["schiene_laenge"] / 2 + P["brenner_versatz"]
+    P["wanne_mitte_y"] = wm
+    P["schiene_y0"] = P["platz_hinten"]
+    vorn = max(P["schiene_y0"] + P["schiene_laenge"] + P["platz_vorn"],
+               wm + P["wanne_y"] / 2 + s + r)
+    P["aussen_y"] = vorn
+    P["innen_y"] = vorn - 2 * r
     P["schiene_x"] = [r / 2, P["aussen_x"] - r / 2]   # Schienenmitte = Rohrmitte
 
 
@@ -145,7 +159,7 @@ def rahmen():
 
 def schienen_loecher():
     ay, L = P["aussen_y"], P["schiene_laenge"]
-    y0 = (ay - L) / 2
+    y0 = P["schiene_y0"]
     n = int((L - 2 * P["schiene_e"]) // P["schiene_teilung"]) + 1
     return [y0 + P["schiene_e"] + i * P["schiene_teilung"] for i in range(n)]
 
@@ -155,7 +169,7 @@ def dummies():
     d = {}
     ay, L, sb = P["aussen_y"], P["schiene_laenge"], P["schiene_breite"]
     z = P["hoehe_ok"]
-    y0 = (ay - L) / 2
+    y0 = P["schiene_y0"]
     s = None
     for xc in P["schiene_x"]:
         k = box(xc - sb / 2, xc + sb / 2, y0, y0 + L, z, z + P["schiene_hoehe"])
@@ -164,7 +178,8 @@ def dummies():
     # Wanne: Höhe hängt am Wannenträger, hier Oberkante 20 mm unter dem oberen Rahmen
     r, sp = P["rohr"], P["wanne_spiel"]
     zt = P["hoehe_ok"] - r - 20
-    d["Dummy_Wanne"] = box(r + sp, r + sp + P["wanne_x"], r + sp, r + sp + P["wanne_y"],
+    y0 = P["wanne_mitte_y"] - P["wanne_y"] / 2
+    d["Dummy_Wanne"] = box(r + sp, r + sp + P["wanne_x"], y0, y0 + P["wanne_y"],
                            zt - P["wanne_h"], zt)
     return d
 

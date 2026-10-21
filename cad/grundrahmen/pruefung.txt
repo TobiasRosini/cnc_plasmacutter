@@ -1,8 +1,8 @@
-Außenmaß Rahmen: 720 x 1320 x 850 mm (X x Y x Z)
-Lichtes Innenmaß zwischen den Rohren: 640 x 1240 mm (Wanne 600 x 1200)
+Außenmaß Rahmen: 720 x 1516 x 850 mm (X x Y x Z)
+Lichtes Innenmaß zwischen den Rohren: 640 x 1436 mm (Wanne 600 x 1200)
 Schienenabstand Mitte-Mitte: 680 mm
-Masse Stahl (Rohre + Fußplatten): 44.9 kg
+Masse Stahl (Rohre + Fußplatten): 47.6 kg
 Stirnöffnung zum Herausziehen der Wanne: 640 breit x 670 hoch
 Überschneidungen gesamt: 0.000 mm³
 Wanne / Rahmen: 0.000 mm³
-Durchbiegung Längsträger (Spannweite 1280 mm, 200 N mittig): 0.408 mm
+Durchbiegung Längsträger (Spannweite 1476 mm, 200 N mittig): 0.626 mm
