@@ -28,6 +28,7 @@ import fc_dok  # noqa: E402
 P = dict(
     portal_y=None,              # Mitte Portal in Y; None = Rahmenmitte
     bruecke_wand=4.0,
+    bruecke_verl_links=47.0,    # Brücke links verlängert: Stirn trägt den Kettenturm
     wagen_x=None,               # Lage X-Wagen; None = Rahmenmitte
     x_schiene=15.0,
     x_riemen_dicke=3.8,
@@ -136,7 +137,7 @@ def main():
 
     # Brücke über die volle Breite: Außenkante Sattel links bis rechts
     halb = w_bruecke.XMax          # Brückenende = Sattelaußenkante ab Schienenmitte
-    x0, x1 = sx[0] - halb, sx[1] + halb
+    x0, x1 = sx[0] - halb - P["bruecke_verl_links"], sx[1] + halb
     y0, y1 = py + w_bruecke.YMin, py + w_bruecke.YMax
     z0, z1 = dz + w_bruecke.ZMin, dz + w_bruecke.ZMax
     t = P["bruecke_wand"]
@@ -228,8 +229,16 @@ def main():
     pl_fest = App.Placement(V(sx[0], 0, z_schiene_rahmen), App.Rotation())
     for n in ("ek_traeger_40x20", "ek_rinne", "ek_stuetzen"):
         link(doc, "EK_" + n, dek.getObject(n), pl_fest, g_e)
-    link(doc, "P_links_ek_ausleger", dek.getObject("ek_ausleger"),
-         App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation()), g_e)
+    pl_portal = App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation())
+    for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",
+              "ekx_stuetze_rechts"):
+        link(doc, "P_links_" + n, dek.getObject(n), pl_portal, g_e)
+    link(doc, "X_ekx_pfosten", dek.getObject("ekx_pfosten"), plw, g_e)
+    kx = ek.kette_x(xw)
+    kx.translate(V(sx[0], py, z_schiene_rahmen))
+    o = fc_dok.teil(doc, "X_Kette_20x38_R65", fc_dok.fest(kx), "zukauf")
+    if o not in g_e.Group:
+        g_e.addObject(o)
     kt_ = ek.kette(py)
     kt_.translate(V(sx[0], 0, z_schiene_rahmen))
     o = fc_dok.teil(doc, "EK_Kette_20x38_R125", fc_dok.fest(kt_), "zukauf")
@@ -298,7 +307,8 @@ def main():
 
         # X-Weg: Wagen an beide Enden schieben, bis er die Winkel berührt
         wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
-                                  + [dz_.getObject(n).Shape for n in z_teile])
+                                  + [dz_.getObject(n).Shape for n in z_teile]
+                                  + [dek.getObject("ekx_pfosten").Shape])
         winkel = Part.makeCompound([o.Shape for o in doc.Objects
                                     if (o.Name.startswith("P_") or o.Name.startswith("EK_"))
                                     and o.TypeId in ("App::Link", "Part::Feature")])

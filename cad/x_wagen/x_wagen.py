@@ -57,6 +57,7 @@ P = dict(
     # linken Y-Winkel (Sattelrückwand), Achse z 94, y -25
     xf=(-20.0, 3.0, -34.0, -19.0, 86.0),      # x0, x1, y0, y1, z unten
     xf_loecher=[(-12.0, -26.5), (-3.0, -26.5)],
+    pfosten_loecher=[(-50.0, -18.0), (-30.0, -18.0)],   # Pfosten der X-Energiekette (M5)
     deck_vor=0.0,               # Deckplatte bündig mit der Frontplatte (vorn sitzt die Z-Grundplatte)
     boden_vor=3.0,              # Bodenplatte steht vorn über die Frontplatte
     z_loecher=[(-20.0, 62.0), (20.0, 62.0), (-20.0, 88.0), (20.0, 88.0)],  # M5 für die Z-Grundplatte
@@ -164,6 +165,9 @@ def deckplatte():
     yf = (g["y_f0"] + g["y_f1"]) / 2
     for x in (-20, 0, 20):
         s = s.cut(zyl(P["m5_durchgang"], t + 2, x, yf, z0 - 1))
+    # M5-Gewinde für den Pfosten der X-Energiekette
+    for x, y in P["pfosten_loecher"]:
+        s = s.cut(zyl(P["m5_kern"], t + 2, x, y, z0 - 1))
     # M4-Gewinde für die Referenzfahne X
     for x, y in P["xf_loecher"]:
         s = s.cut(zyl(3.3, 9, x, y, z0 - 1))

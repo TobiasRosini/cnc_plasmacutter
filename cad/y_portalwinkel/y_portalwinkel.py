@@ -139,7 +139,7 @@ P = dict(
 
     # Befestigungsflansch Energiekette (Halter folgt als eigenes Teil).
     # Sitzt außen auf jedem Winkel, damit links und rechts dasselbe Teil passt.
-    ek_flansch=True,            # nur Variante "kasten"
+    ek_flansch=False,           # entfällt: Kettenturm sitzt jetzt an der Brückenstirn
     ek_dicke=8.0,
     ek_hoehe=30.0,              # über Basisoberkante
     ek_y=(-45.0, -5.0),
@@ -153,6 +153,10 @@ P = dict(
     yf_laenge=43.0,             # Auflage ab Winkelende
     yf_oben=80.0,               # Oberkante Zielfläche (Winkel-z)
     yf_dicke=3.0,
+    # Stütze der X-Ablage (nur fest, rechts): 2x M5-Einsatz außen im festen Turm
+    xs_einsatz=[(-80.0, 30.0), (-60.0, 30.0), (-80.0, 48.0), (-60.0, 48.0)],   # (y, z)
+    einsatz_m5_d=6.4,
+    einsatz_m5_tiefe=10.0,
     # Referenzschalter X (nur kasten): Block auf der Sattelrückwand, Achse quer,
     # Sensorfläche innen (lokal -x), Fahne unter der Deckplatte des X-Wagens
     xr_block=(-20.0, 0.0, -34.0, -15.5, 24.0),  # x0, x1, y0, y1, Höhe über Sattel-OK
@@ -362,6 +366,10 @@ def winkel(variante="fest"):
                                 xi - 1, y, z1 + z, V(1, 0, 0)))
     # X-Riemenklemme: Zahnprofil in der Sattelrückwand, Gewindeeinsätze
     s = s.cut(x_klemm_bohrungen(variante))
+    # Gewindeeinsätze für die Stütze der X-Ablage (nur rechte Seite)
+    if variante == "fest":
+        for y, z in P["xs_einsatz"]:
+            s = s.cut(zyl(P["einsatz_m5_d"], P["einsatz_m5_tiefe"] + 1, tb + 1, y, z, V(-1, 0, 0)))
     # Referenzschalter X auf der Sattelrückwand (nur Kastenseite)
     if variante == "kasten":
         x0, x1, y0, y1, h = P["xr_block"]

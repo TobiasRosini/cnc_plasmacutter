@@ -133,7 +133,9 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 - Liegend links, über dem linken Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 1,01 m (`cad/energiekette/`).
 - Die geteilte Lichtbogenspannung kommt an der CNC-Buchse des Geräts heraus (Anleitung S. 13), läuft also nicht in der Kette; im Schlauchpaket des SP80M nur Luft/Strom und Start-Stopp, Pilot, Düse.
-- Gesamtbreite mit Kette: 781 mm.
+- Kettenturm an der Stirn der links verlängerten Brücke (Einsteckteil, mit den Sattel-M6 verschraubt).
+- **X-Kette** 20 × 38, R65, liegend hinter der Brücke auf einer Ablage über dem X-Wagen; Festpunkt links am Kettenturm, bewegtes Ende am Pfosten auf der Deckplatte. Z ohne Kette (lose Schlaufe).
+- Gesamtbreite mit beiden Ketten: 789 mm.
 
 ### Gantry Squaring
 

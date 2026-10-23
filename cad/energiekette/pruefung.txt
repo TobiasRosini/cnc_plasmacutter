@@ -1,3 +1,5 @@
-Kettenlänge ca. 1013 mm (Festpunkt y 695, Hub 1120, R125)
-Rinne x -65.0 bis -3.0, Ausleger außen bis x -75.0 (ab Schienenmitte links)
-Kette oben bis 478 mm über Rahmen-OK, Träger-UK 163
+Y-Kette: Länge ca. 1013 mm (Festpunkt y 720, Hub 1120, R125)
+Y-Rinne x -65.0 bis -3.0, Kettenturm außen bis x -75.0 (ab Schienenmitte links)
+X-Kette: Länge ca. 848 mm (R65), Ablage-UK 225, oben bis 412 über Rahmen-OK
+X-Kette Schlaufe bei X ganz rechts bis Rahmen-x 716.5
+Wand an Bohrungen ek_einsteckteil: ok (>= 3.0 mm)

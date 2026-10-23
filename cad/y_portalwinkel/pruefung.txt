@@ -1,5 +1,5 @@
-winkel_fest            gültig: True, 52.0 x 180.0 x 94.0 mm, PETG ca. 362 g (100 % Füllung)
-winkel_kasten          gültig: True, 54.0 x 180.0 x 118.0 mm, PETG ca. 386 g (100 % Füllung)
+winkel_fest            gültig: True, 52.0 x 180.0 x 94.0 mm, PETG ca. 360 g (100 % Füllung)
+winkel_kasten          gültig: True, 52.0 x 180.0 x 118.0 mm, PETG ca. 370 g (100 % Füllung)
 spannschlitten         gültig: True, 43.1 x 24.0 x 6.7 mm, PETG ca. 6 g (100 % Füllung)
 klemmplatte_fest       gültig: True, 48.0 x 40.0 x 6.0 mm, PETG ca. 14 g (100 % Füllung)
 klemmplatte_schlitten  gültig: True, 35.4 x 28.0 x 17.3 mm, PETG ca. 9 g (100 % Füllung)
@@ -46,7 +46,7 @@ Höhen über Flachstange-Unterseite: Rücktrum UK 17.0, Kanalboden Obertrum 56.9
 (X-Klemmplatte liegt bewusst 0,5 mm auf dem Riemenrücken = Klemmweg)
 Schlitten entspannt: Außenende y 88.2 (Winkelende 90.0)
 Winkel Fest quer: x -26.0 bis 26.0 (Schienenmitte = 0)
-Winkel Kasten quer: x -28.0 bis 26.0 (Schienenmitte = 0)
+Winkel Kasten quer: x -26.0 bis 26.0 (Schienenmitte = 0)
 Spannweg 20.0 mm (4 Zähne), Widerlager y 30.2..38.2, Lasche außen bis y 65.2 (entspannt)
 Lage 0: Kollision Winkel Fest/Klemmplatte+Lasche 0.000 mm³, Winkel Fest/Schlitten 0.000 mm³
 Lage 1: Kollision Winkel Fest/Klemmplatte+Lasche 0.000 mm³, Winkel Fest/Schlitten 0.000 mm³

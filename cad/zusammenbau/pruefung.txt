@@ -1,7 +1,7 @@
-Gesamtmaß: 781 (X) x 1538 (Y) x 1328 (Z) mm
-Gesamtbreite 781 mm, Grenze 800 mm: ok
-Rahmen außen 720, Portal steht je Seite 30 mm über
-Portalbrücke: 720 mm lang, OK 987 mm über Boden
+Gesamtmaß: 789 (X) x 1538 (Y) x 1328 (Z) mm
+Gesamtbreite 789 mm, Grenze 800 mm: ok
+Rahmen außen 720, Portal steht je Seite 34 mm über
+Portalbrücke: 767 mm lang, OK 987 mm über Boden
 Y-Hub (Schiene 1300 − Flachstange 180): 1120 mm, gefordert 1100
 Wanne: Unterkante 730, Oberkante 849 mm über Boden (im Wannenkäfig)
 Kollision Wanne / Rahmen: 0.000 mm³
