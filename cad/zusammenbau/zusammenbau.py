@@ -42,17 +42,19 @@ XWAGEN = os.path.join(CAD, "x_wagen", "x_wagen.FCStd")
 YANTRIEB = os.path.join(CAD, "y_antrieb", "y_antrieb.FCStd")
 ZACHSE = os.path.join(CAD, "z_achse", "z_achse.FCStd")
 KAEFIG = os.path.join(CAD, "wannenkaefig", "wannenkaefig.FCStd")
+EKETTE = os.path.join(CAD, "energiekette", "energiekette.FCStd")
 XWAGEN_TEILE = ["x_deckplatte", "x_frontplatte", "x_bodenplatte", "x_motorbock",
                 "Wagen_X_oben", "Wagen_X_unten", "Riemenscheibe_X", "Umlenkrollen_X",
-                "Motor_X_NEMA23"]
+                "Motor_X_NEMA23", "x_ref_fahne"]
 
 # aus den Einzelteilen übernommen
 RAHMEN_TEILE_AUS = {"Dummy_Wanne"}
 GEMEINSAM = ["Flachstange_40x15", "spannschlitten", "klemmplatte_fest",
              "klemmplatte_schlitten", "Wagen_HGH15CA"]
 # rechts einfache Seite, links Kastenseite (Energieketten)
-SEITEN_TEILE = {"rechts": ["winkel_fest", "x_klemmplatte"],
-                "links": ["winkel_kasten", "x_klemmplatte_links"]}
+SEITEN_TEILE = {"rechts": ["winkel_fest", "x_klemmplatte", "y_ref_fahne"],
+                "links": ["winkel_kasten", "x_klemmplatte_links", "y_ref_fahne_links",
+                          "Referenzschalter_X"]}
 
 
 def gruppe(doc, name):
@@ -190,7 +192,8 @@ def main():
                                ("hr", sx[1], yb, App.Rotation(), "_r"),
                                ("vr", sx[1], yf, dreh, ""),
                                ("vl", sx[0], yf, dreh, "_r")):
-        namen = (["y_motorhalter", "Motor_Y", "Riemenscheibe_Y"] if kurz[0] == "h"
+        namen = (["y_motorhalter", "Motor_Y", "Riemenscheibe_Y", "Referenzschalter_Y"]
+                 if kurz[0] == "h"
                  else ["y_umlenkhalter", "Umlenkrolle_Y"])
         for n in namen:
             link(doc, "Y_%s_%s" % (kurz, n), dya.getObject(n + suf),
@@ -213,6 +216,25 @@ def main():
     o = fc_dok.teil(doc, "Y_Riemen_HTD5M_15", yr, "riemen")
     if o not in g_y.Group:
         g_y.addObject(o)
+
+    # --- Y-Energiekette links: Träger, Rinne, Stützen fest; Ausleger am Portal;
+    # Kette in der aktuellen Portallage aus dem Kettenmodul berechnet
+    import importlib
+    sys.path.insert(0, os.path.join(CAD, "energiekette"))
+    import energiekette as ek
+    importlib.reload(ek)
+    dek = fc_dok.quelle(EKETTE)
+    g_e = gruppe(doc, "Energiekette_Y")
+    pl_fest = App.Placement(V(sx[0], 0, z_schiene_rahmen), App.Rotation())
+    for n in ("ek_traeger_40x20", "ek_rinne", "ek_stuetzen"):
+        link(doc, "EK_" + n, dek.getObject(n), pl_fest, g_e)
+    link(doc, "P_links_ek_ausleger", dek.getObject("ek_ausleger"),
+         App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation()), g_e)
+    kt_ = ek.kette(py)
+    kt_.translate(V(sx[0], 0, z_schiene_rahmen))
+    o = fc_dok.teil(doc, "EK_Kette_20x38_R125", fc_dok.fest(kt_), "zukauf")
+    if o not in g_e.Group:
+        g_e.addObject(o)
 
     fc_dok.speichern(doc, pfad, offen)
 
@@ -278,7 +300,8 @@ def main():
         wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
                                   + [dz_.getObject(n).Shape for n in z_teile])
         winkel = Part.makeCompound([o.Shape for o in doc.Objects
-                                    if o.Name.startswith("P_") and o.TypeId == "App::Link"])
+                                    if (o.Name.startswith("P_") or o.Name.startswith("EK_"))
+                                    and o.TypeId in ("App::Link", "Part::Feature")])
 
         def frei(x):
             c = wagen.copy()
@@ -299,7 +322,8 @@ def main():
         # Y-Antrieb und Y-Riemen prüfen; X-Wagen dabei ganz links und ganz rechts
         fest_teile = Part.makeCompound(
             [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
-             and (o.Name.startswith("R_") or o.Name.startswith("Y_"))
+             and (o.Name.startswith("R_") or o.Name.startswith("Y_")
+                  or (o.Name.startswith("EK_") and "Kette" not in o.Name))
              and "Schienen" not in o.Name and o.Name != "Y_Riemen_HTD5M_15"])
         portal_teile = [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
                         and (o.Name.startswith("P_") or o.Name == "Portalbruecke_80x40x4"

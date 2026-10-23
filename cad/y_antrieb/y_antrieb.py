@@ -48,6 +48,15 @@ P = dict(
     m8_mutter_tiefe=6.5,
     # Motor
     motor_laenge=112.0,         # 3 Nm
+    # Referenzschalter Y (nur Motorhalter, hinten): über der Riemenscheibe, genau
+    # über der Schiene, Achse längs. Fahne auf der Klemmplatte am festen Ende des
+    # Y-Winkels. Der Block bleibt innen unter 14 mm (dort fährt der X-Motorbock
+    # nur 1 mm darüber), der Steg zur Platte bleibt unter 97 mm.
+    ref_x=0.0,
+    ref_z=98.0,
+    ref_block=(-12.0, 14.0, -30.0, -14.0, 88.5, 107.5),  # x0, x1, y0, y1, z0, z1
+    ref_steg_oben=97.0,
+    ref_luft=6.0,               # Sensorfläche hinter dem Schienenende (Fahne steht 3 mm über)
     motor_welle_d=8.0,
 )
 
@@ -102,7 +111,11 @@ def halter(variante):
         s = s.cut(Part.makeCylinder(P["m6_senk_d"] / 2, P["m6_senk_tiefe"] + 1,
                                     V(x, y, P["basis_dicke"] - P["m6_senk_tiefe"])))
     t = P["platte_dicke"]
-    if variante == "motor":
+    if variante == "motor":                                                 # Schalterblock außen
+        x0, x1, y0, y1, z0, z1 = P["ref_block"]
+        s = s.fuse(box(x0, x1, y0, y1, z0, z1))
+        s = s.fuse(box(x1 - 0.01, g["x0"] + 0.01, y0, y1, z0, P["ref_steg_oben"]))   # Steg zur Platte
+        s = s.cut(Part.makeCylinder(6.1, y1 - y0 + 2, V(P["ref_x"], y0 - 1, P["ref_z"]), V(0, 1, 0)))
         s = s.cut(zyl_x(38.1 + 1, t + 2, g["x0"] - 1, ya_, za))
         a = 47.14 / 2
         for dy in (-a, a):
@@ -125,6 +138,14 @@ def motor():
     return fc_dok.fest(m)
 
 
+def ref_schalter():
+    x0, x1, y0, y1, z0, z1 = P["ref_block"]
+    m = kt.naeherungsschalter_m12(50.0, (-y1 - P["ref_luft"] - 4.0, -y0 - P["ref_luft"]))
+    m.rotate(V(0, 0, 0), V(1, 0, 0), 90)                # +Z -> -Y (Körper nach hinten)
+    m.translate(V(P["ref_x"], -P["ref_luft"], P["ref_z"]))
+    return fc_dok.fest(m)
+
+
 def gespiegelt(s):
     return s.mirror(V(0, 0, 0), V(1, 0, 0))
 
@@ -136,6 +157,7 @@ def main():
         "Motor_Y": (motor(), "zukauf"),
         "Riemenscheibe_Y": (scheibe(True)[0], "zukauf"),
         "Umlenkrolle_Y": (scheibe(False)[0], "zukauf"),
+        "Referenzschalter_Y": (ref_schalter(), "zukauf"),
     }
     for n in list(teile):
         teile[n + "_r"] = (gespiegelt(teile[n][0]), teile[n][1])

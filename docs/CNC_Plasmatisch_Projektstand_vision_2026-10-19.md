@@ -121,6 +121,20 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - Motoren möglichst stationär am Tisch; Riemen parallel und möglichst nahe an der Führungsebene.
 - Riemenlängen, Umlenkrollen und Spannvorrichtungen sind noch zu konstruieren.
 
+### Referenzschalter (bestellt 23.10.2026)
+
+- 4× induktiver Näherungsschalter **LJ12A3-4-Z/AY** (M12, PNP, Öffner, 6–36 V, 4 mm auf Stahl), betrieben an 24 V.
+- **Y links/rechts:** hinten über der Y-Riemenscheibe, genau über der Schiene, Achse längs (Halter am Y-Motorhalter); Stahlfahne abgekantet auf der Klemmplatte am festen Ende des Y-Winkels. Über das M12-Gewinde fein einstellbar (Portal rechtwinklig).
+- **X:** am linken Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Stahlfahne unter der Deckplatte des X-Wagens. Schaltet ab ca. 82 mm Wagenmitte.
+- **Z:** oben, senkrecht durch den Z-Kopf; Stahlfahne auf dem Z-Schlitten.
+- Andere Achsenden über Software-Endlagen in LinuxCNC.
+
+### Energiekette Y (Stand 23.10.2026)
+
+- Liegend links, über dem linken Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 1,01 m (`cad/energiekette/`).
+- Die geteilte Lichtbogenspannung kommt an der CNC-Buchse des Geräts heraus (Anleitung S. 13), läuft also nicht in der Kette; im Schlauchpaket des SP80M nur Luft/Strom und Start-Stopp, Pilot, Düse.
+- Gesamtbreite mit Kette: 781 mm.
+
 ### Gantry Squaring
 
 - Zwei unabhängige Referenzschalter für die Y-Achse.
@@ -164,7 +178,8 @@ Vorläufige Planungswerte:
 
 - **Wannenkäfig** aus Stahl-Rechteckrohr 20 × 20 × 2 (`cad/wannenkaefig/`): hängt mit dem oberen Ring im Grundrahmen, trägt den Wannenboden auf Querrohren und hält die Wände. Wanne steht 120 mm unter Rahmenoberkante, Blechunterseite = Rahmenoberkante.
 - Austauschbare Opferleisten auf Trägern, die im Wasser auf dem Wannenboden direkt über den Querrohren des Käfigs stehen; die Last geht durch den Boden ins Stahlrohr, die PE-Wände tragen nichts.
-- **Ablauf** mittig im Wannenboden, der Käfigboden ist dort frei.
+- **Ablauf** mittig im Wannenboden, Ø25–32 mm, der Käfigboden ist dort frei.
+- Wanne wird zum Reinigen **nach oben herausgehoben** (Portal ganz hinten); der Käfig bleibt fest im Rahmen.
 - Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
 - **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Wannenboden und Seiten sind konstruktiv zu schützen; Wasserstand und Schnittbereich müssen das Risiko berücksichtigen. Wasserbett ersetzt keine geeignete Lüftung/Absaugung.
 
@@ -183,7 +198,7 @@ Vorläufige Planungswerte:
 | Lenovo ThinkCentre M929q | Vorhanden |
 | Mesa 7i96S | Geliefert |
 | PE-Wasserwanne 597 × 1194 × 119 | Geliefert, vermessen |
-| SPARTUS XPro CUT 70CNC | Modell festgelegt, noch nicht als gekauft bestätigt |
+| SPARTUS XPro CUT 70CNC | Modell festgelegt; Maschinenbrenner SP80M gekauft (22.10.2026), Maße Düsenkopf und Schlauchpaket folgen |
 | Mesa THCAD | Vorgesehen, Variante offen |
 | 4 × NEMA23, 3 Nm, Open Loop | Neu festgelegt, noch auszuwählen/zu bestellen |
 | 4 × separate Step/Dir-Treiber | Noch auszuwählen |

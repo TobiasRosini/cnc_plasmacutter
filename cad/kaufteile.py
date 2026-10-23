@@ -147,3 +147,17 @@ def brenner_sp80m(schaft_d=32.0, laenge=250.0):
     schaft = Part.makeCylinder(schaft_d / 2, laenge - 35.0, V(0, 0, 35.0))
     schlauch = Part.makeCylinder(9.0, 40.0, V(0, 0, laenge))
     return kegel.fuse([schaft, schlauch]).removeSplitter()
+
+
+def naeherungsschalter_m12(laenge=50.0, mutter_abstand=(8.0, 26.0)):
+    """Induktiver Näherungsschalter M12 (LJ12A3-4-Z/AY, PNP, Öffner, 4 mm
+    Schaltabstand auf Stahl). Lage: Achse Z, Sensorfläche in z = 0, Körper nach
+    +Z, zwei Muttern M12 (SW17 x 4) bei mutter_abstand, Kabel hinten."""
+    s = Part.makeCylinder(6.0, laenge)
+    for z in mutter_abstand:
+        r = 17.0 / math.sqrt(3)
+        pts = [V(r * math.cos(math.radians(30 + 60 * i)), r * math.sin(math.radians(30 + 60 * i)), z)
+               for i in range(7)]
+        s = s.fuse(Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, 4)))
+    s = s.fuse(Part.makeCylinder(2.0, 20.0, V(0, 0, laenge)))
+    return s.removeSplitter()

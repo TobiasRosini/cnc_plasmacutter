@@ -1,6 +1,6 @@
-Gesamtmaß: 734 (X) x 1538 (Y) x 1306 (Z) mm
-Gesamtbreite 734 mm, Grenze 800 mm: ok
-Rahmen außen 720, Portal steht je Seite 7 mm über
+Gesamtmaß: 781 (X) x 1538 (Y) x 1328 (Z) mm
+Gesamtbreite 781 mm, Grenze 800 mm: ok
+Rahmen außen 720, Portal steht je Seite 30 mm über
 Portalbrücke: 720 mm lang, OK 987 mm über Boden
 Y-Hub (Schiene 1300 − Flachstange 180): 1120 mm, gefordert 1100
 Wanne: Unterkante 730, Oberkante 849 mm über Boden (im Wannenkäfig)
@@ -8,10 +8,10 @@ Kollision Wanne / Rahmen: 0.000 mm³
 Kollision Wanne / Brücke: 0.000 mm³
 Abstand Brücke UK zu Rahmen OK: 57 mm
 Kollisionen zwischen allen Teilen: 0
-X-Weg Wagenmitte: 76.0 bis 644.0 = 568.0 mm (Wannenboden 85 bis 635 gefordert)
-Portal hinten, X-Wagen bei 76: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
+X-Weg Wagenmitte: 78.0 bis 644.0 = 566.0 mm (Wannenboden 85 bis 635 gefordert)
+Portal hinten, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal hinten, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
-Portal vorn, X-Wagen bei 76: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
+Portal vorn, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal vorn, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Düse in Y: 296 bis 1416, Wannenboden 306 bis 1406
 Y-Motor hinten: Oberkante 944.0 mm über Boden, innen bis x 160.5

@@ -48,7 +48,7 @@ P = dict(
     # Böden: Querrohre unter dem Wannenboden (y-Lagen ab Mitte); Mitte frei für Ablauf
     querrohre_y=[110.0, 330.0, 550.0],
     pfosten_y=[0.0],            # zusätzlich zu den Ecken, an beiden Längsseiten
-    ablauf_d=40.0,
+    ablauf_d=32.0,              # Ø25-32
     ablauf_l=120.0,
     # Befestigung am Rahmen: M8 quer durch Ring und Längsträger
     bolzen_y=[-450.0, 0.0, 450.0],

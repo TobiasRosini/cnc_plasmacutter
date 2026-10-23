@@ -53,6 +53,10 @@ P = dict(
     front_x=30.0,               # halbe Länge Front- und Bodenplatte (<= halbe Wagenlänge)
     front_spalt=4.0,            # Frontplatte vor der Brücke
     deck_hinten=-136.0,         # Hinterkante Deckplatte (y)
+    # Referenzfahne X (Stahl 3 mm) unter der Deckplatte, links hinten; Schalter am
+    # linken Y-Winkel (Sattelrückwand), Achse z 94, y -25
+    xf=(-20.0, 3.0, -34.0, -19.0, 86.0),      # x0, x1, y0, y1, z unten
+    xf_loecher=[(-12.0, -26.5), (-3.0, -26.5)],
     deck_vor=0.0,               # Deckplatte bündig mit der Frontplatte (vorn sitzt die Z-Grundplatte)
     boden_vor=3.0,              # Bodenplatte steht vorn über die Frontplatte
     z_loecher=[(-20.0, 62.0), (20.0, 62.0), (-20.0, 88.0), (20.0, 88.0)],  # M5 für die Z-Grundplatte
@@ -160,6 +164,9 @@ def deckplatte():
     yf = (g["y_f0"] + g["y_f1"]) / 2
     for x in (-20, 0, 20):
         s = s.cut(zyl(P["m5_durchgang"], t + 2, x, yf, z0 - 1))
+    # M4-Gewinde für die Referenzfahne X
+    for x, y in P["xf_loecher"]:
+        s = s.cut(zyl(3.3, 9, x, y, z0 - 1))
     # M4 in den Motorbock (Gewindeeinsätze), gesenkt
     for x, y in P["bock_schrauben"]:
         s = s.cut(zyl(P["m4_durchgang"], t + 2, x, y, z0 - 1))
@@ -281,6 +288,16 @@ def motorbock():
     return s.removeSplitter()
 
 
+def ref_fahne():
+    g = geo()
+    x0, x1, y0, y1, zu = P["xf"]
+    zo = g["z_wo"]
+    s = box(x0, x1, y0, y1, zo - 3, zo).fuse(box(x0, x0 + 3, y0, y1, zu, zo - 2.99))
+    for x, y in P["xf_loecher"]:
+        s = s.cut(zyl(4.5, 5, x, y, zo - 4))
+    return s.removeSplitter()
+
+
 # ---------------------------------------------------------------- Kaufteile (Dummies)
 def kaufteile():
     g = geo()
@@ -308,7 +325,8 @@ def kaufteile():
 
 def main():
     teile = {"x_deckplatte": (deckplatte(), "alu"), "x_frontplatte": (frontplatte(), "alu"),
-             "x_bodenplatte": (bodenplatte(), "alu"), "x_motorbock": (motorbock(), "druck")}
+             "x_bodenplatte": (bodenplatte(), "alu"), "x_motorbock": (motorbock(), "druck"),
+             "x_ref_fahne": (ref_fahne(), "stahl")}
     kauf = kaufteile()
     pfad = os.path.join(OUT, "x_wagen.FCStd")
     doc, offen = fc_dok.dokument(pfad)

@@ -37,6 +37,7 @@ OUT = os.path.dirname(os.path.abspath(__file__))
 ABSTAND = 300.0     # Darstellung im Teile-Dokument: linker Winkel (kasten) bei x = -ABSTAND
 sys.path.insert(0, os.path.dirname(OUT))
 import fc_dok  # noqa: E402
+import kaufteile as kt  # noqa: E402
 
 # ---------------------------------------------------------------- Parameter
 P = dict(
@@ -143,6 +144,21 @@ P = dict(
     ek_hoehe=30.0,              # über Basisoberkante
     ek_y=(-45.0, -5.0),
     ek_loecher=[(-35.0, 10.0), (-15.0, 10.0), (-35.0, 22.0), (-15.0, 22.0)],  # (y, z über OK)
+
+    # Referenzfahne Y (Stahl 3 mm, abgekantet): liegt auf der Klemmplatte am festen
+    # Ende unter den beiden hinteren Klemmschrauben, Zielfläche steht 3 mm vor dem
+    # Winkelende senkrecht hoch (Schalter sitzt über der Y-Riemenscheibe)
+    yf_ziel_x=(-12.0, 20.0),    # Zielfläche quer (innen nur bis -12: dort fährt der X-Motorbock)
+    yf_auflage_x=(2.0, 20.0),   # Auflage außen, unter den beiden äußeren Klemmschrauben
+    yf_laenge=43.0,             # Auflage ab Winkelende
+    yf_oben=80.0,               # Oberkante Zielfläche (Winkel-z)
+    yf_dicke=3.0,
+    # Referenzschalter X (nur kasten): Block auf der Sattelrückwand, Achse quer,
+    # Sensorfläche innen (lokal -x), Fahne unter der Deckplatte des X-Wagens
+    xr_block=(-20.0, 0.0, -34.0, -15.5, 24.0),  # x0, x1, y0, y1, Höhe über Sattel-OK
+    xr_y=-24.75,
+    xr_z=123.0,                 # Winkel-z (= X-Wagen-z 94)
+    xr_flaeche=-38.0,           # Sensorfläche (lokal x): Fahne berührt bei Wagen 78 mm, schaltet ab ca. 82
 
     # X-Riemen (Omega auf dem X-Wagen): Enden hinten an den Sätteln geklemmt
     x_riemen_z=61.0,            # Mitte X-Riemen (hochkant) über Basisoberkante
@@ -346,6 +362,11 @@ def winkel(variante="fest"):
                                 xi - 1, y, z1 + z, V(1, 0, 0)))
     # X-Riemenklemme: Zahnprofil in der Sattelrückwand, Gewindeeinsätze
     s = s.cut(x_klemm_bohrungen(variante))
+    # Referenzschalter X auf der Sattelrückwand (nur Kastenseite)
+    if variante == "kasten":
+        x0, x1, y0, y1, h = P["xr_block"]
+        s = s.fuse(box(x0, x1, y0, y1, zs, zs + h))
+        s = s.cut(zyl(12.1, x1 - x0 + 2, x0 - 1, P["xr_y"], P["xr_z"], V(1, 0, 0)))
     return s.removeSplitter()
 
 
@@ -382,6 +403,33 @@ def x_klemm_bohrungen(variante):
             res.append(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, x, g["yw"] - 1,
                            z1 + z, V(0, 1, 0)))
     return Part.makeCompound(res)
+
+
+def x_ref_schalter():
+    """Schalter X in Lage 'kasten' vor dem Spiegeln (Fläche zeigt nach -x)."""
+    x0, x1 = P["xr_block"][:2]
+    f = P["xr_flaeche"]
+    m = kt.naeherungsschalter_m12(50.0, (x0 - 4.0 - f, x1 - f))
+    m.rotate(V(0, 0, 0), V(0, 1, 0), 90)                # +Z -> +X
+    m.translate(V(f, P["xr_y"], P["xr_z"]))
+    return fc_dok.fest(m)
+
+
+def y_ref_fahne():
+    """Abgekantete Stahlfahne: Auflage auf der Klemmplatte (unter den hinteren
+    Klemmschrauben), Zielfläche quer 3 mm vor dem Winkelende."""
+    t = P["yf_dicke"]
+    yend = -P["fl_laenge"] / 2
+    z0 = z_turm() + 0.7 + P["klemm_platte_dicke"]          # Oberseite Klemmplatte
+    a0, a1 = P["yf_auflage_x"]
+    z_0, z_1 = P["yf_ziel_x"]
+    auflage = box(a0, a1, yend - t, yend + P["yf_laenge"], z0, z0 + t)
+    ziel = box(z_0, z_1, yend - t, yend, z0, P["yf_oben"])
+    s = auflage.fuse(ziel)
+    for x, y in klemm_punkte():
+        if x > 0:
+            s = s.cut(zyl(P["m5_durchgang"], t + 2, x, y, z0 - 1))
+    return s.removeSplitter()
 
 
 def x_klemmplatte():
@@ -625,6 +673,7 @@ def main():
     druck = {"winkel_fest": wm, "winkel_kasten": wk, "spannschlitten": sl,
              "klemmplatte_fest": kf, "klemmplatte_schlitten": ks,
              "x_klemmplatte": xk}
+    yfa = y_ref_fahne()
 
     pfad = os.path.join(OUT, "y_portalwinkel.FCStd")
     doc, offen = fc_dok.dokument(pfad)
@@ -638,6 +687,10 @@ def main():
              "Riemen_Ruecktrum": "riemen"}
     for name, shp in dm.items():
         fc_dok.teil(doc, name, shp, farbe.get(name, "dummy"))
+    fc_dok.teil(doc, "y_ref_fahne", yfa, "stahl")
+    fc_dok.teil(doc, "Referenzschalter_X", verschoben(gespiegelt_links(x_ref_schalter()), -ABSTAND),
+                "zukauf")
+    fc_dok.teil(doc, "y_ref_fahne_links", verschoben(gespiegelt_links(yfa), -ABSTAND), "stahl")
     fc_dok.teil(doc, "x_klemmplatte_links", verschoben(gespiegelt_links(xk), -ABSTAND),
                 "druck_hell")
     fc_dok.teil(doc, "Riemen_X", xr, "riemen")

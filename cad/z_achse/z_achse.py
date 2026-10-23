@@ -63,7 +63,16 @@ P = dict(
     kopf_saeule=12.0,
     kopf_platte=8.0,
     kupplung_l=30.0,
-    fk_loch=18.0,               # FK10-Flansch: Lochbild ±18 (Datenblatt prüfen)
+    fk_loch=18.0,
+    kopf_x=58.0,                # Z-Kopf-Sockel rechts (Platz für den Referenzschalter)
+    kopf_x_links=52.0,          # links schmaler: bei X ganz links läuft dort die Y-Energiekette
+    # Referenzschalter Z oben: senkrecht durch den Z-Kopf-Sockel, Stahlfahne auf dem Schlitten
+    ref_x=46.0,
+    ref_y=96.0,
+    ref_luft=3.0,               # Sensorfläche über der Fahne, wenn der Schlitten ganz oben ist
+    fahne_dicke=3.0,
+    fahne_x=(36.0, 56.0),
+    fahne_y0=86.0,               # FK10-Flansch: Lochbild ±18 (Datenblatt prüfen)
     # Schwimmkopf
     stab_d=8.0,
     stab_x=17.0,
@@ -180,7 +189,35 @@ def schlitten(g):
     for x in (-26.0, 26.0):                               # Schwimmkopf-Halter: M5-Gewinde
         s = s.cut(zyl(P["m5_kern"], P["sl_dicke"] + 2, x, g["y_wa"] - 1, s0 + P["halter_h"] / 2,
                       V(0, 1, 0)))
+    for x in fahne_schrauben():                           # Referenzfahne: M4 in die Oberkante
+        s = s.cut(zyl(P["m4_kern"], 9, x, (g["y_wa"] + g["y_sl"]) / 2, s0 + P["sl_hoehe"] - 8))
     return s
+
+
+def fahne_schrauben():
+    a, b = P["fahne_x"]
+    return [a + 5.5, b - 5.5]
+
+
+def ref_fahne(g):
+    """Stahlfahne 3 mm auf der Schlitten-Oberkante, ragt nach hinten über die Wagen."""
+    a, b = P["fahne_x"]
+    z0 = g["s0"] + P["sl_hoehe"]
+    s = box(a, b, P["fahne_y0"], g["y_sl"] + 2, z0, z0 + P["fahne_dicke"])
+    for x in fahne_schrauben():
+        s = s.cut(zyl(4.5, 5, x, (g["y_wa"] + g["y_sl"]) / 2, z0 - 1))
+    return s
+
+
+def ref_schalter():
+    """Sensorfläche über der Fahne bei Schlitten ganz oben (feste Lage)."""
+    g1 = geo(1.0)
+    zf = g1["s0"] + P["sl_hoehe"] + P["fahne_dicke"] + P["ref_luft"]
+    unter = g1["z_kb"] - 4.0 - zf                          # Mutter unter dem Sockel
+    ueber = g1["z_kb"] + P["kopf_basis"] - zf               # Mutter auf dem Sockel
+    sch = kt.naeherungsschalter_m12(50.0, (unter, ueber))
+    sch.translate(V(P["ref_x"], P["ref_y"], zf))
+    return fc_dok.fest(sch)
 
 
 # ---------------------------------------------------------------- Druck
@@ -213,11 +250,11 @@ def kopf_schrauben(g):
 
 
 def zkopf(g):
-    gx = P["gp_x"]
+    gx = P["kopf_x"]
     zb = g["z_kb"]
     zb1 = zb + P["kopf_basis"]
-    yv = g["y_sp"] + 28.2 + 3
-    s = box(-gx, gx, g["y0"] - 8, yv, zb, zb1)                             # Basis
+    yv = max(g["y_sp"] + 28.2 + 3, P["ref_y"] + 6.1 + 4)
+    s = box(-P["kopf_x_links"], gx, g["y0"] - 8, yv, zb, zb1)              # Basis
     sx = P["kopf_saeule"]
     ys0, ys1 = g["y_sp"] - 12, g["y_sp"] + 12
     for x0 in (-42.0, 42.0 - sx):                                          # zwei Säulen
@@ -239,6 +276,8 @@ def zkopf(g):
             s = s.cut(zyl(P["m5_durchgang"], P["kopf_platte"] + 2, dx, g["y_sp"] + dy, zp - 1))
             s = s.cut(sechskant(P["m5_mutter_sw"], P["m5_mutter_tiefe"] + 1, dx, g["y_sp"] + dy,
                                 zp - 1))
+    # Referenzschalter M12 senkrecht
+    s = s.cut(zyl(12.2, P["kopf_basis"] + 2, P["ref_x"], P["ref_y"], zb - 1))
     # Befestigung auf Grundplatte und Leisten: M5 gesenkt
     for x, y in kopf_schrauben(g):
         s = s.cut(zyl(P["m5_durchgang"], P["kopf_basis"] + 2, x, y, zb - 1))
@@ -320,6 +359,7 @@ def kaufteile(g):
     b = kt.brenner_sp80m(P["brenner_d"])
     b.translate(V(0, P["brenner_y"], g["c0"] - P["brenner_unter_traeger"]))
     d["Brenner_SP80M"] = fc_dok.fest(b)
+    d["Z_Referenzschalter"] = ref_schalter()
     return d
 
 
@@ -328,7 +368,7 @@ def teile(lage=None):
     eigen = {"z_grundplatte": (grundplatte(), "alu"), "z_leisten_20x20": (leisten(), "alu"),
              "z_schlitten": (schlitten(g), "alu"), "z_mutterblock": (mutterblock(g), "druck"),
              "z_kopf": (zkopf(g), "druck"), "z_halter": (halter(g), "druck"),
-             "z_traeger": (traeger(g), "druck")}
+             "z_traeger": (traeger(g), "druck"), "z_ref_fahne": (ref_fahne(g), "stahl")}
     kauf = {n: (s, "zukauf") for n, s in kaufteile(g).items()}
     return g, eigen, kauf
 

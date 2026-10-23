@@ -1,4 +1,4 @@
-y_motorhalter    gültig: True, 48.5 x 64.0 x 97.0 mm
+y_motorhalter    gültig: True, 48.5 x 64.0 x 107.5 mm
 Wand an Bohrungen y_motorhalter: ok (>= 3.0 mm)
 y_umlenkhalter   gültig: True, 48.5 x 64.0 x 97.0 mm
 Wand an Bohrungen y_umlenkhalter: ok (>= 3.0 mm)
