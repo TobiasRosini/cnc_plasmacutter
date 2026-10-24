@@ -183,3 +183,32 @@ def fest(shape):
     s = shape.copy()
     s.Placement = App.Placement()
     return s.transformGeometry(m)
+
+
+# Muttern (Schlüsselweite + Druckspiel, Höhe + Spiel) für Taschen in Druckteilen
+MUTTER = {3: (5.7, 2.7), 4: (7.2, 3.5), 5: (8.2, 4.3), 6: (10.2, 5.3)}
+
+
+def mutter(m, p, achse, schlitz=None, laenge=0.0):
+    """Tasche für eine eingepresste Mutter M<m>: Mitte p auf der Schraubenachse,
+    achse = Schraubenrichtung. Mit schlitz (Richtung quer zur Achse) und laenge
+    entsteht ein Schlitz, durch den die Mutter seitlich eingeschoben wird; die
+    Schlüsselflächen liegen dann parallel zum Schlitz (Mutter dreht nicht mit)."""
+    import math
+    sw, h = MUTTER[m]
+    V = App.Vector
+    z = V(achse).normalize()
+    if schlitz is None:
+        x = z.cross(V(0, 0, 1)) if abs(z.z) < 0.9 else z.cross(V(1, 0, 0))
+    else:
+        x = V(schlitz)
+    x = (x - z * x.dot(z)).normalize()
+    y = z.cross(x)
+    r = sw / math.sqrt(3)
+    pts = [V(r * math.cos(math.radians(60 * i)), r * math.sin(math.radians(60 * i)), -h / 2)
+           for i in range(7)]
+    s = Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, h))
+    if schlitz is not None and laenge > 0:
+        s = s.fuse(Part.makeBox(laenge, sw, h, V(0, -sw / 2, -h / 2)))
+    mat = App.Matrix(x.x, y.x, z.x, p.x, x.y, y.y, z.y, p.y, x.z, y.z, z.z, p.z, 0, 0, 0, 1)
+    return s.transformGeometry(mat)

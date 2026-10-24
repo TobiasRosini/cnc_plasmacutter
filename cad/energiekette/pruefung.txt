@@ -9,6 +9,7 @@ Wand an Bohrungen ekx_festhalter: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsclips: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_stopfen: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_halter: ok (>= 3.0 mm)
+Wand an Bohrungen ek_stuetzen_kopf: ok (>= 3.0 mm)
 Leitung / Turm: 0.00 mm³
 Leitung / Clips: 0.00 mm³
 Leitung / Halter Y: 0.00 mm³

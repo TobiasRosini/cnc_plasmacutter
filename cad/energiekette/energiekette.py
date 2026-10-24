@@ -52,9 +52,23 @@ P = dict(
     end_F=6.0,
     end_laenge=30.0,
     end_flansch=4.0,
-    # Stützen (Stahl 20x20x2) außen am Längsträger, an den Rahmenenden
-    stuetze=20.0,
-    stuetze_m8_z=[-30.0, -10.0],    # = Grundrahmen ek_stuetze_z
+    # Stützen: je ein Rechteckrohr 20x40x2 (40 entlang y) außen am Längsträger, an den
+    # Rahmenenden, oben ein Druckkopf unter dem Träger (statt angeschweißtem Querrohr).
+    # Rohr an den Längsträger: 2x M6 durch die Innenwand in Nietmuttern (Grundrahmen
+    # ek_stuetze_y/z), außen Zugangslöcher. Kopf ins Rohr: 2x M5 in eingepresste Muttern.
+    # Träger auf den Kopf: 2x M6 von unten in Nietmuttern in der Trägerunterseite.
+    stuetze=(20.0, 40.0),
+    stuetze_wand=2.0,
+    stuetze_m6_y=[10.0, 30.0],      # = Grundrahmen ek_stuetze_y
+    stuetze_m6_z=-20.0,             # = Grundrahmen ek_stuetze_z
+    zugang_m6_d=13.0,
+    kopf_h=15.0,
+    kopf_zapfen=25.0,
+    kopf_y=60.0,                    # Kopf ragt über das Rohr hinaus: Trägerschrauben von unten zugänglich
+    kopf_m5_y=[12.0, 28.0],
+    kopf_m5_unter_ok=12.0,
+    traeger_m6_y=50.0,              # ab Rahmenende
+    nietmutter_m6_d=9.0,
     # Kettenturm (Alu-Flachmaterial 40x8) an der Stirn der links verlängerten Brücke.
     # In der Brücke steckt ein Einsteckteil (Druck), das von den M6 des Sattels
     # mit gehalten wird; der Turm ist mit 4x M6 in dessen Stirnseite geschraubt.
@@ -69,8 +83,9 @@ P = dict(
     m6_z=[75.0, 95.0],
     einsteck_innen=38.0,        # Einsteckteil reicht bis hier (über die zweite M6)
     turm_loecher=[(-8.0, 80.0), (8.0, 80.0), (-8.0, 118.0), (8.0, 118.0)],  # (y, z)
-    einsatz_m6_d=8.0,
-    einsatz_m6_tiefe=12.0,
+    # rechts liegt die Sattelschraube M6 (z 75) nur 8,5 mm hinter der Stirn: die
+    # unteren Einsätze würden sie schneiden, deshalb beide Reihen über den Sattel-M6
+    turm_loecher_rechts=[(-8.0, 106.0), (8.0, 106.0), (-8.0, 124.0), (8.0, 124.0)],
 
     # X-Energiekette über der Brücke: 20x38 (35x56), R65, liegend auf einer Ablage,
     # die links am Kettenturm und rechts an einer Platte an der rechten Brückenstirn
@@ -88,8 +103,6 @@ P = dict(
     # (festes X-Kettenende + Zapfen für die Ablage), dazwischen Clips für die Leitungen
     hy_dicke=20.0,              # Halter Y über dem Anschlussstück
     hy_y=(-20.0, 32.0),         # nach vorn verlängert: Kabelbinder an der Leitungsbiegung
-    einsatz_m5_d=6.4,           # Gewindeeinsatz M5 (Bohrung im Druckteil)
-    einsatz_m5_tiefe=10.0,
     turm_x_y=[-14.0, 12.0],     # M5 Turm -> Festhalter (innerhalb der 40 mm Turmbreite)
     leitung_d=16.0,             # Leitungsbündel (Brennerschlauch + Kabel), vereinfacht
     clip_z=[345.0, 380.0],      # Leitungsclips am Turm
@@ -103,8 +116,6 @@ P = dict(
     hx_kanal_b=38.0,            # lichte Breite = Innenbreite der Kette
     hx_wand=4.0,
     hx_strebe=5.0,              # Strebe zwischen Rückwand und Kanalkörper
-    m4_einsatz_d=5.6,           # Gewindeeinsatz M4 (Tülle am Austritt)
-    m4_einsatz_tiefe=8.0,
     bruecke_uk_x_wagen=57.0,    # Brückenunterkante über Rahmen-OK (X-Wagen z = 0)
 )
 
@@ -143,9 +154,9 @@ def traeger_rinne():
     tr = box(xm - tb / 2, xm + tb / 2, yh, L, P["traeger_uk"], P["traeger_uk"] + th)
     tr = tr.cut(box(xm - tb / 2 + 2, xm + tb / 2 - 2, yh - 1, L + 1, P["traeger_uk"] + 2,
                     P["traeger_uk"] + th - 2))
-    for y in (P["stuetze"] / 2, L - P["stuetze"] / 2):            # M6 zu den Stützen
+    for y in (P["traeger_m6_y"], L - P["traeger_m6_y"]):          # M6-Nietmuttern zu den Stützköpfen
         for dx in (-10.0, 10.0):
-            tr = tr.cut(Part.makeCylinder(3.3, 4, V(xm + dx, y, P["traeger_uk"] - 1)))   # nur untere Wand
+            tr = tr.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, 4, V(xm + dx, y, P["traeger_uk"] - 1)))
     t = P["rinne_t"]
     y0 = yh                                              # Rinne ganz durch: hinten Schlaufe, vorn Kabel
     ri = box(g["r_x0"], g["r_x1"], y0, L, g["z_rinne"], g["z_rinne"] + t)
@@ -157,28 +168,60 @@ def traeger_rinne():
     return tr, ri.removeSplitter()
 
 
+def stuetzen_lagen():
+    """(y0, Richtung) je Rahmenende: Rohr von y0 bis y0 + richt * 40."""
+    return [(0.0, 1), (P["rahmen_laenge"], -1)]
+
+
 def stuetzen():
-    s = P["stuetze"]
-    g = geo()
-    xm = (g["r_x0"] + g["r_x1"]) / 2
-    x_aussen = -P["rohr"] / 2                          # Außenfläche Längsträger
+    """Je ein Rechteckrohr 20 x 40 x 2 senkrecht außen am Längsträger."""
+    sx, sy = P["stuetze"]
+    t = P["stuetze_wand"]
+    x1 = -P["rohr"] / 2                                # Außenfläche Längsträger
+    x0 = x1 - sx
+    z0, z1 = -P["rohr"], P["traeger_uk"] - P["kopf_h"]
     res = None
-    for y0 in (0.0, P["rahmen_laenge"] - s):
-        # senkrechtes Rohr außen am Längsträger, oben ein Querstück unter den Träger
-        st = box(x_aussen - s, x_aussen, y0, y0 + s, -P["rohr"], P["traeger_uk"])
-        st = st.cut(box(x_aussen - s + 2, x_aussen - 2, y0 + 2, y0 + s - 2, -P["rohr"] - 1,
-                        P["traeger_uk"] + 1))
-        q0 = min(xm - P["traeger_b"] / 2, x_aussen - s)
-        q1 = max(xm + P["traeger_b"] / 2, x_aussen)
-        qu = box(q0, q1, y0, y0 + s, P["traeger_uk"] - s, P["traeger_uk"])
-        qu = qu.cut(box(q0 - 1, q1 + 1, y0 + 2, y0 + s - 2, P["traeger_uk"] - s + 2,
-                        P["traeger_uk"] - 2))
-        st = st.fuse(qu)
-        for z in P["stuetze_m8_z"]:                       # M8 quer in den Längsträger
-            st = st.cut(Part.makeCylinder(4.5, s + 2, V(x_aussen - s - 1, y0 + s / 2, z), V(1, 0, 0)))
-        for dx in (-10.0, 10.0):                           # M6 senkrecht in den Träger
-            st = st.cut(Part.makeCylinder(3.3, s + 2, V(xm + dx, y0 + s / 2, P["traeger_uk"] - s - 1)))
+    for ya, ri in stuetzen_lagen():
+        y0, y1 = sorted((ya, ya + ri * sy))
+        st = box(x0, x1, y0, y1, z0, z1).cut(box(x0 + t, x1 - t, y0 + t, y1 - t, z0 - 1, z1 + 1))
+        for dy in P["stuetze_m6_y"]:                       # M6 innen, Zugang außen
+            y = ya + ri * dy
+            st = st.cut(Part.makeCylinder(3.3, t + 2, V(x1 - t - 1, y, P["stuetze_m6_z"]), V(1, 0, 0)))
+            st = st.cut(Part.makeCylinder(P["zugang_m6_d"] / 2, t + 2, V(x0 - 1, y, P["stuetze_m6_z"]),
+                                          V(1, 0, 0)))
+        for dy in P["kopf_m5_y"]:                          # M5 außen in den Kopfzapfen
+            st = st.cut(Part.makeCylinder(2.75, t + 2, V(x0 - 1, ya + ri * dy, z1 - P["kopf_m5_unter_ok"]),
+                                          V(1, 0, 0)))
         res = st if res is None else res.fuse(st)
+    return res.removeSplitter()
+
+
+def stuetzen_kopf():
+    """Druckkopf auf jedem Stützrohr: Zapfen im Rohr (2x M5-Mutter, von unten in
+    Schlitze geschoben), Platte unter dem Träger (2x M6 von unten). Kopfüber druckbar."""
+    g = geo()
+    sx, sy = P["stuetze"]
+    t, sp = P["stuetze_wand"], 0.2
+    x1 = -P["rohr"] / 2
+    x0 = x1 - sx
+    xm = (g["r_x0"] + g["r_x1"]) / 2
+    zo = P["traeger_uk"]
+    zu = zo - P["kopf_h"]
+    res = None
+    for ya, ri in stuetzen_lagen():
+        y0, y1 = sorted((ya, ya + ri * P["kopf_y"]))
+        k = box(min(xm - P["traeger_b"] / 2, x0), max(xm + P["traeger_b"] / 2, x1), y0, y1, zu, zo)
+        r0, r1 = sorted((ya + ri * (t + sp), ya + ri * (sy - t - sp)))
+        k = k.fuse(box(x0 + t + sp, x1 - t - sp, r0, r1, zu - P["kopf_zapfen"], zu + 0.01))
+        zs = zu - P["kopf_m5_unter_ok"]
+        xn = (x0 + x1) / 2                                   # Mutter in Zapfenmitte
+        for dy in P["kopf_m5_y"]:
+            y = ya + ri * dy
+            k = k.cut(Part.makeCylinder(2.75, sx, V(x0, y, zs), V(1, 0, 0)))
+            k = k.cut(box(xn - 2.4, xn + 2.4, y - 4.15, y + 4.15, zu - P["kopf_zapfen"] - 1, zs + 4.8))
+        for dx in (-10.0, 10.0):                              # M6 in den Träger
+            k = k.cut(Part.makeCylinder(3.3, P["kopf_h"] + 2, V(xm + dx, ya + ri * P["traeger_m6_y"], zu - 1)))
+        res = k if res is None else res.fuse(k)
     return res.removeSplitter()
 
 
@@ -213,30 +256,33 @@ def turm_m5():
     return res
 
 
-def einsatz_x(x, y, z, richt=1):
-    """Bohrung für einen M5-Gewindeeinsatz, quer (x)."""
-    d, l = P["einsatz_m5_d"], P["einsatz_m5_tiefe"]
-    return Part.makeCylinder(d / 2, l + 1, V(x - richt, y, z), V(richt, 0, 0))
+def m5_quer(x, y, z, richt, schlitz, laenge, tiefe=8.0):
+    """M5 quer (x) ab der Fläche x in Richtung richt; Mutter tiefe dahinter,
+    durch einen Schlitz in Richtung schlitz (Länge laenge) eingeschoben."""
+    s = Part.makeCylinder(2.75, tiefe + 6, V(x - richt, y, z), V(richt, 0, 0))
+    return s.fuse(fc_dok.mutter(5, V(x + richt * tiefe, y, z), V(1, 0, 0), schlitz, laenge))
 
 
-def einsatz_z(x, y, z, richt=1):
-    d, l = P["einsatz_m5_d"], P["einsatz_m5_tiefe"]
-    return Part.makeCylinder(d / 2, l + 1, V(x, y, z - richt), V(0, 0, richt))
+def m5_senkrecht(x, y, z0, z1, z_mutter):
+    """M5 senkrecht durch (z0..z1), Mutter an der Fläche bei z_mutter eingepresst."""
+    s = Part.makeCylinder(2.75, z1 - z0 + 2, V(x, y, z0 - 1))
+    return s.fuse(fc_dok.mutter(5, V(x, y, z_mutter), V(0, 0, 1)))
 
 
 def halter_y():
     """Druckteil oben am Turm: das bewegte Ende der Y-Kette ist von unten mit 2x M5
-    in Einsätze geschraubt; seitlich 2x M5 durch den Turm. Vorn zwei Schlitze für
+    in eingepresste Muttern geschraubt; seitlich 2x M5 durch den Turm. Vorn zwei Schlitze für
     einen Kabelbinder, der die Leitung an der Biegung nach unten hält."""
     g = geo()
     z0 = g["z_mo"] + P["kette_h"] / 2
     x0, x1 = g["a_x1"], g["k_x1"] + 5
     s = box(x0, x1, P["hy_y"][0], P["hy_y"][1], z0, z0 + P["hy_dicke"])
     xc = (g["k_x0"] + g["k_x1"]) / 2
-    for dx in (-P["end_C"] / 2, P["end_C"] / 2):
-        s = s.cut(einsatz_z(xc + dx, sum(P["ausleger_y"]) / 2, z0))
-    for y in (-10.0, 10.0):
-        s = s.cut(einsatz_x(x0, y, z0 + P["hy_dicke"] / 2))
+    hd = P["hy_dicke"]
+    for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # M5 von unten, Mutter oben
+        s = s.cut(m5_senkrecht(xc + dx, sum(P["ausleger_y"]) / 2, z0, z0 + hd, z0 + hd - 1.5))
+    for y in (-10.0, 10.0):                                        # Turm: Mutter von oben
+        s = s.cut(m5_quer(x0, y, z0 + hd / 2, 1, V(0, 0, 1), hd / 2 + 1))
     lx, _ = leitung_bei_y(26.0)
     for dx in (-12.0, 12.0):                                      # Kabelbinder 3,6 breit
         s = s.cut(box(lx + dx - 1.5, lx + dx + 1.5, 23.5, 28.5, z0 - 1, z0 + P["hy_dicke"] + 1))
@@ -249,7 +295,7 @@ def festhalter_zm():
 
 def festhalter_x():
     """Druckteil auf Höhe der X-Ablage, innen am Turm (2x M5 durch den Turm). Trägt
-    oben das feste Ende der X-Kette (2x M5 von oben in Einsätze) und hat rechts
+    oben das feste Ende der X-Kette (2x M5 von oben in eingepresste Muttern) und hat rechts
     einen Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die
     untere Wand). Er ist so breit wie die Rinne und gleicht damit den Versatz
     zwischen Turm (y +-20) und Ablage aus."""
@@ -260,12 +306,15 @@ def festhalter_x():
     s = box(x0, x1, gx["r_y0"], gx["r_y1"], z0, gx["z_ku"])
     s = s.fuse(box(x1 - 0.01, x1 + 25, ym - 17.8, ym + 17.8, z0 + 2.2, z0 + h - 2.2))
     yc = (gx["y0"] + gx["y1"]) / 2
-    for dy in (-P["end_C"] / 2, P["end_C"] / 2):
-        s = s.cut(einsatz_z(gx["xf"], yc + dy, gx["z_ku"], -1))
-    for y in P["turm_x_y"]:
-        s = s.cut(einsatz_x(x0, y, festhalter_zm()))
-    for x, y in zapfen_loecher():
-        s = s.cut(Part.makeCylinder(P["einsatz_m5_d"] / 2, 9, V(x, y, z0 + 1)))
+    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # M5 von oben, Mutter unten
+        s = s.cut(m5_senkrecht(gx["xf"], yc + dy, z0, gx["z_ku"], z0 + 1.5))
+    zm = festhalter_zm()
+    for y in P["turm_x_y"]:                                        # Turm: Mutter von unten
+        s = s.cut(m5_quer(x0, y, zm, 1, V(0, 0, -1), zm - z0 + 1))
+    for x, y in zapfen_loecher():                                  # Zapfen: Mutter von der Seite
+        s = s.cut(Part.makeCylinder(2.75, 15, V(x, y, z0 + 1)))
+        sy = -1 if y < ym else 1
+        s = s.cut(fc_dok.mutter(5, V(x, y, z0 + 10), V(0, 0, 1), V(0, sy, 0), 9))
     return s.removeSplitter()
 
 
@@ -350,15 +399,15 @@ def clips():
         c = box(x0, cx + r + 3.5, -16.0, cy + r + 1.5, zc - 8, zc + 8)
         c = c.cut(Part.makeCylinder(r, 18, V(cx, cy, zc - 9)))
         c = c.cut(box(cx - 6.0, cx + 6.0, cy, cy + r + 3, zc - 9, zc + 9))
-        for y in (-8.0, 8.0):
-            c = c.cut(einsatz_x(x0, y, zc))
+        for y in (-8.0, 8.0):                                      # Mutter von oben
+            c = c.cut(m5_quer(x0, y, zc, 1, V(0, 0, 1), 9))
         res = c if res is None else res.fuse(c)
     return res
 
 
 def einsteckteil():
     """Steckt in der Brücke (links), gehalten von den beiden M6 des Sattels;
-    Stirnseite mit 4x M6-Einsatz für den Kettenturm."""
+    Stirnseite mit 4x M6 für den Kettenturm (Muttern seitlich eingeschoben)."""
     g = geo()
     w, tb = P["bruecke_wand"], P["bruecke_tiefe"]
     za, zb = P["bruecke_z"]
@@ -368,9 +417,9 @@ def einsteckteil():
     for x in P["m6_x"]:
         for z in P["m6_z"]:
             s = s.cut(Part.makeCylinder(3.3, tb, V(x, -tb / 2, z), V(0, 1, 0)))
-    for y, z in P["turm_loecher"]:
-        s = s.cut(Part.makeCylinder(P["einsatz_m6_d"] / 2, P["einsatz_m6_tiefe"] + 1,
-                                    V(x0 - 1, y, z), V(1, 0, 0)))
+    for y, z in P["turm_loecher"]:                     # M6, Mutter seitlich eingeschoben
+        s = s.cut(Part.makeCylinder(3.3, 20, V(x0 - 1, y, z), V(1, 0, 0)))
+        s = s.cut(fc_dok.mutter(6, V(x0 + 10, y, z), V(1, 0, 0), V(0, 1 if y > 0 else -1, 0), 9))
     return s.removeSplitter()
 
 
@@ -422,7 +471,7 @@ def ablage_x():
 
 
 def stopfen_x():
-    """Stopfen (Druck) im rechten Ende der X-Ablage, 2x M5-Einsatz längs."""
+    """Stopfen (Druck) im rechten Ende der X-Ablage, 2x M5 längs in Muttern."""
     gx = geo_x()
     ym = (gx["r_y0"] + gx["r_y1"]) / 2
     z0 = gx["z_t0"]
@@ -431,8 +480,11 @@ def stopfen_x():
     for xa, richt in ((gx["x_re"], -1),):
         xs0, xs1 = (xa, xa + L) if richt > 0 else (xa - L, xa)
         st = box(xs0, xs1, ym - 17.8, ym + 17.8, z0 + 2.2, z0 + P["traeger_h"] - 2.2)
-        for y, z in stopfen_loecher():
-            st = st.cut(Part.makeCylinder(3.2, 11, V(xa - richt * 1, y, z), V(richt, 0, 0)))
+        for y, z in stopfen_loecher():                  # Mutter seitlich eingeschoben
+            st = st.cut(Part.makeCylinder(2.75, 14, V(xa - richt * 1, y, z), V(richt, 0, 0)))
+            sy = -1 if y < ym else 1
+            st = st.cut(fc_dok.mutter(5, V(xa + richt * 8, y, z), V(1, 0, 0), V(0, sy, 0),
+                                      abs(ym + sy * 17.8 - y) + 1))
         res = st if res is None else res.fuse(st)
     return res
 
@@ -445,7 +497,7 @@ def stuetze_x_rechts():
     t = P["ausleger_t"]
     py0, py1 = P["ausleger_y"]
     s = box(x0, x0 + t, py0, py1, P["bruecke_z"][0], gx["z_t0"] + P["traeger_h"] + 5)
-    for y, z in P["turm_loecher"]:
+    for y, z in P["turm_loecher_rechts"]:
         s = s.cut(Part.makeCylinder(3.3, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
     for y, z in stopfen_loecher():
         s = s.cut(Part.makeCylinder(2.75, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
@@ -465,9 +517,9 @@ def einsteckteil_rechts():
     for x in P["m6_x"]:
         for z in P["m6_z"]:
             s = s.cut(Part.makeCylinder(3.3, tb, V(xm + x, -tb / 2, z), V(0, 1, 0)))
-    for y, z in P["turm_loecher"]:
-        s = s.cut(Part.makeCylinder(P["einsatz_m6_d"] / 2, P["einsatz_m6_tiefe"] + 1,
-                                    V(xr + 1, y, z), V(-1, 0, 0)))
+    for y, z in P["turm_loecher_rechts"]:              # Mutter hinter der Sattelschraube
+        s = s.cut(Part.makeCylinder(3.3, 24, V(xr + 1, y, z), V(-1, 0, 0)))
+        s = s.cut(fc_dok.mutter(6, V(xr - 14, y, z), V(1, 0, 0), V(0, 1 if y > 0 else -1, 0), 9))
     return s.removeSplitter()
 
 
@@ -512,8 +564,7 @@ def halter_x():
     s = s.cut(ring.common(q2))
     s = s.cut(box(xb - R - kh / 2, xb - R + kh / 2, ky0, ky1, zc, z_ob + 1))
     for dy in (-P["end_C"] / 2, P["end_C"] / 2):        # Einsatz von unten, oben M5 durch
-        s = s.cut(einsatz_z(dx, yc + dy, z_top))
-        s = s.cut(Part.makeCylinder(2.75, dp + 2, V(dx, yc + dy, z_top)))
+        s = s.cut(m5_senkrecht(dx, yc + dy, z_top, z_ob, z_ob - 1.5))
     # Strebe links neben dem Anschlussstück: von der Rückwand unten schräg unter den
     # Kanalkörper, versteift den Winkel zwischen Rückwand und Platte
     rb = P["hx_strebe"]
@@ -522,10 +573,10 @@ def halter_x():
            V(xb - rb, gx["y0"] - 1, zs), V(xb - rb, yk - t, P["zkopf_uk"] + 2)]
     s = s.fuse(Part.Face(Part.makePolygon(pts)).extrude(V(rb, 0, 0)))
     s = s.cut(ring.common(q2))                          # Kanal frei halten
-    # zwei Gewindeeinsätze M4 neben der Austrittsöffnung (für eine Tülle)
+    # zwei M4 neben der Austrittsöffnung (für eine Tülle), Muttern von links eingeschoben
     for y in (ky0 - 8.0, ky1 + 8.0):
-        s = s.cut(Part.makeCylinder(P["m4_einsatz_d"] / 2, P["m4_einsatz_tiefe"] + 1,
-                                    V(xb - R, y, z_ob - P["m4_einsatz_tiefe"])))
+        s = s.cut(Part.makeCylinder(2.25, 13, V(xb - R, y, z_ob - 12)))
+        s = s.cut(fc_dok.mutter(4, V(xb - R, y, z_ob - 8), V(0, 0, 1), V(-1, 0, 0), ra - R + 1))
     for x in P["xk_halter_loecher"]:
         s = s.cut(Part.makeCylinder(2.75, t + 2, V(x, yk - t - 1, P["zkopf_uk"] + 10), V(0, 1, 0)))
     return s.removeSplitter()
@@ -597,6 +648,7 @@ def main():
     fc_dok.teil(doc, "ek_traeger_40x20", tr, "stahl")
     fc_dok.teil(doc, "ek_rinne", ri, "stahl")
     fc_dok.teil(doc, "ek_stuetzen", st, "stahl")
+    fc_dok.teil(doc, "ek_stuetzen_kopf", stuetzen_kopf(), "druck")
     portal = {"ek_ausleger": (au, "alu"), "ek_einsteckteil": (ei, "druck"),
               "ek_halter_y": (halter_y(), "druck"), "ekx_festhalter": (festhalter_x(), "druck"),
               "ek_leitungsclips": (clips(), "druck"), "ek_Leitung": (leitung(), "zukauf"),
@@ -617,7 +669,8 @@ def main():
         s.exportStep(os.path.join(OUT, n + ".step"))
     druck = {"ek_einsteckteil": ei, "ek_einsteckteil_rechts": einsteckteil_rechts(),
              "ek_halter_y": halter_y(), "ekx_festhalter": festhalter_x(),
-             "ek_leitungsclips": clips(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf}
+             "ek_leitungsclips": clips(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
+             "ek_stuetzen_kopf": stuetzen_kopf()}
     for n, s in druck.items():
         s.exportStep(os.path.join(OUT, n + ".step"))
         Mesh.Mesh(s.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))

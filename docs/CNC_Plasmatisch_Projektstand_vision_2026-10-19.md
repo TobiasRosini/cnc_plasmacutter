@@ -125,7 +125,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 - 4× induktiver Näherungsschalter **LJ12A3-4-Z/AY** (M12, PNP, Öffner, 6–36 V, 4 mm auf Stahl), betrieben an 24 V.
 - **Y links/rechts:** hinten über der Y-Riemenscheibe, genau über der Schiene, Achse längs (Halter am Y-Motorhalter); Stahlfahne abgekantet auf der Klemmplatte am festen Ende des Y-Winkels. Über das M12-Gewinde fein einstellbar (Portal rechtwinklig).
-- **X:** am linken Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Stahlfahne unter der Deckplatte des X-Wagens. Schaltet ab ca. 82 mm Wagenmitte.
+- **X:** am linken Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Ziel ist ein eingepresster Zylinderstift 6 × 10 (Stahl) in der linken Fläche des X-Wagenkörpers. Schaltet ab ca. 82 mm Wagenmitte.
 - **Z:** oben, senkrecht durch den Z-Kopf; Stahlfahne auf dem Z-Schlitten.
 - Andere Achsenden über Software-Endlagen in LinuxCNC.
 

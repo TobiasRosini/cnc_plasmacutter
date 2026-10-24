@@ -1,4 +1,5 @@
-Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 38 gewollt
+Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 54 gewollt
+Bohrungen, die sich im selben Teil schneiden: 0
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_kasten (Ø8.0 bei 7.0, 690.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_kasten (Ø8.0 bei 7.0, 716.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_kasten (Ø8.0 bei 7.0, 800.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
@@ -12,10 +13,14 @@ gewollt P_links_spannschlitten -> P_links_winkel_kasten (Ø3.4 bei 7.5, 829.2, 9
 gewollt P_links_spannschlitten -> P_links_winkel_kasten (Ø3.4 bei 32.5, 819.2, 933.8): Muttertasche/Schraube endet im Schlitten
 gewollt P_links_spannschlitten -> P_links_winkel_kasten (Ø3.4 bei 32.5, 829.2, 933.8): Muttertasche/Schraube endet im Schlitten
 gewollt P_links_winkel_kasten -> P_links_Referenzschalter_X (Ø12.1 bei 30.0, 733.2, 1001.0): Bohrung für den Schalter (Schalter steckt darin)
+gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø3.4 bei 5.0, 731.5, 955.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
+gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø3.4 bei 5.0, 731.5, 981.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
 gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø7.5 bei 6.8, 748.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø7.5 bei 6.8, 768.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø7.5 bei 33.2, 748.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø7.5 bei 33.2, 768.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
+gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø3.4 bei 35.0, 731.5, 955.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
+gewollt P_links_winkel_kasten -> Portalbruecke_80x40x4 (Ø3.4 bei 35.0, 731.5, 981.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
 gewollt P_rechts_Flachstange_40x15 -> P_rechts_winkel_fest (Ø8.0 bei 687.0, 690.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_rechts_Flachstange_40x15 -> P_rechts_winkel_fest (Ø8.0 bei 687.0, 716.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_rechts_Flachstange_40x15 -> P_rechts_winkel_fest (Ø8.0 bei 687.0, 800.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
@@ -28,10 +33,22 @@ gewollt P_rechts_spannschlitten -> P_rechts_winkel_fest (Ø3.4 bei 687.5, 819.2,
 gewollt P_rechts_spannschlitten -> P_rechts_winkel_fest (Ø3.4 bei 687.5, 829.2, 933.8): Muttertasche/Schraube endet im Schlitten
 gewollt P_rechts_spannschlitten -> P_rechts_winkel_fest (Ø3.4 bei 712.5, 819.2, 933.8): Muttertasche/Schraube endet im Schlitten
 gewollt P_rechts_spannschlitten -> P_rechts_winkel_fest (Ø3.4 bei 712.5, 829.2, 933.8): Muttertasche/Schraube endet im Schlitten
+gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø3.4 bei 685.0, 731.5, 955.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
+gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø3.4 bei 685.0, 731.5, 981.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
 gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø7.5 bei 686.8, 748.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø7.5 bei 686.8, 768.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø7.5 bei 713.2, 748.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
 gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø7.5 bei 713.2, 768.0, 905.0): Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)
+gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø3.4 bei 715.0, 731.5, 955.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
+gewollt P_rechts_winkel_fest -> Portalbruecke_80x40x4 (Ø3.4 bei 715.0, 731.5, 981.0): M3 der X-Riemenklemme endet in der Mutter innen an der Sattelrückwand (Schraube nicht länger als Klemmplatte + Wand)
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 336.4, 643.5, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 336.4, 651.5, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 336.4, 690.7, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 336.4, 698.7, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 643.5, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 651.5, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 690.7, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
+gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 698.7, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
 gewollt Y_hl_y_motorhalter -> Y_hl_Referenzschalter_Y (Ø12.2 bei 20.0, 48.0, 948.0): Bohrung für den Schalter (Schalter steckt darin)
 gewollt Y_hr_y_motorhalter -> Y_hr_Referenzschalter_Y (Ø12.2 bei 700.0, 48.0, 948.0): Bohrung für den Schalter (Schalter steckt darin)
 gewollt Z_z_kopf -> Z_Referenzschalter (Ø12.2 bei 406.0, 854.0, 1187.0): Bohrung für den Schalter (Schalter steckt darin)

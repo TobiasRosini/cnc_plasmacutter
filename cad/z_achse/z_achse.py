@@ -44,7 +44,10 @@ P = dict(
     gp_dicke=12.0,
     gp_x=52.0,
     gp_oben=270.0,
-    gp_loecher=[(-20.0, 62.0), (20.0, 62.0), (-20.0, 88.0), (20.0, 88.0)],   # = X-Wagen z_loecher
+    gp_unten=-38.0,             # bis Unterkante Wagenkörper: trägt die Biegung zwischen den X-Wagen
+    gp_x_unten=30.0,            # unterhalb z_unten so schmal wie die Front des Wagenkörpers
+    gp_loecher=[(-20.0, -15.0), (20.0, -15.0), (-20.0, 62.0), (20.0, 62.0),
+                (-20.0, 88.0), (20.0, 88.0)],   # = X-Wagen z_loecher
     # Distanzleisten + Schienen
     leiste=20.0,
     schiene_x=40.0,
@@ -145,6 +148,8 @@ def grundplatte():
     g = geo()
     gx = P["gp_x"]
     s = box(-gx, gx, g["y0"], g["y_gp"], P["z_unten"], P["gp_oben"])
+    gu = P["gp_x_unten"]                                    # unten schmal: läuft an den Sätteln vorbei
+    s = s.fuse(box(-gu, gu, g["y0"], g["y_gp"], P["gp_unten"], P["z_unten"] + 0.01)).removeSplitter()
     for x, z in P["gp_loecher"]:
         s = s.cut(zyl(P["m5_durchgang"], P["gp_dicke"] + 2, x, g["y0"] - 1, z, V(0, 1, 0)))
         s = s.cut(zyl(P["m5_senk_d"], P["m5_senk_tiefe"] + 1, x, g["y_gp"] - P["m5_senk_tiefe"], z,
@@ -240,9 +245,10 @@ def mutterblock(g):
     for x, y in mutter_loecher(g):
         s = s.cut(zyl(P["m4_durchgang"], P["mb_steg"] + 2, x, y, zs - 1))
         s = s.cut(sechskant(7.2, 3.5, x, y, zs + P["mb_steg"] - 3.5))
-    for x, z in mutterblock_schrauben(g):
-        s = s.cut(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, x, g["y_wa"] + 1, z,
-                      V(0, -1, 0)))
+    yr = g["y_wa"] - P["mb_platte"]                           # Rückseite der Platte
+    for x, z in mutterblock_schrauben(g):                     # M4 durch, Mutter hinten eingepresst
+        s = s.cut(zyl(P["m4_durchgang"], P["mb_platte"] + 2, x, g["y_wa"] + 1, z, V(0, -1, 0)))
+        s = s.cut(fc_dok.mutter(4, V(x, yr + 1.5, z), V(0, 1, 0)))
     return s.removeSplitter()
 
 
@@ -261,18 +267,20 @@ def zkopf(g):
     yv = max(g["y_sp"] + 28.2 + 3, P["ref_y"] + 6.1 + 4)
     yh = g["y0"] - 8
     s = box(-P["kopf_x_links"], gx, yh, yv, zb, zb1)
-    # FK10 im Sockel, Flansch oben aufliegend, 4x M4 in Einsätze
+    # FK10 im Sockel, Flansch oben aufliegend, 4x M4 in Muttern unten
     s = s.cut(zyl(35.0, P["kopf_basis"] + 2, 0, g["y_sp"], zb - 1))
     for dx in (-P["fk_loch"], P["fk_loch"]):
         for dy in (-P["fk_loch"], P["fk_loch"]):
-            s = s.cut(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, dx, g["y_sp"] + dy,
-                          zb1 - P["einsatz_m4_tiefe"]))
-    # Motorhalter: 4x M4-Einsatz oben unter den Säulen
+            s = s.cut(zyl(P["m4_durchgang"], P["kopf_basis"] + 2, dx, g["y_sp"] + dy, zb - 1))
+            s = s.cut(fc_dok.mutter(4, V(dx, g["y_sp"] + dy, zb + 1.5), V(0, 0, 1)))
+    # Motorhalter: 4x M4 in Muttern unten unter den Säulen
     for x, y in motorhalter_schrauben(g):
-        s = s.cut(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, x, y, zb1 - P["einsatz_m4_tiefe"]))
-    # Halter der X-Energiekette: 2x M5-Einsatz in der Rückseite
+        s = s.cut(zyl(P["m4_durchgang"], P["kopf_basis"] + 2, x, y, zb - 1))   # Mutter unten
+        s = s.cut(fc_dok.mutter(4, V(x, y, zb + 1.5), V(0, 0, 1)))
+    # Halter der X-Energiekette: 2x M5 in der Rückseite, Muttern von unten eingeschoben
     for x in P["xk_halter_x"]:
-        s = s.cut(zyl(P["einsatz_m5_d"], P["einsatz_m5_tiefe"] + 1, x, yh - 1, zb + 10, V(0, 1, 0)))
+        s = s.cut(zyl(P["m5_durchgang"], 14, x, yh - 1, zb + 10, V(0, 1, 0)))   # Mutter von unten
+        s = s.cut(fc_dok.mutter(5, V(x, yh + 8, zb + 10), V(0, 1, 0), V(0, 0, -1), 11))
     # Referenzschalter M12 senkrecht
     s = s.cut(zyl(12.2, P["kopf_basis"] + 2, P["ref_x"], P["ref_y"], zb - 1))
     # Befestigung auf Grundplatte und Leisten: M5 gesenkt

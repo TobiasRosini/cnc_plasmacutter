@@ -5,7 +5,7 @@ python3 cad/live.py cad/z_achse/z_achse.py
 ```
 
 - Kugelumlaufspindel **SFU1204**, Festlager FK10 oben, unteres Ende frei. Motor NEMA23 kompakt (1,2 Nm) oben über Kupplung Ø25 × 30.
-- Z-Grundplatte Alu 104 × 220 × 12 mit 4× M5 an die Frontplatte des X-Wagens.
+- Z-Grundplatte Alu 12 mm, oben 104 breit, unterhalb z 50 nur 60 breit (läuft an den Sätteln vorbei), reicht bis zur Unterkante des X-Wagenkörpers. 6× M5 in Muttern der Front, damit trägt sie die Biegung zwischen oberem und unterem Wagen.
 - Zwei Distanzleisten Alu 20 × 20 × 220, darauf HGR15 (Abstand 80). Die Leisten schaffen Platz für den Mutterflansch Ø42 zwischen Grundplatte und Schlitten; die Schienenschrauben M4 gehen durch die Leisten in die Grundplatte.
 - Z-Schlitten Alu 120 × 100 × 10 auf zwei HGH15CA. Mutterblock (Druck) hinten, die Mutter hängt unter dem Steg.
 - Z-Kopf (Druck) auf Grundplatte und Leisten: Sockel mit FK10, zwei Säulen, Motorplatte; die Kupplung ist von vorn und hinten zugänglich.

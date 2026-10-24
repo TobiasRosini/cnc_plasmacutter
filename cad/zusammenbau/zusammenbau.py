@@ -44,9 +44,9 @@ YANTRIEB = os.path.join(CAD, "y_antrieb", "y_antrieb.FCStd")
 ZACHSE = os.path.join(CAD, "z_achse", "z_achse.FCStd")
 KAEFIG = os.path.join(CAD, "wannenkaefig", "wannenkaefig.FCStd")
 EKETTE = os.path.join(CAD, "energiekette", "energiekette.FCStd")
-XWAGEN_TEILE = ["x_deckplatte", "x_frontplatte", "x_bodenplatte", "x_motorbock",
+XWAGEN_TEILE = ["x_wagenkoerper", "x_spritzschutz", "x_motorbock",
                 "Wagen_X_oben", "Wagen_X_unten", "Riemenscheibe_X", "Umlenkrollen_X",
-                "Motor_X_NEMA23", "x_ref_fahne"]
+                "Motor_X_NEMA23", "x_ref_stift"]
 
 # aus den Einzelteilen übernommen
 RAHMEN_TEILE_AUS = {"Dummy_Wanne"}
@@ -194,7 +194,7 @@ def main():
         link(doc, "Z_" + n if not n.startswith("Z_") else n, dz_.getObject(n), plw, g_z)
     # X-Riemen hinter der Brücke (gerade Trume bis zu den Umlenkrollen)
     rolle = dx.getObject("Umlenkrollen_X").Shape.BoundBox
-    deck = dx.getObject("x_deckplatte").Shape.BoundBox
+    deck = dx.getObject("x_wagenkoerper").Shape.BoundBox
     rr = rolle.YLength / 2
     y_rueck = yc + rolle.YMax + 0.05          # Riemenrücken liegt an den Rollen an
     zr = z0 + rolle.Center.z
@@ -250,7 +250,7 @@ def main():
     dek = fc_dok.quelle(EKETTE)
     g_e = gruppe(doc, "Energiekette_Y")
     pl_fest = App.Placement(V(sx[0], 0, z_schiene_rahmen), App.Rotation())
-    for n in ("ek_traeger_40x20", "ek_rinne", "ek_stuetzen"):
+    for n in ("ek_traeger_40x20", "ek_rinne", "ek_stuetzen", "ek_stuetzen_kopf"):
         link(doc, "EK_" + n, dek.getObject(n), pl_fest, g_e)
     pl_portal = App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation())
     for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",

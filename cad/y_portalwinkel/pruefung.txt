@@ -1,4 +1,4 @@
-winkel_fest            gültig: True, 52.0 x 180.0 x 94.0 mm, PETG ca. 362 g (100 % Füllung)
+winkel_fest            gültig: True, 52.0 x 180.0 x 94.0 mm, PETG ca. 361 g (100 % Füllung)
 winkel_kasten          gültig: True, 52.0 x 180.0 x 118.0 mm, PETG ca. 370 g (100 % Füllung)
 spannschlitten         gültig: True, 43.1 x 24.0 x 6.7 mm, PETG ca. 6 g (100 % Füllung)
 klemmplatte_fest       gültig: True, 48.0 x 40.0 x 6.0 mm, PETG ca. 14 g (100 % Füllung)

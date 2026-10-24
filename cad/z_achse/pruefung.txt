@@ -1,4 +1,4 @@
-z_grundplatte    gültig: True, 104.0 x 12.0 x 220.0 mm
+z_grundplatte    gültig: True, 104.0 x 12.0 x 308.0 mm
 z_leisten_20x20  gültig: True, 100.0 x 20.0 x 220.0 mm
 z_schlitten      gültig: True, 120.0 x 10.0 x 100.0 mm
 z_mutterblock    gültig: True, 40.0 x 46.0 x 54.0 mm

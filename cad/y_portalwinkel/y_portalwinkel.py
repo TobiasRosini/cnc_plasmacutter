@@ -400,11 +400,12 @@ def x_klemm_bohrungen(variante):
         res.append(box(x - w / 2, x + w / 2, g["yw"] - 0.01, g["yw"] + h - w / 2,
                        g["zr"] - hb, g["zr"] + hb))
         res.append(zyl(w, 2 * hb, x, g["yw"] + h - w / 2, g["zr"] - hb))
-    for sx in (-1, 1):
+    ci = sattel_y()[0]
+    for sx in (-1, 1):                          # M3 durch die Rückwand, Mutter innen eingepresst
         for sz in (-1, 1):
-            res.append(zyl(P["einsatz_m3_d"], P["einsatz_m3_tiefe"] + 1,
-                           sx * P["xk_einsatz_x"], g["yw"] - 1,
-                           g["zr"] + sz * P["xk_einsatz_dz"], V(0, 1, 0)))
+            x, z = sx * P["xk_einsatz_x"], g["zr"] + sz * P["xk_einsatz_dz"]
+            res.append(zyl(P["m3_durchgang"], P["sattel_wand"] + 2, x, g["yw"] - 1, z, V(0, 1, 0)))
+            res.append(fc_dok.mutter(3, V(x, -ci - 1.2, z), V(0, 1, 0)))
     if variante == "kasten" and P["xek_loecher"]:
         z1 = z_basis()
         for x, z in P["xek_loecher"]:

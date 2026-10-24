@@ -1,13 +1,11 @@
-x_deckplatte   gültig: True, 92.0 x 172.0 x 10.0 mm
-x_frontplatte  gültig: True, 60.0 x 12.0 x 136.0 mm
-x_bodenplatte  gültig: True, 60.0 x 60.0 x 10.0 mm
-x_motorbock    gültig: True, 84.0 x 97.6 x 66.5 mm
-x_ref_fahne    gültig: True, 23.0 x 15.0 x 22.0 mm
+x_wagenkoerper gültig: True, 60.0 x 69.0 x 172.0 mm
+x_spritzschutz gültig: True, 60.0 x 69.0 x 1.0 mm
+x_motorbock    gültig: True, 84.0 x 89.7 x 93.5 mm
+x_ref_stift    gültig: True, 10.0 x 6.0 x 6.0 mm
 Kollisionen: 0
-Wand an Bohrungen x_deckplatte: ok (>= 3.0 mm)
-Wand an Bohrungen x_frontplatte: ok (>= 3.0 mm)
-Wand an Bohrungen x_bodenplatte: ok (>= 3.0 mm)
+Wand an Bohrungen x_wagenkoerper: ok (>= 3.0 mm)
+Wand an Bohrungen x_spritzschutz: ok (>= 3.0 mm)
 Wand an Bohrungen x_motorbock: ok (>= 3.0 mm)
-Wand an Bohrungen x_ref_fahne: ok (>= 3.0 mm)
-Riemenscheibe Mitte y -76.0, Rollen y -42.9, Motorplatte UK z 79.5
+Wand an Bohrungen x_ref_stift: ok (>= 3.0 mm)
+Riemenscheibe Mitte y -86.9, Rollen y -42.9, Motorplatte UK z 79.5
 Größte halbe Breite hinter der Brücke (begrenzt den X-Weg an den Sätteln): 42.0 mm

@@ -2,7 +2,7 @@
 """
 Wannenkäfig aus Stahl-Rechteckrohr 20x20x2 (nur gerade Schnitte, stumpf
 verschweißt). Trägt die Wanne am Boden, hält die Wände und hängt mit dem
-oberen Ring innen am oberen Rahmen des Untertischs (M8 quer durch Ring und Rohr).
+oberen Ring innen am oberen Rahmen des Untertischs (M6 in Nietmuttern im Rohr).
 
 Höhe: Bleche, die breiter als die Wannenöffnung (540) sind, liegen sonst auf
 dem Bördel. Die Opferleisten stehen deshalb 1 mm über dem Bördel (Wannenboden
@@ -52,9 +52,11 @@ P = dict(
     pfosten_y=[0.0],            # zusätzlich zu den Ecken, an beiden Längsseiten
     ablauf_d=32.0,              # Ø25-32
     ablauf_l=120.0,
-    # Befestigung am Rahmen: M8 quer durch Ring und Längsträger
+    # Befestigung am Rahmen: je Seite 3x M6 durch die Außenwand des Rings in
+    # Nietmuttern im Längsrohr des Untertischs; innen im Ring ein Zugangsloch
     bolzen_y=[-450.0, 0.0, 450.0],
-    m8_durchgang=8.5,
+    m6_durchgang=6.6,
+    zugang_d=12.0,
 )
 
 
@@ -108,11 +110,14 @@ def kaefig():
         for y0 in ys:
             teile.append(rohr("Pfosten", x0, y0, g["z_boden"], h, "z"))
     s = teile[0].fuse(teile[1:])
-    # M8 quer durch den Ring (und den Längsträger des Rahmens)
+    # M6 durch die Außenwand des Rings, innen Zugangsloch (Wanne vorher heraus)
+    t = P["wand"]
     for sx in (-1, 1):
         for y in P["bolzen_y"]:
-            s = s.cut(Part.makeCylinder(P["m8_durchgang"] / 2, r + 2,
-                                        V(sx * (ax + 1), y, g["z_ring"] + r / 2),
+            z = g["z_ring"] + r / 2
+            s = s.cut(Part.makeCylinder(P["m6_durchgang"] / 2, t + 2, V(sx * (ax + 1), y, z),
+                                        V(-sx, 0, 0)))
+            s = s.cut(Part.makeCylinder(P["zugang_d"] / 2, t + 2, V(sx * (ax - r + t + 1), y, z),
                                         V(-sx, 0, 0)))
     return s.removeSplitter()
 

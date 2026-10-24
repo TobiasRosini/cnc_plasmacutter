@@ -69,13 +69,18 @@ P = dict(
     schiene_e=20.0,             # Abstand erstes Loch vom Schienenende
     m4_kern=3.3,
     # Trennung Untertisch / Oberrahmen
-    trenn_schrauben_x=[120.0, 360.0, 600.0],    # M8 durch beide Querrohre, je Ende
-    kaefig_schrauben_y=[-450.0, 0.0, 450.0],    # M8 Wannenkäfig, ab Wannenmitte
+    # Verbindungen ohne lange Bolzen: Schraube nur durch die nahe Wand, gegenüber ein
+    # Zugangsloch, Gewinde in einer Nietmutter im anderen Rohr
+    trenn_schrauben_x=[120.0, 360.0, 600.0],    # M8 x 16: Querrohr oben in Nietmutter Querrohr unten
+    kaefig_schrauben_y=[-450.0, 0.0, 450.0],    # M6: Wannenkäfig in Nietmutter Längsrohr Untertisch
     m8_durchgang=9.0,
+    nietmutter_m8_d=11.0,
+    zugang_m8_d=16.0,           # Zugangsloch für Stecknuss/Inbus mit Scheibe
     # Befestigungen am Oberrahmen
     halter_loecher=[(-10.0, 52.0), (10.0, 52.0), (-10.0, 14.0), (10.0, 14.0)],  # (x ab Schiene, Abstand vor/hinter Schienenende)
     nietmutter_m6_d=9.0,        # M6-Nietmutter: 3 mm Wand trägt kein gutes M6-Gewinde
-    ek_stuetze_z=[-30.0, -10.0],                 # M8 quer, ab Rahmen-OK (Kettenstützen links)
+    ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen links), ab Rahmenende
+    ek_stuetze_z=-20.0,                          # ab Rahmen-OK
 )
 
 
@@ -147,15 +152,17 @@ def rahmen():
                                               V(x0 + r / 2 + dx, y, z_ok - P["wand"] - 1)))
         # M8 quer für die Stützen der Y-Energiekette (nur links, an beiden Enden)
         if i == 0:
-            for y in (10.0, ay - 10.0):
-                for z in P["ek_stuetze_z"]:
-                    lt = lt.cut(Part.makeCylinder(P["m8_durchgang"] / 2, r + 2, V(-1, y, z_ok + z),
-                                                  V(1, 0, 0)))
+            for dy in P["ek_stuetze_y"]:
+                for y in (dy, ay - dy):
+                    lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
+                                                  V(-1, y, z_ok + P["ek_stuetze_z"]), V(1, 0, 0)))
         teile["OR_Laengstraeger_%s" % "LR"[i]] = lt
     for i, y0 in enumerate((0.0, ay - r)):
         q = rohr("Querträger oben", r, y0, z_oben, ax - 2 * r, "x")
-        for x in P["trenn_schrauben_x"]:
-            q = q.cut(Part.makeCylinder(P["m8_durchgang"] / 2, r + 2, V(x, y0 + r / 2, z_oben - 1)))
+        for x in P["trenn_schrauben_x"]:                 # unten Durchgang, oben Zugang
+            q = q.cut(Part.makeCylinder(P["m8_durchgang"] / 2, P["wand"] + 2, V(x, y0 + r / 2, z_oben - 1)))
+            q = q.cut(Part.makeCylinder(P["zugang_m8_d"] / 2, P["wand"] + 2,
+                                        V(x, y0 + r / 2, z_ok - P["wand"] - 1)))
         teile["OR_Quertraeger_%s" % "VH"[i]] = q
 
     # ----- Untertisch
@@ -173,17 +180,19 @@ def rahmen():
         teile["UT_Fussplatte_%d" % (i + 1)] = fp
     for i, x0 in enumerate((0.0, ax - r)):
         lo = rohr("Längsrohr Untertisch oben", x0, r, z_ut, ay - 2 * r, "y")
+        xi = x0 + r - P["wand"] - 1 if i == 0 else x0 - 1      # Innenwand (zum Käfig)
         for y in P["kaefig_schrauben_y"]:
-            lo = lo.cut(Part.makeCylinder(P["m8_durchgang"] / 2, r + 2,
-                                          V(x0 - 1, P["wanne_mitte_y"] + y, z_ut + r / 2),
+            lo = lo.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
+                                          V(xi, P["wanne_mitte_y"] + y, z_ut + r - 10.0),
                                           V(1, 0, 0)))
         teile["UT_Laengsrohr_oben_%s" % "LR"[i]] = lo
         teile["UT_Laengsrohr_unten_%s" % "LR"[i]] = rohr(
             "Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
     for i, y0 in enumerate((0.0, ay - r)):
         q = rohr("Querrohr Untertisch oben", r, y0, z_ut, ax - 2 * r, "x")
-        for x in P["trenn_schrauben_x"]:
-            q = q.cut(Part.makeCylinder(P["m8_durchgang"] / 2, r + 2, V(x, y0 + r / 2, z_ut - 1)))
+        for x in P["trenn_schrauben_x"]:                 # Nietmutter M8 in der Oberseite
+            q = q.cut(Part.makeCylinder(P["nietmutter_m8_d"] / 2, P["wand"] + 2,
+                                        V(x, y0 + r / 2, z_oben - P["wand"] - 1)))
         teile["UT_Querrohr_oben_%s" % "VH"[i]] = q
         teile["UT_Querrohr_unten_%s" % "VH"[i]] = rohr(
             "Querrohr unten", r, y0, z_u, ax - 2 * r, "x")
@@ -256,8 +265,9 @@ def main():
             f.write("Summe: %.2f m (%.1f kg)\n" % (gesamt / 1000, gesamt / 1000 * kg_m))
         f.write("\nFußplatten: 4x %gx%gx%g mm, Bohrung Ø%g\n"
                 % (P["fuss_kante"], P["fuss_kante"], P["fuss_dicke"], P["fuss_loch"]))
-        f.write("Verschraubung Untertisch/Oberrahmen: %d x M8 senkrecht durch die Querrohre "
-                "(je Ende %d), Schraube M8x90 mit Scheiben\n"
+        f.write("Verschraubung Untertisch/Oberrahmen: %d x M8 senkrecht (je Ende %d), "
+                "M8x16 durch die Unterseite des oberen Querrohrs (Zugang Ø16 von oben) "
+                "in Nietmuttern M8 im unteren Querrohr\n"
                 % (2 * len(P["trenn_schrauben_x"]), len(P["trenn_schrauben_x"])))
         f.write("Schienengewinde: 2x %d x M4 (Kernloch Ø%.1f), Teilung %g, "
                 "erstes Loch %g mm vom Schienenende\n"
