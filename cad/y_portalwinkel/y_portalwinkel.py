@@ -154,7 +154,7 @@ P = dict(
     yf_oben=80.0,               # Oberkante Zielfläche (Winkel-z)
     yf_dicke=3.0,
     # Stütze der X-Ablage (nur fest, rechts): 2x M5-Einsatz außen im festen Turm
-    xs_einsatz=[(-80.0, 30.0), (-60.0, 30.0), (-80.0, 48.0), (-60.0, 48.0)],   # (y, z)
+    xs_einsatz=[],              # entfällt: X-Ablage sitzt jetzt an der Brückenstirn
     einsatz_m5_d=6.4,
     einsatz_m5_tiefe=10.0,
     # Referenzschalter X (nur kasten): Block auf der Sattelrückwand, Achse quer,
@@ -176,7 +176,7 @@ P = dict(
     einsatz_m4_d=5.6,
     einsatz_m4_tiefe=8.0,
     # X-Energiekette hinten an der Sattelrückwand (nur kasten): 2x M5 unten
-    xek_loecher=[(-10.0, 4.0), (10.0, 4.0)],   # (x, z über Basis), unter den M6-Senkungen
+    xek_loecher=[],             # entfällt: X-Kette hat ihren Festpunkt auf der eigenen Ablage
 )
 
 
@@ -405,7 +405,7 @@ def x_klemm_bohrungen(variante):
             res.append(zyl(P["einsatz_m3_d"], P["einsatz_m3_tiefe"] + 1,
                            sx * P["xk_einsatz_x"], g["yw"] - 1,
                            g["zr"] + sz * P["xk_einsatz_dz"], V(0, 1, 0)))
-    if variante == "kasten":
+    if variante == "kasten" and P["xek_loecher"]:
         z1 = z_basis()
         for x, z in P["xek_loecher"]:
             res.append(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, x, g["yw"] - 1,
@@ -578,9 +578,9 @@ def dummies():
     sb = P["schiene_breite"]
     w = None
     for yc in wagen_mitten():
-        k = box(-wb / 2, wb / 2, yc - wl / 2, yc + wl / 2, zw0, 0)
-        k = k.cut(box(-sb / 2 - 0.5, sb / 2 + 0.5, yc - wl, yc + wl,
-                      zw0 - 1, zs0 + P["schiene_hoehe"]))
+        k = kt.hgh15ca()
+        k.translate(V(0, yc, -P["wagen_hoehe"]))           # Montagefläche = Unterseite Flachstange
+        k = fc_dok.fest(k)
         w = k if w is None else w.fuse(k)
     d["Wagen_HGH15CA"] = w
     d["Schiene_HGR15"] = box(-sb / 2, sb / 2, -150, 150, zs0,

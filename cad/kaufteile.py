@@ -41,8 +41,11 @@ def nema23(laenge=56.0, welle_d=8.0, welle_l=21.0, kabel_winkel=225.0):
         for sy in (-1, 1):
             flansch = flansch.cut(Part.makeCylinder(loch_d / 2, flansch_t + 2,
                                                     V(sx * lochabstand / 2, sy * lochabstand / 2, -1)))
-    koerper = quadrat(koerper_kante, fase + 1.5, flansch_t, laenge - flansch_t - kappe_t)
-    kappe = quadrat(kante, fase, laenge - kappe_t, kappe_t)
+    # Körper und Kappe mit großen Eckfasen: die Befestigungsschrauben gehen an den
+    # Ecken vorbei (wie beim echten Motor), die Bohrungen bleiben von hinten sichtbar
+    ecke = koerper_kante - (lochabstand - 2 * 5.5 / math.sqrt(2)) + 2
+    koerper = quadrat(koerper_kante, ecke, flansch_t, laenge - flansch_t - kappe_t)
+    kappe = quadrat(koerper_kante, ecke, laenge - kappe_t, kappe_t)
     zentrier = Part.makeCylinder(zentrier_d / 2, zentrier_h, V(0, 0, -zentrier_h))
     welle = Part.makeCylinder(welle_d / 2, welle_l, V(0, 0, -zentrier_h - welle_l))
     # Abflachung an der Welle (0,5 mm tief, 15 mm lang ab Wellenende)
@@ -160,4 +163,18 @@ def naeherungsschalter_m12(laenge=50.0, mutter_abstand=(8.0, 26.0)):
                for i in range(7)]
         s = s.fuse(Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, 4)))
     s = s.fuse(Part.makeCylinder(2.0, 20.0, V(0, 0, laenge)))
+    return s.removeSplitter()
+
+
+def kette_endstueck(h=35.0, b=56.0, D=60.0, C=51.0, F=6.0, laenge=30.0, flansch=4.0,
+                    unten=True):
+    """Anschlussstück einer Energiekette (Maße nach Herstellertabelle, z. B. 20x38:
+    C = 51, D = 60, F = 6). Lage: Länge entlang Y von -laenge/2 bis +laenge/2, Breite
+    entlang X (Mitte 0), Höhe z = 0 bis h. Der Flansch (D breit) liegt unten oder oben
+    und hat zwei Bohrungen ØF im Abstand C quer zur Kette, bei y = 0."""
+    s = Part.makeBox(b, laenge, h - flansch, V(-b / 2, -laenge / 2, flansch if unten else 0))
+    zf = 0.0 if unten else h - flansch
+    s = s.fuse(Part.makeBox(D, laenge, flansch, V(-D / 2, -laenge / 2, zf)))
+    for x in (-C / 2, C / 2):
+        s = s.cut(Part.makeCylinder(F / 2, h + 2, V(x, 0, -1)))
     return s.removeSplitter()

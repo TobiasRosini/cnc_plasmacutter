@@ -96,10 +96,20 @@ def speichern(doc, pfad, war_offen):
         if o.Name not in _BERUEHRT.get(doc.Name, set()):
             doc.removeObject(o.Name)
     doc.recompute()
-    if war_offen:
-        doc.save()
-    else:
-        doc.saveAs(os.path.abspath(pfad))
+    # Immer mit saveAs schreiben und prüfen, dass die Datei wirklich neu ist:
+    # doc.save() hat im laufenden FreeCAD teils stillschweigend nichts geschrieben,
+    # dann fehlen nach einem Neustart Teile ("link not restored").
+    import time
+    vorher = os.path.getmtime(pfad) if os.path.exists(pfad) else 0.0
+    start = time.time()
+    doc.saveAs(os.path.abspath(pfad))
+    if os.path.getmtime(pfad) < start - 1 and os.path.getmtime(pfad) <= vorher:
+        # Rückfall: Kopie schreiben und an die Stelle der Datei setzen
+        tmp = os.path.abspath(pfad) + ".neu.FCStd"
+        doc.saveCopy(tmp)
+        os.replace(tmp, os.path.abspath(pfad))
+    if os.path.getmtime(pfad) < start - 1:
+        raise RuntimeError("Datei wurde nicht gespeichert: %s" % pfad)
     if App.GuiUp and not war_offen:
         import FreeCADGui
         FreeCADGui.getDocument(doc.Name).activeView().viewIsometric()

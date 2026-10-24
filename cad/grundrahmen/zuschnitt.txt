@@ -1,13 +1,21 @@
 Zuschnitt Rechteckrohr 40x40x3 Stahl, alle Schnitte gerade (90°)
 
-Teil                         Länge mm    Stk
-Längsträger oben               1516.0      2
-Längsrohr unten                1436.0      2
-Bein                            802.0      4
-Querträger oben                 640.0      2
-Querrohr unten                  640.0      2
-Querrohr Mitte (unten)          640.0      2
+Untertisch
+Teil                           Länge mm    Stk
+Längsrohr Untertisch oben        1436.0      2
+Längsrohr unten                  1436.0      2
+Bein                              802.0      4
+Querrohr Untertisch oben          640.0      2
+Querrohr unten                    640.0      2
+Querrohr Mitte (unten)            640.0      2
+Summe: 12.79 m (44.6 kg)
 
-Summe Rohr: 12.95 m (45.1 kg bei 3.49 kg/m), ohne Sägeverlust
+Oberrahmen
+Teil                           Länge mm    Stk
+Längsträger oben                 1516.0      2
+Querträger oben                   640.0      2
+Summe: 4.31 m (15.0 kg)
+
 Fußplatten: 4x 100x100x8 mm, Bohrung Ø13
+Verschraubung Untertisch/Oberrahmen: 6 x M8 senkrecht durch die Querrohre (je Ende 3), Schraube M8x90 mit Scheiben
 Schienengewinde: 2x 22 x M4 (Kernloch Ø3.3), Teilung 60, erstes Loch 20 mm vom Schienenende

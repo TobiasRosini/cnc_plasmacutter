@@ -7,4 +7,4 @@ Kollision y_motorhalter / Riemenscheibe_Y: 0.000 mm³
 Kollision Motor_Y / Riemenscheibe_Y: 0.000 mm³
 Kollision y_umlenkhalter / Umlenkrolle_Y: 0.000 mm³
 Achse Riemenscheibe: z 65.8 über Rahmen, y -32.0 vor dem Schienenende
-Motor innen bis x 140.5 ab Schienenmitte
+Motor innen bis x 104.5 ab Schienenmitte

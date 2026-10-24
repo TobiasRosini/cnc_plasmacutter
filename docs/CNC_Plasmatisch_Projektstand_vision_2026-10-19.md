@@ -11,7 +11,7 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
 | Portalbrücke | Alu-Rechteckrohr **80 × 40 × 4 mm** (80 hoch, 40 tief), X-Schienen oben und unten |
 | Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
-| Rahmen | Geschweißtes Stahl-Rechteckrohr 40 × 40 × 3, nur gerade Schnitte (keine Gehrungen) |
+| Rahmen | Geschweißtes Stahl-Rechteckrohr 40 × 40 × 3, nur gerade Schnitte (keine Gehrungen); zwei verschraubte Baugruppen: **Untertisch** (Beine, Wannenkäfig, Wanne) und **Oberrahmen** (Schienen, Portal), 6× M8 |
 | **Maximale Gesamtbreite** | **800 mm** über alles (Tür Werkstatt–Garage 820 mm lichte Weite) |
 | Aufstellung | Einstellfüße und Rollen: Zum Betrieb wird der Rahmen mit den Füßen über die Rollen angehoben und steht fest; zum Verfahren Füße hochdrehen |
 | CAD | **FreeCAD** (statt Fusion 360) |
@@ -65,11 +65,11 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 
 | Achse | Anzahl | Motor |
 |---|---:|---|
-| Y-Achse links | 1 | NEMA23, 3 Nm, Open Loop |
-| Y-Achse rechts | 1 | NEMA23, 3 Nm, Open Loop |
+| Y-Achse links | 1 | NEMA23 ca. 1,9 Nm, 76 mm, Open Loop |
+| Y-Achse rechts | 1 | NEMA23 ca. 1,9 Nm, 76 mm, Open Loop |
 | X-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm (fährt auf dem X-Wagen mit), Open Loop |
 | Z-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm, direkt über Kupplung auf SFU1204, Open Loop |
-| **Gesamt** | **4** | **4 × NEMA23, 3 Nm** |
+| **Gesamt** | **4** | **2 × NEMA23 1,9 Nm (Y), 2 × NEMA23 1,2 Nm (X, Z)** |
 
 - **4 separate digitale Step/Dir-Schrittmotortreiber** statt integrierter Closed-Loop-Treiber.
 - Treiber müssen hinsichtlich Phasenstrom, Versorgungsspannung und Step/Dir-Eingangspegel zu den konkret gewählten Motoren und zur Mesa 7i96S passen.
@@ -131,11 +131,11 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 ### Energiekette Y (Stand 23.10.2026)
 
-- Liegend links, über dem linken Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 1,01 m (`cad/energiekette/`).
+- Liegend links, über dem linken Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 0,99 m, Schlaufe hinten, Kabel verlassen den Festpunkt nach vorn: **Schaltschrank und Plasmagerät stehen vorn** (`cad/energiekette/`).
 - Die geteilte Lichtbogenspannung kommt an der CNC-Buchse des Geräts heraus (Anleitung S. 13), läuft also nicht in der Kette; im Schlauchpaket des SP80M nur Luft/Strom und Start-Stopp, Pilot, Düse.
 - Kettenturm an der Stirn der links verlängerten Brücke (Einsteckteil, mit den Sattel-M6 verschraubt).
-- **X-Kette** 20 × 38, R65, liegend hinter der Brücke auf einer Ablage über dem X-Wagen; Festpunkt links am Kettenturm, bewegtes Ende am Pfosten auf der Deckplatte. Z ohne Kette (lose Schlaufe).
-- Gesamtbreite mit beiden Ketten: 789 mm.
+- **X-Kette** 20 × 38, R65, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt links, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe).
+- Gesamtbreite mit beiden Ketten: 783 mm.
 
 ### Gantry Squaring
 
@@ -202,7 +202,7 @@ Vorläufige Planungswerte:
 | PE-Wasserwanne 597 × 1194 × 119 | Geliefert, vermessen |
 | SPARTUS XPro CUT 70CNC | Modell festgelegt; Maschinenbrenner SP80M gekauft (22.10.2026), Maße Düsenkopf und Schlauchpaket folgen |
 | Mesa THCAD | Vorgesehen, Variante offen |
-| 4 × NEMA23, 3 Nm, Open Loop | Neu festgelegt, noch auszuwählen/zu bestellen |
+| 2 × NEMA23 1,9 Nm + 2 × NEMA23 1,2 Nm, Open Loop | Festgelegt, noch auszuwählen/zu bestellen |
 | 4 × separate Step/Dir-Treiber | Noch auszuwählen |
 | 48-V- und 24-V-Netzteile | Vorgesehen, noch zu dimensionieren |
 | HGR15-Schienen und Wagen | Bauart festgelegt, Längen offen |
@@ -216,7 +216,7 @@ Vorläufige Planungswerte:
 2. Rahmen und Portal in **FreeCAD** konstruieren.
 3. Verfahrwege, Schienenlängen und Befestigungsebenen festlegen.
 4. HTD5M-Riemenführung mit zwei Antrieben auf der langen Achse ausarbeiten.
-5. Passende **3-Nm-NEMA23-Open-Loop-Motoren** und separate Step/Dir-Treiber auswählen; Strom, Induktivität, Drehmoment-Drehzahl-Kennlinie und Versorgung prüfen.
+5. Passende **NEMA23-Open-Loop-Motoren (1,9 Nm Y, 1,2 Nm X/Z)** und separate Step/Dir-Treiber auswählen; Strom, Induktivität, Drehmoment-Drehzahl-Kennlinie und Versorgung prüfen.
 6. Motoransteuerung über die bereits vorhandene Mesa 7i96S testen.
 7. Z-Achse, Antastung und THCAD-Anbindung planen.
 8. Schaltschrank, Erdung/EMV, Not-Aus und Sicherheitskreis auslegen.

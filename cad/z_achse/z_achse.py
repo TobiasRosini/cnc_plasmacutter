@@ -62,6 +62,9 @@ P = dict(
     kopf_basis=20.0,
     kopf_saeule=12.0,
     kopf_platte=8.0,
+    saeule_dy=4.0,              # Säulen des Motorhalters gegenüber der Spindel nach vorn
+                                # (die Sockelschrauben hinten bleiben frei)
+    xk_halter_x=[-45.0, -25.0], # M5-Einsätze in der Sockelrückseite für den Halter der X-Kette
     kupplung_l=30.0,
     fk_loch=18.0,
     kopf_x=58.0,                # Z-Kopf-Sockel rechts (Platz für den Referenzschalter)
@@ -250,25 +253,53 @@ def kopf_schrauben(g):
 
 
 def zkopf(g):
+    """Z-Kopf-Sockel (Druck): FK10 im Sockel, Referenzschalter, Befestigung auf
+    Grundplatte und Leisten, Einsätze für den Motorhalter und den Halter der X-Kette."""
     gx = P["kopf_x"]
     zb = g["z_kb"]
     zb1 = zb + P["kopf_basis"]
     yv = max(g["y_sp"] + 28.2 + 3, P["ref_y"] + 6.1 + 4)
-    s = box(-P["kopf_x_links"], gx, g["y0"] - 8, yv, zb, zb1)              # Basis
-    sx = P["kopf_saeule"]
-    ys0, ys1 = g["y_sp"] - 12, g["y_sp"] + 12
-    for x0 in (-42.0, 42.0 - sx):                                          # zwei Säulen
-        s = s.fuse(box(x0, x0 + sx, ys0, ys1, zb1 - 0.01, g["z_mp"]))
-    s = s.fuse(box(-42.0, 42.0, g["y_sp"] - 32, g["y_sp"] + 32, g["z_mp"],
-                   g["z_mp"] + P["kopf_platte"]))                          # Motorplatte
+    yh = g["y0"] - 8
+    s = box(-P["kopf_x_links"], gx, yh, yv, zb, zb1)
     # FK10 im Sockel, Flansch oben aufliegend, 4x M4 in Einsätze
     s = s.cut(zyl(35.0, P["kopf_basis"] + 2, 0, g["y_sp"], zb - 1))
     for dx in (-P["fk_loch"], P["fk_loch"]):
         for dy in (-P["fk_loch"], P["fk_loch"]):
             s = s.cut(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, dx, g["y_sp"] + dy,
                           zb1 - P["einsatz_m4_tiefe"]))
-    # Motor: Zentrierung, 4x M5 mit Muttertaschen unten
+    # Motorhalter: 4x M4-Einsatz oben unter den Säulen
+    for x, y in motorhalter_schrauben(g):
+        s = s.cut(zyl(P["einsatz_m4_d"], P["einsatz_m4_tiefe"] + 1, x, y, zb1 - P["einsatz_m4_tiefe"]))
+    # Halter der X-Energiekette: 2x M5-Einsatz in der Rückseite
+    for x in P["xk_halter_x"]:
+        s = s.cut(zyl(P["einsatz_m5_d"], P["einsatz_m5_tiefe"] + 1, x, yh - 1, zb + 10, V(0, 1, 0)))
+    # Referenzschalter M12 senkrecht
+    s = s.cut(zyl(12.2, P["kopf_basis"] + 2, P["ref_x"], P["ref_y"], zb - 1))
+    # Befestigung auf Grundplatte und Leisten: M5 gesenkt
+    for x, y in kopf_schrauben(g):
+        s = s.cut(zyl(P["m5_durchgang"], P["kopf_basis"] + 2, x, y, zb - 1))
+        s = s.cut(zyl(P["m5_senk_d"], P["m5_senk_tiefe"] + 1, x, y, zb1 - P["m5_senk_tiefe"]))
+    return s.removeSplitter()
+
+
+def motorhalter_schrauben(g):
+    """Je Säule 2x M4 senkrecht durch Säule und Motorplatte in den Sockel."""
+    ys = g["y_sp"] + P["saeule_dy"]
+    return [(sx * 36.0, ys + dy) for sx in (-1, 1) for dy in (-6.0, 6.0)]
+
+
+def zmotorhalter(g):
+    """Motorhalter (Druck), eigenes Teil: zwei Säulen und Motorplatte. Wird nach dem
+    Festlager und der Kupplung aufgesetzt; die Sockelschrauben bleiben zugänglich."""
+    zb1 = g["z_kb"] + P["kopf_basis"]
+    sx = P["kopf_saeule"]
+    ys = g["y_sp"] + P["saeule_dy"]
+    s = None
+    for x0 in (-42.0, 42.0 - sx):
+        sa = box(x0, x0 + sx, ys - 12, ys + 12, zb1, g["z_mp"] + 0.01)
+        s = sa if s is None else s.fuse(sa)
     zp = g["z_mp"]
+    s = s.fuse(box(-42.0, 42.0, g["y_sp"] - 32, g["y_sp"] + 32, zp, zp + P["kopf_platte"]))
     s = s.cut(zyl(39.1, P["kopf_platte"] + 2, 0, g["y_sp"], zp - 1))
     a = 47.14 / 2
     for dx in (-a, a):
@@ -276,12 +307,8 @@ def zkopf(g):
             s = s.cut(zyl(P["m5_durchgang"], P["kopf_platte"] + 2, dx, g["y_sp"] + dy, zp - 1))
             s = s.cut(sechskant(P["m5_mutter_sw"], P["m5_mutter_tiefe"] + 1, dx, g["y_sp"] + dy,
                                 zp - 1))
-    # Referenzschalter M12 senkrecht
-    s = s.cut(zyl(12.2, P["kopf_basis"] + 2, P["ref_x"], P["ref_y"], zb - 1))
-    # Befestigung auf Grundplatte und Leisten: M5 gesenkt
-    for x, y in kopf_schrauben(g):
-        s = s.cut(zyl(P["m5_durchgang"], P["kopf_basis"] + 2, x, y, zb - 1))
-        s = s.cut(zyl(P["m5_senk_d"], P["m5_senk_tiefe"] + 1, x, y, zb1 - P["m5_senk_tiefe"]))
+    for x, y in motorhalter_schrauben(g):
+        s = s.cut(zyl(P["m4_durchgang"], zp + P["kopf_platte"] - zb1 + 2, x, y, zb1 - 1))
     return s.removeSplitter()
 
 
@@ -332,6 +359,7 @@ def kaufteile(g):
     d["Z_Wagen_HGH15CA"] = fc_dok.fest(wa)
     zs = g["s0"] + P["mb_z"]
     m = kt.sfu1204_mutter()
+    m.rotate(V(0, 0, 0), V(0, 0, 1), 30)              # Flanschbohrungen wie im Mutterblock
     m.translate(V(0, g["y_sp"], zs))
     d["Z_Mutter_SFU1204"] = fc_dok.fest(m)
     sp = kt.sfu1204(g["z_fk"] - P["spindel_unten"])
@@ -367,7 +395,8 @@ def teile(lage=None):
     g = geo(lage)
     eigen = {"z_grundplatte": (grundplatte(), "alu"), "z_leisten_20x20": (leisten(), "alu"),
              "z_schlitten": (schlitten(g), "alu"), "z_mutterblock": (mutterblock(g), "druck"),
-             "z_kopf": (zkopf(g), "druck"), "z_halter": (halter(g), "druck"),
+             "z_kopf": (zkopf(g), "druck"), "z_motorhalter": (zmotorhalter(g), "druck"),
+             "z_halter": (halter(g), "druck"),
              "z_traeger": (traeger(g), "druck"), "z_ref_fahne": (ref_fahne(g), "stahl")}
     kauf = {n: (s, "zukauf") for n, s in kaufteile(g).items()}
     return g, eigen, kauf

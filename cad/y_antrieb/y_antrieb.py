@@ -47,7 +47,7 @@ P = dict(
     m8_mutter_sw=13.2,
     m8_mutter_tiefe=6.5,
     # Motor
-    motor_laenge=112.0,         # 3 Nm
+    motor_laenge=76.0,          # NEMA23 ca. 1,9 Nm (statt 3 Nm, 112 mm)
     # Referenzschalter Y (nur Motorhalter, hinten): über der Riemenscheibe, genau
     # über der Schiene, Achse längs. Fahne auf der Klemmplatte am festen Ende des
     # Y-Winkels. Der Block bleibt innen unter 14 mm (dort fährt der X-Motorbock

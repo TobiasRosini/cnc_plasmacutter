@@ -2,7 +2,7 @@
 """
 Wannenkäfig aus Stahl-Rechteckrohr 20x20x2 (nur gerade Schnitte, stumpf
 verschweißt). Trägt die Wanne am Boden, hält die Wände und hängt mit dem
-oberen Ring innen am Grundrahmen (an die Längsträger geschraubt).
+oberen Ring innen am oberen Rahmen des Untertischs (M8 quer durch Ring und Rohr).
 
 Höhe: Bleche, die breiter als die Wannenöffnung (540) sind, liegen sonst auf
 dem Bördel. Die Opferleisten stehen deshalb 1 mm über dem Bördel (Wannenboden
@@ -10,7 +10,8 @@ dem Bördel. Die Opferleisten stehen deshalb 1 mm über dem Bördel (Wannenboden
 (die Last geht durch den Wannenboden ins Rohr, nicht in die Wände). Wasser bis
 knapp unter den Bördel (105 über Boden) -> 15 mm unter dem Blech.
 Blechunterseite = Rahmenoberkante (die Düse kommt bis 8 mm darunter).
-Oberer Ring: Oberkante = Rahmenoberkante, außen neben dem Bördel.
+Oberer Ring: hängt am oberen Rahmen des Untertischs (40 mm unter der
+Rahmenoberkante), so gehören Käfig und Wanne zum Untertisch.
 
 In der Mitte bleibt der Boden zwischen zwei Querrohren frei für den Ablauf.
 
@@ -31,6 +32,7 @@ import fc_dok  # noqa: E402
 
 P = dict(
     rohr=20.0,
+    ring_unter_ok=40.0,         # Ring hängt am oberen Rahmen des Untertischs (unter dem Oberrahmen)
     wand=2.0,
     dichte=7.85e-6,
     # Rahmen innen (Grundrahmen: 640 breit); Käfig liegt mit dem Ring am Rahmen an
@@ -80,7 +82,7 @@ def geo():
     ax = P["innen_x"] / 2                                       # Ring außen = Rahmen innen
     wy = P["wanne_y"] / 2 - P["wanne_ueberstand"] + P["wand_luft"]   # Ring innen (y)
     ay = wy + r
-    return dict(z_boden=z_boden, ax=ax, ay=ay, z_ring=-r)
+    return dict(z_boden=z_boden, ax=ax, ay=ay, z_ring=-r - P["ring_unter_ok"])
 
 
 def kaefig():
@@ -147,9 +149,9 @@ def main():
                 % (gesamt / 1000, gesamt / 1000 * kg_m, kg_m))
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
         f.write("Käfig gültig: %s, außen %.0f x %.0f, Höhe %.0f mm\n"
-                % (k.isValid(), 2 * g["ax"], 2 * g["ay"], -g["z_boden"] + r))
+                % (k.isValid(), 2 * g["ax"], 2 * g["ay"], g["z_ring"] - g["z_boden"] + 2 * r))
         f.write("Wanne steht %.1f mm unter Rahmenoberkante; Bördel %.1f bis %.1f; Wasser bis %.1f; "
-                "Blech (Leisten-OK) %.1f -> Wasser %.1f mm unter dem Blech; Ring-OK 0\n"
+                "Blech (Leisten-OK) %.1f -> Wasser %.1f mm unter dem Blech; Ring-OK -40\n"
                 % (-g["z_boden"], g["z_boden"] + 110, g["z_boden"] + P["wanne_hoehe"],
                    g["z_boden"] + P["wasserstand"], P["blech_unten"],
                    P["blech_unten"] - g["z_boden"] - P["wasserstand"]))

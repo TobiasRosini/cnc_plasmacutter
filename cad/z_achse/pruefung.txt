@@ -2,7 +2,8 @@ z_grundplatte    gültig: True, 104.0 x 12.0 x 220.0 mm
 z_leisten_20x20  gültig: True, 100.0 x 20.0 x 220.0 mm
 z_schlitten      gültig: True, 120.0 x 10.0 x 100.0 mm
 z_mutterblock    gültig: True, 40.0 x 46.0 x 54.0 mm
-z_kopf           gültig: True, 110.0 x 78.1 x 73.0 mm
+z_kopf           gültig: True, 110.0 x 78.1 x 20.0 mm
+z_motorhalter    gültig: True, 84.0 x 64.0 x 53.0 mm
 z_halter         gültig: True, 72.0 x 20.0 x 20.0 mm
 z_traeger        gültig: True, 50.0 x 48.0 x 50.0 mm
 z_ref_fahne      gültig: True, 20.0 x 22.0 x 3.0 mm
@@ -11,6 +12,7 @@ Wand an Bohrungen z_leisten_20x20: ok (>= 3.0 mm)
 Wand an Bohrungen z_schlitten: ok (>= 3.0 mm)
 Wand an Bohrungen z_mutterblock: ok (>= 3.0 mm)
 Wand an Bohrungen z_kopf: ok (>= 3.0 mm)
+Wand an Bohrungen z_motorhalter: ok (>= 3.0 mm)
 Wand an Bohrungen z_halter: ok (>= 3.0 mm)
 Wand an Bohrungen z_traeger: ok (>= 3.0 mm)
 Wand an Bohrungen z_ref_fahne: ok (>= 3.0 mm)

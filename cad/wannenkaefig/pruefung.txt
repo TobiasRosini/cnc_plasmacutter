@@ -1,3 +1,3 @@
-Käfig gültig: True, außen 640 x 1235, Höhe 140 mm
-Wanne steht 120.0 mm unter Rahmenoberkante; Bördel -10.0 bis -1.0; Wasser bis -15.0; Blech (Leisten-OK) 0.0 -> Wasser 15.0 mm unter dem Blech; Ring-OK 0
+Käfig gültig: True, außen 640 x 1235, Höhe 100 mm
+Wanne steht 120.0 mm unter Rahmenoberkante; Bördel -10.0 bis -1.0; Wasser bis -15.0; Blech (Leisten-OK) 0.0 -> Wasser 15.0 mm unter dem Blech; Ring-OK -40
 Ablauf: Boden frei zwischen den Querrohren y ±100

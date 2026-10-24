@@ -57,7 +57,7 @@ P = dict(
     # linken Y-Winkel (Sattelrückwand), Achse z 94, y -25
     xf=(-20.0, 3.0, -34.0, -19.0, 86.0),      # x0, x1, y0, y1, z unten
     xf_loecher=[(-12.0, -26.5), (-3.0, -26.5)],
-    pfosten_loecher=[(-50.0, -18.0), (-30.0, -18.0)],   # Pfosten der X-Energiekette (M5)
+    pfosten_loecher=[],         # entfällt: bewegtes Ende der X-Kette hängt am Z-Kopf
     deck_vor=0.0,               # Deckplatte bündig mit der Frontplatte (vorn sitzt die Z-Grundplatte)
     boden_vor=3.0,              # Bodenplatte steht vorn über die Frontplatte
     z_loecher=[(-20.0, 62.0), (20.0, 62.0), (-20.0, 88.0), (20.0, 88.0)],  # M5 für die Z-Grundplatte
@@ -307,10 +307,14 @@ def kaufteile():
     g = geo()
     d = {}
     wb, wl, s = P["wagen_breite"] / 2, P["wagen_laenge"] / 2, P["schiene"] / 2
-    ob = box(-wl, wl, -wb, wb, P["br_hoehe"] + P["wagen_h1"], g["z_wo"])
-    ob = ob.cut(box(-wl - 1, wl + 1, -s - 0.5, s + 0.5, P["br_hoehe"], P["br_hoehe"] + P["schiene"]))
-    un = box(-wl, wl, -wb, wb, g["z_wu"], -P["wagen_h1"])
-    un = un.cut(box(-wl - 1, wl + 1, -s - 0.5, s + 0.5, -P["schiene"], 0))
+    ob = kt.hgh15ca()                                   # Länge entlang Y -> entlang X drehen
+    ob.rotate(V(0, 0, 0), V(0, 0, 1), 90)
+    ob.translate(V(0, 0, P["br_hoehe"]))
+    ob = fc_dok.fest(ob)
+    un = kt.hgh15ca()
+    un.rotate(V(0, 0, 0), V(0, 0, 1), 90)
+    un.rotate(V(0, 0, 0), V(1, 0, 0), 180)              # unten, kopfüber
+    un = fc_dok.fest(un)
     d["Wagen_X_oben"] = ob
     d["Wagen_X_unten"] = un
     sch, _ = kt.riemenscheibe_htd5m(24, bohrung=P["motor_welle_d"])
