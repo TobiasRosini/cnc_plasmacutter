@@ -1,4 +1,4 @@
-Gesamtmaß: 784 (X) x 1538 (Y) x 1328 (Z) mm
+Gesamtmaß: 784 (X) x 1538 (Y) x 1340 (Z) mm
 Gesamtbreite 784 mm, Grenze 800 mm: ok
 Rahmen außen 720, Portal steht je Seite 32 mm über
 Portalbrücke: 767 mm lang, OK 987 mm über Boden

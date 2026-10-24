@@ -4,4 +4,14 @@ X-Kette: Länge ca. 833 mm (R65), Ablage-UK 225, oben bis 412 über Rahmen-OK
 X-Kette Schlaufe bei X ganz rechts bis Rahmen-x 711.5
 Wand an Bohrungen ek_einsteckteil: ok (>= 3.0 mm)
 Wand an Bohrungen ek_einsteckteil_rechts: ok (>= 3.0 mm)
+Wand an Bohrungen ek_halter_y: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_festhalter: ok (>= 3.0 mm)
+Wand an Bohrungen ek_leitungsclips: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_stopfen: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_halter: ok (>= 3.0 mm)
+Leitung / Turm: 0.00 mm³
+Leitung / Clips: 0.00 mm³
+Leitung / Halter Y: 0.00 mm³
+Leitung / Festhalter X: 0.00 mm³
+Leitung / X-Kette: 0.00 mm³
+Leitung: Länge ca. 248 mm (Mittellinie)

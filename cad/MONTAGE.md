@@ -1,4 +1,4 @@
-# Montage (Stand 23.10.2026)
+# Montage (Stand 24.10.2026)
 
 Prüfung: `python3 cad/live.py cad/pruefe_montage.py` → `cad/zusammenbau/montage.txt`. Jede Schraubenbohrung wird bis 3 mm über ihr Ende hinaus verfolgt; trifft sie ein anliegendes Teil, muss dort eine Bohrung oder ein Gewinde sein. Aktuell: **0 offen**, 38 bekannte, gewollte Fälle (Schraubenköpfe unter Deckteilen, Muttertaschen, Klemmschrauben auf den Brenner, Schalter in Bohrungen).
 
@@ -9,11 +9,12 @@ Prüfung: `python3 cad/live.py cad/pruefe_montage.py` → `cad/zusammenbau/monta
 3. Feste Riemenklemme: Fahne + Klemmplatte, 4× M5×65 durch Turm und Basis in die Flachstange.
 4. X-Schienen oben und unten an die **Brücke** (M4-Gewinde in der Brückenwand), Einsteckteile links und rechts einschieben.
 5. Brücke in die Sättel legen, 4× M6×60 je Sattel quer (auch durch die Einsteckteile), Muttern in den Taschen.
-6. Kettenturm an die Brückenstirn (4× M6 in die Einsätze des Einsteckteils).
+6. Kettenturm (gerades Alu-Flachmaterial 40 × 8) an die Brückenstirn (4× M6 in die Einsätze des Einsteckteils). Innen am Turm, alles M5 von außen durch den Turm in Gewindeeinsätze der Druckteile: **Festhalter X** (2×), zwei **Leitungsclips** (je 2×), **Halter Y** oben (2×).
 7. X-Wagen: Bodenplatte und Deckplatte an die Frontplatte (je 3× M5 in die Stirnkanten), Motorbock unter die Deckplatte (4× M4 in Einsätze).
-8. Platte an die rechte Brückenstirn (4× M6 in das rechte Einsteckteil). X-Ablage zwischen Kettenturm und rechter Platte (Stopfen in den Rohrenden, je 2× M5).
-9. Z-Achse: Grundplatte an die Frontplatte (4× M5), Leisten + Schienen (M4 durch die Leiste in die Grundplatte), Z-Kopf-Sockel (4× M5), FK10 mit Spindel, Kupplung, dann Motorhalter mit Motor (4× M4 durch die Säulen in den Sockel).
-10. Halter der X-Kette an die Rückseite des Z-Kopf-Sockels (2× M5 in Einsätze).
+8. Platte an die rechte Brückenstirn (4× M6 in das rechte Einsteckteil). X-Ablage links auf den Zapfen des Festhalters schieben (2× M5 von unten durch die untere Rohrwand), rechts Stopfen im Rohr, 2× M5 durch die Platte.
+9. Festes Ende der X-Kette von oben auf den Festhalter (2× M5 in Einsätze), bewegtes Ende der Y-Kette von unten an den Halter Y (2× M5 in Einsätze). Leitungen vom Y-Ende nach vorn, mit Kabelbinder durch die zwei Schlitze im Halter Y, senkrecht in die Clips einklipsen, dann von links in das feste X-Ende.
+10. Z-Achse: Grundplatte an die Frontplatte (4× M5), Leisten + Schienen (M4 durch die Leiste in die Grundplatte), Z-Kopf-Sockel (4× M5), FK10 mit Spindel, Kupplung, dann Motorhalter mit Motor (4× M4 durch die Säulen in den Sockel).
+11. Halter der X-Kette (Druck) an die Rückseite des Z-Kopf-Sockels (2× M5 in Einsätze), bewegtes Ende von unten an den Halter (2× M5 in Einsätze). Leitungen durch den Bogenkanal nach oben führen.
 
 ## Rahmen
 
@@ -26,7 +27,8 @@ Prüfung: `python3 cad/live.py cad/pruefe_montage.py` → `cad/zusammenbau/monta
 ## Noch offen
 
 - Rinnen (Y und X) auf den Trägern: Blindnieten Ø4, Lage beim Bau festlegen.
-- Endstücke der Energieketten (Kaufteil) an Rinne, Kettenturm und Pfosten: Lochbild nach Kettenhersteller anreißen.
-- Stopfen der X-Ablage im Rohr sichern (kleben oder Querstift).
+- Endstücke der Energieketten (Kaufteil): Lochbild C = 51 nach Herstellertabelle angenommen, beim Kauf prüfen.
+- Stopfen rechts in der X-Ablage sichern (kleben oder Querstift).
+- Leitungsbündel ist als Rohr Ø16 vereinfacht; Clips an den echten Brennerschlauch anpassen, wenn er da ist.
 - Anschlusskasten noch nicht gezeichnet.
 - Stellfüße und Rollen an den Fußplatten.

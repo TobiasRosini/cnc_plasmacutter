@@ -17,7 +17,7 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zusammenbau")
 V = App.Vector
 
 # Teile, die nicht verschraubt werden oder deren Bohrungen keine Schrauben sind
-OHNE = ("Riemen", "Kette_", "Wanne", "Brenner", "Spindel", "Kupplung", "Ablauf",
+OHNE = ("Riemen", "Kette_", "Leitung", "Wanne", "Brenner", "Spindel", "Kupplung", "Ablauf",
         "Schienen_HGR15\0")
 R_MIN, R_MAX = 1.4, 6.6
 VERL = 25.0
@@ -90,7 +90,7 @@ def main():
                 # nur das anliegende Nachbarteil (bis 3 mm hinter dem Bohrungsende)
                 pts = [c + a * (ende + vz * d) for d in (0.3, 1.0, 2.0, 3.0)]
                 for nb, sb in teile:
-                    if nb == na or any(k in nb for k in ("Riemen", "Kette_", "Wanne", "Ablauf")):
+                    if nb == na or any(k in nb for k in ("Riemen", "Kette_", "Leitung", "Wanne", "Ablauf")):
                         continue
                     bb = sb.BoundBox
                     if not any(bb.isInside(p) for p in pts):
