@@ -67,8 +67,8 @@ def GEWOLLT_GRUND(e):
         return "Senkschraube M4 im Sattelboden, liegt unter der Brücke (vor der Brücke montieren)"
     if "spannschlitten" in na:
         return "Muttertasche/Schraube endet im Schlitten"
-    if "z_traeger" in na and "Brenner" in nb:
-        return "Klemmschraube drückt auf den Brennerschaft"
+    if "z_halter" in na and "z_traeger" in nb:
+        return "Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)"
     if "motorbock" in na and "Motor_X" in nb:
         return "Langloch zum Spannen: der Motor wird darin verschoben"
     if "Referenzschalter" in nb:

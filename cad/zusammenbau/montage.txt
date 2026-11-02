@@ -1,4 +1,4 @@
-Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 54 gewollt
+Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 59 gewollt
 Bohrungen, die sich im selben Teil schneiden: 0
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_kasten (Ø8.0 bei 7.0, 690.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_kasten (Ø8.0 bei 7.0, 716.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
@@ -51,6 +51,11 @@ gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 690.7, 992.7): Langl
 gewollt X_x_motorbock -> X_Motor_X_NEMA23 (Ø5.5 bei 383.6, 698.7, 992.7): Langloch zum Spannen: der Motor wird darin verschoben
 gewollt Y_hl_y_motorhalter -> Y_hl_Referenzschalter_Y (Ø12.2 bei 20.0, 48.0, 948.0): Bohrung für den Schalter (Schalter steckt darin)
 gewollt Y_hr_y_motorhalter -> Y_hr_Referenzschalter_Y (Ø12.2 bei 700.0, 48.0, 948.0): Bohrung für den Schalter (Schalter steckt darin)
+gewollt Z_z_halter -> Z_z_traeger (Ø9.5 bei 346.0, 869.2, 989.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 348.0, 868.0, 1019.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 348.0, 868.0, 1043.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø9.5 bei 360.0, 869.2, 1035.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 372.0, 868.0, 1019.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 372.0, 868.0, 1043.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter -> Z_z_traeger (Ø9.5 bei 374.0, 869.2, 989.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
 gewollt Z_z_kopf -> Z_Referenzschalter (Ø12.2 bei 406.0, 854.0, 1187.0): Bohrung für den Schalter (Schalter steckt darin)
-gewollt Z_z_traeger -> Z_Brenner_SP80M (Ø4.2 bei 380.5, 894.0, 914.0): Klemmschraube drückt auf den Brennerschaft
-gewollt Z_z_traeger -> Z_Brenner_SP80M (Ø4.2 bei 380.5, 894.0, 940.0): Klemmschraube drückt auf den Brennerschaft

@@ -143,13 +143,28 @@ def kupplung(d=25.0, l=30.0, bohrung=8.0):
     return Part.makeCylinder(d / 2, l).cut(Part.makeCylinder(bohrung / 2, l + 2, V(0, 0, -1)))
 
 
-def brenner_sp80m(schaft_d=32.0, laenge=250.0):
-    """Maschinenbrenner (Platzhalter für SP80M): Schaft Ø32, Kegel zur Düse.
-    Lage: Achse Z, Düsenspitze in z = 0, Schaft nach oben."""
-    kegel = Part.makeCone(6.0, schaft_d / 2, 35.0)
-    schaft = Part.makeCylinder(schaft_d / 2, laenge - 35.0, V(0, 0, 35.0))
-    schlauch = Part.makeCylinder(9.0, 40.0, V(0, 0, laenge))
-    return kegel.fuse([schaft, schlauch]).removeSplitter()
+def brenner_sp80m():
+    """Maschinenbrenner SP80M (aufgemessen 02.11.2026), Gesamtlänge 510 mm.
+    Lage: Achse Z, Düsenspitze in z = 0, Schaft nach oben.
+    Von unten: Düse 7 aus der Überwurfmutter (Ø angenommen), Mutter Kegel Ø19-25,5
+    × 10, Ø25,5 × 7,5, Ø28,5 × 8,5, Ø30,5 × 5; Kunststoffabdeckung Ø34,6 bis 135;
+    Verbundrohr Ø35 bis 375 (Spannbereich); Knickschutztülle bis 510, größte Stelle
+    SW36 (Lage der Sechskants und Verlauf der Tülle angenommen); Schlauchpaket Ø20."""
+    def zyl(d, z0, z1):
+        return Part.makeCylinder(d / 2, z1 - z0, V(0, 0, z0))
+    r = 36.0 / math.sqrt(3)
+    sk = Part.Face(Part.makePolygon(
+        [V(r * math.cos(math.radians(60 * i)), r * math.sin(math.radians(60 * i)), 375.0)
+         for i in range(7)])).extrude(V(0, 0, 20.0))
+    teile = [Part.makeCone(3.0, 6.0, 7.0),                       # Düse (angenommen)
+             Part.makeCone(9.5, 12.75, 10.0, V(0, 0, 7.0)),
+             zyl(25.5, 17.0, 24.5), zyl(28.5, 24.5, 33.0), zyl(30.5, 33.0, 38.0),
+             zyl(34.6, 38.0, 135.0),                             # Kunststoffabdeckung
+             zyl(35.0, 135.0, 375.0),                            # Verbundrohr
+             sk,
+             Part.makeCone(16.0, 12.0, 115.0, V(0, 0, 395.0)),   # Tülle
+             zyl(20.0, 510.0, 540.0)]                            # Schlauchpaket (Anfang)
+    return teile[0].fuse(teile[1:]).removeSplitter()
 
 
 def naeherungsschalter_m12(laenge=50.0, mutter_abstand=(8.0, 26.0)):
