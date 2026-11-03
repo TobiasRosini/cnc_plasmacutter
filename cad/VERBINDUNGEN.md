@@ -17,6 +17,8 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
 | Geräteboden auf untere Längsrohre | 4× M6 von oben in Nietmuttern M6 | **neu** |
 | Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
+| Halter Spritzschutz X an Flachstange | 2× M4 in Gewinde in der vorderen Stirn | **neu** |
+| Schutzstreifen X an Halter | 2× M4 mit Mutter je Seite | **neu** |
 | Tropfboden, Kabelkanäle | | offen |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 

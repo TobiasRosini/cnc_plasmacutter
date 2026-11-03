@@ -44,6 +44,12 @@ Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualis
 - X-Riemen (Omega auf dem X-Wagen) hinten an beiden Sätteln: Zahnprofil in der Sattelrückwand, flache **x_klemmplatte** mit 4× M4 in Gewindeeinsätze (je Seite eine, rechts gespiegelt).
 - Kastenseite: Lasche für die Y-Energiekette außen, 2× M4-Einsätze hinten für die X-Energiekette. Der Anschlusskasten selbst ist noch offen.
 
+## Spritzschutz untere X-Schiene
+
+- Fester Schutzstreifen Alu 30 × 3 von Winkel zu Winkel (x 50–670 Rahmen, 620 lang), 12–42 mm über dem Blech, direkt vor den Haltern. Er läuft zwischen der Z-Grundplatte und dem Brenner unter dem Z-Schlitten durch und deckt jeden Weg vom Einstich zur unteren X-Schiene ab, über die ganze Länge.
+- Halter je Seite Alu 4 mm an der vorderen Stirn der Flachstange (2× M4 in Gewinde), innen eine Lasche nach unten über Y-Schiene und Y-Schutzstreifen hinweg; Streifen mit 2× M4 und Mutter daran.
+- Der Halter steht 4 mm vor der Flachstange und stößt vorn an die Y-Umlenkhalter: Y-Hub vorn 2 mm kürzer (1118 statt 1120, Düse bis 1414, Wannenboden bis 1406).
+
 ## Energiekette
 
 - Senkrechter Befestigungsflansch außen an der Basis (8 mm dick, 30 mm über Basis, y −45…−5) mit 4× M5 waagerecht (Lochbild 20 × 12 mm), Muttertaschen innen. Der Kettenhalter wird ein eigenes Teil.

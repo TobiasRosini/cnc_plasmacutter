@@ -54,9 +54,9 @@ RAHMEN_TEILE_AUS = {"Dummy_Wanne"}
 GEMEINSAM = ["Flachstange_40x15", "spannschlitten", "klemmplatte_fest",
              "klemmplatte_schlitten", "Wagen_HGH15CA"]
 # links einfache Seite, rechts Kastenseite (Energieketten)
-SEITEN_TEILE = {"links": ["winkel_fest", "x_klemmplatte", "y_ref_fahne"],
+SEITEN_TEILE = {"links": ["winkel_fest", "x_klemmplatte", "y_ref_fahne", "x_schutz_halter"],
                 "rechts": ["winkel_kasten", "x_klemmplatte_rechts", "y_ref_fahne_rechts",
-                          "Referenzschalter_X"]}
+                          "Referenzschalter_X", "x_schutz_halter_rechts", "x_schutzstreifen"]}
 
 
 def gruppe(doc, name):
@@ -231,6 +231,10 @@ def main():
     ya = sch.Center.y
     teil_r = 24 * 5.0 / 3.141592653589793 / 2
     hl = w_flach.YLength / 2
+    # Vordere Endlage: Der Halter des X-Spritzschutzes steht vor der Flachstange über und
+    # stößt vor dem Schienenende an die Umlenkhalter
+    vorsprung = max(dp.getObject(n).Shape.BoundBox.YMax
+                    for n in ("x_schutz_halter", "x_schutz_halter_rechts")) - hl
     yr = None
     for x in sx:
         oben = Part.makeBox(15, (py - hl) - (yb + ya), 3.8,
@@ -308,8 +312,12 @@ def main():
                 % (rahmen_bb.XLength, (gb.XLength - rahmen_bb.XLength) / 2))
         f.write("Portalbrücke: %.0f mm lang, OK %.0f mm über Boden\n" % (x1 - x0, z1))
         ls = s_bb.YLength
-        f.write("Y-Hub (Schiene %.0f − Flachstange %.0f): %.0f mm, gefordert 1100\n"
-                % (ls, w_flach.YLength, ls - w_flach.YLength))
+        y_umlenk = min(doc.getObject(n).Shape.BoundBox.YMin
+                       for n in ("Y_vr_y_umlenkhalter", "Y_vl_y_umlenkhalter"))
+        y_vorn = min(yf, y_umlenk - vorsprung) - hl          # vordere Endlage Portalmitte
+        f.write("Y-Hub (Schiene %.0f − Flachstange %.0f, vorn %.1f mm weniger: Halter Spritzschutz "
+                "an den Umlenkhaltern): %.0f mm, gefordert 1100\n"
+                % (ls, w_flach.YLength, yf - hl - y_vorn, y_vorn - (yb + hl)))
         f.write("Wanne: Unterkante %.0f, Oberkante %.0f mm über Boden (im Wannenkäfig)\n"
                 % (zw, zw + wh))
         for o in portal:
@@ -345,8 +353,7 @@ def main():
 
         # X-Weg: Wagen an beide Enden schieben, bis er die Winkel berührt
         wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
-                                  + [dz_.getObject(n).Shape for n in z_teile
-                                     if "Schutzlappen" not in n]      # weich, biegt sich weg
+                                  + [dz_.getObject(n).Shape for n in z_teile]
                                   + [dek.getObject("ekx_halter").Shape])
         winkel = Part.makeCompound([o.Shape for o in doc.Objects
                                     if (o.Name.startswith("P_") or o.Name.startswith("EK_"))
@@ -377,7 +384,7 @@ def main():
         portal_teile = [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
                         and (o.Name.startswith("P_") or o.Name == "Portalbruecke_80x40x4"
                              or o.Name == "X_Schienen_HGR15")]
-        for name, ylage in (("hinten", yb + hl), ("vorn", yf - hl)):
+        for name, ylage in (("hinten", yb + hl), ("vorn", y_vorn)):
             for xl in (xmin, xmax):
                 teile_l = [s.copy() for s in portal_teile]
                 w = wagen.copy()
@@ -391,9 +398,9 @@ def main():
                         % (name, xl, v))
         br_y = dz_.getObject("Brenner_SP80M").Shape.BoundBox.Center.y
         f.write("Düse in Y: %.0f bis %.0f, Wannenboden %.0f bis %.0f\n"
-                % (yb + hl + br_y, yf - hl + br_y, wy - 550, wy + 550))
+                % (yb + hl + br_y, y_vorn + br_y, wy - 550, wy + 550))
         # Y-Kette in beiden Endlagen gegen Portal (mit X-Wagen rechts/links) und Rahmen
-        for name, ylage in (("hinten", yb + hl), ("vorn", yf - hl)):
+        for name, ylage in (("hinten", yb + hl), ("vorn", y_vorn)):
             kk = ek.kette(ylage)
             kk.translate(V(sx[0], 0, z_schiene_rahmen))
             kk = fc_dok.fest(kk)

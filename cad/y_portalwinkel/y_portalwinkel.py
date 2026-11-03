@@ -57,6 +57,18 @@ P = dict(
     fl_breite=40.0,
     fl_dicke=15.0,
     fl_laenge=180.0,
+    # Spritzschutz der unteren X-Schiene: Alu-Flachstange 30 x 3 von Winkel zu Winkel, läuft
+    # zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch. Getragen von je einem
+    # Halter (Alu 4 mm) an der vorderen Stirn der Flachstange (2x M4 in Gewinde).
+    spur=680.0,                 # Schienenabstand Y (Mitte-Mitte)
+    sh_t=4.0,
+    sh_x=(-20.0, 45.0),         # Halter: oben über die Stirn der Flachstange bis innen
+    sh_lasche=(30.0, -18.0),    # Lasche innen ab x 30 bis z -18 (über Y-Schiene und Schutzstreifen)
+    sh_m4=[-10.0, 10.0],        # M4 in die Stirn der Flachstange, z = Mitte
+    ss_t=3.0,
+    ss_z=(-16.0, 14.0),         # Streifen: Unterkante 12 über dem Blech
+    ss_x0=30.0,                 # ab Schienenmitte innen (= X-Wagen-Endlage)
+    ss_m4=[(37.5, -9.0), (37.5, 7.0)],  # Streifen an Lasche, M4 mit Mutter
     m4_durchgang=4.5,
     m4_senk_d=8.0,              # Kopf ISO 4762 M4 = 7 mm
     m4_senk_tiefe=7.5,          # -> M4x12: 7,5 Klemmlänge + 4,5 Einschraubtiefe
@@ -244,6 +256,34 @@ def flachstange():
                       x, y, t - P["m5_gewinde_tiefe"]))
     for x, y in m4_basis_punkte():
         s = s.cut(zyl(P["m4_kern"], 11, x, y, t - 10))
+    for x in P["sh_m4"]:                                    # Halter Spritzschutz vorn
+        s = s.cut(zyl(P["m4_kern"], 11, x, l / 2 + 1, t / 2, V(0, -1, 0)))
+    return s
+
+
+def schutz_halter():
+    """Halter für den Spritzschutz der unteren X-Schiene (linke Lage, innen = -x;
+    rechts gespiegelt). Oben auf der Stirn der Flachstange, innen eine Lasche nach unten."""
+    l2, t = P["fl_laenge"] / 2, P["fl_dicke"]
+    x0, x1 = P["sh_x"]
+    lx, lz = P["sh_lasche"]
+    s = box(x0, x1, l2, l2 + P["sh_t"], 0, t).fuse(
+        box(lx, x1, l2, l2 + P["sh_t"], lz, 0.01)).removeSplitter()
+    for x in P["sh_m4"]:
+        s = s.cut(zyl(P["m4_durchgang"], P["sh_t"] + 2, x, l2 - 1, t / 2, V(0, 1, 0)))
+    for x, z in P["ss_m4"]:
+        s = s.cut(zyl(P["m4_durchgang"], P["sh_t"] + 2, x, l2 - 1, z, V(0, 1, 0)))
+    return gespiegelt_rechts(s)
+
+
+def schutzstreifen():
+    """Alu-Flachstange 30 x 3, rechte Lage (x ab rechter Schienenmitte, innen = +x)."""
+    y0 = P["fl_laenge"] / 2 + P["sh_t"]
+    xa, xb = P["ss_x0"], P["spur"] - P["ss_x0"]
+    s = box(xa, xb, y0, y0 + P["ss_t"], P["ss_z"][0], P["ss_z"][1])
+    for x, z in P["ss_m4"]:
+        for xx in (x, P["spur"] - x):
+            s = s.cut(zyl(P["m4_durchgang"], P["ss_t"] + 2, xx, y0 - 1, z, V(0, 1, 0)))
     return s
 
 
@@ -703,6 +743,10 @@ def main():
     fc_dok.teil(doc, "x_klemmplatte_rechts", verschoben(gespiegelt_rechts(xk), -ABSTAND),
                 "druck_hell")
     fc_dok.teil(doc, "Riemen_X", xr, "riemen")
+    sh = schutz_halter()
+    fc_dok.teil(doc, "x_schutz_halter", sh, "alu")
+    fc_dok.teil(doc, "x_schutz_halter_rechts", verschoben(gespiegelt_rechts(sh), -ABSTAND), "alu")
+    fc_dok.teil(doc, "x_schutzstreifen", verschoben(schutzstreifen(), -ABSTAND), "alu")
     fc_dok.speichern(doc, pfad, offen)
 
     fl.exportStep(os.path.join(OUT, "flachstange_40x15.step"))

@@ -139,9 +139,9 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 ### Spritzschutz der Schienen (Stand 03.11.2026)
 
-- Einstechspritzer fliegen flach und schräg nach oben. Die untere X-Schiene hängt kopfüber 42–57 mm über dem Blech und 136 mm hinter dem Brenner und ist besonders gefährdet; eine feste Abdeckung an der Brücke geht nicht (der Wagen umgreift die Brücke), ein Faltenbalg kostet zu viel Weg.
-- Umgesetzt: Schutzlappen aus Silikon-Glasgewebe am X-Wagen (wandert mit dem Brenner), Alu-Streifen innen an den Y-Längsträgern. Dazu X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
-- Früh mit Probestichen nahe der Brücke testen. Erst wenn Spritzer an der Schiene haften: untere X-Schiene auf die Brückenrückseite verlegen (großer Umbau, dort läuft der X-Riemen).
+- Einstechspritzer fliegen flach und schräg nach oben. Die untere X-Schiene hängt kopfüber 42–57 mm über dem Blech und 136 mm hinter dem Brenner und ist besonders gefährdet.
+- Umgesetzt: fester Schutzstreifen (Alu 30 × 3) von Y-Winkel zu Y-Winkel, an Haltern an den Flachstangen; er läuft zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch und deckt die Schiene über die ganze Länge ab (Y-Hub vorn 2 mm kürzer). Dazu Alu-Streifen innen an den Y-Längsträgern, X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
+- Der Streifen hängt 12 mm über dem Blech: hochstehende Teile können ihn wie den Brenner treffen.
 
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 

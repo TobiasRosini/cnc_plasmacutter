@@ -2,7 +2,7 @@ Gesamtmaß: 793 (X) x 1538 (Y) x 1470 (Z) mm
 Gesamtbreite 793 mm, Grenze 800 mm: ok
 Rahmen außen 720, Portal steht je Seite 36 mm über
 Portalbrücke: 767 mm lang, OK 987 mm über Boden
-Y-Hub (Schiene 1300 − Flachstange 180): 1120 mm, gefordert 1100
+Y-Hub (Schiene 1300 − Flachstange 180, vorn 2.0 mm weniger: Halter Spritzschutz an den Umlenkhaltern): 1118 mm, gefordert 1100
 Wanne: Unterkante 730, Oberkante 849 mm über Boden (im Wannenkäfig)
 Kollision Wanne / Rahmen: 0.000 mm³
 Kollision Wanne / Brücke: 0.000 mm³
@@ -13,7 +13,7 @@ Portal hinten, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.1 mm³
 Portal hinten, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal vorn, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal vorn, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
-Düse in Y: 296 bis 1416, Wannenboden 306 bis 1406
+Düse in Y: 296 bis 1414, Wannenboden 306 bis 1406
 Y-Kette, Portal hinten, X-Wagen bei 78: Kollision 0.0 mm³
 Y-Kette, Portal hinten, X-Wagen bei 644: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 78: Kollision 0.0 mm³
