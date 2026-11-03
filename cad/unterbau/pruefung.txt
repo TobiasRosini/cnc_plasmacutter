@@ -1,0 +1,7 @@
+Geräteboden: Oberkante 144 über Boden, y 991 bis 1516
+Tropfboden: Oberseite hinten 640, vorn 690 (Gefälle 3.3 %), Ränder 15; unter dem Käfig mind. 5 mm Luft
+Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 528 mm (gefordert 500): ok
+Plasmagerät: x 45 bis 260, y 985 bis 1500, Oberkante 514; Querkanal darüber ab 560
+Schaltschrank: x 275 bis 675, Oberkante 644, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
+Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
+Kabelkanal senkrecht außen rechts: x -65 bis -40 -> Maschinenbreite höchstens 792 (Grenze 800, Portal links bis x 727,5)

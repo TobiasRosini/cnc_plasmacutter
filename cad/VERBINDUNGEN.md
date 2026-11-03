@@ -15,6 +15,8 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Stützkopf (Druck) im Rohr | 2× M5 durch die Rohrwand in Muttern, die von unten in Schlitze im Zapfen geschoben werden | **neu** |
 | Y-Kettenträger auf Stützkopf | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
 | Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
+| Geräteboden auf untere Längsrohre | 4× M6 von oben in Nietmuttern M6 | **neu** |
+| Tropfboden, Kabelkanäle | | offen |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 
 ## Portal und Wagen

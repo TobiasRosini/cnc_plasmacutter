@@ -26,11 +26,15 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Y-Motor- und Umlenkhalter: **M6-Nietmuttern** im Längsträger (Ø9), die 3-mm-Wand trägt kein gutes M6-Gewinde.
 - Y-Schienen: M4 direkt in die 3-mm-Wand (gut 4 Gänge).
 - Wannenkäfig: 3× M6 je Seite durch die Außenwand des Rings (Zugang Ø12 innen, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr des Untertischs.
+- Geräteboden (Alu 4 mm) auf die unteren Längsrohre: 4× M6 von oben in Nietmuttern. Darauf Plasmagerät vorn rechts und Schaltschrank vorn links (`cad/unterbau/README.md`).
+- Tropfboden unter dem Wannenkäfig (Gefälle nach hinten), Ablauf durch die Hülse; Befestigung noch offen.
+- Kabelkanäle: 40 × 40 auf dem Y-Kettenträger vom festen Kettenende bis y 1450, senkrecht 25 × 60 außen rechts, quer 60 × 40 über dem Plasmagerät in den Schaltschrank.
 - Stützen der Y-Kette: je ein Rohr 20×40×2, 2× M6 durch die Innenwand (Zugang Ø13 außen) in Nietmuttern im Längsträger. Druckkopf mit 2× M5-Muttern (von unten in die Schlitze) einstecken und durch die Rohrwand verschrauben, Träger mit 2× M6 von unten in Nietmuttern.
 
 ## Noch offen
 
-- Rinnen (Y und X) auf den Trägern: Blindnieten Ø4, Lage beim Bau festlegen.
+- Rinnen (Y und X) und Kabelkanal auf den Trägern: Blindnieten Ø4 bzw. Schrauben, Lage beim Bau festlegen.
+- Befestigung Tropfboden und Kabelkanäle (senkrecht, quer).
 - Ketten igus 2400.03 (Y: 2400.03.125.0, 23 Glieder; X: 2400.03.075.0, 14 Glieder), Anschlussteile igus 2030.12PZ: 2 Bohrungen Ø6,1 im Abstand 25, 10 mm vom äußeren Ende, mit M5 verschrauben. Feste Enden: 2× M5 durch den Rinnenboden in Nietmuttern M5 im Y-Träger bzw. in der X-Ablage.
 - Stopfen links in der X-Ablage sichern (kleben oder Querstift).
 - Leitungen sind als Hüllrohre vereinfacht (Ø20 / Ø16). Führung des Bogens über dem Y-Ende und am Abgang hinter der Ablage (Clips) noch offen; Adern am Brenner gegen Funken schützen (Gewebe- oder Silikonschlauch).

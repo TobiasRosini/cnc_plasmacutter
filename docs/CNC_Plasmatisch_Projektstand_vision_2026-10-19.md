@@ -137,6 +137,12 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - **X-Kette** igus 2400.03, R75, 14 Glieder, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt bei Rahmen-x 476 (so weit rechts, wie die Schlaufe am Turm erlaubt), Anschlussteile igus 2030.12PZ (Stand 03.11.2026), Schlaufe nach rechts, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe). Brennerpaket ohne Schutzschlauch, Adern lose durch beide Ketten (Stand 02.11.2026, siehe `cad/energiekette/README.md`). Seiten von vorn gesehen.
 - Gesamtbreite mit beiden Ketten: 783 mm.
 
+### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
+
+- Unter der Wanne ein Geräteboden (Alu 4 mm, Oberkante 144) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).
+- Darüber ein Tropfboden mit Gefälle nach hinten, damit Wasser aus der Wanne nicht auf die Elektronik tropft.
+- Leitungen vom festen Ende der Y-Kette im Kabelkanal auf dem Kettenträger nach vorn bis vor die vorderste Portalstellung, außen rechts senkrecht hinunter, quer über dem Plasmagerät in den Schaltschrank. Gesamtbreite damit 793 mm. Details `cad/unterbau/README.md`, Leitungen `docs/Kabelliste.md`.
+
 ### Gantry Squaring
 
 - Zwei unabhängige Referenzschalter für die Y-Achse.

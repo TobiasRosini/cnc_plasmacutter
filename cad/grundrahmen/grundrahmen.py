@@ -81,6 +81,7 @@ P = dict(
     nietmutter_m6_d=9.0,        # M6-Nietmutter: 3 mm Wand trägt kein gutes M6-Gewinde
     ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen rechts), ab Rahmenende
     ek_stuetze_z=-20.0,                          # ab Rahmen-OK
+    geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
 )
 
 
@@ -186,8 +187,11 @@ def rahmen():
                                           V(xi, P["wanne_mitte_y"] + y, z_ut + r - 10.0),
                                           V(1, 0, 0)))
         teile["UT_Laengsrohr_oben_%s" % "LR"[i]] = lo
-        teile["UT_Laengsrohr_unten_%s" % "LR"[i]] = rohr(
-            "Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
+        lu = rohr("Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
+        for y in P["geraeteboden_y"]:                    # Geräteboden: M6 von oben in Nietmuttern
+            lu = lu.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
+                                          V(x0 + r / 2, y, z_u + r - P["wand"] - 1)))
+        teile["UT_Laengsrohr_unten_%s" % "LR"[i]] = lu
     for i, y0 in enumerate((0.0, ay - r)):
         q = rohr("Querrohr Untertisch oben", r, y0, z_ut, ax - 2 * r, "x")
         for x in P["trenn_schrauben_x"]:                 # Nietmutter M8 in der Oberseite

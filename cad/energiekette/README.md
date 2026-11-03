@@ -6,7 +6,10 @@ Beide Ketten: **igus E2/000 Serie 2400.03** (innen 38 × 25, außen 54 × 35, Te
 |---|---|---|---|
 | Y-Kette | 2400.03.125.0 | 23 | 1058 mm (igus-Formel 1056) |
 | X-Kette | 2400.03.075.0 | 14 | 644 mm (igus-Formel 629) |
-| Anschlussteile | 2030.12PZ | 2 Sätze | |
+| Anschlussteile | 2030.12PZ.A1 (vormontiert, Einbaulage A1) | 2 Sätze | |
+| Trennstege | 211, jedes 2. Glied | Y 11, X 7 | |
+
+Belegung und Leitungen: `docs/Kabelliste.md`.
 
 ## Y-Energiekette (rechts, liegend)
 
@@ -15,7 +18,7 @@ python3 cad/live.py cad/energiekette/energiekette.py
 ```
 
 - R125, 23 Glieder, Festpunkt bei Rahmen-y 825 (105 mm vor der Mitte des Y-Wegs, so dass die längere igus-Kette hinten nicht weiter übersteht), **Schlaufe hinten**, die Kabel verlassen den Festpunkt nach vorn (Schaltschrank und Plasmagerät stehen vorn). Seit die X-Ablage über der Brücke liegt, reicht die Schlaufe nur noch knapp 10 mm hinter den Rahmen.
-- Träger Stahl 40 × 20 × 2 flach über die ganze Rahmenlänge, Unterkante 163 mm über Rahmen-OK (über dem X-Schalterblock), darauf eine Rinne aus 2-mm-Blech. Zwei Stützen außen am Längsträger an den Rahmenenden: je ein Rohr 20 × 40 × 2 (M6 in Nietmuttern), oben ein Druckkopf unter dem Träger (kopfüber druckbar, M5-Muttern in Schlitzen).
+- Träger Stahl 40 × 20 × 2 flach über die ganze Rahmenlänge, Unterkante 163 mm über Rahmen-OK (über dem X-Schalterblock), darauf hinten eine Rinne aus 2-mm-Blech bis hinter das feste Kettenende, davor ein Kabelkanal 40 × 40 bis y 1450 (weiter siehe `cad/unterbau/README.md`). Zwei Stützen außen am Längsträger an den Rahmenenden: je ein Rohr 20 × 40 × 2 (M6 in Nietmuttern), oben ein Druckkopf unter dem Träger (kopfüber druckbar, M5-Muttern in Schlitzen).
 - Kettenturm aus Alu-Flachmaterial 40 × 8 an der Stirn der rechts um 47 mm verlängerten Brücke: 4× M6 in Muttern eines Einsteckteils (Druck, Muttern seitlich eingeschoben), das in der Brücke steckt und von den beiden M6 des Sattels mit gehalten wird. Ohne Laschen: Druckteile mit eingepressten M5-Muttern sitzen innen am Turm (Halter Y oben, Ablagehalter X unten).
 - Kette innen 7 mm außerhalb der Schienenmitte: Der Z-Schlitten fährt bei X ganz rechts bis knapp davor. Der Z-Kopf ist rechts schmaler (52 statt 58 mm).
 - Gesamtbreite mit Kette: 781 mm.

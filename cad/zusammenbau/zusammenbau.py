@@ -44,6 +44,7 @@ YANTRIEB = os.path.join(CAD, "y_antrieb", "y_antrieb.FCStd")
 ZACHSE = os.path.join(CAD, "z_achse", "z_achse.FCStd")
 KAEFIG = os.path.join(CAD, "wannenkaefig", "wannenkaefig.FCStd")
 EKETTE = os.path.join(CAD, "energiekette", "energiekette.FCStd")
+UNTERBAU = os.path.join(CAD, "unterbau", "unterbau.FCStd")
 XWAGEN_TEILE = ["x_wagenkoerper", "x_spritzschutz", "x_motorbock",
                 "Wagen_X_oben", "Wagen_X_unten", "Riemenscheibe_X", "Umlenkrollen_X",
                 "Motor_X_NEMA23", "x_ref_stift"]
@@ -250,7 +251,7 @@ def main():
     dek = fc_dok.quelle(EKETTE)
     g_e = gruppe(doc, "Energiekette_Y")
     pl_fest = App.Placement(V(sx[0], 0, z_schiene_rahmen), App.Rotation())
-    for n in ("ek_traeger_40x20", "ek_rinne", "ek_stuetzen", "ek_stuetzen_kopf"):
+    for n in ("ek_traeger_40x20", "ek_rinne", "ek_kabelkanal", "ek_stuetzen", "ek_stuetzen_kopf"):
         link(doc, "EK_" + n, dek.getObject(n), pl_fest, g_e)
     pl_portal = App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation())
     for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",
@@ -272,6 +273,14 @@ def main():
     o = fc_dok.teil(doc, "EK_Kette_igus_2400_03_R125", fc_dok.fest(kt_), "zukauf")
     if o not in g_e.Group:
         g_e.addObject(o)
+
+    # --- Unterbau: Geräteboden, Plasmagerät, Schaltschrank, Tropfboden, Kabelkanäle
+    # (Koordinaten wie Grundrahmen)
+    dub = fc_dok.quelle(UNTERBAU)
+    g_ub = gruppe(doc, "Unterbau")
+    for o in dub.Objects:
+        if o.TypeId == "Part::Feature":
+            link(doc, "U_" + o.Name, o, App.Placement(), g_ub)
 
     fc_dok.speichern(doc, pfad, offen)
 
@@ -357,10 +366,10 @@ def main():
                 % (xmin, xmax, xmax - xmin, rahmen_bb.Center.x - 275, rahmen_bb.Center.x + 275))
 
         # Portal in beiden Y-Endlagen (Flachstange am Schienenende) gegen Rahmen,
-        # Y-Antrieb und Y-Riemen prüfen; X-Wagen dabei ganz rechts und ganz links
+        # Y-Antrieb, Unterbau (Kabelkanäle) und Y-Riemen prüfen; X-Wagen dabei ganz rechts und ganz links
         fest_teile = Part.makeCompound(
             [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
-             and (o.Name.startswith("R_") or o.Name.startswith("Y_")
+             and (o.Name.startswith("R_") or o.Name.startswith("Y_") or o.Name.startswith("U_")
                   or (o.Name.startswith("EK_") and "Kette" not in o.Name))
              and "Schienen" not in o.Name and o.Name != "Y_Riemen_HTD5M_15"])
         portal_teile = [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")

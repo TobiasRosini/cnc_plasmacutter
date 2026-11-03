@@ -50,6 +50,10 @@ P = dict(
     traeger_h=20.0,
     rinne_t=2.0,
     rinne_rand=12.0,
+    kanal_ende_y=1450.0,        # Kabelkanal auf dem Träger vom festen Kettenende bis hier, dann
+                                # außen senkrecht hinunter (= unterbau kanal_y[1])
+    kanal_h=40.0,               # Kabelkanal 40 x 40 (PVC, Wand 2) auf dem Träger
+    kanal_t=2.0,
     rinne_luft=3.5,             # Anschlussstücke sind 55 breit (Kette 54); Rinne und Turm wie vorher
     # Anschlussteile igus 2030.12PZ (Kunststoff, verriegelt): Platte 7 dick, Ba + 1 = 55
     # breit, 40 lang, 2 Bohrungen Ø6,1 im Abstand A = 25 quer zur Kette, 10 mm vom äußeren Ende
@@ -185,14 +189,31 @@ def traeger_rinne():
         tr = tr.cut(Part.makeCylinder(3.5, 4, V(xc + dx, g["y_fest"] + loch_versatz(),
                                                 P["traeger_uk"] + th - 3)))
     t = P["rinne_t"]
-    y0 = yh                                              # Rinne ganz durch: hinten Schlaufe, vorn Kabel
-    ri = box(g["r_x0"], g["r_x1"], y0, L, g["z_rinne"], g["z_rinne"] + t)
+    y0 = yh                                              # Rinne hinten bis hinter das feste Kettenende
+    y1 = rinne_ende_y()
+    ri = box(g["r_x0"], g["r_x1"], y0, y1, g["z_rinne"], g["z_rinne"] + t)
     xc = (g["k_x0"] + g["k_x1"]) / 2
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende, M5
         ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(xc + dx, g["y_fest"] + loch_versatz(), g["z_rinne"] - 1)))
     for x0 in (g["r_x0"], g["r_x1"] - t):
-        ri = ri.fuse(box(x0, x0 + t, y0, L, g["z_rinne"], g["z_rinne"] + P["rinne_rand"]))
+        ri = ri.fuse(box(x0, x0 + t, y0, y1, g["z_rinne"], g["z_rinne"] + P["rinne_rand"]))
     return tr, ri.removeSplitter()
+
+
+def rinne_ende_y():
+    return geo()["y_fest"] + P["end_laenge"] / 2 + 10.0
+
+
+def kabelkanal_y():
+    """Kabelkanal 40 x 40 (mit Deckel) auf dem Träger vor der Rinne: nimmt die Leitungen
+    vom festen Kettenende nach vorn auf; an seinem Ende gehen sie seitlich in den
+    senkrechten Kanal (Unterbau)."""
+    g = geo()
+    xm = (g["r_x0"] + g["r_x1"]) / 2
+    b, h, t = P["traeger_b"], P["kanal_h"], P["kanal_t"]
+    y0, y1, z0 = rinne_ende_y(), P["kanal_ende_y"], g["z_rinne"]
+    k = box(xm - b / 2, xm + b / 2, y0, y1, z0, z0 + h)
+    return k.cut(box(xm - b / 2 + t, xm + b / 2 - t, y0 - 1, y1 + 1, z0 + t, z0 + h - t))
 
 
 def stuetzen_lagen():
@@ -721,6 +742,7 @@ def main():
             doc.removeObject(alt)
     fc_dok.teil(doc, "ek_traeger_40x20", tr, "stahl")
     fc_dok.teil(doc, "ek_rinne", ri, "stahl")
+    fc_dok.teil(doc, "ek_kabelkanal", kabelkanal_y(), "zukauf")
     fc_dok.teil(doc, "ek_stuetzen", st, "stahl")
     fc_dok.teil(doc, "ek_stuetzen_kopf", stuetzen_kopf(), "druck")
     portal = {"ek_ausleger": (au, "alu"), "ek_einsteckteil": (ei, "druck"),
