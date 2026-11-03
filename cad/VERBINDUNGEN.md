@@ -16,6 +16,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Y-Kettenträger auf Stützkopf | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
 | Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
 | Geräteboden auf untere Längsrohre | 4× M6 von oben in Nietmuttern M6 | **neu** |
+| Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
 | Tropfboden, Kabelkanäle | | offen |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 

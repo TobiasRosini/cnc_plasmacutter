@@ -48,6 +48,14 @@ P = dict(
     gp_x_unten=30.0,            # unterhalb z_unten so schmal wie die Front des Wagenkörpers
     gp_loecher=[(-20.0, -15.0), (20.0, -15.0), (-20.0, 62.0), (20.0, 62.0),
                 (-20.0, 88.0), (20.0, 88.0)],   # = X-Wagen z_loecher
+    # Spritzschutz der unteren X-Schiene: Lappen aus Silikon-Glasgewebe vorn unten an der
+    # Grundplatte, seitlich weit über den Wagen hinaus (weich: biegt sich an den X-Enden am
+    # Y-Winkel weg), geklemmt mit einer Alu-Leiste auf den beiden unteren M5 der Grundplatte
+    lappen_x=180.0,             # halbe Breite
+    lappen_z=(-40.0, 0.0),      # Unterkante 17 über dem Blech, Oberkante = Brückenunterkante
+    lappen_t=1.5,
+    lappenleiste_t=6.0,
+    lappenleiste_z=(-30.0, 0.0),
     # Distanzleisten + Schienen
     leiste=20.0,
     schiene_x=40.0,
@@ -167,6 +175,30 @@ def grundplatte():
     for x, y in kopf_schrauben(g):                         # M5 in die Oberkante
         if y < g["y_gp"]:
             s = s.cut(zyl(P["m5_kern"], 13, x, y, P["gp_oben"] - 12))
+    return s
+
+
+def untere_loecher():
+    return [(x, z) for x, z in P["gp_loecher"] if z < 0]
+
+
+def schutzlappen():
+    g = geo()
+    y0, lx = g["y_gp"], P["lappen_x"]
+    s = box(-lx, lx, y0, y0 + P["lappen_t"], P["lappen_z"][0], P["lappen_z"][1])
+    for x, z in untere_loecher():
+        s = s.cut(zyl(P["m5_durchgang"], P["lappen_t"] + 2, x, y0 - 1, z, V(0, 1, 0)))
+    return s
+
+
+def lappenleiste():
+    g = geo()
+    y0 = g["y_gp"] + P["lappen_t"]
+    t, gu = P["lappenleiste_t"], P["gp_x_unten"]
+    s = box(-gu, gu, y0, y0 + t, P["lappenleiste_z"][0], P["lappenleiste_z"][1])
+    for x, z in untere_loecher():                       # M5 gesenkt, länger als vorher
+        s = s.cut(zyl(P["m5_durchgang"], t + 2, x, y0 - 1, z, V(0, 1, 0)))
+        s = s.cut(zyl(P["m5_senk_d"], 3.0 + 1, x, y0 + t - 3.0, z, V(0, 1, 0)))
     return s
 
 
@@ -454,8 +486,10 @@ def teile(lage=None):
              "z_schlitten": (schlitten(g), "alu"), "z_mutterblock": (mutterblock(g), "druck"),
              "z_kopf": (zkopf(g), "druck"), "z_motorhalter": (zmotorhalter(g), "druck"),
              "z_halter": (halter(g), "druck"), "z_traeger": (traeger(g), "druck"),
-             "z_klemmdeckel": (klemmdeckel(g), "druck"), "z_ref_fahne": (ref_fahne(g), "stahl")}
+             "z_klemmdeckel": (klemmdeckel(g), "druck"), "z_ref_fahne": (ref_fahne(g), "stahl"),
+             "z_lappenleiste": (lappenleiste(), "alu")}
     kauf = {n: (s, "zukauf") for n, s in kaufteile(g).items()}
+    kauf["Schutzlappen_Silikon_Glasgewebe"] = (schutzlappen(), "zukauf")
     return g, eigen, kauf
 
 

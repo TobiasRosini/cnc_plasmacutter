@@ -17,7 +17,7 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 7. X-Wagen: Wagenkörper (Druck) mit 4× M4 oben und 4× M4 unten an die Wagen, je mit Scheibe. Motorbock mit den Umlenkrollen (M8 von unten) von hinten an die Rückseite des Decks (4× M4 in Muttern, Köpfe in den Schrägen der Stege gesenkt), **erst danach** Motor mit Scheibe einsetzen: die Senkungen liegen dicht vor der Motorfront. Riemen spannen: Hebel zwischen Motor und Flanschwand, Motor nach hinten drücken, M5 festziehen. Spritzschutz erst nach dem unteren Wagen (4× M3×6 in Muttern im Boden).
 8. Platte an die linke Brückenstirn (4× M6 in die Muttern des linken Einsteckteils). X-Ablage rechts auf den Zapfen des Ablagehalters schieben (2× M5 von unten durch die untere Rohrwand), links Stopfen im Rohr, 2× M5 durch die Platte. Drei Rinnenhalter unter die Ablage (je 2× M5 von unten in Nietmuttern), Rinne hinten darauf (je 1× M4 in Mutter).
 9. Festes Ende der X-Kette (Anschlussteil igus 2030.12PZ) bei Rahmen-x 476 in die Rinne (2× M5 durch den Rinnenboden), bewegtes Ende der Y-Kette von unten an den Halter Y (2× M5 in Muttern). Leitungen vom Y-Ende nach vorn (Kabelbinder durch die zwei Schlitze im Halter Y), im Bogen über das Y-Ende nach hinten, hinter der Ablage hinunter, in der Rinne hinten nach links und mit der Kehre von links in das feste X-Ende. Überall mindestens R60.
-10. Z-Achse: Grundplatte an die Front des Wagenkörpers (6× M5 in Muttern, davon 2 unten), Leisten + Schienen (M4 durch die Leiste in die Grundplatte), Z-Kopf-Sockel (4× M5), FK10 mit Spindel (4× M4 in Muttern unten im Sockel), Kupplung, dann Motorhalter mit Motor (4× M4 durch die Säulen in Muttern unten im Sockel).
+10. Z-Achse: Grundplatte an die Front des Wagenkörpers (6× M5 in Muttern; die unteren 2 erst mit Schutzlappen und Lappenleiste davor, M5 entsprechend länger), Leisten + Schienen (M4 durch die Leiste in die Grundplatte), Z-Kopf-Sockel (4× M5), FK10 mit Spindel (4× M4 in Muttern unten im Sockel), Kupplung, dann Motorhalter mit Motor (4× M4 durch die Säulen in Muttern unten im Sockel).
 11. Halter der X-Kette (Druck) an die Rückseite des Z-Kopf-Sockels (2× M5 in Muttern), bewegtes Ende von unten an den Halter (2× M5 in Muttern). Adern des Brennerpakets links aus dem Kettenende, im Bogen (R60) hoch und nach vorn, von oben in die Tülle; Motor- und Schalterkabel zweigen hier ab.
 
 ## Rahmen
@@ -25,6 +25,7 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Oberrahmen auf den Untertisch: 6× M8×16 durch die Unterseite der oberen Querrohre (Zugang Ø16 von oben) in Nietmuttern M8 in den unteren Querrohren.
 - Y-Motor- und Umlenkhalter: **M6-Nietmuttern** im Längsträger (Ø9), die 3-mm-Wand trägt kein gutes M6-Gewinde.
 - Y-Schienen: M4 direkt in die 3-mm-Wand (gut 4 Gänge).
+- Spritzschutz Y: Alu-Streifen innen an die Längsträger, je 6 Blindnieten Ø4.
 - Wannenkäfig: 3× M6 je Seite durch die Außenwand des Rings (Zugang Ø12 innen, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr des Untertischs.
 - Geräteboden (Alu 4 mm) auf die unteren Längsrohre: 4× M6 von oben in Nietmuttern. Darauf Plasmagerät vorn rechts und Schaltschrank vorn links (`cad/unterbau/README.md`).
 - Tropfboden unter dem Wannenkäfig (Gefälle nach hinten), Ablauf durch die Hülse; Befestigung noch offen.

@@ -8,6 +8,7 @@ z_halter         gültig: True, 78.0 x 52.5 x 105.0 mm
 z_traeger        gültig: True, 78.0 x 21.5 x 70.0 mm
 z_klemmdeckel    gültig: True, 60.0 x 22.0 x 70.0 mm
 z_ref_fahne      gültig: True, 20.0 x 22.0 x 3.0 mm
+z_lappenleiste   gültig: True, 60.0 x 6.0 x 30.0 mm
 Wand an Bohrungen z_grundplatte: ok (>= 3.0 mm)
 Wand an Bohrungen z_leisten_20x20: ok (>= 3.0 mm)
 Wand an Bohrungen z_schlitten: ok (>= 3.0 mm)
@@ -18,6 +19,7 @@ Wand an Bohrungen z_halter: ok (>= 3.0 mm)
 Wand an Bohrungen z_traeger: ok (>= 3.0 mm)
 Wand an Bohrungen z_klemmdeckel: ok (>= 3.0 mm)
 Wand an Bohrungen z_ref_fahne: ok (>= 3.0 mm)
+Wand an Bohrungen z_lappenleiste: ok (>= 3.0 mm)
 Lage 0 (unten): 0 Kollisionen, Düse z = -65.0 (Brücken-UK = 0, Rahmen-OK ≈ -57)
 Lage 1 (oben): 0 Kollisionen, Düse z = 35.0 (Brücken-UK = 0, Rahmen-OK ≈ -57)
 Brennerachse 136 mm vor Brückenmitte; Spindel y 72.0

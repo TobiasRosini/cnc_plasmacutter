@@ -15,4 +15,7 @@ python3 cad/live.py cad/z_achse/z_achse.py
 - Hub 100 mm. Düse von 65 mm unter bis 35 mm über der Brückenunterkante (Rahmenoberkante = 57 mm unter der Brücke). Brennerachse 136 mm vor der Brückenmitte.
 - Breite Teile liegen alle über der Brückenunterkante + 50 mm; darunter nur der Brenner (an den X-Enden stehen dort die Türme der Y-Winkel).
 
+- **Spritzschutz untere X-Schiene:** Lappen aus Silikon-Glasgewebe 1,5 mm, 360 breit, vorn unten an der Grundplatte (Unterkante 17 über dem Blech, Oberkante = Brückenunterkante), geklemmt mit einer Alu-Leiste 60 × 30 × 6 auf den beiden unteren M5 der Grundplatte (Schrauben 6 + 1,5 mm länger, Kopf in der Leiste gesenkt). Die Spritzer kommen immer von der Brennerstelle, der Lappen wandert mit und deckt die Schiene etwa ±200 mm um den Brenner ab. Er ist weich und biegt sich an den X-Enden am Y-Winkel weg (im X-Weg nicht mitgeprüft).
+- Die X-Wagen HGH15CA mit Metallabstreifer bestellen (HIWIN-Dichtungsoption, Kennung im Katalog prüfen).
+
 Offen: genaue Maße FK10 (Lochbild), Schalter für den Schwimmkopf (Platzhalter 10 × 6 × 4).

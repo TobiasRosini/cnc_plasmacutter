@@ -137,6 +137,12 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - **X-Kette** igus 2400.03, R75, 14 Glieder, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt bei Rahmen-x 476 (so weit rechts, wie die Schlaufe am Turm erlaubt), Anschlussteile igus 2030.12PZ (Stand 03.11.2026), Schlaufe nach rechts, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe). Brennerpaket ohne Schutzschlauch, Adern lose durch beide Ketten (Stand 02.11.2026, siehe `cad/energiekette/README.md`). Seiten von vorn gesehen.
 - Gesamtbreite mit beiden Ketten: 783 mm.
 
+### Spritzschutz der Schienen (Stand 03.11.2026)
+
+- Einstechspritzer fliegen flach und schräg nach oben. Die untere X-Schiene hängt kopfüber 42–57 mm über dem Blech und 136 mm hinter dem Brenner und ist besonders gefährdet; eine feste Abdeckung an der Brücke geht nicht (der Wagen umgreift die Brücke), ein Faltenbalg kostet zu viel Weg.
+- Umgesetzt: Schutzlappen aus Silikon-Glasgewebe am X-Wagen (wandert mit dem Brenner), Alu-Streifen innen an den Y-Längsträgern. Dazu X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
+- Früh mit Probestichen nahe der Brücke testen. Erst wenn Spritzer an der Schiene haften: untere X-Schiene auf die Brückenrückseite verlegen (großer Umbau, dort läuft der X-Riemen).
+
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 
 - Unter der Wanne ein Geräteboden (Alu 4 mm, Oberkante 144) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).
@@ -153,7 +159,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 - Kugelumlaufspindel, voraussichtlich **SFU1204**.
 - Zielwert ca. **100 mm nutzbarer Hub**.
-- Floating Head oder ohmsche Antastung; genaue Konstruktion offen.
+- **Schwimmkopf bleibt** (03.11.2026): Die THC regelt erst im laufenden Schnitt; für Einstechhöhe und Sollspannung muss vorher die Blechoberfläche angetastet werden. Ohmsche Antastung bräuchte eine leitende, getrennte Schutzkappe am SP80M (prüfen) und versagt auf rostigen, lackierten oder nassen Blechen.
 - Automatische Brennerhöhenregelung (THC) vorgesehen.
 
 ## 6. Wasserbett

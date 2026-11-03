@@ -95,7 +95,8 @@ def main():
     z_schiene_rahmen = s_bb.ZMin
     rahmen_bb = App.BoundBox()
     for o in dr.Objects:
-        if o.Name not in RAHMEN_TEILE_AUS and o.Name != "Dummy_Schienen_HGR15":
+        if o.Name not in RAHMEN_TEILE_AUS and o.Name != "Dummy_Schienen_HGR15" \
+                and "Spritzschutz" not in o.Name:          # steht über die Rahmenoberkante
             rahmen_bb.add(o.Shape.BoundBox)
     w_schiene = dp.getObject("Schiene_HGR15").Shape.BoundBox
     w_bruecke = dp.getObject("Bruecke_80x40x4").Shape.BoundBox
@@ -344,7 +345,8 @@ def main():
 
         # X-Weg: Wagen an beide Enden schieben, bis er die Winkel berührt
         wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
-                                  + [dz_.getObject(n).Shape for n in z_teile]
+                                  + [dz_.getObject(n).Shape for n in z_teile
+                                     if "Schutzlappen" not in n]      # weich, biegt sich weg
                                   + [dek.getObject("ekx_halter").Shape])
         winkel = Part.makeCompound([o.Shape for o in doc.Objects
                                     if (o.Name.startswith("P_") or o.Name.startswith("EK_"))

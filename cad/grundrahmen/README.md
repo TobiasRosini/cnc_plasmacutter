@@ -20,6 +20,7 @@ Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualis
 
 - **Oben:** 2 Längsträger über die volle Länge (1320) tragen die HGR15-Schienen. M4-Gewinde direkt in die 3-mm-Oberwand, Teilung 60, 22 Löcher je Schiene. 2 Querträger stumpf dazwischen.
 - **Beine:** 4 Eckbeine stumpf unter die Längsträger, Fußplatten 100×100×8 mit Ø13. Vorgesehen sind **Einstellfüße und Rollen**: Im Betrieb heben die Füße den Rahmen über die Rollen an, zum Verfahren werden sie hochgedreht. Die Anbindung beider an den Fußplatten ist noch zu konstruieren.
+- **Spritzschutz Y-Schienen:** Alu-Streifen 2 mm innen an beiden Längsträgern (y 80–1360, zwischen den Y-Haltern), 25 mm über die Rahmenoberkante, je 6 Blindnieten Ø4. Bleche dürfen damit höchstens 636 mm breit sein.
 - **Unten:** Längs- und Querrohre stumpf zwischen die Beine (Unterkante 100 über Boden), dazu 2 Mittelquerrohre als Auflage für den Wannenträger.
 - **Wanne:** liegt innen (lichte Weite 640 × 1240 bei Wanne 600 × 1200 und 20 mm Spiel je Seite) und lässt sich an der Stirnseite durch die Öffnung 640 × 670 herausziehen. Der Wannenträger und damit die Wannenhöhe folgen später.
 

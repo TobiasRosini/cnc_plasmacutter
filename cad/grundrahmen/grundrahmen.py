@@ -82,6 +82,15 @@ P = dict(
     ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen rechts), ab Rahmenende
     ek_stuetze_z=-20.0,                          # ab Rahmen-OK
     geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
+    # Spritzschutz Y-Schienen: Alu-Streifen 2 mm innen an den Längsträgern, steht über die
+    # Rahmenoberkante (Bleche dann höchstens 636 breit); zwischen den Y-Motor- und Umlenkhaltern
+    schutz_t=2.0,
+    schutz_ueber=25.0,
+    schutz_unter=35.0,
+    schutz_y=(80.0, 1360.0),
+    schutz_niet_y=[120.0, 340.0, 560.0, 780.0, 1000.0, 1220.0],
+    schutz_niet_z=-20.0,                         # ab Rahmen-OK, Blindniet Ø4
+    niet_d=4.1,
 )
 
 
@@ -157,6 +166,10 @@ def rahmen():
                 for y in (dy, ay - dy):
                     lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                                   V(-1, y, z_ok + P["ek_stuetze_z"]), V(1, 0, 0)))
+        xi = x0 + r - P["wand"] - 1 if i == 0 else x0 - 1      # Innenwand (Spritzschutz)
+        for y in P["schutz_niet_y"]:
+            lt = lt.cut(Part.makeCylinder(P["niet_d"] / 2, P["wand"] + 2,
+                                          V(xi, y, z_ok + P["schutz_niet_z"]), V(1, 0, 0)))
         teile["OR_Laengstraeger_%s" % "LR"[i]] = lt
     for i, y0 in enumerate((0.0, ay - r)):
         q = rohr("Querträger oben", r, y0, z_oben, ax - 2 * r, "x")
@@ -207,6 +220,22 @@ def rahmen():
     return teile
 
 
+def spritzschutz():
+    """Alu-Streifen innen an den Längsträgern, Blindnieten Ø4."""
+    r, t, ax = P["rohr"], P["schutz_t"], P["aussen_x"]
+    z0, z1 = P["hoehe_ok"] - P["schutz_unter"], P["hoehe_ok"] + P["schutz_ueber"]
+    y0, y1 = P["schutz_y"]
+    res = {}
+    for name, x0, rich in (("R", r, 1), ("L", ax - r - t, -1)):
+        s = box(x0, x0 + t, y0, y1, z0, z1)
+        for y in P["schutz_niet_y"]:
+            s = s.cut(Part.makeCylinder(P["niet_d"] / 2, t + 2,
+                                        V(x0 - 1 if rich > 0 else x0 + t + 1, y,
+                                          P["hoehe_ok"] + P["schutz_niet_z"]), V(rich, 0, 0)))
+        res["OR_Spritzschutz_%s" % name] = s
+    return res
+
+
 def schienen_loecher():
     ay, L = P["aussen_y"], P["schiene_laenge"]
     y0 = P["schiene_y0"]
@@ -246,6 +275,8 @@ def main():
     doc, offen = fc_dok.dokument(pfad)
     for name, shp in teile.items():
         fc_dok.teil(doc, name, shp, "stahl")
+    for name, shp in spritzschutz().items():
+        fc_dok.teil(doc, name, shp, "alu")
     fc_dok.teil(doc, "Dummy_Schienen_HGR15", dm["Dummy_Schienen_HGR15"], "dummy")
     fc_dok.teil(doc, "Dummy_Wanne", dm["Dummy_Wanne"], "wanne", 60)
     fc_dok.speichern(doc, pfad, offen)
