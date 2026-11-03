@@ -19,7 +19,9 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
 | Halter Spritzschutz X an Flachstange | 2× M4 in Gewinde in der vorderen Stirn | **neu** |
 | Schutzstreifen X an Halter | 2× M4 mit Mutter je Seite | **neu** |
-| Tropfboden, Kabelkanäle | | offen |
+| Kabelkanal auf Y-Träger | 3× M4 in Nietmuttern M4 | **neu** |
+| Kabelkanäle senkrecht / quer | Distanzstücke (Druck), je 2× M5 aus dem Kanal in Nietmuttern M5 | **neu** |
+| Tropfboden | | offen |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 
 ## Portal und Wagen
@@ -52,6 +54,10 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ek_halter_y | 2× M5 oben (Kettenende), 2× M5 von oben in Schlitze (Turm) |
 | ekx_ablagehalter | 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
 | ekx_rinnenhalter | je 1× M4 seitlich (Rinne hinten) |
+| ek_leitungsbogen | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich |
+| ekx_umlenkkopf | 2× M4 vom Mast, 2× M4 Verbindungsplatte, Muttern seitlich |
+| ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf |
+| ub_kanalhalter | 2× M5 durch (Distanzstück) |
 | ekx_halter | 2× M5 oben (Kettenende) |
 | ekx_stopfen | 2× M5 seitlich |
 | ek_stuetzen_kopf | je 2× M5 von unten |

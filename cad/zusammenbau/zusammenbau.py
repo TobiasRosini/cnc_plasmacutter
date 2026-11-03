@@ -265,7 +265,9 @@ def main():
     pl_portal = App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation())
     for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",
               "ekx_stuetze_links", "ekx_stopfen", "ek_einsteckteil_links",
-              "ek_halter_y", "ekx_ablagehalter", "ekx_rinne_hinten", "ekx_rinnenhalter", "ek_Leitung"):
+              "ek_halter_y", "ekx_ablagehalter", "ekx_rinne_hinten", "ekx_rinnenhalter", "ek_Leitung",
+              "ek_leitungsbogen", "ekx_mast", "ekx_umlenkkopf",
+              "ek_verbindungsplatte"):
         link(doc, "P_rechts_" + n, dek.getObject(n), pl_portal, g_e)
     link(doc, "X_ekx_halter", dek.getObject("ekx_halter"), plw, g_e)
     link(doc, "X_ekx_Leitung_Brenner", dek.getObject("ekx_Leitung_Brenner"), plw, g_e)

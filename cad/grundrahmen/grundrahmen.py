@@ -86,6 +86,12 @@ P = dict(
     qv_tiefe=80.0,
     qv_wand=4.0,
     or_ueberstand=40.0,
+    # Kabelkanäle (Unterbau): Distanzstücke mit M5 in Nietmuttern, rechts außen bzw. am vorderen Bein
+    kanal_y=1420.0,
+    kanal_z_or=[820.0, 840.0],                   # Längsträger Oberrahmen rechts, außen
+    kanal_z_ut=[780.0, 800.0],                   # Längsrohr Untertisch oben rechts, außen
+    kanal_bein=[(12.0, 580.0), (28.0, 580.0)],   # vorderes Bein rechts, Rückseite (x, z)
+    nietmutter_m5_d=7.0,
     geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
     # Spritzschutz Y-Schienen: Alu-Streifen 2 mm innen an den Längsträgern, steht über die
     # Rahmenoberkante (Bleche dann höchstens 636 breit); zwischen den Y-Motor- und Umlenkhaltern
@@ -176,6 +182,10 @@ def rahmen():
         for y in P["schutz_niet_y"]:
             lt = lt.cut(Part.makeCylinder(P["niet_d"] / 2, P["wand"] + 2,
                                           V(xi, y, z_ok + P["schutz_niet_z"]), V(1, 0, 0)))
+        if i == 0:                                       # Kabelkanal außen rechts
+            for z in P["kanal_z_or"]:
+                lt = lt.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
+                                              V(-1, P["kanal_y"], z), V(1, 0, 0)))
         teile["OR_Laengstraeger_%s" % "LR"[i]] = lt
     for i, y0 in enumerate((0.0, ay - r)):
         if i == 1:                                       # vorn 80 x 40 x 4 flach, steht über
@@ -196,7 +206,12 @@ def rahmen():
     z_ut = z_oben - r                    # Unterkante oberer Rahmen Untertisch
     bein_l = z_oben - z_fuss
     for i, (x0, y0) in enumerate([(0, 0), (ax - r, 0), (0, ay - r), (ax - r, ay - r)]):
-        teile["UT_Bein_%d" % (i + 1)] = rohr("Bein", x0, y0, z_fuss, bein_l, "z")
+        bein = rohr("Bein", x0, y0, z_fuss, bein_l, "z")
+        if i == 2:                                       # vorn rechts: Querkanal (Rückseite)
+            for x, z in P["kanal_bein"]:
+                bein = bein.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
+                                                  V(x0 + x, y0 - 1, z), V(0, 1, 0)))
+        teile["UT_Bein_%d" % (i + 1)] = bein
         fk = P["fuss_kante"]
         fx = min(max(x0 + r / 2 - fk / 2, 0), ax - fk)
         fy = min(max(y0 + r / 2 - fk / 2, 0), ay - fk)
@@ -211,6 +226,10 @@ def rahmen():
             lo = lo.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                           V(xi, P["wanne_mitte_y"] + y, z_ut + r - 10.0),
                                           V(1, 0, 0)))
+        if i == 0:                                       # Kabelkanal außen rechts
+            for z in P["kanal_z_ut"]:
+                lo = lo.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
+                                              V(-1, P["kanal_y"], z), V(1, 0, 0)))
         teile["UT_Laengsrohr_oben_%s" % "LR"[i]] = lo
         lu = rohr("Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
         for y in P["geraeteboden_y"]:                    # Geräteboden: M6 von oben in Nietmuttern

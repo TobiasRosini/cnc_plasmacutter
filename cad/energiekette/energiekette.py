@@ -54,6 +54,7 @@ P = dict(
                                 # außen senkrecht hinunter (= unterbau kanal_y[1])
     kanal_h=40.0,               # Kabelkanal 40 x 40 (PVC, Wand 2) auf dem Träger
     kanal_t=2.0,
+    kanal_schraub_y=[950.0, 1150.0, 1350.0],   # M4 durch den Kanalboden in Nietmuttern im Träger
     rinne_luft=3.5,             # Anschlussstücke sind 55 breit (Kette 54); Rinne und Turm wie vorher
     # Anschlussteile igus 2030.12PZ (Kunststoff, verriegelt): Platte 7 dick, Ba + 1 = 55
     # breit, 40 lang, 2 Bohrungen Ø6,1 im Abstand A = 25 quer zur Kette, 10 mm vom äußeren Ende
@@ -130,6 +131,22 @@ P = dict(
     leitung_hinten_y=-131.0,    # Lauf hinter der Ablage (Kehre R60 in den Festpunkt)
     leitung_oben_z=580.0,       # Bogen über das Y-Kettenende nach hinten
     leitung_ab_x=10.0,          # dort hinter der Ablage senkrecht nach unten
+    leitung_s_y=(0.0, -45.0),   # oben zwischen Bogen und Umlenkkopf seitlich versetzt (neben die Y-Kette)
+    # Führungen (Druck): Leitungsbogen auf dem Halter Y (180°-Kehre R60), Umlenkkopf auf einem
+    # Mast (Alu 30 x 4) an der Rinne hinten (90° nach unten)
+    fuehrung_b=40.0,            # Breite zwischen den Wangen
+    wange_t=3.0,
+    wange_r=75.0,               # Wangen bis zu diesem Radius um die Bogenmitte
+    mast=(30.0, 4.0),
+    mast_oben=595.0,
+    mast_m4_dx=8.0,             # M4 unten in den Schenkel der Rinne hinten
+    kopf_m4_z=[470.0, 560.0],   # M4 Kopf an den Mast
+    # Verbindungsplatte (Druck) unter dem freien Leitungsstück zwischen Bogen und Kopf:
+    # liegt in Aussparungen oben in beiden, je 2x M4 von oben (gesenkt) in Muttern
+    vp_t=15.0,
+    vp_y=(-60.0, 0.0),
+    vp_m4_bogen=[(-10.0, -10.0), (10.0, -10.0)],   # (x ab Kettenmitte, y)
+    vp_m4_kopf=[(-10.0, -52.0), (10.0, -52.0)],    # (x ab leitung_ab_x, y)
     brenner_oben_z=555.0,       # Bogen über dem Brenner (X-Wagen-z), Z unten
     brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
     brenner_y=136.0,
@@ -188,6 +205,8 @@ def traeger_rinne():
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmuttern M5 für das feste Kettenende
         tr = tr.cut(Part.makeCylinder(3.5, 4, V(xc + dx, g["y_fest"] + loch_versatz(),
                                                 P["traeger_uk"] + th - 3)))
+    for y in P["kanal_schraub_y"]:                       # Nietmuttern M4 für den Kabelkanal
+        tr = tr.cut(Part.makeCylinder(3.0, 4, V(xm, y, P["traeger_uk"] + th - 3)))
     t = P["rinne_t"]
     y0 = yh                                              # Rinne hinten bis hinter das feste Kettenende
     y1 = rinne_ende_y()
@@ -213,7 +232,10 @@ def kabelkanal_y():
     b, h, t = P["traeger_b"], P["kanal_h"], P["kanal_t"]
     y0, y1, z0 = rinne_ende_y(), P["kanal_ende_y"], g["z_rinne"]
     k = box(xm - b / 2, xm + b / 2, y0, y1, z0, z0 + h)
-    return k.cut(box(xm - b / 2 + t, xm + b / 2 - t, y0 - 1, y1 + 1, z0 + t, z0 + h - t))
+    k = k.cut(box(xm - b / 2 + t, xm + b / 2 - t, y0 - 1, y1 + 1, z0 + t, z0 + h - t))
+    for y in P["kanal_schraub_y"]:
+        k = k.cut(Part.makeCylinder(2.25, t + 2, V(xm, y, z0 - 1)))
+    return k
 
 
 def stuetzen_lagen():
@@ -417,11 +439,134 @@ def leitung_weg():
     yh, zo, xa = P["leitung_hinten_y"], P["leitung_oben_z"], P["leitung_ab_x"]
     x_ein = gx["xf"] + e + 0.5
     x_kehre = x_ein + r + 2.0
-    y_vor = e + 0.5 + r + 2.0                            # Bogen nach oben direkt hinter dem Anschlussteil
+    y_vor = bogen_y_vor()                                # Bogen nach oben direkt hinter dem Anschlussteil
+    ys0, ys1 = P["leitung_s_y"]
     pts = [V(xc, e + 0.5, g["z_mo"]), V(xc, y_vor, g["z_mo"]), V(xc, y_vor, zo),
+           V(xc, ys0, zo), V(xa, ys1, zo),
            V(xa, yh, zo), V(xa, yh, z_ein), V(x_kehre, yh, z_ein), V(x_kehre, yc, z_ein),
            V(x_ein, yc, z_ein)]
     return weg(pts, r)
+
+
+def bogen_y_vor():
+    return P["end_laenge"] / 2 + 0.5 + P["leitung_r"] + 5.0
+
+
+def zyl_x(r, x0, x1, y, z):
+    return Part.makeCylinder(r, x1 - x0, V(x0, y, z), V(1, 0, 0))
+
+
+def leitungsbogen():
+    """Druckteil auf dem Halter Y: die Leitungen treten am bewegten Kettenende nach vorn
+    aus und laufen innen um diesen Bogen (R60 Mittellinie) hoch und zurück nach hinten.
+    Wangen links und rechts halten das Bündel, Kabelbinder durch zwei Schlitze. Befestigt
+    mit den beiden M5 des Kettenendes (länger, von unten durch Anschlussteil, Halter und
+    Bogen, Muttern seitlich eingeschoben)."""
+    g = geo()
+    r, d = P["leitung_r"], P["leitung_d"]
+    xc = (g["k_x0"] + g["k_x1"]) / 2
+    yv = bogen_y_vor()
+    cy, z1, z2 = yv - r, g["z_mo"] + r, P["leitung_oben_z"] - r
+    ri = r - d / 2
+    b, wt, wr = P["fuehrung_b"] / 2, P["wange_t"], P["wange_r"]
+    z_h = g["z_mo"] + P["kette_h"] / 2 + P["hy_dicke"]   # Oberkante Halter Y
+    yb = P["hy_y"][0]
+    xa0, xa1 = xc - b - wt, xc + b + wt
+
+    def stadion(rad, x0, x1):
+        s = zyl_x(rad, x0, x1, cy, z1).fuse(zyl_x(rad, x0, x1, cy, z2))
+        s = s.fuse(box(x0, x1, cy - rad, cy + rad, z1, z2))
+        return s.common(box(x0 - 1, x1 + 1, cy, cy + rad + 1, z1 - rad - 1, z2 + rad + 1))
+
+    kern = stadion(ri, xc - b, xc + b).fuse(box(xc - b, xc + b, yb, cy, z_h, z2 + ri))
+    w = stadion(wr, xa0, xa1)              # nur am Bogen: dahinter versetzen sich die Leitungen
+    w = w.cut(box(xc - b, xc + b, yb - 1, cy + wr + 1, z1 - wr - 1, z2 + wr + 1))
+    s = kern.fuse(w)
+    s = s.cut(box(xa0 - 1, xa1 + 1, yb - 1, P["hy_y"][1] + 0.5, z1 - wr - 1, z_h))   # Halter Y
+    zv = z2 + ri - P["vp_t"]                                            # Verbindungsplatte
+    s = s.cut(box(xc - b - 1, xc + b + 1, yb - 1, P["vp_y"][1], zv, z2 + ri + 1))
+    for dx, y in P["vp_m4_bogen"]:
+        s = s.cut(Part.makeCylinder(2.25, 16, V(xc + dx, y, zv - 15)))
+        s = s.cut(fc_dok.mutter(4, V(xc + dx, y, zv - 8.0), V(0, 0, 1), V(0, -1, 0), y - yb + 1))
+    lx, _ = leitung_bei_y(26.0)
+    s = s.cut(box(lx - 15, lx + 15, 22.0, 30.0, z_h - 1, z_h + 2.5))   # Kabelbinder im Halter Y
+    for z in (z1 - 15.0, z2 + 15.0):                                    # Kabelbinder um das Bündel
+        s = s.cut(box(xa0 - 1, xa1 + 1, cy + ri - 15.0, cy + ri - 12.0, z - 2.5, z + 2.5))
+    yl = sum(P["ausleger_y"]) / 2 + loch_versatz()
+    for dx in (-P["end_C"] / 2, P["end_C"] / 2):                        # M5 des Kettenendes
+        x = xc + dx
+        s = s.cut(Part.makeCylinder(2.75, 25, V(x, yl, z_h - 1)))
+        sx = 1 if dx > 0 else -1
+        s = s.cut(fc_dok.mutter(5, V(x, yl, z_h + 15), V(0, 0, 1), V(sx, 0, 0), b + wt - abs(dx) + 2))
+    return s.removeSplitter()
+
+
+def mast():
+    """Alu-Flachstange 30 x 4 hinter der Rinne hinten: trägt den Umlenkkopf."""
+    gx = geo_x()
+    yh, xa = P["leitung_hinten_y"], P["leitung_ab_x"]
+    mb, mt = P["mast"]
+    z0 = rinne_hinten_z()
+    y1 = yh - 22.0
+    s = box(xa - mb / 2, xa + mb / 2, y1 - mt, y1, z0, P["mast_oben"])
+    for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):
+        s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + dx, y1 - mt - 1, z0 + 10.0), V(0, 1, 0)))
+    for z in P["kopf_m4_z"]:
+        s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa, y1 - mt - 1, z), V(0, 1, 0)))
+    return s
+
+
+def umlenkkopf():
+    """Druckteil oben am Mast: die Leitungen kommen oben von vorn und laufen innen um
+    diesen Bogen (R60) senkrecht hinunter in die Rinne hinten. Rückwand am Mast (2x M4,
+    Muttern seitlich eingeschoben), Wange auf der Gegenseite, zur Kettenseite offen
+    (Leitungen von der Seite einlegen, Kabelbinder)."""
+    r, d = P["leitung_r"], P["leitung_d"]
+    yh, xa, zo = P["leitung_hinten_y"], P["leitung_ab_x"], P["leitung_oben_z"]
+    ri = r - d / 2
+    b, wt = P["fuehrung_b"] / 2, P["wange_t"]
+    cy, cz = yh + r, zo - r
+    ys1 = P["leitung_s_y"][1]
+    y_rw = yh - 22.0                                     # Rückseite = Vorderseite Mast
+    z_u = min(P["kopf_m4_z"]) - 30.0
+    kern = zyl_x(ri, xa - b, xa + b, cy, cz).common(box(xa - b, xa + b, cy - ri, cy, cz, cz + ri))
+    kern = kern.fuse(box(xa - b, xa + b, cy, ys1 + 5.0, cz, cz + ri))
+    rw = box(xa - 15.0, xa + b, y_rw, yh - d / 2, z_u, P["mast_oben"])
+    wa = box(xa + b, xa + b + wt + 2.0, y_rw, ys1 + 5.0, z_u, zo + d / 2 + 5.0)   # Wange 5
+    s = kern.fuse([rw, wa]).removeSplitter()
+    zv = cz + ri - P["vp_t"]                                            # Verbindungsplatte
+    s = s.cut(box(xa - b - 1, xa + b, P["vp_y"][0], ys1 + 6.0, zv, cz + ri + 1))
+    for dx, y in P["vp_m4_kopf"]:
+        s = s.cut(Part.makeCylinder(2.25, 16, V(xa + dx, y, zv - 15)))
+        s = s.cut(fc_dok.mutter(4, V(xa + dx, y, zv - 8.0), V(0, 0, 1), V(0, 1, 0), ys1 + 5.0 - y + 1))
+    for z in P["kopf_m4_z"]:
+        s = s.cut(Part.makeCylinder(2.25, 14, V(xa, y_rw - 1, z), V(0, 1, 0)))
+        s = s.cut(fc_dok.mutter(4, V(xa, y_rw + 6.0, z), V(0, 1, 0), V(-1, 0, 0), 17.0))
+    for z in (z_u + 15.0, cz - 30.0):                    # Kabelbinder um das Bündel
+        s = s.cut(box(xa - 16, xa + b + wt + 1, y_rw + 3.0, y_rw + 6.0, z - 2.5, z + 2.5))
+    return s.removeSplitter()
+
+
+def verbindungsplatte():
+    """Druckteil zwischen Leitungsbogen und Umlenkkopf: Oberseite = Unterseite der
+    Leitungen, liegt an beiden Enden in einer Aussparung, je 2x M4 (Zylinderkopf versenkt)."""
+    g = geo()
+    xc = (g["k_x0"] + g["k_x1"]) / 2
+    xa = P["leitung_ab_x"]
+    b = P["fuehrung_b"] / 2
+    z1 = P["leitung_oben_z"] - P["leitung_d"] / 2
+    z0 = z1 - P["vp_t"]
+    s = box(xc - b, xa + b, P["vp_y"][0], P["vp_y"][1], z0, z1)
+    for x0, pts in ((xc, P["vp_m4_bogen"]), (xa, P["vp_m4_kopf"])):
+        for dx, y in pts:
+            s = s.cut(Part.makeCylinder(2.25, P["vp_t"] + 2, V(x0 + dx, y, z0 - 1)))
+            s = s.cut(Part.makeCylinder(4.0, 5.5, V(x0 + dx, y, z1 - 4.5)))   # Zylinderkopf M4 versenkt
+    return s
+
+
+def rinne_hinten_z():
+    gx = geo_x()
+    return gx["z_ku"] + P["kette_h"] / 2 - P["leitung_d"] / 2 - 2.0
 
 
 def brenner_weg():
@@ -480,6 +625,8 @@ def rinne_hinten():
     s = s.fuse(box(x0, x1, yh - 22.0, yh - 20.0, z0, z0 + 20.0)).removeSplitter()
     for x in P["rh_halter_x"]:                           # M4 in die Rinnenhalter
         s = s.cut(Part.makeCylinder(2.25, 4, V(x + P["rh_halter_b"] / 2, yh, z0 - 1)))
+    for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):       # M4 Mast, Mutter in der Rinne
+        s = s.cut(Part.makeCylinder(2.25, 4, V(P["leitung_ab_x"] + dx, yh - 23.0, z0 + 10.0), V(0, 1, 0)))
     return s
 
 
@@ -750,6 +897,8 @@ def main():
               "ek_Leitung": (leitung(), "zukauf"),
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
+              "ek_leitungsbogen": (leitungsbogen(), "druck"), "ekx_mast": (mast(), "alu"),
+              "ekx_umlenkkopf": (umlenkkopf(), "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
               "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
               "ek_einsteckteil_links": (einsteckteil_links(), "druck")}
     for n, (shp, farbe) in portal.items():
@@ -769,7 +918,9 @@ def main():
     druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": einsteckteil_links(),
              "ek_halter_y": halter_y(), "ekx_ablagehalter": ablagehalter_x(),
              "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
-             "ek_stuetzen_kopf": stuetzen_kopf()}
+             "ek_stuetzen_kopf": stuetzen_kopf(), "ek_leitungsbogen": leitungsbogen(),
+             "ekx_umlenkkopf": umlenkkopf(), "ek_verbindungsplatte": verbindungsplatte()}
+    mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
     for n, s in druck.items():
         s.exportStep(os.path.join(OUT, n + ".step"))
         Mesh.Mesh(s.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))
@@ -799,7 +950,9 @@ def main():
         le = leitung()
         for n, sh in (("Turm", au), ("Halter Y", halter_y()), ("Ablagehalter X", ablagehalter_x()),
                       ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
-                      ("Rinnenhalter", rinnenhalter())):
+                      ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", leitungsbogen()),
+                      ("Mast", mast()), ("Umlenkkopf", umlenkkopf()),
+                      ("Verbindungsplatte", verbindungsplatte())):
             f.write("Leitung / %s: %.2f mm³\n" % (n, le.common(sh).Volume))
         for wx in P["xk_wagen_x"]:
             f.write("Leitung / X-Kette bei Wagen %.0f: %.2f mm³\n" % (wx, le.common(kette_x(wx)).Volume))

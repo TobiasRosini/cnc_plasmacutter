@@ -4,4 +4,6 @@ Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 528 m
 Plasmagerät: x 45 bis 260, y 985 bis 1500, Oberkante 514; Querkanal darüber ab 560
 Schaltschrank: x 275 bis 675, Oberkante 644, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
 Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
+Wand an Bohrungen ub_kanalhalter_rahmen: ok (>= 3.0 mm)
+Wand an Bohrungen ub_kanalhalter_bein: ok (>= 3.0 mm)
 Kabelkanal senkrecht außen rechts: x -65 bis -40 -> Maschinenbreite höchstens 792 (Grenze 800, Portal links bis x 727,5)

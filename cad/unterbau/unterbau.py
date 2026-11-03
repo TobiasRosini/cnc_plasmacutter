@@ -69,6 +69,13 @@ P = dict(
     kanal_oben=1073.0,          # Oberkante Kabelkanal auf dem Y-Kettenträger
     quer_z=(560.0, 600.0),      # Querkanal unter dem Tropfboden, über dem Plasmagerät
     kanal_t=2.0,
+    # Distanzstücke (Druck) zwischen Kanal und Rahmen, je 2x M5 von innen aus dem Kanal in
+    # Nietmuttern im Rohr (= grundrahmen kanal_*)
+    halter_y=1420.0,
+    halter_z_or=[820.0, 840.0],
+    halter_z_ut=[780.0, 800.0],
+    halter_bein=[(12.0, 580.0), (28.0, 580.0)],
+    bein_hinten_y=1476.0,
 )
 
 
@@ -156,7 +163,34 @@ def kanaele():
     senk = rohr_kanal(kx0, kx1, ky0, ky1, zq0, P["kanal_oben"], "z")
     xs = P["schrank_x1"] - P["schrank"][0]
     quer = rohr_kanal(kx1, xs, ky0, ky1, zq0, zq1, "x")
+    t = P["kanal_t"]
+    for z in P["halter_z_or"] + P["halter_z_ut"]:        # M5 durch die Rückwand
+        senk = senk.cut(Part.makeCylinder(2.75, t + 2, V(kx1 - t - 1, P["halter_y"], z), V(1, 0, 0)))
+    for x, z in P["halter_bein"]:                        # M5 durch die Vorderwand
+        quer = quer.cut(Part.makeCylinder(2.75, t + 2, V(x, ky1 - t - 1, z), V(0, 1, 0)))
     return senk, quer
+
+
+def kanalhalter():
+    """Distanzstücke (Druck): senkrechter Kanal an Längsträger und Längsrohr (rechts außen),
+    Querkanal an der Rückseite des vorderen Beins."""
+    kx1 = P["kanal_x"][1]
+    ky1 = P["kanal_y"][1]
+    y = P["halter_y"]
+    res = []
+    for zs in (P["halter_z_or"], P["halter_z_ut"]):
+        zm = sum(zs) / 2
+        s = box(kx1, 0.0, y - 20.0, y + 20.0, zm - 20.0, zm + 20.0)   # so hoch wie das Rohr
+        for z in zs:
+            s = s.cut(Part.makeCylinder(2.75, -kx1 + 2, V(kx1 - 1, y, z), V(1, 0, 0)))
+        res.append(s)
+    xs = [x for x, _ in P["halter_bein"]]
+    zm = P["halter_bein"][0][1]
+    s = box(min(xs) - 10.0, max(xs) + 10.0, ky1, P["bein_hinten_y"], zm - 15.0, zm + 15.0)
+    for x, z in P["halter_bein"]:
+        s = s.cut(Part.makeCylinder(2.75, P["bein_hinten_y"] - ky1 + 2, V(x, ky1 - 1, z), V(0, 1, 0)))
+    res.append(s)
+    return res
 
 
 def main():
@@ -174,9 +208,15 @@ def main():
     fc_dok.teil(doc, "Schaltschrank_400x500x200", sc, "dummy")
     fc_dok.teil(doc, "ub_kabelkanal_senkrecht", senk, "zukauf")
     fc_dok.teil(doc, "ub_kabelkanal_quer", quer, "zukauf")
+    kh = kanalhalter()
+    fc_dok.teil(doc, "ub_kanalhalter", Part.makeCompound(kh), "druck")
     fc_dok.speichern(doc, pfad, offen)
     for n, s in (("ub_geraeteboden", bo), ("ub_tropfboden", tr)):
         s.exportStep(os.path.join(OUT, n + ".step"))
+    import Mesh
+    for n, s in (("ub_kanalhalter_rahmen", kh[0]), ("ub_kanalhalter_bein", kh[2])):
+        s.exportStep(os.path.join(OUT, n + ".step"))
+        Mesh.Mesh(s.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))
 
     gx, gy, gz = P["geraet"]
     ok = boden_ok()
@@ -204,6 +244,8 @@ def main():
         xa, ya = P["ablauf"]
         f.write("Ablauf: durch den Tropfboden bei z %.0f, Hülse Ø%.0f bis %.0f\n"
                 % (tropf_z(ya), P["huelse"][1], tropf_z(ya) + P["huelse"][2]))
+        for n, sh in (("ub_kanalhalter_rahmen", kh[0]), ("ub_kanalhalter_bein", kh[2])):
+            fc_dok.schreibe_waende(f, n, sh)
         f.write("Kabelkanal senkrecht außen rechts: x %.0f bis %.0f -> Maschinenbreite höchstens %.0f "
                 "(Grenze %.0f, Portal links bis x 727,5)\n"
                 % (P["kanal_x"][0], P["kanal_x"][1], 727.5 - P["kanal_x"][0], P["max_breite"]))
