@@ -181,15 +181,15 @@ def naeherungsschalter_m12(laenge=50.0, mutter_abstand=(8.0, 26.0)):
     return s.removeSplitter()
 
 
-def kette_endstueck(h=35.0, b=56.0, D=60.0, C=51.0, F=6.0, laenge=30.0, flansch=4.0,
-                    unten=True):
-    """Anschlussstück einer Energiekette (Maße nach Herstellertabelle, z. B. 20x38:
-    C = 51, D = 60, F = 6). Lage: Länge entlang Y von -laenge/2 bis +laenge/2, Breite
-    entlang X (Mitte 0), Höhe z = 0 bis h. Der Flansch (D breit) liegt unten oder oben
-    und hat zwei Bohrungen ØF im Abstand C quer zur Kette, bei y = 0."""
+def kette_endstueck(h=35.0, b=54.0, D=55.0, C=25.0, F=6.1, laenge=40.0, flansch=7.0,
+                    unten=True, loch=10.0):
+    """Anschlussstück einer Energiekette (Vorgabe: igus 2030.12PZ für Serie 2400.03).
+    Lage: Länge entlang Y von -laenge/2 bis +laenge/2, Breite entlang X (Mitte 0), Höhe
+    z = 0 bis h. Der Flansch (D breit) liegt unten oder oben und hat zwei Bohrungen ØF
+    im Abstand C quer zur Kette, bei y = loch."""
     s = Part.makeBox(b, laenge, h - flansch, V(-b / 2, -laenge / 2, flansch if unten else 0))
     zf = 0.0 if unten else h - flansch
     s = s.fuse(Part.makeBox(D, laenge, flansch, V(-D / 2, -laenge / 2, zf)))
     for x in (-C / 2, C / 2):
-        s = s.cut(Part.makeCylinder(F / 2, h + 2, V(x, 0, -1)))
+        s = s.cut(Part.makeCylinder(F / 2, h + 2, V(x, loch, -1)))
     return s.removeSplitter()

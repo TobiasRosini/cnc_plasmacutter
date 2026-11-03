@@ -2,7 +2,7 @@
 """
 Y-Energiekette, liegend, rechts (Kastenseite).
 
-Kette 20 x 38 innen, 35 x 56 außen, R125. Die feste Hälfte liegt in einer Rinne
+Kette igus E2/000 2400.03 (38 x 25 innen, 54 x 35 außen), R125. Die feste Hälfte liegt in einer Rinne
 auf einem Träger über dem rechten Y-Winkel (höher als alles, was dort am Portal
 hochsteht). Der Träger liegt auf zwei Stützen an den Rahmenenden, außen am
 Längsträger. Das bewegte Ende sitzt oben auf der Schlaufe; ein Ausleger aus
@@ -33,25 +33,32 @@ P = dict(
     rohr=40.0,
     portal_y=(160.0, 1280.0),   # Portalmitte von hinten bis vorn
     # Kette
+    # igus E2/000 Serie 2400.03: innen 38 x 25, außen 54 x 35, Teilung 46 mm/Glied,
+    # Radien 55/75/100/125/150/...; R bis Kettenmitte (Bauhöhe H = 2R + 35).
+    # Länge nach igus: S/2 + K (K = pi R + Zuschlag, Katalog 5.102)
     kette_h=35.0,
-    kette_b=56.0,
-    radius=125.0,               # bis Kettenmitte
-    reserve=40.0,               # Zusatzlänge: Schlaufe bleibt hinter der X-Ablage
-                                # (dort liegt die X-Ablage), auch wenn das Portal ganz hinten steht
-    kette_innen_x=-6.0,         # Innenkante der Kette (Z-Schlitten fährt bei X rechts bis 2 mm vor die Schienenmitte)
+    kette_b=54.0,
+    teilung=46.0,
+    radius=125.0,               # 2400.03.125.0
+    glieder=23,                 # 1058 mm, igus: S/2 + K = 560 + 496 = 1056
+    reserve=40.0,               # Schlaufe bei Portal hinten reserve/2 hinter der Mitte des Anschlussteils (mind. end_laenge)
+                                # (bleibt hinter der X-Ablage); der Festpunkt folgt aus der Kettenlänge
+    kette_innen_x=-7.0,         # Innenkante der Kette (Mitte wie bei 56 breit) (Z-Schlitten fährt bei X rechts bis 2 mm vor die Schienenmitte)
     # Träger (Stahl 40x20x2, flach) und Rinne (Blech 2 mm)
     traeger_uk=163.0,           # über X-Schalterblock (161)
     traeger_b=40.0,
     traeger_h=20.0,
     rinne_t=2.0,
     rinne_rand=12.0,
-    rinne_luft=2.5,             # Anschlussstücke sind 60 breit (Kette 56)
-    # Anschlussstücke 20x38 (Herstellertabelle): Flansch D = 60, Bohrungen Ø6 im Abstand C = 51
-    end_D=60.0,
-    end_C=51.0,
-    end_F=6.0,
-    end_laenge=30.0,
-    end_flansch=4.0,
+    rinne_luft=3.5,             # Anschlussstücke sind 55 breit (Kette 54); Rinne und Turm wie vorher
+    # Anschlussteile igus 2030.12PZ (Kunststoff, verriegelt): Platte 7 dick, Ba + 1 = 55
+    # breit, 40 lang, 2 Bohrungen Ø6,1 im Abstand A = 25 quer zur Kette, 10 mm vom äußeren Ende
+    end_D=55.0,
+    end_C=25.0,
+    end_F=6.1,
+    end_laenge=40.0,
+    end_flansch=7.0,
+    end_loch=10.0,
     # Stützen: je ein Rechteckrohr 20x40x2 (40 entlang y) außen am Längsträger, an den
     # Rahmenenden, oben ein Druckkopf unter dem Träger (statt angeschweißtem Querrohr).
     # Rohr an den Längsträger: 2x M6 durch die Innenwand in Nietmuttern (Grundrahmen
@@ -87,22 +94,23 @@ P = dict(
     # unteren Einsätze würden sie schneiden, deshalb beide Reihen über den Sattel-M6
     turm_loecher_links=[(-8.0, 106.0), (8.0, 106.0), (-8.0, 124.0), (8.0, 124.0)],
 
-    # X-Energiekette über der Brücke: 20x38 (35x56), R65, liegend auf einer Ablage,
+    # X-Energiekette über der Brücke: igus 2400.03, R75, liegend auf einer Ablage,
     # die an der Kettenseite am Kettenturm und an der Gegenseite an einer Platte an der
-    # Brückenstirn sitzt (Einsteckteil wie am Turm). Festpunkt in der Mitte des X-Wegs
-    # (kurze Kette, kurzer Rücklauf der Leitungen in der Rinne hinten), Schlaufe zur
+    # Brückenstirn sitzt (Einsteckteil wie am Turm). Festpunkt so weit zur Kettenseite,
+    # wie es die Kettenlänge erlaubt (kurzer Rücklauf der Leitungen in der Rinne hinten),
+    # Schlaufe zur
     # Kettenseite, bewegtes Ende am Halter auf dem Z-Kopf. Die Leitungen treten dort zur
     # Gegenseite aus und kehren über einen Bogen zum Brenner zurück: an der Kettenseite
     # wäre dafür bei X am Ende kein Platz (Turm, Y-Kettenende). Steht der Wagen an der
     # Gegenseite, trägt sich das obere Trum über den Festpunkt hinaus frei.
-    xk_radius=65.0,
+    xk_radius=75.0,             # 2400.03.075.0 (R65 gibt es nicht; Adern innen in der Kehre > R60)
+    xk_glieder=14,              # 644 mm, igus: S/2 + K = 283 + 346 = 629
     xk_y_vorn=17.0,             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
     xk_traeger_uk=225.0,        # über Y-Kette (unteres Trum bis 220) und X-Motor
-    xk_fest_x=351.0,            # Festpunkt in der Mitte des X-Wegs (Rahmen-x, Wagenmitte 361 - 10)
     xk_ablage_x0=15.0,          # Ablage beginnt hier (x ab Schienenmitte Kettenseite)
     xk_halter_dx=-10.0,         # bewegtes Ende neben der Wagenmitte (am Z-Kopf)
     xk_wagen_x=(78.0, 644.0),   # X-Weg Wagenmitte (Rahmen-x)
-    xk_reserve=40.0,
+    xk_reserve=40.0,            # Schlaufe bei X rechts xk_reserve/2 neben der Mitte des Anschlussteils (mind. end_laenge)
     xk_bruecke_links_x=720.0,  # Brückenstirn Gegenseite (Rahmen-x)
     # Druckteile am Kettenturm (Turm bleibt ein gerades Alu-Flachmaterial 40 x 8):
     # oben Halter für das bewegte Y-Kettenende, auf Höhe der X-Ablage der Ablagehalter
@@ -122,7 +130,7 @@ P = dict(
     brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
     brenner_y=136.0,
     # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
-    rh_halter_x=[40.0, 300.0],
+    rh_halter_x=[40.0, 250.0, 440.0],
     rh_halter_b=20.0,
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
@@ -147,13 +155,16 @@ def geo():
     z_mitte_o = z_mitte_u + 2 * P["radius"]
     ym0 = P["portal_y"][0] + sum(P["ausleger_y"]) / 2
     ym1 = P["portal_y"][1] + sum(P["ausleger_y"]) / 2
-    y_fest = (ym0 + ym1) / 2
-    l_eff = (ym1 - ym0) / 2 + P["reserve"]
+    laenge = P["glieder"] * P["teilung"] + P["end_laenge"]        # Anschlussteile je zur Hälfte
+    l_eff = laenge - math.pi * P["radius"]
+    y_fest = ym0 - P["reserve"] + l_eff                 # Schlaufe bei Portal hinten reserve/2 hinter dem Ende
+    if ym1 - y_fest > l_eff:
+        raise ValueError("Y-Kette zu kurz")
     a_x1 = r_x0 - P["ausleger_luft"]
     y_hinten = ym0 - P["reserve"] / 2 - P["radius"] - P["kette_h"] / 2 - 5   # Rinne/Träger hinten
     return dict(y_hinten=y_hinten, k_x0=k_x0, k_x1=k_x1, r_x0=r_x0, r_x1=r_x1, z_rinne=z_rinne, z_ku=z_ku,
                 z_mu=z_mitte_u, z_mo=z_mitte_o, ym0=ym0, ym1=ym1, y_fest=y_fest, l_eff=l_eff,
-                laenge=l_eff + math.pi * P["radius"], a_x1=a_x1, a_x0=a_x1 - P["ausleger_t"])
+                laenge=laenge, a_x1=a_x1, a_x0=a_x1 - P["ausleger_t"])
 
 
 # ---------------------------------------------------------------- feste Teile
@@ -169,12 +180,16 @@ def traeger_rinne():
     for y in (P["traeger_m6_y"], L - P["traeger_m6_y"]):          # M6-Nietmuttern zu den Stützköpfen
         for dx in (-10.0, 10.0):
             tr = tr.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, 4, V(xm + dx, y, P["traeger_uk"] - 1)))
+    xc = (g["k_x0"] + g["k_x1"]) / 2
+    for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmuttern M5 für das feste Kettenende
+        tr = tr.cut(Part.makeCylinder(3.5, 4, V(xc + dx, g["y_fest"] + loch_versatz(),
+                                                P["traeger_uk"] + th - 3)))
     t = P["rinne_t"]
     y0 = yh                                              # Rinne ganz durch: hinten Schlaufe, vorn Kabel
     ri = box(g["r_x0"], g["r_x1"], y0, L, g["z_rinne"], g["z_rinne"] + t)
     xc = (g["k_x0"] + g["k_x1"]) / 2
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende, M5
-        ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(xc + dx, g["y_fest"], g["z_rinne"] - 1)))
+        ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(xc + dx, g["y_fest"] + loch_versatz(), g["z_rinne"] - 1)))
     for x0 in (g["r_x0"], g["r_x1"] - t):
         ri = ri.fuse(box(x0, x0 + t, y0, L, g["z_rinne"], g["z_rinne"] + P["rinne_rand"]))
     return tr, ri.removeSplitter()
@@ -291,7 +306,7 @@ def halter_y():
     xc = (g["k_x0"] + g["k_x1"]) / 2
     hd = P["hy_dicke"]
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # M5 von unten, Mutter oben
-        s = s.cut(m5_senkrecht(xc + dx, sum(P["ausleger_y"]) / 2, z0, z0 + hd, z0 + hd - 1.5))
+        s = s.cut(m5_senkrecht(xc + dx, sum(P["ausleger_y"]) / 2 + loch_versatz(), z0, z0 + hd, z0 + hd - 1.5))
     for y in (-10.0, 10.0):                                        # Turm: Mutter von oben
         s = s.cut(m5_quer(x0, y, z0 + hd / 2, 1, V(0, 0, 1), hd / 2 + 1))
     lx, _ = leitung_bei_y(26.0)
@@ -381,7 +396,8 @@ def leitung_weg():
     yh, zo, xa = P["leitung_hinten_y"], P["leitung_oben_z"], P["leitung_ab_x"]
     x_ein = gx["xf"] + e + 0.5
     x_kehre = x_ein + r + 2.0
-    pts = [V(xc, e + 0.5, g["z_mo"]), V(xc, 80.0, g["z_mo"]), V(xc, 80.0, zo),
+    y_vor = e + 0.5 + r + 2.0                            # Bogen nach oben direkt hinter dem Anschlussteil
+    pts = [V(xc, e + 0.5, g["z_mo"]), V(xc, y_vor, g["z_mo"]), V(xc, y_vor, zo),
            V(xa, yh, zo), V(xa, yh, z_ein), V(x_kehre, yh, z_ein), V(x_kehre, yc, z_ein),
            V(x_ein, yc, z_ein)]
     return weg(pts, r)
@@ -499,10 +515,13 @@ def geo_x():
     xs = -20.0                                           # Rahmen-x -> x ab Schienenmitte rechts
     m0 = P["xk_wagen_x"][0] + P["xk_halter_dx"] + xs
     m1 = P["xk_wagen_x"][1] + P["xk_halter_dx"] + xs
-    xf = P["xk_fest_x"] + xs
-    l_eff = max(xf - m0, m1 - xf) + P["xk_reserve"]     # Schlaufe bleibt in beiden Endlagen hinter den Enden
+    laenge = P["xk_glieder"] * P["teilung"] + P["end_laenge"]
+    l_eff = laenge - math.pi * R
+    xf = m0 - P["xk_reserve"] + l_eff                    # Schlaufe bei X rechts xk_reserve/2 neben dem Ende
+    if m1 - xf > l_eff:
+        raise ValueError("X-Kette zu kurz")
     return dict(y0=y0, y1=y1, z_t0=z_t0, z_ri=z_ri, z_ku=z_ku, z_mu=z_mu, z_mo=z_mo,
-                m0=m0, m1=m1, xf=xf, l_eff=l_eff, laenge=l_eff + math.pi * R, xs=xs,
+                m0=m0, m1=m1, xf=xf, l_eff=l_eff, laenge=laenge, xs=xs,
                 r_y0=y0 - rl - t, r_y1=y1 + rl + t, x_re=P["xk_bruecke_links_x"] + xs)
 
 
@@ -530,6 +549,9 @@ def ablage_x():
     for x in P["rh_halter_x"]:                                     # Nietmuttern M5 für die Rinnenhalter
         for y in (ym - 10.0, ym + 10.0):
             tr = tr.cut(Part.makeCylinder(3.5, 4, V(x + P["rh_halter_b"] / 2, y, z0 - 1)))
+    yc = (gx["y0"] + gx["y1"]) / 2
+    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmuttern M5 für das feste Kettenende
+        tr = tr.cut(Part.makeCylinder(3.5, 4, V(gx["xf"] + loch_versatz(), yc + dy, z0 + P["traeger_h"] - 3)))
     t = P["rinne_t"]
     xr = gx["xf"] + P["end_laenge"] / 2
     ri = box(x0, xr, gx["r_y0"], gx["r_y1"], gx["z_ri"], gx["z_ri"] + t)
@@ -537,7 +559,7 @@ def ablage_x():
         ri = ri.fuse(box(x0, xr, y0, y0 + t, gx["z_ri"], gx["z_ri"] + P["rinne_rand"]))
     yc = (gx["y0"] + gx["y1"]) / 2
     for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende
-        ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(gx["xf"], yc + dy, gx["z_ri"] - 1)))
+        ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(gx["xf"] + loch_versatz(), yc + dy, gx["z_ri"] - 1)))
     return tr, ri.removeSplitter()
 
 
@@ -617,15 +639,21 @@ def halter_x():
     s = s.fuse(box(xa, xb, gx["y0"] - 6, yk, z_top, z_ob))
     # keine Streben: darunter laufen Kette und Adern, darüber sitzt der Z-Motor
     for dy in (-P["end_C"] / 2, P["end_C"] / 2):        # Mutter oben, M5 von unten
-        s = s.cut(m5_senkrecht(dx, yc + dy, z_top, z_ob, z_ob - 1.5))
+        s = s.cut(m5_senkrecht(dx + loch_versatz(), yc + dy, z_top, z_ob, z_ob - 1.5))
     for x in lo:
         s = s.cut(Part.makeCylinder(2.75, t + 2, V(x, yk - t - 1, P["zkopf_uk"] + 10), V(0, 1, 0)))
     return s.removeSplitter()
 
 
-def endstueck(unten):
+def loch_versatz():
+    """Bohrungen der Anschlussteile ab Mitte Anschlussteil zum äußeren Ende (beide Ketten:
+    +x bzw. +y, die Schlaufen liegen an der Kettenseite bzw. hinten)."""
+    return P["end_laenge"] / 2 - P["end_loch"]
+
+
+def endstueck(unten, loch):
     return kt.kette_endstueck(P["kette_h"], P["kette_b"], P["end_D"], P["end_C"], P["end_F"],
-                              P["end_laenge"], P["end_flansch"], unten)
+                              P["end_laenge"], P["end_flansch"], unten, loch)
 
 
 def kette_x(wagen_x):
@@ -639,10 +667,10 @@ def kette_x(wagen_x):
     h, R = P["kette_h"], P["xk_radius"]
     e = P["end_laenge"] / 2
     unten = box(x_l, gx["xf"] - e, y0, y1, gx["z_ku"], gx["z_ku"] + h)
-    oben = box(x_l, xm - e, y0, y1, gx["z_mo"] - h / 2, gx["z_mo"] + h / 2)
+    oben = box(x_l - 0.01, max(xm - e, x_l + 0.01), y0, y1, gx["z_mo"] - h / 2, gx["z_mo"] + h / 2)  # Bogen ab Anschlussteil
     yc = (y0 + y1) / 2
     for unt, x, z in ((True, gx["xf"], gx["z_ku"]), (False, xm, gx["z_mo"] - h / 2)):
-        es = endstueck(unt)
+        es = endstueck(unt, -loch_versatz())                # nach der Drehung: Bohrungen bei +x
         es.rotate(V(0, 0, 0), V(0, 0, 1), 90)              # Länge entlang X, Breite entlang Y
         es.translate(V(x, yc, z))
         unten = unten.fuse(fc_dok.fest(es))
@@ -665,10 +693,10 @@ def kette(portal_y):
     h, R = P["kette_h"], P["radius"]
     e = P["end_laenge"] / 2
     unten = box(x0, x1, y_l, g["y_fest"] - e, g["z_ku"], g["z_ku"] + h)
-    oben = box(x0, x1, y_l, ym - e, g["z_mo"] - h / 2, g["z_mo"] + h / 2)
+    oben = box(x0, x1, y_l - 0.01, max(ym - e, y_l + 0.01), g["z_mo"] - h / 2, g["z_mo"] + h / 2)
     xc = (x0 + x1) / 2
     for unt, y, z in ((True, g["y_fest"], g["z_ku"]), (False, ym, g["z_mo"] - h / 2)):
-        es = endstueck(unt)
+        es = endstueck(unt, loch_versatz())
         es.translate(V(xc, y, z))
         unten = unten.fuse(fc_dok.fest(es))
     zc = (g["z_mu"] + g["z_mo"]) / 2
@@ -688,7 +716,7 @@ def main():
     xpf = halter_x()
     pfad = os.path.join(OUT, "energiekette.FCStd")
     doc, offen = fc_dok.dokument(pfad)
-    for alt in ("ekx_festhalter", "ek_leitungsclips"):          # ersetzt
+    for alt in ("ekx_festhalter", "ek_leitungsclips", "Kette_20x38_R125", "Kette_X_20x38_R65"):  # ersetzt
         if doc.getObject(alt):
             doc.removeObject(alt)
     fc_dok.teil(doc, "ek_traeger_40x20", tr, "stahl")
@@ -708,8 +736,8 @@ def main():
     for n, shp, farbe in (("ekx_halter", xpf, "druck"), ("ekx_Leitung_Brenner", brenner_leitung(), "zukauf")):
         o = fc_dok.teil(doc, n, shp, farbe)
         o.Placement = App.Placement(V(340, 700, 57), App.Rotation())
-    fc_dok.teil(doc, "Kette_20x38_R125", kette(700.0), "zukauf")
-    k = fc_dok.teil(doc, "Kette_X_20x38_R65", kette_x(360.0), "zukauf")
+    fc_dok.teil(doc, "Kette_igus_2400_03_R125", kette(700.0), "zukauf")
+    k = fc_dok.teil(doc, "Kette_X_igus_2400_03_R75", kette_x(360.0), "zukauf")
     k.Placement = App.Placement(V(0, 700, 0), App.Rotation())
     fc_dok.speichern(doc, pfad, offen)
     import Mesh
@@ -726,12 +754,16 @@ def main():
 
     g, gx = geo(), geo_x()
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
-        f.write("Y-Kette: Länge ca. %.0f mm (Festpunkt y %.0f, Hub %.0f, R%.0f)\n"
-                % (g["laenge"], g["y_fest"], g["ym1"] - g["ym0"], P["radius"]))
+        f.write("Y-Kette igus 2400.03.%03.0f.0: %d Glieder = %.0f mm (Modell mit Anschlussteilen %.0f), "
+                "Festpunkt y %.0f, Hub %.0f\n"
+                % (P["radius"], P["glieder"], P["glieder"] * P["teilung"], g["laenge"], g["y_fest"],
+                   g["ym1"] - g["ym0"]))
         f.write("Y-Rinne x %.1f bis %.1f, Kettenturm außen bis x %.1f (ab Schienenmitte Kettenseite)\n"
                 % (g["r_x0"], g["r_x1"], g["a_x0"]))
-        f.write("X-Kette: Länge ca. %.0f mm (R%.0f), Festpunkt x %.0f, Ablage-UK %.0f, oben bis %.0f über Rahmen-OK\n"
-                % (gx["laenge"], P["xk_radius"], gx["xf"], gx["z_t0"], gx["z_mo"] + P["kette_h"] / 2))
+        f.write("X-Kette igus 2400.03.%03.0f.0: %d Glieder = %.0f mm, Festpunkt Rahmen-x %.0f, Ablage-UK %.0f, "
+                "oben bis %.0f über Rahmen-OK\n"
+                % (P["xk_radius"], P["xk_glieder"], P["xk_glieder"] * P["teilung"], gx["xf"] - gx["xs"],
+                   gx["z_t0"], gx["z_mo"] + P["kette_h"] / 2))
         f.write("X-Kette oberes Trum bei X an der Gegenseite ca. %.0f mm frei über den Festpunkt hinaus "
                 "(freitragende Länge der Kette prüfen)\n" % (gx["m1"] - gx["xf"]))
         sl = kette_x(P["xk_wagen_x"][0]).BoundBox

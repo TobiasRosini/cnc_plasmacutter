@@ -259,14 +259,17 @@ def main():
         link(doc, "P_rechts_" + n, dek.getObject(n), pl_portal, g_e)
     link(doc, "X_ekx_halter", dek.getObject("ekx_halter"), plw, g_e)
     link(doc, "X_ekx_Leitung_Brenner", dek.getObject("ekx_Leitung_Brenner"), plw, g_e)
+    for alt in ("X_Kette_20x38_R65", "EK_Kette_20x38_R125"):         # ersetzt (igus 2400.03)
+        if doc.getObject(alt):
+            doc.removeObject(alt)
     kx = ek.kette_x(xw)
     kx.translate(V(sx[0], py, z_schiene_rahmen))
-    o = fc_dok.teil(doc, "X_Kette_20x38_R65", fc_dok.fest(kx), "zukauf")
+    o = fc_dok.teil(doc, "X_Kette_igus_2400_03_R75", fc_dok.fest(kx), "zukauf")
     if o not in g_e.Group:
         g_e.addObject(o)
     kt_ = ek.kette(py)
     kt_.translate(V(sx[0], 0, z_schiene_rahmen))
-    o = fc_dok.teil(doc, "EK_Kette_20x38_R125", fc_dok.fest(kt_), "zukauf")
+    o = fc_dok.teil(doc, "EK_Kette_igus_2400_03_R125", fc_dok.fest(kt_), "zukauf")
     if o not in g_e.Group:
         g_e.addObject(o)
 
