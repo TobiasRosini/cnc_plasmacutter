@@ -15,16 +15,17 @@ python3 cad/live.py cad/energiekette/energiekette.py
 
 Seiten von vorn gesehen (vorn = +Y): die Y-Kette liegt rechts (kleines x).
 
-- 20 × 38 (35 × 56), R65, ca. 0,80 m, liegend auf einer Ablage (Alu 40 × 20 × 2 + Rinne) über der Brücke, direkt hinter dem Z-Kopf, Unterkante 225 mm über Rahmen-OK.
-- **Festpunkt links** (Rahmen-x 620, 2× M5 durch den Rinnenboden), **Schlaufe nach rechts** zum Kettenturm. Bewegtes Ende am Halter (Druck) an der Rückseite des Z-Kopf-Sockels (2× M5 in Muttern), 10 mm rechts der Wagenmitte. Die Leitungen treten dort nach links aus.
-- Warum so herum: Die Adern müssen am bewegten Ende zum Brenner umkehren (Kehre R60, etwa 70 mm). Rechts stehen bei X am Ende Kettenturm und Y-Kettenende; links ist der Platz frei. Bei X ganz links reichen die Adern bis an die Brückenstirn (Rahmen-x 720).
-- Ablage rechts auf dem Zapfen des Ablagehalters am Turm (darauf liegt bei X ganz rechts die Schlaufe), links an der Platte an der linken Brückenstirn (Stopfen mit 2× M5). Die Rinne endet hinter dem Festpunkt.
+- 20 × 38 (35 × 56), R65, ca. 0,53 m, liegend auf einer Ablage (Alu 40 × 20 × 2 + Rinne) über der Brücke, direkt hinter dem Z-Kopf, Unterkante 225 mm über Rahmen-OK.
+- **Festpunkt in der Mitte des X-Wegs** (Rahmen-x 351, 2× M5 durch den Rinnenboden), **Schlaufe nach rechts** zum Kettenturm. Steht der Wagen links, trägt sich das obere Trum etwa 280 mm frei über den Festpunkt hinaus (freitragende Länge der gekauften Kette prüfen). Bewegtes Ende am Halter (Druck) an der Rückseite des Z-Kopf-Sockels (2× M5 in Muttern), 10 mm rechts der Wagenmitte. Die Leitungen treten dort nach links aus.
+- Warum Festpunkt in der Mitte: kürzere Kette und nur ein halber Rücklauf der Leitungen in der Rinne hinten (vorher Festpunkt links, 0,80 m Kette, 1,42 m Leitung bis zum Festpunkt).
+- Warum Schlaufe rechts: Die Adern müssen am bewegten Ende zum Brenner umkehren (Kehre R60, etwa 70 mm). Rechts stehen bei X am Ende Kettenturm und Y-Kettenende; links ist der Platz frei. Bei X ganz links reichen die Adern bis an die Brückenstirn (Rahmen-x 720).
+- Ablage rechts auf dem Zapfen des Ablagehalters am Turm (darauf liegt bei X ganz rechts die Schlaufe), links an der Platte an der linken Brückenstirn (Stopfen mit 2× M5). Die Rinne endet hinter dem Festpunkt; links davon liegt nichts mehr auf der Ablage.
 
 ## Leitungen (ohne Schutzschlauch)
 
 Der Mantel des Brennerpakets wird bis zur Knickschutztülle aufgeschnitten; die Adern (PU-Luftschlauch 8, Stromkabel 6,3, Pilot ~3, 2× ~2) laufen lose mit den Motor- und Schalterkabeln durch beide Ketten. Kleinster Biegeradius 60 (Stromkabel). Im Modell als Hüllrohre: Ø20 für alle Leitungen, Ø16 für die Adern zum Brenner.
 
-- **Y-Ende → X-Festpunkt** (ca. 1,42 m): am Y-Ende nach vorn (Kabelbinder im Halter Y), hoch, im Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in einer **Rinne hinten** (Alu-Winkel 40 × 20 × 2 auf drei Haltern aus Druck, je 2× M5 von unten in Nietmuttern der Ablage) nach links und mit einer Kehre R60 in den Festpunkt.
+- **Y-Ende → X-Festpunkt** (ca. 1,15 m): am Y-Ende nach vorn (Kabelbinder im Halter Y), hoch, im Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in einer **Rinne hinten** (Alu-Winkel 40 × 20 × 2 auf zwei Haltern aus Druck, je 2× M5 von unten in Nietmuttern der Ablage) nach links und mit einer Kehre R60 in den Festpunkt.
 - **X-Ende → Brenner** (ca. 0,42 m): nach links aus dem Kettenende, hoch, im Bogen nach vorn und von oben in die Tülle. Höchster Punkt bei Z unten ca. 1,47 m über Boden; bei Z oben wird die Schlaufe 100 mm länger und wölbt sich etwas höher.
 - Motor- und Schalterkabel zweigen am X-Ende ab.
 - Gesamtbreite: 784 mm.

@@ -134,7 +134,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - Liegend rechts, über dem rechten Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 0,99 m, Schlaufe hinten, Kabel verlassen den Festpunkt nach vorn: **Schaltschrank und Plasmagerät stehen vorn** (`cad/energiekette/`).
 - Die geteilte Lichtbogenspannung kommt an der CNC-Buchse des Geräts heraus (Anleitung S. 13), läuft also nicht in der Kette; im Schlauchpaket des SP80M nur Luft/Strom und Start-Stopp, Pilot, Düse.
 - Kettenturm an der Stirn der rechts verlängerten Brücke (Einsteckteil, mit den Sattel-M6 verschraubt): ein gerades Alu-Flachmaterial 40 × 8 ohne Laschen. Daran Druckteile mit M5-Einsätzen: oben Halter für das bewegte Y-Ende, unten Ablagehalter (trägt die X-Ablage auf einem Zapfen und gleicht deren Versatz zum Turm aus).
-- **X-Kette** 20 × 38, R65, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt links, Schlaufe nach rechts, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe). Brennerpaket ohne Schutzschlauch, Adern lose durch beide Ketten (Stand 02.11.2026, siehe `cad/energiekette/README.md`). Seiten von vorn gesehen.
+- **X-Kette** 20 × 38, R65, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt in der Mitte des X-Wegs (Kette ca. 0,53 m), Schlaufe nach rechts, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe). Brennerpaket ohne Schutzschlauch, Adern lose durch beide Ketten (Stand 02.11.2026, siehe `cad/energiekette/README.md`). Seiten von vorn gesehen.
 - Gesamtbreite mit beiden Ketten: 783 mm.
 
 ### Gantry Squaring

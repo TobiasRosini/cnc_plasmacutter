@@ -89,14 +89,16 @@ P = dict(
 
     # X-Energiekette über der Brücke: 20x38 (35x56), R65, liegend auf einer Ablage,
     # die an der Kettenseite am Kettenturm und an der Gegenseite an einer Platte an der
-    # Brückenstirn sitzt (Einsteckteil wie am Turm). Festpunkt an der Gegenseite,
-    # Schlaufe zur Kettenseite, bewegtes Ende am Halter auf dem Z-Kopf. Die Leitungen
-    # treten dort zur Gegenseite aus und kehren über einen Bogen zum Brenner zurück:
-    # an der Kettenseite wäre dafür bei X am Ende kein Platz (Turm, Y-Kettenende).
+    # Brückenstirn sitzt (Einsteckteil wie am Turm). Festpunkt in der Mitte des X-Wegs
+    # (kurze Kette, kurzer Rücklauf der Leitungen in der Rinne hinten), Schlaufe zur
+    # Kettenseite, bewegtes Ende am Halter auf dem Z-Kopf. Die Leitungen treten dort zur
+    # Gegenseite aus und kehren über einen Bogen zum Brenner zurück: an der Kettenseite
+    # wäre dafür bei X am Ende kein Platz (Turm, Y-Kettenende). Steht der Wagen an der
+    # Gegenseite, trägt sich das obere Trum über den Festpunkt hinaus frei.
     xk_radius=65.0,
     xk_y_vorn=17.0,             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
     xk_traeger_uk=225.0,        # über Y-Kette (unteres Trum bis 220) und X-Motor
-    xk_fest_x=620.0,            # Festpunkt an der Gegenseite (Rahmen-x)
+    xk_fest_x=351.0,            # Festpunkt in der Mitte des X-Wegs (Rahmen-x, Wagenmitte 361 - 10)
     xk_ablage_x0=15.0,          # Ablage beginnt hier (x ab Schienenmitte Kettenseite)
     xk_halter_dx=-10.0,         # bewegtes Ende neben der Wagenmitte (am Z-Kopf)
     xk_wagen_x=(78.0, 644.0),   # X-Weg Wagenmitte (Rahmen-x)
@@ -120,7 +122,7 @@ P = dict(
     brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
     brenner_y=136.0,
     # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
-    rh_halter_x=[40.0, 330.0, 560.0],
+    rh_halter_x=[40.0, 300.0],
     rh_halter_b=20.0,
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
@@ -367,9 +369,9 @@ def weg(pts, r):
 
 def leitung_weg():
     """Alle Leitungen vom bewegten Y-Ende (treten nach vorn aus) zum Festpunkt der
-    X-Kette an der Gegenseite (treten dort zur Kettenseite ein): nach vorn, hoch, in
-    einem Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in der
-    Rinne hinten zur Gegenseite und mit einer Kehre R60 in den Festpunkt."""
+    X-Kette in der Mitte (treten dort zur Kettenseite ein): nach vorn, hoch, in einem
+    Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in der Rinne
+    hinten zur Gegenseite und mit einer Kehre R60 in den Festpunkt."""
     g, gx = geo(), geo_x()
     r = P["leitung_r"]
     xc = (g["k_x0"] + g["k_x1"]) / 2
@@ -498,7 +500,7 @@ def geo_x():
     m0 = P["xk_wagen_x"][0] + P["xk_halter_dx"] + xs
     m1 = P["xk_wagen_x"][1] + P["xk_halter_dx"] + xs
     xf = P["xk_fest_x"] + xs
-    l_eff = xf - m0 + P["xk_reserve"]                    # gestreckt bei X an der Kettenseite
+    l_eff = max(xf - m0, m1 - xf) + P["xk_reserve"]     # Schlaufe bleibt in beiden Endlagen hinter den Enden
     return dict(y0=y0, y1=y1, z_t0=z_t0, z_ri=z_ri, z_ku=z_ku, z_mu=z_mu, z_mo=z_mo,
                 m0=m0, m1=m1, xf=xf, l_eff=l_eff, laenge=l_eff + math.pi * R, xs=xs,
                 r_y0=y0 - rl - t, r_y1=y1 + rl + t, x_re=P["xk_bruecke_links_x"] + xs)
@@ -628,7 +630,8 @@ def endstueck(unten):
 
 def kette_x(wagen_x):
     """X-Kette je Wagenlage (Rahmen-x der Wagenmitte), x ab Schienenmitte Kettenseite.
-    Festpunkt an der Gegenseite, Schlaufe zur Kettenseite."""
+    Festpunkt in der Mitte, Schlaufe zur Kettenseite; an der Gegenseite läuft das
+    obere Trum frei über den Festpunkt hinaus."""
     gx = geo_x()
     xm = wagen_x + P["xk_halter_dx"] + gx["xs"]
     x_l = (gx["xf"] + xm - gx["l_eff"]) / 2
@@ -729,6 +732,8 @@ def main():
                 % (g["r_x0"], g["r_x1"], g["a_x0"]))
         f.write("X-Kette: Länge ca. %.0f mm (R%.0f), Festpunkt x %.0f, Ablage-UK %.0f, oben bis %.0f über Rahmen-OK\n"
                 % (gx["laenge"], P["xk_radius"], gx["xf"], gx["z_t0"], gx["z_mo"] + P["kette_h"] / 2))
+        f.write("X-Kette oberes Trum bei X an der Gegenseite ca. %.0f mm frei über den Festpunkt hinaus "
+                "(freitragende Länge der Kette prüfen)\n" % (gx["m1"] - gx["xf"]))
         sl = kette_x(P["xk_wagen_x"][0]).BoundBox
         f.write("X-Kette Schlaufe bei X an der Kettenseite bis x %.1f (Turm innen %.1f)\n"
                 % (sl.XMin, g["a_x1"]))
