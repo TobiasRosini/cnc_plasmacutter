@@ -45,6 +45,7 @@ ZACHSE = os.path.join(CAD, "z_achse", "z_achse.FCStd")
 KAEFIG = os.path.join(CAD, "wannenkaefig", "wannenkaefig.FCStd")
 EKETTE = os.path.join(CAD, "energiekette", "energiekette.FCStd")
 UNTERBAU = os.path.join(CAD, "unterbau", "unterbau.FCStd")
+AUFLAGE = os.path.join(CAD, "auflage", "auflage.FCStd")
 XWAGEN_TEILE = ["x_wagenkoerper", "x_spritzschutz", "x_motorbock",
                 "Wagen_X_oben", "Wagen_X_unten", "Riemenscheibe_X", "Umlenkrollen_X",
                 "Motor_X_NEMA23", "x_ref_stift"]
@@ -122,6 +123,9 @@ def main():
     plk = App.Placement(V(rahmen_bb.Center.x, wy, rahmen_bb.ZMax), App.Rotation())
     link(doc, "W_Wannenkaefig", dk.getObject("Wannenkaefig"), plk, g_w)
     link(doc, "W_Ablauf", dk.getObject("Ablauf"), plk, g_w)
+    da = fc_dok.quelle(AUFLAGE)                      # Kammträger und Leisten (gleiche Koordinaten)
+    for n in ("Kammtraeger", "Auflageleisten"):
+        link(doc, "W_" + n, da.getObject(n), plk, g_w)
     zw = rahmen_bb.ZMax + dk.getObject("Wannenkaefig").Shape.BoundBox.ZMin + 20.0
     link(doc, "W_Wanne", wobj,
          App.Placement(V(rahmen_bb.Center.x, wy, zw), App.Rotation()), g_w)
@@ -351,18 +355,30 @@ def main():
                     n += 1
         f.write("Kollisionen zwischen allen Teilen: %d\n" % n)
 
-        # X-Weg: Wagen an beide Enden schieben, bis er die Winkel berührt
+        # X-Weg: Wagen an beide Enden schieben, bis er die Winkel (oder in einer Y-Endlage
+        # die festen Teile der Y-Kette) berührt
         wagen = Part.makeCompound([dx.getObject(n).Shape for n in XWAGEN_TEILE]
                                   + [dz_.getObject(n).Shape for n in z_teile]
                                   + [dek.getObject("ekx_halter").Shape])
         winkel = Part.makeCompound([o.Shape for o in doc.Objects
-                                    if (o.Name.startswith("P_") or o.Name.startswith("EK_"))
+                                    if o.Name.startswith("P_")
                                     and o.TypeId in ("App::Link", "Part::Feature")])
+        # feste Teile der Y-Kette (Rinne, Kanal, Stützen) in beiden Y-Endlagen des Portals
+        ek_fest = Part.makeCompound([o.Shape for o in doc.Objects
+                                     if o.Name.startswith("EK_") and "Kette" not in o.Name
+                                     and o.TypeId in ("App::Link", "Part::Feature")])
 
         def frei(x):
             c = wagen.copy()
             c.Placement = App.Placement(V(x, yc, z0), App.Rotation())
-            return c.common(winkel).Volume < 1e-2
+            if c.common(winkel).Volume >= 1e-2:
+                return False
+            for ylage in (yb + hl, y_vorn):
+                cy = wagen.copy()
+                cy.Placement = App.Placement(V(x, yc + ylage - py, z0), App.Rotation())
+                if cy.common(ek_fest).Volume >= 1e-2:
+                    return False
+            return True
 
         def grenze(innen, aussen):
             for _ in range(20):

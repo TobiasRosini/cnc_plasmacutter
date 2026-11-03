@@ -29,7 +29,7 @@ import kaufteile as kt  # noqa: E402
 
 P = dict(
     # Maschine (aus Grundrahmen / Y-Winkel)
-    rahmen_laenge=1516.0,
+    rahmen_laenge=1556.0,       # Oberrahmen (vorn 40 über den Untertisch)
     rohr=40.0,
     portal_y=(160.0, 1280.0),   # Portalmitte von hinten bis vorn
     # Kette

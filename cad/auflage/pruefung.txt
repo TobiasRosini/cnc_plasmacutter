@@ -1,0 +1,4 @@
+Kammträger: 3 Stück, 1080 lang, 87 hoch (Stahl 3 mm), Schlitze 3.5 x 20 im Raster 25 (43 Positionen, y -525 bis 525)
+Auflageleisten: 22 Stück (Teilung 50), Flachstahl 50 x 3, 530 lang; dicht gesteckt 43 Stück
+Oberkante Leisten 0.0 (Rahmen-OK = 0), im Wasser bis 15 mm unter der Oberkante
+Durch die Bördelöffnung 540 x 1137: Leisten 530 (Luft 5 je Seite), Kammträger 1080 (Luft 28 je Ende)

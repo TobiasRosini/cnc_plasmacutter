@@ -143,6 +143,11 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - Umgesetzt: fester Schutzstreifen (Alu 30 × 3) von Y-Winkel zu Y-Winkel, an Haltern an den Flachstangen; er läuft zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch und deckt die Schiene über die ganze Länge ab (Y-Hub vorn 2 mm kürzer). Dazu Alu-Streifen innen an den Y-Längsträgern, X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
 - Der Streifen hängt 12 mm über dem Blech: hochstehende Teile können ihn wie den Brenner treffen.
 
+### Werkstückauflage und Einspannen (Stand 03.11.2026)
+
+- Kammträger (3 × längs, Stahl 3 mm) auf dem Wannenboden, Schlitze im Raster 25 mm; Auflageleisten Flachstahl 50 × 3 quer, normal Teilung 50, bei Bedarf dichter. Lose gesteckt, Oberkante = Blechunterseite. Wasser 15 mm unter dem Blech (`cad/auflage/`).
+- Vorderer Querträger des Oberrahmens 80 × 40 × 4 flach, 40 mm über den Untertisch hinaus: Flachstangen mit Schraubzwingen einspannen. Maschine dadurch 40 mm länger.
+
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 
 - Unter der Wanne ein Geräteboden (Alu 4 mm, Oberkante 144) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).

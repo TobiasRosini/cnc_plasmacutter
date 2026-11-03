@@ -9,5 +9,5 @@ Stahl-Rechteckrohr 20 × 20 × 2, nur gerade Schnitte, stumpf verschweißt (`zus
 - Oberer Ring 640 × 1235, Oberkante 40 mm unter Rahmenoberkante, liegt innen am oberen Rahmen des Untertischs an; 3× M8 je Seite quer durch Ring und Längsrohr. Käfig und Wanne gehören damit zum Untertisch.
 - Unterer Rahmen gleicher Größe, sechs Querrohre unter dem Wannenboden (y ±110, ±330, ±550 ab Wannenmitte), sechs Pfosten.
 - Mitte frei für den Ablauf (zwischen den Querrohren bei ±110).
-- Höhe: Wanne steht 120 mm unter Rahmenoberkante. Opferleisten 1 mm über dem Bördel (Blechunterseite = Rahmenoberkante), Wasser bis 105 mm über Boden = 15 mm unter dem Blech. Die Leistenträger stehen im Wasser auf dem Wannenboden direkt über den Querrohren.
+- Höhe: Wanne steht 120 mm unter Rahmenoberkante. Opferleisten 1 mm über dem Bördel (Blechunterseite = Rahmenoberkante), Wasser bis 105 mm über Boden = 15 mm unter dem Blech. Die Kammträger der Auflage laufen längs und kreuzen alle Querrohre (`cad/auflage/`).
 - Hinweis: Z ganz unten liegt die Düse 8 mm unter dem Blech und damit tiefer als der Bördel. An den X-Enden würde der Brenner dort den Bördel treffen; Z-Untergrenze in LinuxCNC auf etwa 3 mm unter Blechunterseite begrenzen.

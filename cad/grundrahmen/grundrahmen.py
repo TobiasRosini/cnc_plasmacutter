@@ -81,6 +81,11 @@ P = dict(
     nietmutter_m6_d=9.0,        # M6-Nietmutter: 3 mm Wand trägt kein gutes M6-Gewinde
     ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen rechts), ab Rahmenende
     ek_stuetze_z=-20.0,                          # ab Rahmen-OK
+    # Vorderer Querträger 80 x 40 x 4 flach: steht 40 mm vor den Untertisch über, darunter
+    # greifen Schraubzwingen (Flachstangen zum Schneiden einspannen); Oberrahmen 40 länger
+    qv_tiefe=80.0,
+    qv_wand=4.0,
+    or_ueberstand=40.0,
     geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
     # Spritzschutz Y-Schienen: Alu-Streifen 2 mm innen an den Längsträgern, steht über die
     # Rahmenoberkante (Bleche dann höchstens 636 breit); zwischen den Y-Motor- und Umlenkhaltern
@@ -150,7 +155,8 @@ def rahmen():
     # ----- Oberrahmen
     GRUPPE[0] = "Oberrahmen"
     for i, x0 in enumerate((0.0, ax - r)):
-        lt = rohr("Längsträger oben", x0, 0, z_oben, ay, "y")
+        ayo = ay + P["or_ueberstand"]                    # Oberrahmen vorn länger
+        lt = rohr("Längsträger oben", x0, 0, z_oben, ayo, "y")
         for y in schienen_loecher():
             lt = lt.cut(Part.makeCylinder(P["m4_kern"] / 2, P["wand"] + 2,
                                           V(x0 + r / 2, y, z_ok - P["wand"] - 1)))
@@ -163,7 +169,7 @@ def rahmen():
         # M8 quer für die Stützen der Y-Energiekette (nur rechts, an beiden Enden)
         if i == 0:
             for dy in P["ek_stuetze_y"]:
-                for y in (dy, ay - dy):
+                for y in (dy, ayo - dy):
                     lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                                   V(-1, y, z_ok + P["ek_stuetze_z"]), V(1, 0, 0)))
         xi = x0 + r - P["wand"] - 1 if i == 0 else x0 - 1      # Innenwand (Spritzschutz)
@@ -172,7 +178,13 @@ def rahmen():
                                           V(xi, y, z_ok + P["schutz_niet_z"]), V(1, 0, 0)))
         teile["OR_Laengstraeger_%s" % "LR"[i]] = lt
     for i, y0 in enumerate((0.0, ay - r)):
-        q = rohr("Querträger oben", r, y0, z_oben, ax - 2 * r, "x")
+        if i == 1:                                       # vorn 80 x 40 x 4 flach, steht über
+            tq, qw = P["qv_tiefe"], P["qv_wand"]
+            q = box(r, ax - r, y0, y0 + tq, z_oben, z_ok).cut(
+                box(r - 1, ax - r + 1, y0 + qw, y0 + tq - qw, z_oben + qw, z_ok - qw))
+            ZUSCHNITT.append(("80x40x4", "Querträger vorn (Oberrahmen)", ax - 2 * r))
+        else:
+            q = rohr("Querträger oben", r, y0, z_oben, ax - 2 * r, "x")
         for x in P["trenn_schrauben_x"]:                 # unten Durchgang, oben Zugang
             q = q.cut(Part.makeCylinder(P["m8_durchgang"] / 2, P["wand"] + 2, V(x, y0 + r / 2, z_oben - 1)))
             q = q.cut(Part.makeCylinder(P["zugang_m8_d"] / 2, P["wand"] + 2,
@@ -298,6 +310,9 @@ def main():
             for (name, l), n in sorted(zus.items(), key=lambda e: -e[0][1]):
                 f.write("%-28s %10.1f %6d\n" % (name, l, n))
             f.write("Summe: %.2f m (%.1f kg)\n" % (gesamt / 1000, gesamt / 1000 * kg_m))
+        for g_, name, l in ZUSCHNITT:
+            if g_ == "80x40x4":
+                f.write("\nRechteckrohr 80x40x4 Stahl: %s %.1f mm, 1 Stk\n" % (name, l))
         f.write("\nFußplatten: 4x %gx%gx%g mm, Bohrung Ø%g\n"
                 % (P["fuss_kante"], P["fuss_kante"], P["fuss_dicke"], P["fuss_loch"]))
         f.write("Verschraubung Untertisch/Oberrahmen: %d x M8 senkrecht (je Ende %d), "

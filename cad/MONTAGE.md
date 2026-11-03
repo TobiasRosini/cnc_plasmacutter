@@ -27,6 +27,7 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Y-Motor- und Umlenkhalter: **M6-Nietmuttern** im Längsträger (Ø9), die 3-mm-Wand trägt kein gutes M6-Gewinde.
 - Y-Schienen: M4 direkt in die 3-mm-Wand (gut 4 Gänge).
 - Spritzschutz Y: Alu-Streifen innen an die Längsträger, je 6 Blindnieten Ø4.
+- Auflage: Kammträger in die Wanne stellen (x −200 / 0 / +200), Auflageleisten in jede zweite Schlitzposition stecken (`cad/auflage/README.md`).
 - Wannenkäfig: 3× M6 je Seite durch die Außenwand des Rings (Zugang Ø12 innen, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr des Untertischs.
 - Geräteboden (Alu 4 mm) auf die unteren Längsrohre: 4× M6 von oben in Nietmuttern. Darauf Plasmagerät vorn rechts und Schaltschrank vorn links (`cad/unterbau/README.md`).
 - Tropfboden unter dem Wannenkäfig (Gefälle nach hinten), Ablauf durch die Hülse; Befestigung noch offen.

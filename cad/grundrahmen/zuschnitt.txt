@@ -12,9 +12,11 @@ Summe: 12.79 m (44.6 kg)
 
 Oberrahmen
 Teil                           Länge mm    Stk
-Längsträger oben                 1516.0      2
-Querträger oben                   640.0      2
-Summe: 4.31 m (15.0 kg)
+Längsträger oben                 1556.0      2
+Querträger oben                   640.0      1
+Summe: 3.75 m (13.1 kg)
+
+Rechteckrohr 80x40x4 Stahl: Querträger vorn (Oberrahmen) 640.0 mm, 1 Stk
 
 Fußplatten: 4x 100x100x8 mm, Bohrung Ø13
 Verschraubung Untertisch/Oberrahmen: 6 x M8 senkrecht (je Ende 3), M8x16 durch die Unterseite des oberen Querrohrs (Zugang Ø16 von oben) in Nietmuttern M8 im unteren Querrohr

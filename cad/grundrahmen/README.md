@@ -40,7 +40,7 @@ Der Brenner sitzt 136 mm vor der Brückenmitte. Damit die Düse den ganzen Wanne
 
 ## Zwei Baugruppen (Stand 23.10.2026)
 
-- **Oberrahmen:** 2 Längsträger 1516 (mit den Gewinden für die Y-Schienen) und 2 Querträger 640, trägt das ganze Portal samt Antrieben, Schaltern und Energieketten.
+- **Oberrahmen:** 2 Längsträger 1556 (mit den Gewinden für die Y-Schienen), Querträger hinten 40 × 40 × 3, **vorn 80 × 40 × 4 flach** (Stand 03.11.2026). Der Oberrahmen steht vorn 40 mm über den Untertisch: Unter dem Überstand greifen Schraubzwingen, so lassen sich Flachstangen auf Querträger und Auflageleisten (gleiche Höhe) zum Schneiden einspannen. Trägt das ganze Portal samt Antrieben, Schaltern und Energieketten.
 - **Untertisch:** 4 Beine, Fußplatten, unterer Rahmen mit Mittelquerrohren und ein eigener oberer Rahmen direkt unter dem Oberrahmen. Daran hängt der Wannenkäfig (M8 quer), die Wanne steht darin.
 - **Verschraubung:** 6× M8 × 90 senkrecht durch die aufeinanderliegenden Querrohre (je Ende 3 bei x 120 / 360 / 600). Dort liegen weder Schienen noch Halter.
 - Zuschnittliste getrennt nach Baugruppe in `zuschnitt.txt`.
