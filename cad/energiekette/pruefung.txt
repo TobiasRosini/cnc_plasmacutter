@@ -1,18 +1,24 @@
 Y-Kette: Länge ca. 993 mm (Festpunkt y 720, Hub 1120, R125)
-Y-Rinne x -66.5 bis -1.5, Kettenturm außen bis x -76.5 (ab Schienenmitte links)
-X-Kette: Länge ca. 833 mm (R65), Ablage-UK 225, oben bis 412 über Rahmen-OK
-X-Kette Schlaufe bei X ganz rechts bis Rahmen-x 711.5
+Y-Rinne x -66.5 bis -1.5, Kettenturm außen bis x -76.5 (ab Schienenmitte Kettenseite)
+X-Kette: Länge ca. 796 mm (R65), Festpunkt x 600, Ablage-UK 225, oben bis 412 über Rahmen-OK
+X-Kette Schlaufe bei X an der Kettenseite bis x -54.5 (Turm innen -68.5)
 Wand an Bohrungen ek_einsteckteil: ok (>= 3.0 mm)
-Wand an Bohrungen ek_einsteckteil_rechts: ok (>= 3.0 mm)
+Wand an Bohrungen ek_einsteckteil_links: ok (>= 3.0 mm)
 Wand an Bohrungen ek_halter_y: ok (>= 3.0 mm)
-Wand an Bohrungen ekx_festhalter: ok (>= 3.0 mm)
-Wand an Bohrungen ek_leitungsclips: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_ablagehalter: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_rinnenhalter: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_stopfen: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_halter: ok (>= 3.0 mm)
 Wand an Bohrungen ek_stuetzen_kopf: ok (>= 3.0 mm)
 Leitung / Turm: 0.00 mm³
-Leitung / Clips: 0.00 mm³
 Leitung / Halter Y: 0.00 mm³
-Leitung / Festhalter X: 0.00 mm³
-Leitung / X-Kette: 0.00 mm³
-Leitung: Länge ca. 248 mm (Mittellinie)
+Leitung / Ablagehalter X: 0.00 mm³
+Leitung / Ablage: 0.00 mm³
+Leitung / Rinne X: 0.00 mm³
+Leitung / Rinne hinten: 0.00 mm³
+Leitung / Rinnenhalter: 0.00 mm³
+Leitung / X-Kette bei Wagen 78: 0.00 mm³
+Leitung / X-Kette bei Wagen 644: 0.00 mm³
+Leitungen Y-Ende -> X-Festpunkt: ca. 1418 mm, Adern X-Ende -> Brenner: ca. 420 mm (R60)
+Adern bei X an der Gegenseite bis Rahmen-x 720 (Brückenstirn 720)
+Adern oben bis 563 über Brücken-UK (Z unten), ca. 1470 mm über Boden; bei Z oben 100 mm Schlaufe mehr

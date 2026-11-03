@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Y-Energiekette, liegend, links (Kastenseite).
+Y-Energiekette, liegend, rechts (Kastenseite).
 
 Kette 20 x 38 innen, 35 x 56 außen, R125. Die feste Hälfte liegt in einer Rinne
-auf einem Träger über dem linken Y-Winkel (höher als alles, was dort am Portal
+auf einem Träger über dem rechten Y-Winkel (höher als alles, was dort am Portal
 hochsteht). Der Träger liegt auf zwei Stützen an den Rahmenenden, außen am
 Längsträger. Das bewegte Ende sitzt oben auf der Schlaufe; ein Ausleger aus
-Alu-Flachmaterial geht von der Kettenlasche des linken Winkels außen an der Rinne
+Alu-Flachmaterial geht von der Kettenlasche des rechten Winkels außen an der Rinne
 vorbei nach oben.
 
-Lage: x ab Mitte linke Y-Schiene (negativ = außen), y = Rahmen-y (feste Teile)
+Lage: x ab Mitte rechte Y-Schiene (negativ = außen), y = Rahmen-y (feste Teile)
 bzw. ab Portalmitte (Ausleger), z = Rahmenoberkante.
 
 Aufruf:
@@ -38,7 +38,7 @@ P = dict(
     radius=125.0,               # bis Kettenmitte
     reserve=40.0,               # Zusatzlänge: Schlaufe bleibt hinter der X-Ablage
                                 # (dort liegt die X-Ablage), auch wenn das Portal ganz hinten steht
-    kette_innen_x=-6.0,         # Innenkante der Kette (Z-Schlitten fährt bei X links bis 2 mm vor die Schienenmitte)
+    kette_innen_x=-6.0,         # Innenkante der Kette (Z-Schlitten fährt bei X rechts bis 2 mm vor die Schienenmitte)
     # Träger (Stahl 40x20x2, flach) und Rinne (Blech 2 mm)
     traeger_uk=163.0,           # über X-Schalterblock (161)
     traeger_b=40.0,
@@ -69,7 +69,7 @@ P = dict(
     kopf_m5_unter_ok=12.0,
     traeger_m6_y=50.0,              # ab Rahmenende
     nietmutter_m6_d=9.0,
-    # Kettenturm (Alu-Flachmaterial 40x8) an der Stirn der links verlängerten Brücke.
+    # Kettenturm (Alu-Flachmaterial 40x8) an der Stirn der rechts verlängerten Brücke.
     # In der Brücke steckt ein Einsteckteil (Druck), das von den M6 des Sattels
     # mit gehalten wird; der Turm ist mit 4x M6 in dessen Stirnseite geschraubt.
     ausleger_b=40.0,
@@ -83,39 +83,49 @@ P = dict(
     m6_z=[75.0, 95.0],
     einsteck_innen=38.0,        # Einsteckteil reicht bis hier (über die zweite M6)
     turm_loecher=[(-8.0, 80.0), (8.0, 80.0), (-8.0, 118.0), (8.0, 118.0)],  # (y, z)
-    # rechts liegt die Sattelschraube M6 (z 75) nur 8,5 mm hinter der Stirn: die
+    # links liegt die Sattelschraube M6 (z 75) nur 8,5 mm hinter der Stirn: die
     # unteren Einsätze würden sie schneiden, deshalb beide Reihen über den Sattel-M6
-    turm_loecher_rechts=[(-8.0, 106.0), (8.0, 106.0), (-8.0, 124.0), (8.0, 124.0)],
+    turm_loecher_links=[(-8.0, 106.0), (8.0, 106.0), (-8.0, 124.0), (8.0, 124.0)],
 
     # X-Energiekette über der Brücke: 20x38 (35x56), R65, liegend auf einer Ablage,
-    # die links am Kettenturm und rechts an einer Platte an der rechten Brückenstirn
-    # sitzt (Einsteckteil wie links). Bewegtes Ende am Halter auf dem Z-Kopf.
+    # die an der Kettenseite am Kettenturm und an der Gegenseite an einer Platte an der
+    # Brückenstirn sitzt (Einsteckteil wie am Turm). Festpunkt an der Gegenseite,
+    # Schlaufe zur Kettenseite, bewegtes Ende am Halter auf dem Z-Kopf. Die Leitungen
+    # treten dort zur Gegenseite aus und kehren über einen Bogen zum Brenner zurück:
+    # an der Kettenseite wäre dafür bei X am Ende kein Platz (Turm, Y-Kettenende).
     xk_radius=65.0,
     xk_y_vorn=17.0,             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
     xk_traeger_uk=225.0,        # über Y-Kette (unteres Trum bis 220) und X-Motor
-    xk_fest_x=20.0,             # Festpunkt links (Rahmen-x)
-    xk_halter_dx=-35.0,         # bewegtes Ende links von der Wagenmitte (am Z-Kopf)
+    xk_fest_x=620.0,            # Festpunkt an der Gegenseite (Rahmen-x)
+    xk_ablage_x0=15.0,          # Ablage beginnt hier (x ab Schienenmitte Kettenseite)
+    xk_halter_dx=-10.0,         # bewegtes Ende neben der Wagenmitte (am Z-Kopf)
     xk_wagen_x=(78.0, 644.0),   # X-Weg Wagenmitte (Rahmen-x)
     xk_reserve=40.0,
-    xk_bruecke_rechts_x=720.0,  # rechte Brückenstirn (Rahmen-x)
+    xk_bruecke_links_x=720.0,  # Brückenstirn Gegenseite (Rahmen-x)
     # Druckteile am Kettenturm (Turm bleibt ein gerades Alu-Flachmaterial 40 x 8):
-    # oben Halter für das bewegte Y-Kettenende, auf Höhe der X-Ablage der Festhalter
-    # (festes X-Kettenende + Zapfen für die Ablage), dazwischen Clips für die Leitungen
+    # oben Halter für das bewegte Y-Kettenende, auf Höhe der X-Ablage der Ablagehalter
+    # (Zapfen für die Ablage, darauf liegt die Schlaufe bei X am Ende)
     hy_dicke=20.0,              # Halter Y über dem Anschlussstück
     hy_y=(-20.0, 32.0),         # nach vorn verlängert: Kabelbinder an der Leitungsbiegung
-    turm_x_y=[-14.0, 12.0],     # M5 Turm -> Festhalter (innerhalb der 40 mm Turmbreite)
-    leitung_d=16.0,             # Leitungsbündel (Brennerschlauch + Kabel), vereinfacht
-    clip_z=[345.0, 380.0],      # Leitungsclips am Turm
+    turm_x_y=[-14.0, 12.0],     # M5 Turm -> Ablagehalter (innerhalb der 40 mm Turmbreite)
+    # Leitungen ohne Schutzschlauch (Adern des Brennerpakets + Motor- und Schalterkabel),
+    # Biegeradius mindestens 60 (Stromkabel Ø6,3); Hüllkurven als Rundrohr
+    leitung_r=60.0,
+    leitung_d=20.0,             # alle Leitungen zwischen Y-Kette und X-Kette
+    brenner_leitung_d=16.0,     # Adern des Brennerpakets zwischen X-Kette und Brenner
+    leitung_hinten_y=-131.0,    # Lauf hinter der Ablage (Kehre R60 in den Festpunkt)
+    leitung_oben_z=580.0,       # Bogen über das Y-Kettenende nach hinten
+    leitung_ab_x=10.0,          # dort hinter der Ablage senkrecht nach unten
+    brenner_oben_z=555.0,       # Bogen über dem Brenner (X-Wagen-z), Z unten
+    brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
+    brenner_y=136.0,
+    # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
+    rh_halter_x=[40.0, 330.0, 560.0],
+    rh_halter_b=20.0,
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
-    xk_halter_loecher=[-45.0, -25.0],   # x der M5-Einsätze in der Z-Kopf-Rückseite
-    # Halter X (Druck) mit Bogenkanal: Leitungen treten nach oben aus
-    hx_platte=14.0,             # Platte über dem Anschlussstück (Einsätze von unten)
-    hx_bogen_r=20.0,            # Kanalmitte
-    hx_kanal_h=20.0,            # lichte Höhe = Innenhöhe der Kette
-    hx_kanal_b=38.0,            # lichte Breite = Innenbreite der Kette
-    hx_wand=4.0,
-    hx_strebe=5.0,              # Strebe zwischen Rückwand und Kanalkörper
+    xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
+    hx_platte=14.0,             # Platte über dem Anschlussstück (Muttern oben)
     bruecke_uk_x_wagen=57.0,    # Brückenunterkante über Rahmen-OK (X-Wagen z = 0)
 )
 
@@ -227,7 +237,7 @@ def stuetzen_kopf():
 
 # ---------------------------------------------------------------- Kettenturm (am Portal)
 def bruecke_ende():
-    """x-Lage der verlängerten Brückenstirn (ab Schienenmitte links)."""
+    """x-Lage der verlängerten Brückenstirn (ab Schienenmitte rechts)."""
     return geo()["a_x1"]
 
 
@@ -247,11 +257,10 @@ def ausleger():
 
 
 def turm_m5():
-    """Alle M5-Durchgänge im Turm (y, z): Halter Y, Clips, Festhalter X."""
-    g, gx = geo(), geo_x()
+    """Alle M5-Durchgänge im Turm (y, z): Halter Y, Ablagehalter X."""
+    g = geo()
     z_top = g["z_mo"] + P["kette_h"] / 2
     res = [(y, z_top + P["hy_dicke"] / 2) for y in (-10.0, 10.0)]
-    res += [(y, z) for z in P["clip_z"] for y in (-8.0, 8.0)]
     res += [(y, festhalter_zm()) for y in P["turm_x_y"]]
     return res
 
@@ -293,21 +302,17 @@ def festhalter_zm():
     return geo_x()["z_t0"] + (P["traeger_h"] + P["rinne_t"]) / 2
 
 
-def festhalter_x():
-    """Druckteil auf Höhe der X-Ablage, innen am Turm (2x M5 durch den Turm). Trägt
-    oben das feste Ende der X-Kette (2x M5 von oben in eingepresste Muttern) und hat rechts
-    einen Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die
+def ablagehalter_x():
+    """Druckteil auf Höhe der X-Ablage, innen am Turm (2x M5 durch den Turm), mit
+    einem Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die
     untere Wand). Er ist so breit wie die Rinne und gleicht damit den Versatz
-    zwischen Turm (y +-20) und Ablage aus."""
+    zwischen Turm (y +-20) und Ablage aus; oben liegt bei X am Ende die Schlaufe auf."""
     g, gx = geo(), geo_x()
     x0, x1 = g["a_x1"], ablage_x0()
     ym = (gx["r_y0"] + gx["r_y1"]) / 2
     z0, h = gx["z_t0"], P["traeger_h"]
     s = box(x0, x1, gx["r_y0"], gx["r_y1"], z0, gx["z_ku"])
     s = s.fuse(box(x1 - 0.01, x1 + 25, ym - 17.8, ym + 17.8, z0 + 2.2, z0 + h - 2.2))
-    yc = (gx["y0"] + gx["y1"]) / 2
-    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # M5 von oben, Mutter unten
-        s = s.cut(m5_senkrecht(gx["xf"], yc + dy, z0, gx["z_ku"], z0 + 1.5))
     zm = festhalter_zm()
     for y in P["turm_x_y"]:                                        # Turm: Mutter von unten
         s = s.cut(m5_quer(x0, y, zm, 1, V(0, 0, -1), zm - z0 + 1))
@@ -319,9 +324,8 @@ def festhalter_x():
 
 
 def ablage_x0():
-    """Linkes Ende von X-Ablage und Rinne: hinter dem festen Kettenende."""
-    gx = geo_x()
-    return gx["xf"] + P["end_laenge"] / 2
+    """Ende von X-Ablage und Rinne an der Kettenseite (auf dem Zapfen des Ablagehalters)."""
+    return P["xk_ablage_x0"]
 
 
 def zapfen_loecher():
@@ -330,35 +334,72 @@ def zapfen_loecher():
     return [(ablage_x0() + 12.5, ym - 10.0), (ablage_x0() + 12.5, ym + 10.0)]
 
 
+def weg(pts, r):
+    """Mittellinie aus Geraden mit Bögen (Radius r) an den Ecken. Prüft, dass jede
+    Gerade für die Bögen an ihren Enden lang genug ist."""
+    n = len(pts)
+    d = [0.0] * n
+    for i in range(1, n - 1):
+        u = (pts[i - 1] - pts[i]).normalize()
+        w = (pts[i + 1] - pts[i]).normalize()
+        th = math.pi - math.acos(max(-1.0, min(1.0, u.dot(w))))   # Richtungsänderung
+        d[i] = r * math.tan(th / 2)
+    for i in range(n - 1):
+        if d[i] + d[i + 1] > (pts[i + 1] - pts[i]).Length + 1e-6:
+            raise ValueError("Leitungsweg: Gerade %d zu kurz für R%.0f" % (i, r))
+    kanten, start = [], pts[0]
+    for i in range(1, n - 1):
+        a, p, b = pts[i - 1], pts[i], pts[i + 1]
+        u = (a - p).normalize()
+        w = (b - p).normalize()
+        t1, t2 = p + u * d[i], p + w * d[i]
+        bi = (u + w).normalize()
+        th = math.acos(max(-1.0, min(1.0, u.dot(w))))
+        c = p + bi * (r / math.sin(th / 2))
+        if (t1 - start).Length > 1e-6:
+            kanten.append(Part.LineSegment(start, t1).toShape())
+        kanten.append(Part.Arc(t1, c - bi * r, t2).toShape())
+        start = t2
+    if (pts[-1] - start).Length > 1e-6:
+        kanten.append(Part.LineSegment(start, pts[-1]).toShape())
+    return Part.Wire(kanten)
+
+
 def leitung_weg():
-    """Mittellinie des Leitungsbündels vom bewegten Y-Ende (tritt nach vorn aus)
-    zum festen X-Ende (tritt nach links ein), ab Schienenmitte links / Portalmitte:
-    Geraden mit Bögen, senkrecht durch die Clips vor dem Turm."""
+    """Alle Leitungen vom bewegten Y-Ende (treten nach vorn aus) zum Festpunkt der
+    X-Kette an der Gegenseite (treten dort zur Kettenseite ein): nach vorn, hoch, in
+    einem Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in der
+    Rinne hinten zur Gegenseite und mit einer Kehre R60 in den Festpunkt."""
     g, gx = geo(), geo_x()
+    r = P["leitung_r"]
     xc = (g["k_x0"] + g["k_x1"]) / 2
     e = P["end_laenge"] / 2
     yc = (gx["y0"] + gx["y1"]) / 2
     z_ein = gx["z_ku"] + P["kette_h"] / 2
-    xl, yl = -50.0, 34.0                                 # senkrechtes Stück (Clips)
-    pts = [V(xc, e + 0.5, g["z_mo"]), V(xc, yl, g["z_mo"]), V(xl, yl, 410.0),
-           V(xl, yl, 300.0), V(xl, yc, z_ein), V(gx["xf"] - e - 0.5, yc, z_ein)]
-    radien = [16.0, 30.0, 30.0, 20.0]
-    kanten, start = [], pts[0]
-    for i in range(1, len(pts) - 1):
-        a, p, b = pts[i - 1], pts[i], pts[i + 1]
-        u = (a - p).normalize()
-        w = (b - p).normalize()
-        th = math.acos(max(-1.0, min(1.0, u.dot(w))))
-        r = radien[i - 1]
-        d = r / math.tan(th / 2)
-        t1, t2 = p + u * d, p + w * d
-        bi = (u + w).normalize()
-        c = p + bi * (r / math.sin(th / 2))
-        kanten.append(Part.LineSegment(start, t1).toShape())
-        kanten.append(Part.Arc(t1, c - bi * r, t2).toShape())
-        start = t2
-    kanten.append(Part.LineSegment(start, pts[-1]).toShape())
-    return Part.Wire(kanten)
+    yh, zo, xa = P["leitung_hinten_y"], P["leitung_oben_z"], P["leitung_ab_x"]
+    x_ein = gx["xf"] + e + 0.5
+    x_kehre = x_ein + r + 2.0
+    pts = [V(xc, e + 0.5, g["z_mo"]), V(xc, 80.0, g["z_mo"]), V(xc, 80.0, zo),
+           V(xa, yh, zo), V(xa, yh, z_ein), V(x_kehre, yh, z_ein), V(x_kehre, yc, z_ein),
+           V(x_ein, yc, z_ein)]
+    return weg(pts, r)
+
+
+def brenner_weg():
+    """Adern des Brennerpakets vom bewegten X-Ende (treten zur Gegenseite aus) zum
+    Brenner, X-Wagen-Koordinaten, Z unten: hoch, über einen Bogen nach vorn und von
+    oben in die Tülle. Bei Z oben wird die Schlaufe 100 mm länger und wölbt sich."""
+    gx = geo_x()
+    r = P["leitung_r"]
+    zb = P["bruecke_uk_x_wagen"]
+    yc = (gx["y0"] + gx["y1"]) / 2
+    z_aus = gx["z_mo"] - zb
+    x_aus = P["xk_halter_dx"] + P["end_laenge"] / 2 + 0.5
+    xa = x_aus + r + 2.0
+    zo, yb = P["brenner_oben_z"], P["brenner_y"]
+    pts = [V(x_aus, yc, z_aus), V(xa, yc, z_aus), V(xa, 30.0, zo), V(0, yb, zo),
+           V(0, yb, P["brenner_stummel_z"])]
+    return weg(pts, r)
 
 
 def leitung_abtasten(n=200):
@@ -367,46 +408,65 @@ def leitung_abtasten(n=200):
 
 def leitung_bei_y(y):
     pts = leitung_abtasten()
-    p = min(pts[:len(pts) // 3], key=lambda q: abs(q.y - y))
+    p = min(pts[:len(pts) // 6], key=lambda q: abs(q.y - y))
     return p.x, p.z
 
 
-def leitung_bei_z(z):
-    pts = [q for q in leitung_abtasten() if 300 < q.z < 410]
-    p = min(pts, key=lambda q: abs(q.z - z))
-    return p.x, p.y
-
-
-def leitung():
-    """Leitungsbündel als Rohr entlang der Mittellinie (nur Darstellung und Kollision)."""
-    w = leitung_weg()
+def rohr(w, d):
+    """Hüllkurve der Leitungen als Rohr entlang der Mittellinie (Darstellung, Kollision)."""
     e0 = w.OrderedEdges[0]
     p0 = e0.valueAt(e0.FirstParameter)
     t0 = e0.tangentAt(e0.FirstParameter)
-    kreis = Part.Wire([Part.makeCircle(P["leitung_d"] / 2, p0, t0)])
+    kreis = Part.Wire([Part.makeCircle(d / 2, p0, t0)])
     return w.makePipeShell([kreis], True, True)
 
 
-def clips():
-    """Leitungsclips (Druck) innen am Turm, je 2x M5 durch den Turm; die Leitung
-    wird von vorn eingeklipst."""
-    g = geo()
-    x0 = g["a_x1"]
-    r = P["leitung_d"] / 2 + 0.5
+def leitung():
+    return rohr(leitung_weg(), P["leitung_d"])
+
+
+def brenner_leitung():
+    return rohr(brenner_weg(), P["brenner_leitung_d"])
+
+
+def rinne_hinten():
+    """Alu-Winkel 40 x 20 x 2 hinter der Ablage: waagerechter Schenkel unter den
+    Leitungen, senkrechter Schenkel hinten; von der Kettenseite bis vor die Kehre."""
+    gx = geo_x()
+    yh = P["leitung_hinten_y"]
+    z0 = gx["z_ku"] + P["kette_h"] / 2 - P["leitung_d"] / 2 - 2.0
+    x0 = P["leitung_ab_x"] - 15.0
+    x1 = gx["xf"] + P["end_laenge"] / 2 + 2.0
+    s = box(x0, x1, yh - 20.0, yh + 20.0, z0, z0 + 2.0)
+    s = s.fuse(box(x0, x1, yh - 22.0, yh - 20.0, z0, z0 + 20.0)).removeSplitter()
+    for x in P["rh_halter_x"]:                           # M4 in die Rinnenhalter
+        s = s.cut(Part.makeCylinder(2.25, 4, V(x + P["rh_halter_b"] / 2, yh, z0 - 1)))
+    return s
+
+
+def rinnenhalter():
+    """Druckteile unter der Ablage: tragen die Rinne hinten (je 2x M5 von unten in
+    Nietmuttern der Ablage, Rinne mit 1x M4 in eine Mutter, seitlich eingeschoben)."""
+    gx = geo_x()
+    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    yh = P["leitung_hinten_y"]
+    z_r = gx["z_ku"] + P["kette_h"] / 2 - P["leitung_d"] / 2 - 2.0
+    z0 = gx["z_t0"] - 8.0
     res = None
-    for zc in P["clip_z"]:
-        cx, cy = leitung_bei_z(zc)
-        c = box(x0, cx + r + 3.5, -16.0, cy + r + 1.5, zc - 8, zc + 8)
-        c = c.cut(Part.makeCylinder(r, 18, V(cx, cy, zc - 9)))
-        c = c.cut(box(cx - 6.0, cx + 6.0, cy, cy + r + 3, zc - 9, zc + 9))
-        for y in (-8.0, 8.0):                                      # Mutter von oben
-            c = c.cut(m5_quer(x0, y, zc, 1, V(0, 0, 1), 9))
-        res = c if res is None else res.fuse(c)
-    return res
+    for x in P["rh_halter_x"]:
+        b = P["rh_halter_b"]
+        s = box(x, x + b, yh - 22.0, ym + 20.0, z0, gx["z_t0"])           # unter der Ablage
+        s = s.fuse(box(x, x + b, yh - 22.0, gx["r_y0"] - 1.0, gx["z_t0"] - 0.01, z_r))  # hinten hoch zur Rinne
+        for y in (ym - 10.0, ym + 10.0):                               # M5 von unten, Nietmutter in der Ablage
+            s = s.cut(Part.makeCylinder(2.75, 10, V(x + b / 2, y, z0 - 1)))
+        s = s.cut(Part.makeCylinder(2.25, 12, V(x + b / 2, yh, z_r - 11)))
+        s = s.cut(fc_dok.mutter(4, V(x + b / 2, yh, z_r - 6), V(0, 0, 1), V(1, 0, 0), b))
+        res = s if res is None else res.fuse(s)
+    return res.removeSplitter()
 
 
 def einsteckteil():
-    """Steckt in der Brücke (links), gehalten von den beiden M6 des Sattels;
+    """Steckt in der Brücke (rechts), gehalten von den beiden M6 des Sattels;
     Stirnseite mit 4x M6 für den Kettenturm (Muttern seitlich eingeschoben)."""
     g = geo()
     w, tb = P["bruecke_wand"], P["bruecke_tiefe"]
@@ -434,14 +494,14 @@ def geo_x():
     z_ku = z_ri + t
     z_mu = z_ku + h / 2
     z_mo = z_mu + 2 * R
-    xs = -20.0                                           # Rahmen-x -> x ab Schienenmitte links
+    xs = -20.0                                           # Rahmen-x -> x ab Schienenmitte rechts
     m0 = P["xk_wagen_x"][0] + P["xk_halter_dx"] + xs
     m1 = P["xk_wagen_x"][1] + P["xk_halter_dx"] + xs
     xf = P["xk_fest_x"] + xs
-    l_eff = m1 - xf + P["xk_reserve"]
+    l_eff = xf - m0 + P["xk_reserve"]                    # gestreckt bei X an der Kettenseite
     return dict(y0=y0, y1=y1, z_t0=z_t0, z_ri=z_ri, z_ku=z_ku, z_mu=z_mu, z_mo=z_mo,
                 m0=m0, m1=m1, xf=xf, l_eff=l_eff, laenge=l_eff + math.pi * R, xs=xs,
-                r_y0=y0 - rl - t, r_y1=y1 + rl + t, x_re=P["xk_bruecke_rechts_x"] + xs)
+                r_y0=y0 - rl - t, r_y1=y1 + rl + t, x_re=P["xk_bruecke_links_x"] + xs)
 
 
 def stopfen_loecher():
@@ -452,8 +512,10 @@ def stopfen_loecher():
 
 
 def ablage_x():
-    """Alu 40x20x2 flach (in y 40 breit) + Rinne, links auf dem Zapfen des Festhalters,
-    rechts stumpf an der Platte (Stopfen mit M5-Einsätzen)."""
+    """Alu 40x20x2 flach (in y 40 breit) + Rinne, an der Kettenseite auf dem Zapfen des
+    Ablagehalters, an der Gegenseite stumpf an der Platte (Stopfen mit M5-Muttern). Die
+    Rinne endet hinter dem festen Kettenende (2x M5 durch den Rinnenboden, neben der
+    Ablage); dahinter liegt die Kehre der Leitungen."""
     gx = geo_x()
     x0 = ablage_x0()
     x1 = gx["x_re"]
@@ -463,15 +525,22 @@ def ablage_x():
     tr = tr.cut(box(x0 - 1, x1 + 1, ym - 18, ym + 18, z0 + 2, z0 + P["traeger_h"] - 2))
     for x, y in zapfen_loecher():                                  # M5 von unten in den Zapfen
         tr = tr.cut(Part.makeCylinder(2.75, 4, V(x, y, z0 - 1)))
+    for x in P["rh_halter_x"]:                                     # Nietmuttern M5 für die Rinnenhalter
+        for y in (ym - 10.0, ym + 10.0):
+            tr = tr.cut(Part.makeCylinder(3.5, 4, V(x + P["rh_halter_b"] / 2, y, z0 - 1)))
     t = P["rinne_t"]
-    ri = box(x0, x1, gx["r_y0"], gx["r_y1"], gx["z_ri"], gx["z_ri"] + t)
+    xr = gx["xf"] + P["end_laenge"] / 2
+    ri = box(x0, xr, gx["r_y0"], gx["r_y1"], gx["z_ri"], gx["z_ri"] + t)
     for y0 in (gx["r_y0"], gx["r_y1"] - t):
-        ri = ri.fuse(box(x0, x1, y0, y0 + t, gx["z_ri"], gx["z_ri"] + P["rinne_rand"]))
+        ri = ri.fuse(box(x0, xr, y0, y0 + t, gx["z_ri"], gx["z_ri"] + P["rinne_rand"]))
+    yc = (gx["y0"] + gx["y1"]) / 2
+    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende
+        ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(gx["xf"], yc + dy, gx["z_ri"] - 1)))
     return tr, ri.removeSplitter()
 
 
 def stopfen_x():
-    """Stopfen (Druck) im rechten Ende der X-Ablage, 2x M5 längs in Muttern."""
+    """Stopfen (Druck) im linken Ende der X-Ablage, 2x M5 längs in Muttern."""
     gx = geo_x()
     ym = (gx["r_y0"] + gx["r_y1"]) / 2
     z0 = gx["z_t0"]
@@ -489,35 +558,35 @@ def stopfen_x():
     return res
 
 
-def stuetze_x_rechts():
-    """Platte (Alu 8 mm) an der rechten Brückenstirn: 4x M6 in das rechte Einsteckteil,
+def stuetze_x_links():
+    """Platte (Alu 8 mm) an der linken Brückenstirn: 4x M6 in das linke Einsteckteil,
     oben stößt die X-Ablage dagegen (2x M5 in den Stopfen)."""
     gx = geo_x()
     x0 = gx["x_re"]
     t = P["ausleger_t"]
     py0, py1 = P["ausleger_y"]
     s = box(x0, x0 + t, py0, py1, P["bruecke_z"][0], gx["z_t0"] + P["traeger_h"] + 5)
-    for y, z in P["turm_loecher_rechts"]:
+    for y, z in P["turm_loecher_links"]:
         s = s.cut(Part.makeCylinder(3.3, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
     for y, z in stopfen_loecher():
         s = s.cut(Part.makeCylinder(2.75, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
     return s
 
 
-def einsteckteil_rechts():
-    """Wie links, in der rechten Brückenstirn (x ab Schienenmitte links)."""
+def einsteckteil_links():
+    """Wie rechts, in der linken Brückenstirn (x ab Schienenmitte rechts)."""
     gx = geo_x()
     w, tb = P["bruecke_wand"], P["bruecke_tiefe"]
     za, zb = P["bruecke_z"]
     sp = 0.2
     xr = gx["x_re"]
-    xm = xr - 20.0                                       # rechte Schienenmitte
+    xm = xr - 20.0                                       # linke Schienenmitte
     x0 = xm - P["einsteck_innen"]
     s = box(x0, xr, -tb / 2 + w + sp, tb / 2 - w - sp, za + w + sp, zb - w - sp)
     for x in P["m6_x"]:
         for z in P["m6_z"]:
             s = s.cut(Part.makeCylinder(3.3, tb, V(xm + x, -tb / 2, z), V(0, 1, 0)))
-    for y, z in P["turm_loecher_rechts"]:              # Mutter hinter der Sattelschraube
+    for y, z in P["turm_loecher_links"]:              # Mutter hinter der Sattelschraube
         s = s.cut(Part.makeCylinder(3.3, 24, V(xr + 1, y, z), V(-1, 0, 0)))
         s = s.cut(fc_dok.mutter(6, V(xr - 14, y, z), V(1, 0, 0), V(0, 1 if y > 0 else -1, 0), 9))
     return s.removeSplitter()
@@ -525,59 +594,29 @@ def einsteckteil_rechts():
 
 def halter_x():
     """Halter für das bewegte Ende der X-Kette (Druck, X-Wagen-Koordinaten):
-    Rückwand an der Rückseite des Z-Kopf-Sockels (2x M5 in dessen Einsätze), oben
-    eine Platte über dem Anschlussstück (2x M5 von unten in Einsätze). Links ein
-    Bogenkanal: die Leitungen treten waagerecht aus dem Anschlussstück aus und
-    werden nach oben umgelenkt."""
+    Rückwand an der Rückseite des Z-Kopf-Sockels (2x M5 in Muttern im Sockel), oben
+    eine Platte über dem Anschlussstück (2x M5 von unten, Muttern oben eingepresst),
+    ohne Streben (darunter laufen Kette und Adern, darüber sitzt der Z-Motor). Die
+    Leitungen treten frei zur Gegenseite aus. Kopfüber (Platte unten) druckbar."""
     gx = geo_x()
     zb = P["bruecke_uk_x_wagen"]
     t = P["ausleger_t"]
     dx = P["xk_halter_dx"]
     yk = P["zkopf_hinten_y"]
     h = P["kette_h"]
-    e = P["end_laenge"] / 2
     z_es = gx["z_mo"] - h / 2 - zb                       # Unterkante Anschlussstück
     z_top = z_es + h                                     # Oberkante (Flansch)
     dp = P["hx_platte"]
-    xb = dx - e                                          # Austrittsseite des Anschlussstücks
-    senk = box(dx - 20, dx + 20, yk - t, yk, P["zkopf_uk"], z_top + dp)
-    oben = box(xb - 2, dx + 20, gx["y0"] - 6, yk, z_top, z_top + dp)
-    yc = (gx["y0"] + gx["y1"]) / 2
-    s = senk.fuse(oben)
-    # Bogenkanal: Achse quer (y), Mitte über der Austrittsmitte
-    R, kh, kb, w = P["hx_bogen_r"], P["hx_kanal_h"], P["hx_kanal_b"], P["hx_wand"]
-    zm = z_es + h / 2
-    zc = zm + R
-    ky0, ky1 = yc - kb / 2, yc + kb / 2
-    ra, ri = R + kh / 2 + w, R - kh / 2 - w
-    # Druck kopfüber: Oberseite durchgehend eben (Druckbett), Rückseite (-y) bündig
-    # mit der Platte, kein Spalt zwischen Kanal und Platte
-    by0, by1 = gx["y0"] - 6, yk
     z_ob = z_top + dp
-    quadrant = box(xb - ra - 1, xb, by0 - 1, by1 + 1, zc - ra - 1, zc)
-    koerper = Part.makeCylinder(ra, by1 - by0, V(xb, by0, zc), V(0, 1, 0)).common(quadrant)
-    koerper = koerper.fuse(box(xb - ra, xb - 2 + 0.01, by0, by1, zc - 0.01, z_ob))
-    s = s.fuse(koerper)
-    ring = Part.makeCylinder(R + kh / 2, kb, V(xb, ky0, zc), V(0, 1, 0)).cut(
-        Part.makeCylinder(R - kh / 2, kb + 2, V(xb, ky0 - 1, zc), V(0, 1, 0)))
-    q2 = box(xb - R - kh, xb + 0.5, ky0 - 1, ky1 + 1, zc - R - kh, zc + 0.01)
-    s = s.cut(ring.common(q2))
-    s = s.cut(box(xb - R - kh / 2, xb - R + kh / 2, ky0, ky1, zc, z_ob + 1))
-    for dy in (-P["end_C"] / 2, P["end_C"] / 2):        # Einsatz von unten, oben M5 durch
+    lo = P["xk_halter_loecher"]
+    xa, xb = min(lo) - 7.0, max(lo) + 7.0
+    yc = (gx["y0"] + gx["y1"]) / 2
+    s = box(xa, xb, yk - t, yk, P["zkopf_uk"], z_ob)
+    s = s.fuse(box(xa, xb, gx["y0"] - 6, yk, z_top, z_ob))
+    # keine Streben: darunter laufen Kette und Adern, darüber sitzt der Z-Motor
+    for dy in (-P["end_C"] / 2, P["end_C"] / 2):        # Mutter oben, M5 von unten
         s = s.cut(m5_senkrecht(dx, yc + dy, z_top, z_ob, z_ob - 1.5))
-    # Strebe links neben dem Anschlussstück: von der Rückwand unten schräg unter den
-    # Kanalkörper, versteift den Winkel zwischen Rückwand und Platte
-    rb = P["hx_strebe"]
-    zs = zc - math.sqrt(ra ** 2 - (rb / 2) ** 2) + 6      # sicher im Kanalkörper
-    pts = [V(xb - rb, yk - t, P["zkopf_uk"] + 2), V(xb - rb, yk - t, zs),
-           V(xb - rb, gx["y0"] - 1, zs), V(xb - rb, yk - t, P["zkopf_uk"] + 2)]
-    s = s.fuse(Part.Face(Part.makePolygon(pts)).extrude(V(rb, 0, 0)))
-    s = s.cut(ring.common(q2))                          # Kanal frei halten
-    # zwei M4 neben der Austrittsöffnung (für eine Tülle), Muttern von links eingeschoben
-    for y in (ky0 - 8.0, ky1 + 8.0):
-        s = s.cut(Part.makeCylinder(2.25, 13, V(xb - R, y, z_ob - 12)))
-        s = s.cut(fc_dok.mutter(4, V(xb - R, y, z_ob - 8), V(0, 0, 1), V(-1, 0, 0), ra - R + 1))
-    for x in P["xk_halter_loecher"]:
+    for x in lo:
         s = s.cut(Part.makeCylinder(2.75, t + 2, V(x, yk - t - 1, P["zkopf_uk"] + 10), V(0, 1, 0)))
     return s.removeSplitter()
 
@@ -588,15 +627,16 @@ def endstueck(unten):
 
 
 def kette_x(wagen_x):
-    """X-Kette je Wagenlage (Rahmen-x der Wagenmitte), x ab Schienenmitte links."""
+    """X-Kette je Wagenlage (Rahmen-x der Wagenmitte), x ab Schienenmitte Kettenseite.
+    Festpunkt an der Gegenseite, Schlaufe zur Kettenseite."""
     gx = geo_x()
     xm = wagen_x + P["xk_halter_dx"] + gx["xs"]
-    x_l = (gx["xf"] + xm + gx["l_eff"]) / 2
+    x_l = (gx["xf"] + xm - gx["l_eff"]) / 2
     y0, y1 = gx["y0"], gx["y1"]
     h, R = P["kette_h"], P["xk_radius"]
     e = P["end_laenge"] / 2
-    unten = box(gx["xf"] + e, x_l, y0, y1, gx["z_ku"], gx["z_ku"] + h)
-    oben = box(xm + e, x_l, y0, y1, gx["z_mo"] - h / 2, gx["z_mo"] + h / 2)
+    unten = box(x_l, gx["xf"] - e, y0, y1, gx["z_ku"], gx["z_ku"] + h)
+    oben = box(x_l, xm - e, y0, y1, gx["z_mo"] - h / 2, gx["z_mo"] + h / 2)
     yc = (y0 + y1) / 2
     for unt, x, z in ((True, gx["xf"], gx["z_ku"]), (False, xm, gx["z_mo"] - h / 2)):
         es = endstueck(unt)
@@ -606,7 +646,7 @@ def kette_x(wagen_x):
     zc = (gx["z_mu"] + gx["z_mo"]) / 2
     ring = Part.makeCylinder(R + h / 2, y1 - y0, V(x_l, y0, zc), V(0, 1, 0)).cut(
         Part.makeCylinder(R - h / 2, y1 - y0 + 2, V(x_l, y0 - 1, zc), V(0, 1, 0)))
-    ring = ring.common(box(x_l, x_l + R + h, y0 - 1, y1 + 1, zc - R - h, zc + R + h))
+    ring = ring.common(box(x_l - R - h, x_l, y0 - 1, y1 + 1, zc - R - h, zc + R + h))
     return unten.fuse([oben, ring]).removeSplitter()
 
 
@@ -641,35 +681,41 @@ def main():
     au = ausleger()
     ei = einsteckteil()
     xtr, xri = ablage_x()
-    xst = stuetze_x_rechts()
+    xst = stuetze_x_links()
     xpf = halter_x()
     pfad = os.path.join(OUT, "energiekette.FCStd")
     doc, offen = fc_dok.dokument(pfad)
+    for alt in ("ekx_festhalter", "ek_leitungsclips"):          # ersetzt
+        if doc.getObject(alt):
+            doc.removeObject(alt)
     fc_dok.teil(doc, "ek_traeger_40x20", tr, "stahl")
     fc_dok.teil(doc, "ek_rinne", ri, "stahl")
     fc_dok.teil(doc, "ek_stuetzen", st, "stahl")
     fc_dok.teil(doc, "ek_stuetzen_kopf", stuetzen_kopf(), "druck")
     portal = {"ek_ausleger": (au, "alu"), "ek_einsteckteil": (ei, "druck"),
-              "ek_halter_y": (halter_y(), "druck"), "ekx_festhalter": (festhalter_x(), "druck"),
-              "ek_leitungsclips": (clips(), "druck"), "ek_Leitung": (leitung(), "zukauf"),
+              "ek_halter_y": (halter_y(), "druck"), "ekx_ablagehalter": (ablagehalter_x(), "druck"),
+              "ek_Leitung": (leitung(), "zukauf"),
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
-              "ekx_stuetze_rechts": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
-              "ek_einsteckteil_rechts": (einsteckteil_rechts(), "druck")}
+              "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
+              "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
+              "ek_einsteckteil_links": (einsteckteil_links(), "druck")}
     for n, (shp, farbe) in portal.items():
         o = fc_dok.teil(doc, n, shp, farbe)
         o.Placement = App.Placement(V(0, 700, 0), App.Rotation())  # Darstellung in Portalmitte
-    o = fc_dok.teil(doc, "ekx_halter", xpf, "druck")
-    o.Placement = App.Placement(V(340, 700, 57), App.Rotation())
+    for n, shp, farbe in (("ekx_halter", xpf, "druck"), ("ekx_Leitung_Brenner", brenner_leitung(), "zukauf")):
+        o = fc_dok.teil(doc, n, shp, farbe)
+        o.Placement = App.Placement(V(340, 700, 57), App.Rotation())
     fc_dok.teil(doc, "Kette_20x38_R125", kette(700.0), "zukauf")
     k = fc_dok.teil(doc, "Kette_X_20x38_R65", kette_x(360.0), "zukauf")
     k.Placement = App.Placement(V(0, 700, 0), App.Rotation())
     fc_dok.speichern(doc, pfad, offen)
     import Mesh
-    for n, s in (("ek_ausleger", au), ("ek_rinne", ri), ("ek_einsteckteil", ei), ("ekx_halter", xpf)):
+    for n, s in (("ek_ausleger", au), ("ek_rinne", ri), ("ek_einsteckteil", ei), ("ekx_halter", xpf),
+                 ("ekx_rinne_hinten", rinne_hinten())):
         s.exportStep(os.path.join(OUT, n + ".step"))
-    druck = {"ek_einsteckteil": ei, "ek_einsteckteil_rechts": einsteckteil_rechts(),
-             "ek_halter_y": halter_y(), "ekx_festhalter": festhalter_x(),
-             "ek_leitungsclips": clips(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
+    druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": einsteckteil_links(),
+             "ek_halter_y": halter_y(), "ekx_ablagehalter": ablagehalter_x(),
+             "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
              "ek_stuetzen_kopf": stuetzen_kopf()}
     for n, s in druck.items():
         s.exportStep(os.path.join(OUT, n + ".step"))
@@ -679,23 +725,34 @@ def main():
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
         f.write("Y-Kette: Länge ca. %.0f mm (Festpunkt y %.0f, Hub %.0f, R%.0f)\n"
                 % (g["laenge"], g["y_fest"], g["ym1"] - g["ym0"], P["radius"]))
-        f.write("Y-Rinne x %.1f bis %.1f, Kettenturm außen bis x %.1f (ab Schienenmitte links)\n"
+        f.write("Y-Rinne x %.1f bis %.1f, Kettenturm außen bis x %.1f (ab Schienenmitte Kettenseite)\n"
                 % (g["r_x0"], g["r_x1"], g["a_x0"]))
-        f.write("X-Kette: Länge ca. %.0f mm (R%.0f), Ablage-UK %.0f, oben bis %.0f über Rahmen-OK\n"
-                % (gx["laenge"], P["xk_radius"], gx["z_t0"], gx["z_mo"] + P["kette_h"] / 2))
-        sl = kette_x(P["xk_wagen_x"][1]).BoundBox
-        f.write("X-Kette Schlaufe bei X ganz rechts bis Rahmen-x %.1f\n" % (sl.XMax - gx["xs"]))
+        f.write("X-Kette: Länge ca. %.0f mm (R%.0f), Festpunkt x %.0f, Ablage-UK %.0f, oben bis %.0f über Rahmen-OK\n"
+                % (gx["laenge"], P["xk_radius"], gx["xf"], gx["z_t0"], gx["z_mo"] + P["kette_h"] / 2))
+        sl = kette_x(P["xk_wagen_x"][0]).BoundBox
+        f.write("X-Kette Schlaufe bei X an der Kettenseite bis x %.1f (Turm innen %.1f)\n"
+                % (sl.XMin, g["a_x1"]))
         fc_dok.schreibe_waende(f, "ek_einsteckteil", ei)
-        fc_dok.schreibe_waende(f, "ek_einsteckteil_rechts", einsteckteil_rechts())
+        fc_dok.schreibe_waende(f, "ek_einsteckteil_links", einsteckteil_links())
         for n, sh in druck.items():
-            if n not in ("ek_einsteckteil", "ek_einsteckteil_rechts"):
+            if n not in ("ek_einsteckteil", "ek_einsteckteil_links"):
                 fc_dok.schreibe_waende(f, n, sh)
         le = leitung()
-        for n, sh in (("Turm", au), ("Clips", clips()), ("Halter Y", halter_y()),
-                      ("Festhalter X", festhalter_x()), ("X-Kette", kette_x(P["xk_wagen_x"][0])),
-                      ):
+        for n, sh in (("Turm", au), ("Halter Y", halter_y()), ("Ablagehalter X", ablagehalter_x()),
+                      ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
+                      ("Rinnenhalter", rinnenhalter())):
             f.write("Leitung / %s: %.2f mm³\n" % (n, le.common(sh).Volume))
-        f.write("Leitung: Länge ca. %.0f mm (Mittellinie)\n" % leitung_weg().Length)
+        for wx in P["xk_wagen_x"]:
+            f.write("Leitung / X-Kette bei Wagen %.0f: %.2f mm³\n" % (wx, le.common(kette_x(wx)).Volume))
+        bw = brenner_weg()
+        f.write("Leitungen Y-Ende -> X-Festpunkt: ca. %.0f mm, Adern X-Ende -> Brenner: ca. %.0f mm (R%.0f)\n"
+                % (leitung_weg().Length, bw.Length, P["leitung_r"]))
+        x_max = max(v.x for v in bw.discretize(Number=100)) + P["brenner_leitung_d"] / 2
+        f.write("Adern bei X an der Gegenseite bis Rahmen-x %.0f (Brückenstirn %.0f)\n"
+                % (P["xk_wagen_x"][1] + x_max, P["xk_bruecke_links_x"]))
+        z_max = max(v.z for v in bw.discretize(Number=100)) + P["brenner_leitung_d"] / 2
+        f.write("Adern oben bis %.0f über Brücken-UK (Z unten), ca. %.0f mm über Boden; bei Z oben "
+                "100 mm Schlaufe mehr\n" % (z_max, z_max + 907.0))
 
 
 if __name__ == "__main__":

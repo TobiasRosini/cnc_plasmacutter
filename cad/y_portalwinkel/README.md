@@ -40,14 +40,14 @@ Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualis
 
 ## Varianten und X-Riemen
 
-- **winkel_fest** (rechts) und **winkel_kasten** (links, gespiegelt gedruckt). Beide Y-Spannseiten zeigen nach vorn (+Y).
-- X-Riemen (Omega auf dem X-Wagen) hinten an beiden Sätteln: Zahnprofil in der Sattelrückwand, flache **x_klemmplatte** mit 4× M4 in Gewindeeinsätze (je Seite eine, links gespiegelt).
+- **winkel_fest** (links) und **winkel_kasten** (rechts, gespiegelt gedruckt). Beide Y-Spannseiten zeigen nach vorn (+Y).
+- X-Riemen (Omega auf dem X-Wagen) hinten an beiden Sätteln: Zahnprofil in der Sattelrückwand, flache **x_klemmplatte** mit 4× M4 in Gewindeeinsätze (je Seite eine, rechts gespiegelt).
 - Kastenseite: Lasche für die Y-Energiekette außen, 2× M4-Einsätze hinten für die X-Energiekette. Der Anschlusskasten selbst ist noch offen.
 
 ## Energiekette
 
 - Senkrechter Befestigungsflansch außen an der Basis (8 mm dick, 30 mm über Basis, y −45…−5) mit 4× M5 waagerecht (Lochbild 20 × 12 mm), Muttertaschen innen. Der Kettenhalter wird ein eigenes Teil.
-- Der Flansch sitzt an jedem Winkel, damit links und rechts dasselbe Teil passt (um 180° gedreht). Abschaltbar mit `ek_flansch=False`.
+- Der Flansch sitzt an jedem Winkel, damit rechts und links dasselbe Teil passt (um 180° gedreht). Abschaltbar mit `ek_flansch=False`.
 
 ## Stand 20.10.2026 abends
 

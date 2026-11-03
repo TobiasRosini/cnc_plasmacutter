@@ -65,8 +65,8 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 
 | Achse | Anzahl | Motor |
 |---|---:|---|
-| Y-Achse links | 1 | NEMA23 ca. 1,9 Nm, 76 mm, Open Loop |
 | Y-Achse rechts | 1 | NEMA23 ca. 1,9 Nm, 76 mm, Open Loop |
+| Y-Achse links | 1 | NEMA23 ca. 1,9 Nm, 76 mm, Open Loop |
 | X-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm (fährt auf dem X-Wagen mit), Open Loop |
 | Z-Achse | 1 | NEMA23 kompakt, ca. 1,2 Nm, 56 mm, direkt über Kupplung auf SFU1204, Open Loop |
 | **Gesamt** | **4** | **2 × NEMA23 1,9 Nm (Y), 2 × NEMA23 1,2 Nm (X, Z)** |
@@ -93,7 +93,7 @@ Die THC korrigiert während des Schnitts die Brennerhöhe anhand der Lichtbogens
 ### Portalbrücke
 
 - Tragende Struktur der Brücke: **Alu-Rechteckrohr 80 × 40 × 4 mm**, 80 hoch stehend (gewählt 20.10.2026 statt 20 × 40 × 4: ca. 10× steifer gegen Biegung und Verdrehung, 1,7 kg bei 720 mm).
-- X-Achse: HGR15 oben und unten auf der Brücke, Wagen aus Alu-Platten greift von vorn um die Brücke; vorn Z-Achse und Schneiddüse. **Omega-Antrieb** (20.10.2026, statt Motor am Brückenende, wegen 800 mm Gesamtbreite): X-Riemen hochkant hinter der Brücke, Enden an den Sätteln der Y-Winkel geklemmt; Motor hinten auf dem Wagen (gleicht Brenner und Z-Achse teilweise aus). X-Energiekette hinter der Brücke, Anschlusskasten auf der linken Portalseite.
+- X-Achse: HGR15 oben und unten auf der Brücke, Wagen aus Alu-Platten greift von vorn um die Brücke; vorn Z-Achse und Schneiddüse. **Omega-Antrieb** (20.10.2026, statt Motor am Brückenende, wegen 800 mm Gesamtbreite): X-Riemen hochkant hinter der Brücke, Enden an den Sätteln der Y-Winkel geklemmt; Motor hinten auf dem Wagen (gleicht Brenner und Z-Achse teilweise aus). X-Energiekette hinter der Brücke, Anschlusskasten auf der rechten Portalseite.
 - Trägt die X-Schienen und den Brennerwagen mit Z-Achse; Durchbiegung und Torsion in der FreeCAD-Konstruktion prüfen.
 - Anbindung an die Y-Wagen beidseitig über Portalwangen.
 
@@ -124,17 +124,17 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 ### Referenzschalter (bestellt 23.10.2026)
 
 - 4× induktiver Näherungsschalter **LJ12A3-4-Z/AY** (M12, PNP, Öffner, 6–36 V, 4 mm auf Stahl), betrieben an 24 V.
-- **Y links/rechts:** hinten über der Y-Riemenscheibe, genau über der Schiene, Achse längs (Halter am Y-Motorhalter); Stahlfahne abgekantet auf der Klemmplatte am festen Ende des Y-Winkels. Über das M12-Gewinde fein einstellbar (Portal rechtwinklig).
-- **X:** am linken Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Ziel ist ein eingepresster Zylinderstift 6 × 10 (Stahl) in der linken Fläche des X-Wagenkörpers. Schaltet ab ca. 82 mm Wagenmitte.
+- **Y rechts/links:** hinten über der Y-Riemenscheibe, genau über der Schiene, Achse längs (Halter am Y-Motorhalter); Stahlfahne abgekantet auf der Klemmplatte am festen Ende des Y-Winkels. Über das M12-Gewinde fein einstellbar (Portal rechtwinklig).
+- **X:** am rechten Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Ziel ist ein eingepresster Zylinderstift 6 × 10 (Stahl) in der rechten Fläche des X-Wagenkörpers. Schaltet ab ca. 82 mm Wagenmitte.
 - **Z:** oben, senkrecht durch den Z-Kopf; Stahlfahne auf dem Z-Schlitten.
 - Andere Achsenden über Software-Endlagen in LinuxCNC.
 
 ### Energiekette Y (Stand 23.10.2026)
 
-- Liegend links, über dem linken Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 0,99 m, Schlaufe hinten, Kabel verlassen den Festpunkt nach vorn: **Schaltschrank und Plasmagerät stehen vorn** (`cad/energiekette/`).
+- Liegend rechts, über dem rechten Y-Winkel auf einem Träger mit Rinne (Stützen an den Rahmenenden), Ausleger vom Portal außen an der Rinne vorbei. Kette 20 × 38 innen, R125, ca. 0,99 m, Schlaufe hinten, Kabel verlassen den Festpunkt nach vorn: **Schaltschrank und Plasmagerät stehen vorn** (`cad/energiekette/`).
 - Die geteilte Lichtbogenspannung kommt an der CNC-Buchse des Geräts heraus (Anleitung S. 13), läuft also nicht in der Kette; im Schlauchpaket des SP80M nur Luft/Strom und Start-Stopp, Pilot, Düse.
-- Kettenturm an der Stirn der links verlängerten Brücke (Einsteckteil, mit den Sattel-M6 verschraubt): ein gerades Alu-Flachmaterial 40 × 8 ohne Laschen. Daran Druckteile mit M5-Einsätzen: oben Halter für das bewegte Y-Ende, unten Festhalter für das feste X-Ende (trägt zugleich die X-Ablage auf einem Zapfen und gleicht deren Versatz zum Turm aus), dazwischen zwei Clips für die Leitungen.
-- **X-Kette** 20 × 38, R65, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt links, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe).
+- Kettenturm an der Stirn der rechts verlängerten Brücke (Einsteckteil, mit den Sattel-M6 verschraubt): ein gerades Alu-Flachmaterial 40 × 8 ohne Laschen. Daran Druckteile mit M5-Einsätzen: oben Halter für das bewegte Y-Ende, unten Ablagehalter (trägt die X-Ablage auf einem Zapfen und gleicht deren Versatz zum Turm aus).
+- **X-Kette** 20 × 38, R65, liegend auf einer Ablage über der Brücke (an beiden Brückenstirnen befestigt); Festpunkt links, Schlaufe nach rechts, bewegtes Ende am Z-Kopf. Z ohne Kette (lose Schlaufe). Brennerpaket ohne Schutzschlauch, Adern lose durch beide Ketten (Stand 02.11.2026, siehe `cad/energiekette/README.md`). Seiten von vorn gesehen.
 - Gesamtbreite mit beiden Ketten: 783 mm.
 
 ### Gantry Squaring

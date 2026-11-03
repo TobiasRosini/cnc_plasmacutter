@@ -15,4 +15,4 @@ python3 cad/live.py cad/z_achse/z_achse.py
 - Hub 100 mm. Düse von 65 mm unter bis 35 mm über der Brückenunterkante (Rahmenoberkante = 57 mm unter der Brücke). Brennerachse 136 mm vor der Brückenmitte.
 - Breite Teile liegen alle über der Brückenunterkante + 50 mm; darunter nur der Brenner (an den X-Enden stehen dort die Türme der Y-Winkel).
 
-Offen: genaue Maße FK10 (Lochbild), Schalter für den Schwimmkopf (Platzhalter 10 × 6 × 4), Schlauchführung vom Brennerende zur X-Kette.
+Offen: genaue Maße FK10 (Lochbild), Schalter für den Schwimmkopf (Platzhalter 10 × 6 × 4).

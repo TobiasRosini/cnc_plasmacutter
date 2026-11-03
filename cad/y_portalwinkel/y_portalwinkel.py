@@ -12,8 +12,8 @@ Aufbau (von unten nach oben):
   in Schwalbenschwanznut; Rücktrum läuft durch einen Tunnel unten im
   Winkel über die Flachstange. Kein seitlicher Riemenflansch mehr.
   Zwei Varianten (vorn = +Y, dort zeigen die Y-Spannschrauben hin):
-  - "fest" (rechts, wie modelliert, +X außen)
-  - "kasten" (links, gespiegelt): Lasche Y-Energiekette außen, Anschluss
+  - "fest" (links, wie modelliert, +X außen)
+  - "kasten" (rechts, gespiegelt): Lasche Y-Energiekette außen, Anschluss
     X-Energiekette hinten. Der Anschlusskasten ist noch offen.
   X-Antrieb als Omega auf dem X-Wagen: Der X-Riemen (hochkant, Zähne zur
   Brücke) ist hinten an beiden Sätteln geklemmt (Zahnprofil in der
@@ -34,7 +34,7 @@ import Part
 
 V = App.Vector
 OUT = os.path.dirname(os.path.abspath(__file__))
-ABSTAND = 300.0     # Darstellung im Teile-Dokument: linker Winkel (kasten) bei x = -ABSTAND
+ABSTAND = 300.0     # Darstellung im Teile-Dokument: rechter Winkel (kasten) bei x = -ABSTAND
 sys.path.insert(0, os.path.dirname(OUT))
 import fc_dok  # noqa: E402
 import kaufteile as kt  # noqa: E402
@@ -138,7 +138,7 @@ P = dict(
     m5_kopf_hoehe=3.8,
 
     # Befestigungsflansch Energiekette (Halter folgt als eigenes Teil).
-    # Sitzt außen auf jedem Winkel, damit links und rechts dasselbe Teil passt.
+    # Sitzt außen auf jedem Winkel, damit rechts und links dasselbe Teil passt.
     ek_flansch=False,           # entfällt: Kettenturm sitzt jetzt an der Brückenstirn
     ek_dicke=8.0,
     ek_hoehe=30.0,              # über Basisoberkante
@@ -153,7 +153,7 @@ P = dict(
     yf_laenge=43.0,             # Auflage ab Winkelende
     yf_oben=80.0,               # Oberkante Zielfläche (Winkel-z)
     yf_dicke=3.0,
-    # Stütze der X-Ablage (nur fest, rechts): 2x M5-Einsatz außen im festen Turm
+    # Stütze der X-Ablage (nur fest, links): 2x M5-Einsatz außen im festen Turm
     xs_einsatz=[],              # entfällt: X-Ablage sitzt jetzt an der Brückenstirn
     einsatz_m5_d=6.4,
     einsatz_m5_tiefe=10.0,
@@ -366,7 +366,7 @@ def winkel(variante="fest"):
                                 xi - 1, y, z1 + z, V(1, 0, 0)))
     # X-Riemenklemme: Zahnprofil in der Sattelrückwand, Gewindeeinsätze
     s = s.cut(x_klemm_bohrungen(variante))
-    # Gewindeeinsätze für die Stütze der X-Ablage (nur rechte Seite)
+    # Gewindeeinsätze für die Stütze der X-Ablage (nur linke Seite)
     if variante == "fest":
         for y, z in P["xs_einsatz"]:
             s = s.cut(zyl(P["einsatz_m5_d"], P["einsatz_m5_tiefe"] + 1, tb + 1, y, z, V(-1, 0, 0)))
@@ -442,7 +442,7 @@ def y_ref_fahne():
 
 
 def x_klemmplatte():
-    """Flache Klemmplatte für das X-Riemenende (rechts wie modelliert)."""
+    """Flache Klemmplatte für das X-Riemenende (links wie modelliert)."""
     g = x_geo()
     b = P["fl_breite"] / 2
     y1 = g["y_rueck"] + 0.5                    # 0,5 mm Klemmweg
@@ -611,7 +611,7 @@ def bohrschablone():
     """Flachstange 1:1 von oben, A4 quer. Mit 100 % / 'tatsächliche Größe' drucken."""
     b, l = P["fl_breite"], P["fl_laenge"]
     W, H = 297, 210
-    ox, oy = (W - l) / 2, 70       # linke obere Ecke der Stange
+    ox, oy = (W - l) / 2, 70       # rechte obere Ecke der Stange
     L = []
     L.append('<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" '
              'viewBox="0 0 297 210" font-family="sans-serif">')
@@ -651,8 +651,8 @@ def bohrschablone():
 
 
 # ---------------------------------------------------------------- Hauptteil
-def gespiegelt_links(shape):
-    """Variante kasten in Lage links: an der YZ-Ebene gespiegelt (außen = -X)."""
+def gespiegelt_rechts(shape):
+    """Variante kasten in Lage rechts: an der YZ-Ebene gespiegelt (außen = -X)."""
     return shape.mirror(V(0, 0, 0), V(1, 0, 0))
 
 
@@ -666,7 +666,7 @@ def main():
     import Mesh
     fl = flachstange()
     wm = winkel("fest")
-    wk = gespiegelt_links(winkel("kasten"))     # echte Geometrie links, Ursprung Schienenmitte
+    wk = gespiegelt_rechts(winkel("kasten"))     # echte Geometrie rechts, Ursprung Schienenmitte
     sl = spannschlitten()
     kf = klemmplatte_fest()
     ks = klemmplatte_schlitten()
@@ -697,10 +697,10 @@ def main():
     for name, shp in dm.items():
         fc_dok.teil(doc, name, shp, farbe.get(name, "dummy"))
     fc_dok.teil(doc, "y_ref_fahne", yfa, "stahl")
-    fc_dok.teil(doc, "Referenzschalter_X", verschoben(gespiegelt_links(x_ref_schalter()), -ABSTAND),
+    fc_dok.teil(doc, "Referenzschalter_X", verschoben(gespiegelt_rechts(x_ref_schalter()), -ABSTAND),
                 "zukauf")
-    fc_dok.teil(doc, "y_ref_fahne_links", verschoben(gespiegelt_links(yfa), -ABSTAND), "stahl")
-    fc_dok.teil(doc, "x_klemmplatte_links", verschoben(gespiegelt_links(xk), -ABSTAND),
+    fc_dok.teil(doc, "y_ref_fahne_rechts", verschoben(gespiegelt_rechts(yfa), -ABSTAND), "stahl")
+    fc_dok.teil(doc, "x_klemmplatte_rechts", verschoben(gespiegelt_rechts(xk), -ABSTAND),
                 "druck_hell")
     fc_dok.teil(doc, "Riemen_X", xr, "riemen")
     fc_dok.speichern(doc, pfad, offen)
@@ -733,9 +733,9 @@ def main():
 
         def koll(na, a, nb, b):
             f.write("Kollision %s / %s: %.3f mm³\n" % (na, nb, a.common(b).Volume))
-        # Teile der linken Seite gegen die Darstellung verschieben
-        links = lambda shp: verschoben(shp, -ABSTAND)
-        for wn, w, ver in (("Fest", wm, lambda x: x), ("Kasten", links(wk), links)):
+        # Teile der rechten Seite gegen die Darstellung verschieben
+        rechts = lambda shp: verschoben(shp, -ABSTAND)
+        for wn, w, ver in (("Fest", wm, lambda x: x), ("Kasten", rechts(wk), rechts)):
             for n, shp in dm.items():
                 if n == "Bruecke_80x40x4":
                     koll("Winkel " + wn, w, n, shp)
@@ -747,7 +747,7 @@ def main():
             koll("Winkel " + wn, w, "Klemmplatte Schlitten", ver(ks))
             koll("Winkel " + wn, w, "Riemen X", xr)
         koll("Winkel Fest", wm, "X-Klemmplatte", xk)
-        koll("Winkel Kasten", links(wk), "X-Klemmplatte", links(gespiegelt_links(xk)))
+        koll("Winkel Kasten", rechts(wk), "X-Klemmplatte", rechts(gespiegelt_rechts(xk)))
         koll("Riemen X", xr, "X-Klemmplatte", xk)
         koll("Riemen X", xr, "Spannschlitten", sl)
         koll("Riemen X", xr, "Klemmplatte Schlitten", ks)

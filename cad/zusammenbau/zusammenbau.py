@@ -28,7 +28,7 @@ import fc_dok  # noqa: E402
 P = dict(
     portal_y=None,              # Mitte Portal in Y; None = Rahmenmitte
     bruecke_wand=4.0,
-    bruecke_verl_links=47.0,    # Brücke links verlängert: Stirn trägt den Kettenturm
+    bruecke_verl_rechts=47.0,   # Brücke rechts verlängert: Stirn trägt den Kettenturm
     wagen_x=None,               # Lage X-Wagen; None = Rahmenmitte
     x_schiene=15.0,
     x_riemen_dicke=3.8,
@@ -52,9 +52,9 @@ XWAGEN_TEILE = ["x_wagenkoerper", "x_spritzschutz", "x_motorbock",
 RAHMEN_TEILE_AUS = {"Dummy_Wanne"}
 GEMEINSAM = ["Flachstange_40x15", "spannschlitten", "klemmplatte_fest",
              "klemmplatte_schlitten", "Wagen_HGH15CA"]
-# rechts einfache Seite, links Kastenseite (Energieketten)
-SEITEN_TEILE = {"rechts": ["winkel_fest", "x_klemmplatte", "y_ref_fahne"],
-                "links": ["winkel_kasten", "x_klemmplatte_links", "y_ref_fahne_links",
+# links einfache Seite, rechts Kastenseite (Energieketten)
+SEITEN_TEILE = {"links": ["winkel_fest", "x_klemmplatte", "y_ref_fahne"],
+                "rechts": ["winkel_kasten", "x_klemmplatte_rechts", "y_ref_fahne_rechts",
                           "Referenzschalter_X"]}
 
 
@@ -124,10 +124,10 @@ def main():
     link(doc, "W_Wanne", wobj,
          App.Placement(V(rahmen_bb.Center.x, wy, zw), App.Rotation()), g_w)
 
-    # --- Portal: rechts Motorseite, links Kastenseite (gespiegelt, Spannseite
+    # --- Portal: links Motorseite, rechts Kastenseite (gespiegelt, Spannseite
     # beider Winkel vorn = +Y)
     g_p = gruppe(doc, "Portal")
-    for seite, x in (("rechts", sx[1]), ("links", sx[0])):
+    for seite, x in (("links", sx[1]), ("rechts", sx[0])):
         pl = App.Placement(V(x, py, dz), App.Rotation())
         for n in GEMEINSAM:
             link(doc, "P_%s_%s" % (seite, n), dp.getObject(n), pl, g_p)
@@ -136,9 +136,9 @@ def main():
         for n in SEITEN_TEILE[seite]:
             link(doc, "P_%s_%s" % (seite, n), dp.getObject(n), pl, g_p)
 
-    # Brücke über die volle Breite: Außenkante Sattel links bis rechts
+    # Brücke über die volle Breite: Außenkante Sattel rechts bis links
     halb = w_bruecke.XMax          # Brückenende = Sattelaußenkante ab Schienenmitte
-    x0, x1 = sx[0] - halb - P["bruecke_verl_links"], sx[1] + halb
+    x0, x1 = sx[0] - halb - P["bruecke_verl_rechts"], sx[1] + halb
     y0, y1 = py + w_bruecke.YMin, py + w_bruecke.YMax
     z0, z1 = dz + w_bruecke.ZMin, dz + w_bruecke.ZMax
     t = P["bruecke_wand"]
@@ -212,10 +212,10 @@ def main():
     g_y = gruppe(doc, "Y_Antrieb")
     yb, yf = s_bb.YMin, s_bb.YMax
     dreh = App.Rotation(V(0, 0, 1), 180)
-    for kurz, x, y, r, suf in (("hl", sx[0], yb, App.Rotation(), ""),
-                               ("hr", sx[1], yb, App.Rotation(), "_r"),
-                               ("vr", sx[1], yf, dreh, ""),
-                               ("vl", sx[0], yf, dreh, "_r")):
+    for kurz, x, y, r, suf in (("hr", sx[0], yb, App.Rotation(), ""),
+                               ("hl", sx[1], yb, App.Rotation(), "_l"),
+                               ("vl", sx[1], yf, dreh, ""),
+                               ("vr", sx[0], yf, dreh, "_l")):
         namen = (["y_motorhalter", "Motor_Y", "Riemenscheibe_Y", "Referenzschalter_Y"]
                  if kurz[0] == "h"
                  else ["y_umlenkhalter", "Umlenkrolle_Y"])
@@ -241,7 +241,7 @@ def main():
     if o not in g_y.Group:
         g_y.addObject(o)
 
-    # --- Y-Energiekette links: Träger, Rinne, Stützen fest; Ausleger am Portal;
+    # --- Y-Energiekette rechts: Träger, Rinne, Stützen fest; Ausleger am Portal;
     # Kette in der aktuellen Portallage aus dem Kettenmodul berechnet
     import importlib
     sys.path.insert(0, os.path.join(CAD, "energiekette"))
@@ -254,10 +254,11 @@ def main():
         link(doc, "EK_" + n, dek.getObject(n), pl_fest, g_e)
     pl_portal = App.Placement(V(sx[0], py, z_schiene_rahmen), App.Rotation())
     for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",
-              "ekx_stuetze_rechts", "ekx_stopfen", "ek_einsteckteil_rechts",
-              "ek_halter_y", "ekx_festhalter", "ek_leitungsclips", "ek_Leitung"):
-        link(doc, "P_links_" + n, dek.getObject(n), pl_portal, g_e)
+              "ekx_stuetze_links", "ekx_stopfen", "ek_einsteckteil_links",
+              "ek_halter_y", "ekx_ablagehalter", "ekx_rinne_hinten", "ekx_rinnenhalter", "ek_Leitung"):
+        link(doc, "P_rechts_" + n, dek.getObject(n), pl_portal, g_e)
     link(doc, "X_ekx_halter", dek.getObject("ekx_halter"), plw, g_e)
+    link(doc, "X_ekx_Leitung_Brenner", dek.getObject("ekx_Leitung_Brenner"), plw, g_e)
     kx = ek.kette_x(xw)
     kx.translate(V(sx[0], py, z_schiene_rahmen))
     o = fc_dok.teil(doc, "X_Kette_20x38_R65", fc_dok.fest(kx), "zukauf")
@@ -353,7 +354,7 @@ def main():
                 % (xmin, xmax, xmax - xmin, rahmen_bb.Center.x - 275, rahmen_bb.Center.x + 275))
 
         # Portal in beiden Y-Endlagen (Flachstange am Schienenende) gegen Rahmen,
-        # Y-Antrieb und Y-Riemen prüfen; X-Wagen dabei ganz links und ganz rechts
+        # Y-Antrieb und Y-Riemen prüfen; X-Wagen dabei ganz rechts und ganz links
         fest_teile = Part.makeCompound(
             [o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
              and (o.Name.startswith("R_") or o.Name.startswith("Y_")
@@ -377,7 +378,7 @@ def main():
         br_y = dz_.getObject("Brenner_SP80M").Shape.BoundBox.Center.y
         f.write("Düse in Y: %.0f bis %.0f, Wannenboden %.0f bis %.0f\n"
                 % (yb + hl + br_y, yf - hl + br_y, wy - 550, wy + 550))
-        # Y-Kette in beiden Endlagen gegen Portal (mit X-Wagen links/rechts) und Rahmen
+        # Y-Kette in beiden Endlagen gegen Portal (mit X-Wagen rechts/links) und Rahmen
         for name, ylage in (("hinten", yb + hl), ("vorn", yf - hl)):
             kk = ek.kette(ylage)
             kk.translate(V(sx[0], 0, z_schiene_rahmen))

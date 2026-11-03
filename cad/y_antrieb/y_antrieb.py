@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 Y-Antrieb: Motorhalter (hinten) und Umlenkhalter (vorn) auf den Rahmen-
-Längsträgern, je links und rechts. Motor NEMA23 (3 Nm) innen, Achse quer (X),
+Längsträgern, je rechts und links. Motor NEMA23 (3 Nm) innen, Achse quer (X),
 Riemenscheibe 24 Z genau über der Schienenmitte.
 
-Lage (Konvention "hinten links"): x = Schienenmitte, +x nach innen,
+Lage (Konvention "hinten rechts"): x = Schienenmitte, +x nach innen,
 y = Schienenende, +y entlang der Schiene in den Tisch, z = Oberkante Rahmen.
-Die rechten Teile sind gespiegelt; vorn werden sie im Zusammenbau um 180°
+Die linken Teile sind gespiegelt; vorn werden sie im Zusammenbau um 180°
 gedreht eingesetzt.
 
 Aufruf:
@@ -160,20 +160,20 @@ def main():
         "Referenzschalter_Y": (ref_schalter(), "zukauf"),
     }
     for n in list(teile):
-        teile[n + "_r"] = (gespiegelt(teile[n][0]), teile[n][1])
+        teile[n + "_l"] = (gespiegelt(teile[n][0]), teile[n][1])
 
     pfad = os.path.join(OUT, "y_antrieb.FCStd")
     doc, offen = fc_dok.dokument(pfad)
     for n, (shp, farbe) in teile.items():
         o = fc_dok.teil(doc, n, shp, farbe)
         # Darstellung im Teile-Dokument nebeneinander (der Zusammenbau setzt eigene Lagen)
-        dx = 200.0 if n.endswith("_r") else 0.0
+        dx = 200.0 if n.endswith("_l") else 0.0
         dy = 150.0 if ("umlenk" in n.lower()) else 0.0
         o.Placement = App.Placement(V(-dx, dy, 0), App.Rotation())
     fc_dok.speichern(doc, pfad, offen)
 
     import Mesh
-    for n in ("y_motorhalter", "y_umlenkhalter", "y_motorhalter_r", "y_umlenkhalter_r"):
+    for n in ("y_motorhalter", "y_umlenkhalter", "y_motorhalter_l", "y_umlenkhalter_l"):
         shp = teile[n][0]
         shp.exportStep(os.path.join(OUT, n + ".step"))
         Mesh.Mesh(shp.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))

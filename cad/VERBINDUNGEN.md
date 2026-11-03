@@ -24,7 +24,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Flachstange auf Y-Wagen | 4× M4 von oben, gesenkt | ok |
 | Y-Winkel (Druck) auf Flachstange | M4 gesenkt in Gewinde in der Flachstange, Riemenklemme M5×65 durch Turm und Basis in Gewinde | ok (lange Schraube, aber in Gewinde) |
 | Sattel ↔ Brücke | 4× M6×60 quer durch Sattel, Brücke und Einsteckteil, Muttern vorn eingepresst, Köpfe hinten | bleibt. Zugang geprüft: Muttern sind gefangen, die unteren Köpfe immer frei, die oberen liegen unter Y-Klemmplatte und Fahne → Brücke vor der Riemenklemme montieren |
-| Kettenturm / rechte Platte an Einsteckteil | 4× M6 in Muttern, seitlich in Schlitze geschoben | rechts Löcher verlegt (schnitten die Sattel-M6) |
+| Kettenturm / linke Platte an Einsteckteil | 4× M6 in Muttern, seitlich in Schlitze geschoben | links Löcher verlegt (schnitten die Sattel-M6) |
 | X-Schienen an Brücke | M4 in die 4-mm-Alu-Wand | ok |
 | X-Wagenkörper auf X-Wagen | 4× + 4× M4, gesenkt mit Scheibe | ok |
 | Z-Grundplatte an Wagenkörper | 6× M5 in Muttern, von der Seite eingeschoben | ok |
@@ -43,10 +43,10 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | x_wagenkoerper | 4× M4 (Motorbock), 6× M5 (Z-Grundplatte), 4× M3 (Spritzschutz), alle seitlich |
 | z_kopf | 8× M4 unten (FK10, Motorhalter), 2× M5 von unten in Schlitze (Halter X-Kette) |
 | z_mutterblock | 4× M4 hinten |
-| ek_einsteckteil links/rechts | je 4× M6 seitlich |
+| ek_einsteckteil rechts/links | je 4× M6 seitlich |
 | ek_halter_y | 2× M5 oben (Kettenende), 2× M5 von oben in Schlitze (Turm) |
-| ekx_festhalter | 2× M5 unten (Kettenende), 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
-| ek_leitungsclips | je 2× M5 von oben |
-| ekx_halter | 2× M5 oben (Kettenende), 2× M4 von links (Tülle) |
+| ekx_ablagehalter | 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
+| ekx_rinnenhalter | je 1× M4 seitlich (Rinne hinten) |
+| ekx_halter | 2× M5 oben (Kettenende) |
 | ekx_stopfen | 2× M5 seitlich |
 | ek_stuetzen_kopf | je 2× M5 von unten |

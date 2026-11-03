@@ -79,7 +79,7 @@ P = dict(
     # Befestigungen am Oberrahmen
     halter_loecher=[(-10.0, 52.0), (10.0, 52.0), (-10.0, 14.0), (10.0, 14.0)],  # (x ab Schiene, Abstand vor/hinter Schienenende)
     nietmutter_m6_d=9.0,        # M6-Nietmutter: 3 mm Wand trägt kein gutes M6-Gewinde
-    ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen links), ab Rahmenende
+    ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen rechts), ab Rahmenende
     ek_stuetze_z=-20.0,                          # ab Rahmen-OK
 )
 
@@ -150,7 +150,7 @@ def rahmen():
             for y in (y_a - dy, y_e + dy):
                 lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                               V(x0 + r / 2 + dx, y, z_ok - P["wand"] - 1)))
-        # M8 quer für die Stützen der Y-Energiekette (nur links, an beiden Enden)
+        # M8 quer für die Stützen der Y-Energiekette (nur rechts, an beiden Enden)
         if i == 0:
             for dy in P["ek_stuetze_y"]:
                 for y in (dy, ay - dy):

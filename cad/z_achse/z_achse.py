@@ -67,11 +67,11 @@ P = dict(
     kopf_platte=8.0,
     saeule_dy=4.0,              # Säulen des Motorhalters gegenüber der Spindel nach vorn
                                 # (die Sockelschrauben hinten bleiben frei)
-    xk_halter_x=[-45.0, -25.0], # M5-Einsätze in der Sockelrückseite für den Halter der X-Kette
+    xk_halter_x=[-28.0, 2.0],   # M5-Muttern in der Sockelrückseite für den Halter der X-Kette
     kupplung_l=30.0,
     fk_loch=18.0,
-    kopf_x=58.0,                # Z-Kopf-Sockel rechts (Platz für den Referenzschalter)
-    kopf_x_links=52.0,          # links schmaler: bei X ganz links läuft dort die Y-Energiekette
+    kopf_x=58.0,                # Z-Kopf-Sockel links (Platz für den Referenzschalter)
+    kopf_x_rechts=52.0,         # rechts schmaler: bei X ganz rechts läuft dort die Y-Energiekette
     # Referenzschalter Z oben: senkrecht durch den Z-Kopf-Sockel, Stahlfahne auf dem Schlitten
     ref_x=46.0,
     ref_y=96.0,
@@ -275,7 +275,7 @@ def zkopf(g):
     zb1 = zb + P["kopf_basis"]
     yv = max(g["y_sp"] + 28.2 + 3, P["ref_y"] + 6.1 + 4)
     yh = g["y0"] - 8
-    s = box(-P["kopf_x_links"], gx, yh, yv, zb, zb1)
+    s = box(-P["kopf_x_rechts"], gx, yh, yv, zb, zb1)
     # FK10 im Sockel, Flansch oben aufliegend, 4x M4 in Muttern unten
     s = s.cut(zyl(35.0, P["kopf_basis"] + 2, 0, g["y_sp"], zb - 1))
     for dx in (-P["fk_loch"], P["fk_loch"]):

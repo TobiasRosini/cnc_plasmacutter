@@ -66,9 +66,9 @@ P = dict(
     schutz_dicke=1.0,
     schutz_vorn=48.0,           # bis Vorderfläche Z-Grundplatte
     schutz_loecher=[(-24.0, -14.0), (24.0, -14.0), (-24.0, 28.0), (24.0, 28.0)],
-    # Referenz X: Schalter am linken Y-Winkel (Sattelrückwand), Achse quer, z 94,
+    # Referenz X: Schalter am rechten Y-Winkel (Sattelrückwand), Achse quer, z 94,
     # y -24,75, Sensorfläche bei Wagen x 78 - 20. Ziel ist ein Zylinderstift 6x10
-    # (Stahl, eingepresst) in der linken Fläche des nach unten gezogenen Blocks.
+    # (Stahl, eingepresst) in der rechten Fläche des nach unten gezogenen Blocks.
     hinten_block=(-20.0, 30.0, None, -20.5, 72.0),   # x0, x1, (y0 = Deck hinten), y1, z unten
     ref_stift_d=6.0,
     ref_stift_l=10.0,
@@ -115,7 +115,7 @@ P = dict(
     steg_ende_y=-53.5,          # Motor ganz vorn gespannt: Vorderkante bei -54,7
     bock_platte=8.0,
     flansch_dicke=10.0,
-    # (x, z); die unteren weiter innen: links lässt der Block dort Platz für den
+    # (x, z); die unteren weiter innen: rechts lässt der Block dort Platz für den
     # Referenzschalter, darunter sitzt der Stahlstift
     flansch_loecher=[(-14.0, 104.0), (14.0, 104.0), (-22.0, 127.0), (22.0, 127.0)],
     flansch_tiefe=8.0,          # Mutter M4 so tief hinter der Flanschfläche (vor dem Block bleibt Wand)
@@ -190,7 +190,7 @@ def koerper():
         s = s.cut(zyl(P["m4_senk_scheibe"], P["deck_senk"] + 1, x, y, zd1 - P["deck_senk"]))
         s = s.cut(zyl(P["m4_durchgang"], zb1 - zb0 + 2, x, y, zb0 - 1))
         s = s.cut(zyl(P["m4_senk_scheibe"], P["m4_senk_tiefe_druck"] + 1, x, y, zb0 - 1))
-    # hinter der Brücke nach unten gezogen (bis über den Riemen); links bleibt Platz
+    # hinter der Brücke nach unten gezogen (bis über den Riemen); rechts bleibt Platz
     # für den Referenzschalter am Sattel, dort sitzt der Stahlstift in der Seitenfläche
     x0, x1, y0, y1, z0 = P["hinten_block"]
     s = s.fuse(box(x0, x1, P["deck_hinten"], y1, z0, zd0 + 0.01))
@@ -215,8 +215,8 @@ def koerper():
 
 
 def ref_stift():
-    """Zylinderstift Stahl (eingepresst) in der linken Seitenfläche: Ziel für den
-    Referenzschalter X am linken Sattel (an Stelle der Blechfahne)."""
+    """Zylinderstift Stahl (eingepresst) in der rechten Seitenfläche: Ziel für den
+    Referenzschalter X am rechten Sattel (an Stelle der Blechfahne)."""
     xs, ys_, zs = P["ref_stift_lage"]
     return zyl(P["ref_stift_d"], P["ref_stift_l"], xs, ys_, zs, V(1, 0, 0))
 
@@ -315,7 +315,7 @@ def motorbock():
         pts = [V(sx * c0, yv + 1, zb - 1), V(sx * c0, yv, zb - 1), V(sx * c1, yv - (c1 - c0), zb - 1),
                V(sx * c1, yv + 1, zb - 1), V(sx * c0, yv + 1, zb - 1)]
         s = s.cut(Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, zm1 - zb + 2)))
-    # Stege links und rechts: versteifen den Winkel Flanschwand/Motorplatte, reichen
+    # Stege rechts und links: versteifen den Winkel Flanschwand/Motorplatte, reichen
     # bis zur Oberkante und bis knapp vor den Motor (ganz vorn gespannt); in der
     # Mitte bleibt Platz für den Hebel
     ye = P["steg_ende_y"]

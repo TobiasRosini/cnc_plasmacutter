@@ -1,4 +1,4 @@
-Gesamtmaß: 784 (X) x 1538 (Y) x 1382 (Z) mm
+Gesamtmaß: 784 (X) x 1538 (Y) x 1470 (Z) mm
 Gesamtbreite 784 mm, Grenze 800 mm: ok
 Rahmen außen 720, Portal steht je Seite 32 mm über
 Portalbrücke: 767 mm lang, OK 987 mm über Boden
@@ -18,4 +18,4 @@ Y-Kette, Portal hinten, X-Wagen bei 79: Kollision 0.0 mm³
 Y-Kette, Portal hinten, X-Wagen bei 644: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 79: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 644: Kollision 0.0 mm³
-Y-Motor hinten: Oberkante 944.0 mm über Boden, innen bis x 124.5
+Y-Motor hinten: Oberkante 944.0 mm über Boden, innen bis x 694.1
