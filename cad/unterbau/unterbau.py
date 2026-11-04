@@ -4,7 +4,7 @@ Unterbau unter der Wanne: Geräteboden mit Plasmagerät und Schaltschrank, darü
 ein Tropfboden, der Wasser von der Wanne nach hinten ableitet, und der Kabelweg
 von der Y-Energiekette zum Schaltschrank.
 
-- Geräteboden: Alu-Platte 4 mm auf den unteren Längsrohren (vorn bis zum zweiten
+- Geräteboden: Stahlblech 3 mm auf den unteren Längsrohren (vorn bis zum zweiten
   Mittelquerrohr), 4x M6 in Nietmuttern. Darauf vorn rechts das Plasmagerät
   (Front nach vorn), links daneben der Schaltschrank 400 x 500 x 200.
 - Tropfboden: Alu-Blech 1,5 mm unter dem Wannenkäfig, Gefälle nach hinten, Ränder
@@ -44,7 +44,7 @@ P = dict(
     ablauf=(360.0, 856.0),      # Rahmen x, y (Wannenmitte)
     ablauf_d=32.0,
     # Geräteboden
-    boden_t=4.0,
+    boden_t=3.0,                # Stahlblech 3 (wie die Kammträger)
     boden_loch_y=[1050.0, 1420.0],      # = grundrahmen geraeteboden_y
     # Plasmagerät SPARTUS XPro CUT 70CNC: 515 lang x 215 breit x 370 hoch (Herstellerangabe)
     geraet=(215.0, 515.0, 370.0),
@@ -201,7 +201,7 @@ def main():
     senk, quer = kanaele()
     pfad = os.path.join(OUT, "unterbau.FCStd")
     doc, offen = fc_dok.dokument(pfad)
-    fc_dok.teil(doc, "ub_geraeteboden", bo, "alu")
+    fc_dok.teil(doc, "ub_geraeteboden", bo, "stahl")
     fc_dok.teil(doc, "ub_tropfboden", tr, "alu")
     fc_dok.teil(doc, "Plasmageraet_XPro_CUT_70CNC", ge, "dummy")
     fc_dok.teil(doc, "Druckluft_Einheit", dl, "dummy")

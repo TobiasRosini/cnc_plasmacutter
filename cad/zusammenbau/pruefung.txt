@@ -8,14 +8,14 @@ Kollision Wanne / Rahmen: 0.000 mm³
 Kollision Wanne / Brücke: 0.000 mm³
 Abstand Brücke UK zu Rahmen OK: 57 mm
 Kollisionen zwischen allen Teilen: 0
-X-Weg Wagenmitte: 78.5 bis 644.0 = 565.5 mm (Wannenboden 85 bis 635 gefordert)
-Portal hinten, X-Wagen bei 79: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
+X-Weg Wagenmitte: 78.0 bis 644.0 = 566.0 mm (Wannenboden 85 bis 635 gefordert)
+Portal hinten, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal hinten, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
-Portal vorn, X-Wagen bei 79: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
+Portal vorn, X-Wagen bei 78: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Portal vorn, X-Wagen bei 644: Kollision mit Rahmen/Y-Antrieb 0.0 mm³
 Düse in Y: 296 bis 1414, Wannenboden 306 bis 1406
-Y-Kette, Portal hinten, X-Wagen bei 79: Kollision 0.0 mm³
+Y-Kette, Portal hinten, X-Wagen bei 78: Kollision 0.0 mm³
 Y-Kette, Portal hinten, X-Wagen bei 644: Kollision 0.0 mm³
-Y-Kette, Portal vorn, X-Wagen bei 79: Kollision 0.0 mm³
+Y-Kette, Portal vorn, X-Wagen bei 78: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 644: Kollision 0.0 mm³
 Y-Motor hinten: Oberkante 944.0 mm über Boden, innen bis x 694.1

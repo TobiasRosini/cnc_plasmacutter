@@ -93,14 +93,14 @@ P = dict(
     kanal_bein=[(12.0, 580.0), (28.0, 580.0)],   # vorderes Bein rechts, Rückseite (x, z)
     nietmutter_m5_d=7.0,
     geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
-    # Spritzschutz Y-Schienen: Alu-Streifen 2 mm innen an den Längsträgern, steht über die
-    # Rahmenoberkante (Bleche dann höchstens 636 breit); zwischen den Y-Motor- und Umlenkhaltern
-    schutz_t=2.0,
+    # Spritzschutz Y-Schienen: Flachstahl 50 x 3 innen an den Längsträgern, steht über die
+    # Rahmenoberkante (Bleche dann höchstens 634 breit); zwischen den Y-Motor- und Umlenkhaltern
+    schutz_t=3.0,
     schutz_ueber=25.0,
-    schutz_unter=35.0,
+    schutz_unter=25.0,
     schutz_y=(80.0, 1360.0),
     schutz_niet_y=[120.0, 340.0, 560.0, 780.0, 1000.0, 1220.0],
-    schutz_niet_z=-20.0,                         # ab Rahmen-OK, Blindniet Ø4
+    schutz_niet_z=-12.5,                         # ab Rahmen-OK, Blindniet Ø4
     niet_d=4.1,
 )
 
@@ -252,7 +252,7 @@ def rahmen():
 
 
 def spritzschutz():
-    """Alu-Streifen innen an den Längsträgern, Blindnieten Ø4."""
+    """Flachstahl 50 x 3 innen an den Längsträgern, Blindnieten Ø4."""
     r, t, ax = P["rohr"], P["schutz_t"], P["aussen_x"]
     z0, z1 = P["hoehe_ok"] - P["schutz_unter"], P["hoehe_ok"] + P["schutz_ueber"]
     y0, y1 = P["schutz_y"]
@@ -307,7 +307,7 @@ def main():
     for name, shp in teile.items():
         fc_dok.teil(doc, name, shp, "stahl")
     for name, shp in spritzschutz().items():
-        fc_dok.teil(doc, name, shp, "alu")
+        fc_dok.teil(doc, name, shp, "stahl")
     fc_dok.teil(doc, "Dummy_Schienen_HGR15", dm["Dummy_Schienen_HGR15"], "dummy")
     fc_dok.teil(doc, "Dummy_Wanne", dm["Dummy_Wanne"], "wanne", 60)
     fc_dok.speichern(doc, pfad, offen)

@@ -57,16 +57,16 @@ P = dict(
     fl_breite=40.0,
     fl_dicke=15.0,
     fl_laenge=180.0,
-    # Spritzschutz der unteren X-Schiene: Alu-Flachstange 30 x 3 von Winkel zu Winkel, läuft
+    # Spritzschutz der unteren X-Schiene: Flachstahl 50 x 3 von Winkel zu Winkel, läuft
     # zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch. Getragen von je einem
-    # Halter (Alu 4 mm) an der vorderen Stirn der Flachstange (2x M4 in Gewinde).
+    # Halter (Alu 4 mm, aus dem Reststück der Brücke) an der vorderen Stirn der Flachstange (2x M4 in Gewinde).
     spur=680.0,                 # Schienenabstand Y (Mitte-Mitte)
     sh_t=4.0,
     sh_x=(-20.0, 45.0),         # Halter: oben über die Stirn der Flachstange bis innen
     sh_lasche=(30.0, -18.0),    # Lasche innen ab x 30 bis z -18 (über Y-Schiene und Schutzstreifen)
     sh_m4=[-10.0, 10.0],        # M4 in die Stirn der Flachstange, z = Mitte
     ss_t=3.0,
-    ss_z=(-16.0, 14.0),         # Streifen: Unterkante 12 über dem Blech
+    ss_z=(-16.0, 34.0),         # Streifen 50 hoch: Unterkante 12 über dem Blech
     ss_x0=30.0,                 # ab Schienenmitte innen (= X-Wagen-Endlage)
     ss_m4=[(37.5, -9.0), (37.5, 7.0)],  # Streifen an Lasche, M4 mit Mutter
     m4_durchgang=4.5,
@@ -277,7 +277,7 @@ def schutz_halter():
 
 
 def schutzstreifen():
-    """Alu-Flachstange 30 x 3, rechte Lage (x ab rechter Schienenmitte, innen = +x)."""
+    """Flachstahl 50 x 3, rechte Lage (x ab rechter Schienenmitte, innen = +x)."""
     y0 = P["fl_laenge"] / 2 + P["sh_t"]
     xa, xb = P["ss_x0"], P["spur"] - P["ss_x0"]
     s = box(xa, xb, y0, y0 + P["ss_t"], P["ss_z"][0], P["ss_z"][1])
@@ -746,7 +746,7 @@ def main():
     sh = schutz_halter()
     fc_dok.teil(doc, "x_schutz_halter", sh, "alu")
     fc_dok.teil(doc, "x_schutz_halter_rechts", verschoben(gespiegelt_rechts(sh), -ABSTAND), "alu")
-    fc_dok.teil(doc, "x_schutzstreifen", verschoben(schutzstreifen(), -ABSTAND), "alu")
+    fc_dok.teil(doc, "x_schutzstreifen", verschoben(schutzstreifen(), -ABSTAND), "stahl")
     fc_dok.speichern(doc, pfad, offen)
 
     fl.exportStep(os.path.join(OUT, "flachstange_40x15.step"))

@@ -1,5 +1,5 @@
 Y-Kette igus 2400.03.125.0: 23 Glieder = 1058 mm (Modell mit Anschlussteilen 1098), Festpunkt y 825, Hub 1120
-Y-Rinne x -66.5 bis -1.5, Kettenturm außen bis x -76.5 (ab Schienenmitte Kettenseite)
+Y-Rinne x -64.0 bis -4.0, Kettenturm außen bis x -76.5 (ab Schienenmitte Kettenseite)
 X-Kette igus 2400.03.075.0: 14 Glieder = 644 mm, Festpunkt Rahmen-x 476, Ablage-UK 225, oben bis 432 über Rahmen-OK
 X-Kette oberes Trum bei X an der Gegenseite ca. 158 mm frei über den Festpunkt hinaus (freitragende Länge der Kette prüfen)
 X-Kette Schlaufe bei X an der Kettenseite bis x -64.5 (Turm innen -68.5)
@@ -14,6 +14,9 @@ Wand an Bohrungen ek_stuetzen_kopf: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsbogen: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_umlenkkopf: ok (>= 3.0 mm)
 Wand an Bohrungen ek_verbindungsplatte: ok (>= 3.0 mm)
+Wand an Bohrungen ek_leitungsbuegel_44: ok (>= 3.0 mm)
+Wand an Bohrungen ek_leitungsbuegel_kopf: ok (>= 3.0 mm)
+Wand an Bohrungen ek_leitungsbuegel_40: ok (>= 3.0 mm)
 Leitung / Turm: 0.00 mm³
 Leitung / Halter Y: 0.00 mm³
 Leitung / Ablagehalter X: 0.00 mm³

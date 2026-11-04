@@ -52,7 +52,7 @@ P = dict(
     leiste=20.0,
     schiene_x=40.0,
     # Schlitten
-    sl_dicke=10.0,
+    sl_dicke=12.0,              # Alu-Platte 12 wie die Grundplatte
     sl_x=60.0,
     sl_hoehe=100.0,
     # Mutterblock (am Schlitten hinten)
@@ -86,7 +86,7 @@ P = dict(
     stab_y=123.0,
     sk_x=39.0,                  # Halbe Breite von Stegen und Träger
     rueck_x=22.0,               # Rückenplatte des Halters
-    rueck_dicke=8.0,
+    rueck_dicke=6.0,            # 2 mm dünner seit Schlitten 12: Träger bleibt an seiner Stelle
     steg_h=15.0,
     steg_unten=10.0,            # unterer Steg ab hier, Träger liegt darauf
     traeger_h=70.0,

@@ -6,7 +6,7 @@ python3 cad/live.py cad/unterbau/unterbau.py
 
 Alles unter der Wanne. Koordinaten wie Grundrahmen (Seiten von vorn gesehen, vorn = großes y). Prüfwerte in `pruefung.txt`.
 
-- **Geräteboden:** Alu-Platte 4 mm auf den unteren Längsrohren, vom zweiten Mittelquerrohr bis vorn (y 991–1516), an den vorderen Beinen ausgespart. 4× M6 von oben in Nietmuttern in den unteren Längsrohren (`grundrahmen geraeteboden_y`). Oberkante 144 über Boden.
+- **Geräteboden:** Stahlblech 3 mm (wie die Kammträger) auf den unteren Längsrohren, vom zweiten Mittelquerrohr bis vorn (y 991–1516), an den vorderen Beinen ausgespart. 4× M6 von oben in Nietmuttern in den unteren Längsrohren (`grundrahmen geraeteboden_y`). Oberkante 143 über Boden.
 - **Plasmagerät** SPARTUS XPro CUT 70CNC (515 × 215 × 370) vorn rechts, Front nach vorn. Die Druckluft-Einheit hinten am Gerät ist von rechts und von oben erreichbar: über dem Geräteboden sind dort 528 mm frei (gefordert 500).
 - **Schaltschrank** 400 × 500 × 200 vorn links neben dem Gerät (15 mm Abstand), Tür nach vorn. Inhalt: Mini-PC (190 × 190 × 45), Mesa 7i96S (150 × 100 × 40), 4 Schrittmotortreiber, Schaltnetzteil 48 V, 24-V-Versorgung, Klemmen, Not-Aus und Schütz.
 - **Tropfboden:** Alu-Blech 1,5 mm unter dem Wannenkäfig zwischen den Beinen, Gefälle 3,3 % nach hinten (Oberseite vorn 690, hinten 640), Ränder seitlich und vorn 15 hoch, hinten 20 mm über den Rahmen hinaus mit Tropfkante. Der Wannenablauf geht durch eine Hülse Ø44 (20 hoch). Unter dem Käfig bleiben vorn 5 mm Luft. Befestigung noch offen (z. B. Gewindestangen M6 an den Längsrohren des Käfigs).

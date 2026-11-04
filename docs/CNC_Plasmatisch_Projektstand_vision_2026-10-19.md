@@ -140,7 +140,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 ### Spritzschutz der Schienen (Stand 03.11.2026)
 
 - Einstechspritzer fliegen flach und schräg nach oben. Die untere X-Schiene hängt kopfüber 42–57 mm über dem Blech und 136 mm hinter dem Brenner und ist besonders gefährdet.
-- Umgesetzt: fester Schutzstreifen (Alu 30 × 3) von Y-Winkel zu Y-Winkel, an Haltern an den Flachstangen; er läuft zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch und deckt die Schiene über die ganze Länge ab (Y-Hub vorn 2 mm kürzer). Dazu Alu-Streifen innen an den Y-Längsträgern, X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
+- Umgesetzt: fester Schutzstreifen (Flachstahl 50 × 3) von Y-Winkel zu Y-Winkel, an Haltern an den Flachstangen; er läuft zwischen Z-Grundplatte und Brenner unter dem Z-Schlitten durch und deckt die Schiene über die ganze Länge ab (Y-Hub vorn 2 mm kürzer). Dazu Flachstahl 50 × 3 innen an den Y-Längsträgern, X-Wagen mit Metallabstreifer bestellen und in QtPlasmaC höher bzw. in der Bewegung einstechen.
 - Der Streifen hängt 12 mm über dem Blech: hochstehende Teile können ihn wie den Brenner treffen.
 
 ### Werkstückauflage und Einspannen (Stand 03.11.2026)
@@ -148,9 +148,14 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - Kammträger (3 × längs, Stahl 3 mm) auf dem Wannenboden, Schlitze im Raster 25 mm; Auflageleisten Flachstahl 50 × 3 quer, normal Teilung 50, bei Bedarf dichter. Lose gesteckt, Oberkante = Blechunterseite. Wasser 15 mm unter dem Blech (`cad/auflage/`).
 - Vorderer Querträger des Oberrahmens 80 × 40 × 4 flach, 40 mm über den Untertisch hinaus: Flachstangen mit Schraubzwingen einspannen. Maschine dadurch 40 mm länger.
 
+### Halbzeuge (vereinheitlicht 03.11.2026)
+
+- **Alu:** Rechteckrohr 80 × 40 × 4 (Brücke; Reststück für die Halter des X-Spritzschutzes), Flachstange 40 × 15 (Y-Flachstangen), Flachstange 40 × 8 (Kettenturm, Platte links, Mast, Ablage hinten), Rechteckrohr 40 × 20 × 2 (X-Ablage), U-Profil 20 × 60 × 20 × 2 (Rinnen Y und X, Handel), Platte 12 (Z-Grundplatte, Z-Schlitten), Vierkant 20 × 20 (Z-Leisten), Blech 1,5 (Tropfboden, wird noch überarbeitet).
+- **Stahl:** Rechteckrohr 40 × 40 × 3, 80 × 40 × 4, 20 × 20 × 2, 20 × 40 × 2, 40 × 20 × 2 (Y-Kettenträger), Flachstahl 50 × 3 (Auflageleisten, Spritzschutz X und Y), Blech 3 (Kammträger, Geräteboden), Fußplatten 8, Blech 1 (Spritzschutz am X-Wagen).
+
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 
-- Unter der Wanne ein Geräteboden (Alu 4 mm, Oberkante 144) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).
+- Unter der Wanne ein Geräteboden (Stahlblech 3 mm, Oberkante 143) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).
 - Darüber ein Tropfboden mit Gefälle nach hinten, damit Wasser aus der Wanne nicht auf die Elektronik tropft.
 - Leitungen vom festen Ende der Y-Kette im Kabelkanal auf dem Kettenträger nach vorn bis vor die vorderste Portalstellung, außen rechts senkrecht hinunter, quer über dem Plasmagerät in den Schaltschrank. Gesamtbreite damit 793 mm. Details `cad/unterbau/README.md`, Leitungen `docs/Kabelliste.md`.
 
