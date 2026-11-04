@@ -14,9 +14,8 @@ Wand an Bohrungen ek_stuetzen_kopf: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsbogen: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_umlenkkopf: ok (>= 3.0 mm)
 Wand an Bohrungen ek_verbindungsplatte: ok (>= 3.0 mm)
-Wand an Bohrungen ek_leitungsbuegel_44: ok (>= 3.0 mm)
-Wand an Bohrungen ek_leitungsbuegel_kopf: ok (>= 3.0 mm)
-Wand an Bohrungen ek_leitungsbuegel_40: ok (>= 3.0 mm)
+Wand an Bohrungen ek_leitungsschelle: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_leitungssockel: ok (>= 3.0 mm)
 Leitung / Turm: 0.00 mm³
 Leitung / Halter Y: 0.00 mm³
 Leitung / Ablagehalter X: 0.00 mm³
@@ -28,8 +27,13 @@ Leitung / Leitungsbogen: 0.00 mm³
 Leitung / Mast: 0.00 mm³
 Leitung / Umlenkkopf: 0.00 mm³
 Leitung / Verbindungsplatte: 0.00 mm³
+Leitung / Schellen: 0.00 mm³
+Leitung / Sockel: 0.00 mm³
 Leitung / X-Kette bei Wagen 78: 0.00 mm³
 Leitung / X-Kette bei Wagen 644: 0.00 mm³
-Leitungen Y-Ende -> X-Festpunkt: ca. 1295 mm, Adern X-Ende -> Brenner: ca. 403 mm (R60)
+Pfade Brenner / Steuerung: 0.00 mm³
+Pfad Brenner: kleinster Biegeradius (Mitte) R59.8
+Pfad Steuerung: kleinster Biegeradius (Mitte) R50.5
+Leitungen Y-Ende -> X-Festpunkt: ca. 1315 mm, Adern X-Ende -> Brenner: ca. 403 mm (R60)
 Adern bei X an der Gegenseite bis Rahmen-x 724 (Brückenstirn 720)
 Adern oben bis 563 über Brücken-UK (Z unten), ca. 1470 mm über Boden; bei Z oben 100 mm Schlaufe mehr

@@ -46,7 +46,9 @@ Ein Trennsteg igus 211 in jedem zweiten Glied (Y: 11 Stück, X: 7 Stück) teilt 
 | Brenner | ca. 19 | Nr. 1–4 (+10) | unten Luft 8, Strom 6,3, Pilot 3 nebeneinander (17,3), darüber die beiden Start/Stopp-Adern |
 | Steuerung (innen) | ca. 17 | Nr. 5–9 | unten die zwei Motorleitungen (2 × 7,5 = 15), darüber die Schalterleitungen (3 × 4,5 = 13,5) |
 
-Höhe je Fach höchstens 7,5 + 4,5 = 12 von 25 mm. Die Plasmaleitungen (Pilot, Strom) liegen so nicht direkt neben den Schalterleitungen.
+Höhe je Fach höchstens 7,5 + 4,5 = 12 von 25 mm. Die Plasmaleitungen (Pilot, Strom) liegen so nicht direkt neben den Schalterleitungen. Im Brennerfach liegt das Stromkabel unten in der Mitte (Luft und Pilot außen), weil es im Versatz zwischen den Ketten auf der Innenseite R60 braucht.
+
+Zwischen Y- und X-Kette bleiben die beiden Fächer als getrennte Pfade erhalten: Trennsteg in Leitungsbogen und Umlenkkopf, Leitungsschellen mit Mittelsteg (`cad/energiekette/README.md`). In der Y-Kette liegt die Steuerung innen, in der X-Kette hinten.
 
 ## Biegeradien
 

@@ -127,12 +127,18 @@ P = dict(
     # Leitungen ohne Schutzschlauch (Adern des Brennerpakets + Motor- und Schalterkabel),
     # Biegeradius mindestens 60 (Stromkabel Ø6,3); Hüllkurven als Rundrohr
     leitung_r=60.0,
-    leitung_d=20.0,             # alle Leitungen zwischen Y-Kette und X-Kette
+    # zwei Pfade wie die Fächer der Ketten (Trennsteg): Brenner (Nr. 1-4) und Steuerung (Nr. 5-9),
+    # flach nebeneinander, Mitte = Trennsteg; Steuerung in Laufrichtung links (in der Y-Kette innen)
+    fach_b=(17.5, 16.0),        # Breite Brenner, Steuerung (unten 3 bzw. 2 Leitungen nebeneinander)
+    fach_h=13.0,                # Höhe beider Pfade (zwei Lagen)
+    fach_steg=3.0,              # Abstand der Pfade (Trennsteg, Mittelsteg der Schellen)
     brenner_leitung_d=16.0,     # Adern des Brennerpakets zwischen X-Kette und Brenner
-    leitung_hinten_y=-131.0,    # Lauf hinter der Ablage (Kehre R60 in den Festpunkt)
+    leitung_hinten_y=-143.0,    # Lauf hinter der Ablage (Kehre R60 in den Festpunkt)
     leitung_oben_z=580.0,       # Bogen über das Y-Kettenende nach hinten
-    leitung_ab_x=10.0,          # dort hinter der Ablage senkrecht nach unten
-    leitung_s_y=(0.0, -45.0),   # oben zwischen Bogen und Umlenkkopf seitlich versetzt (neben die Y-Kette)
+    leitung_ab_x=16.0,          # dort hinter der Ablage senkrecht nach unten (Pfade nebeneinander in x)
+    leitung_s_y=(-6.0, -51.0),  # oben zwischen Bogen und Umlenkkopf seitlich versetzt (neben die Y-Kette)
+    leitung_r_s=70.0,           # Versatz liegt in der Ebene der Pfade: innerer Pfad R60
+    leitung_dreh_x=270.0,       # in der Ablage hinten bis hier um 90° verdrillt (Pfade danach nebeneinander in y)
     # Führungen (Druck): Leitungsbogen auf dem Halter Y (180°-Kehre R60), Umlenkkopf auf einem
     # Mast (Alu 30 x 4) an der Rinne hinten (90° nach unten)
     fuehrung_b=40.0,            # Breite zwischen den Wangen
@@ -150,15 +156,18 @@ P = dict(
     vp_y=(-60.0, 0.0),
     vp_m4_bogen=[(-10.0, -10.0), (10.0, -10.0)],   # (x ab Kettenmitte, y)
     vp_m4_kopf=[(-10.0, -52.0), (10.0, -52.0)],    # (x ab leitung_ab_x, y)
-    # Leitungsbügel (Druck): Brücke über das Bündel, 2x M3 (Muttern im Druckteil bzw. unter
-    # der Rinne); oben auf Bogen, Verbindungsplatte und Kopf, in der Rinne hinten zweimal
-    bg_b=[44.0, 44.0, 39.8, 40.0, 40.0],         # je Bügel: Breite (Kopf: vor der Wange)
-    bg_tunnel=[22.0, 22.0, 21.0, 21.0, 21.0],    # Tunnel breit (Bogen, Platte: Leitung noch im Versatz)
-    bg_m3_dx=[16.5, 16.5, 15.2, 15.2, 15.2],     # M3 ab Bündelmitte (Wand >= 3)
+    # Leitungsschellen (Druck, 5 gleiche): zwei Tunnel mit Mittelsteg über den Pfaden, je 1x M3 durch
+    # die Schenkel in Muttern der Unterlage; oben auf Bogen, Verbindungsplatte und Kopf, in der
+    # Ablage hinten auf Sockeln (heben die Pfade auf Kettenhöhe, 2x M3 von unten durch die Ablage)
+    bg_spiel=1.0,               # Tunnel breiter als die Pfade (Schellen auch im Bogen der Pfade)
+    bg_steg=2.0,                # Mittelsteg der Schellen (Abstand der Pfade fach_steg)
+    bg_schenkel=9.4,            # Schenkel mit M3 (Wand 3)
     bg_l=15.0,
     bg_dach=3.0,
-    bg_oben_y=[12.5, -30.0, -71.0],             # Bogen, Verbindungsplatte, Kopf (y der Mitte)
-    bg_rinne_x=[140.0, 350.0],
+    bg_oben_y=[12.5, -30.0, -72.0],             # Bogen, Verbindungsplatte, Kopf (y der Mitte)
+    bg_rinne_x=[300.0, 420.0],
+    sockel_l=32.0,
+    sockel_m3_dy=11.0,
     brenner_oben_z=555.0,       # Bogen über dem Brenner (X-Wagen-z), Z unten
     brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
     brenner_y=136.0,
@@ -407,18 +416,21 @@ def zapfen_loecher():
 
 
 def weg(pts, r):
-    """Mittellinie aus Geraden mit Bögen (Radius r) an den Ecken. Prüft, dass jede
-    Gerade für die Bögen an ihren Enden lang genug ist."""
+    """Mittellinie aus Geraden mit Bögen an den Ecken (Radius r, oder je Ecke eine Liste
+    mit einem Wert pro Punkt). Prüft, dass jede Gerade für die Bögen an ihren Enden lang
+    genug ist."""
     n = len(pts)
+    rs = list(r) if isinstance(r, (list, tuple)) else [r] * n
     d = [0.0] * n
     for i in range(1, n - 1):
         u = (pts[i - 1] - pts[i]).normalize()
         w = (pts[i + 1] - pts[i]).normalize()
         th = math.pi - math.acos(max(-1.0, min(1.0, u.dot(w))))   # Richtungsänderung
-        d[i] = r * math.tan(th / 2)
+        d[i] = rs[i] * math.tan(th / 2)
     for i in range(n - 1):
         if d[i] + d[i + 1] > (pts[i + 1] - pts[i]).Length + 1e-6:
-            raise ValueError("Leitungsweg: Gerade %d zu kurz für R%.0f" % (i, r))
+            raise ValueError("Leitungsweg: Gerade %d zu kurz (%.1f < %.1f)"
+                             % (i, (pts[i + 1] - pts[i]).Length, d[i] + d[i + 1]))
     kanten, start = [], pts[0]
     for i in range(1, n - 1):
         a, p, b = pts[i - 1], pts[i], pts[i + 1]
@@ -427,23 +439,24 @@ def weg(pts, r):
         t1, t2 = p + u * d[i], p + w * d[i]
         bi = (u + w).normalize()
         th = math.acos(max(-1.0, min(1.0, u.dot(w))))
-        c = p + bi * (r / math.sin(th / 2))
+        c = p + bi * (rs[i] / math.sin(th / 2))
         if (t1 - start).Length > 1e-6:
             kanten.append(Part.LineSegment(start, t1).toShape())
-        kanten.append(Part.Arc(t1, c - bi * r, t2).toShape())
+        kanten.append(Part.Arc(t1, c - bi * rs[i], t2).toShape())
         start = t2
     if (pts[-1] - start).Length > 1e-6:
         kanten.append(Part.LineSegment(start, pts[-1]).toShape())
     return Part.Wire(kanten)
 
 
-def leitung_weg():
-    """Alle Leitungen vom bewegten Y-Ende (treten nach vorn aus) zum Festpunkt der
-    X-Kette in der Mitte (treten dort zur Kettenseite ein): nach vorn, hoch, in einem
-    Bogen über das Y-Kettenende nach hinten, hinter der Ablage hinunter, in der Rinne
-    hinten zur Gegenseite und mit einer Kehre R60 in den Festpunkt."""
+def leitung_ecken():
+    """Eckpunkte und Radien der Bündelmitte (= Trennsteg zwischen den Pfaden) vom bewegten
+    Y-Ende (Leitungen treten nach vorn aus) zum Festpunkt der X-Kette (treten dort zur
+    Kettenseite ein): nach vorn, hoch, in einem Bogen über das Y-Kettenende nach hinten,
+    seitlich versetzt, hinter der Ablage hinunter, in der Ablage hinten zur Gegenseite und
+    mit einer Kehre in den Festpunkt."""
     g, gx = geo(), geo_x()
-    r = P["leitung_r"]
+    r, rs = P["leitung_r"], P["leitung_r_s"]
     xc = (g["k_x0"] + g["k_x1"]) / 2
     e = P["end_laenge"] / 2
     yc = (gx["y0"] + gx["y1"]) / 2
@@ -457,7 +470,101 @@ def leitung_weg():
            V(xc, ys0, zo), V(xa, ys1, zo),
            V(xa, yh, zo), V(xa, yh, z_ein), V(x_kehre, yh, z_ein), V(x_kehre, yc, z_ein),
            V(x_ein, yc, z_ein)]
-    return weg(pts, r)
+    return pts, [r, r, r, rs, rs, r, r, r, r, r]
+
+
+def leitung_weg():
+    return weg(*leitung_ecken())
+
+
+def fach_mitten():
+    """Lage der Pfadmitten (Brenner, Steuerung) quer zum Bündel ab dem Trennsteg."""
+    st = P["fach_steg"] / 2
+    return -(st + P["fach_b"][0] / 2), st + P["fach_b"][1] / 2
+
+
+def _schnitt(p1, d1, p2, d2):
+    """Mitte der kürzesten Verbindung zweier Geraden (Schnittpunkt, wenn sie sich schneiden)."""
+    w0 = p1 - p2
+    a, b, c = d1.dot(d1), d1.dot(d2), d2.dot(d2)
+    dd, ee = d1.dot(w0), d2.dot(w0)
+    n = a * c - b * b
+    if abs(n) < 1e-12:
+        return p1
+    s, t = (b * ee - c * dd) / n, (a * ee - b * dd) / n
+    return (p1 + d1 * s + p2 + d2 * t) * 0.5
+
+
+def pfad_ecken(o):
+    """Eckpunkte und Radien des Pfads im Abstand o (quer, Steuerung positiv) von der
+    Bündelmitte, vor und nach dem Verdrillen. Die Querrichtung wandert mit dem Bündel:
+    oben liegt die Steuerung zur Maschinenmitte, nach dem Bogen unten am Mast oben; in der
+    Ablage hinten verdrillt das Bündel bis leitung_dreh_x um 90°, danach liegt die
+    Steuerung vorn (innen in der Kehre). Bögen in der Ebene der Pfade: Radius um o
+    kleiner bzw. größer."""
+    pts, rad = leitung_ecken()
+    i_dreh = 6                                           # Ecke unten am Mast, danach verdrillt
+    n = len(pts)
+    dirs = [(pts[j + 1] - pts[j]).normalize() for j in range(n - 1)]
+    seite = [V(1, 0, 0)]                                 # am Y-Ende: Steuerung innen (+x)
+    for j in range(1, n - 1):
+        seite.append(App.Rotation(dirs[j - 1], dirs[j]).multVec(seite[-1]))
+    t = dirs[i_dreh]
+    s_vor = seite[i_dreh]
+    s_nach = V(-t.y, t.x, 0).normalize()                 # nach dem Verdrillen: links der Laufrichtung
+    seite[i_dreh] = s_nach
+    for j in range(i_dreh + 1, n - 1):
+        seite[j] = App.Rotation(dirs[j - 1], dirs[j]).multVec(seite[j - 1])
+
+    def ecke(i):
+        sn = s_vor if i == i_dreh else seite[i]
+        q = _schnitt(pts[i - 1] + seite[i - 1] * o, dirs[i - 1], pts[i] + sn * o, dirs[i])
+        u, w = -dirs[i - 1], dirs[i]
+        bi = (u + w).normalize()
+        ni = bi - w * bi.dot(w)
+        return q, rad[i] - o * sn.dot(ni.normalize())
+
+    a = pts[i_dreh] + t * rad[i_dreh]                    # Ende des Bogens unten (Bündelmitte)
+    e = V(P["leitung_dreh_x"], a.y, a.z)
+    vor = [pts[0] + seite[0] * o] + [ecke(i)[0] for i in range(1, i_dreh + 1)] + [a + s_vor * o]
+    r_vor = [0.0] + [ecke(i)[1] for i in range(1, i_dreh + 1)] + [0.0]
+    nach = [e + s_nach * o] + [ecke(i)[0] for i in range(i_dreh + 1, n - 1)] + [pts[-1] + seite[-1] * o]
+    r_nach = [0.0] + [ecke(i)[1] for i in range(i_dreh + 1, n - 1)] + [0.0]
+    return (vor, r_vor), (nach, r_nach), (a, e, s_vor, s_nach), seite[0]
+
+
+def _rechteck(c, t, s, b, h):
+    hv = t.cross(s).normalize()
+    s = s.normalize()
+    ps = [c + s * (b / 2) + hv * (h / 2), c - s * (b / 2) + hv * (h / 2),
+          c - s * (b / 2) - hv * (h / 2), c + s * (b / 2) - hv * (h / 2)]
+    return Part.makePolygon(ps + [ps[0]])
+
+
+def _quer_zu(s, t):
+    s = s - t * s.dot(t)
+    return s.normalize()
+
+
+def pfad(k):
+    """Hüllkörper eines Pfads (k = 0 Brenner, 1 Steuerung): Rechteck fach_b x fach_h,
+    entlang des Pfads geführt, im Verdrillstück als Loft um die Bündelmitte."""
+    o = fach_mitten()[k]
+    b, h = P["fach_b"][k], P["fach_h"]
+    (vor, r_vor), (nach, r_nach), (a, e, sa, se), s0 = pfad_ecken(o)
+    t0 = (vor[1] - vor[0]).normalize()
+    p1 = weg(vor, r_vor).makePipeShell([_rechteck(vor[0], t0, s0, b, h)], True, False)
+    t = (e - a).normalize()
+    win = math.atan2(sa.cross(se).dot(t), sa.dot(se))
+    profile = []
+    for i in range(9):
+        f = i / 8.0
+        s = App.Rotation(t, math.degrees(win * f)).multVec(sa)
+        profile.append(_rechteck(a + (e - a) * f + s * o, t, s, b, h))
+    p2 = Part.makeLoft(profile, True, False)
+    t2 = (nach[1] - nach[0]).normalize()
+    p3 = weg(nach, r_nach).makePipeShell([_rechteck(nach[0], t2, se, b, h)], True, False)
+    return Part.makeCompound([p1, p2, p3])
 
 
 def leitung_punkt(y=None, x=None, z_min=None, z_max=None):
@@ -472,8 +579,9 @@ def leitung_punkt(y=None, x=None, z_min=None, z_max=None):
 
 
 def buegel_lagen():
-    """(Punkt auf der Auflage unter der Bündelmitte, Richtung längs) aller Leitungsbügel."""
-    zo, rd = P["leitung_oben_z"], P["leitung_d"] / 2
+    """(Punkt auf der Unterlage unter dem Trennsteg, Richtung längs) aller Leitungsschellen.
+    Die Steuerung liegt an allen Schellen links der Richtung."""
+    zo, rd = P["leitung_oben_z"], P["fach_h"] / 2
     res = []
     for y in P["bg_oben_y"]:
         q, d = leitung_punkt(y=y, z_min=zo - 1)
@@ -491,40 +599,96 @@ def _quer(p, d, dx, dy=0.0, dz=0.0):
     return V(p.x + q.x * dx + d.x * dy, p.y + q.y * dx + d.y * dy, p.z + dz)
 
 
-def leitungsbuegel():
-    l, t, dd = P["bg_l"] / 2, P["bg_dach"], P["leitung_d"]
+def schelle_mass():
+    """Quermaße der Schelle ab dem Trennsteg (links = Steuerung positiv)."""
+    st, sp, sk = P["fach_steg"] / 2, P["bg_spiel"], P["bg_schenkel"]
+    xb, xs = -(st + P["fach_b"][0] + sp), st + P["fach_b"][1] + sp
+    return dict(xb=xb, xs=xs, x0=xb - sk, x1=xs + sk, m3=(xb - sk / 2, xs + sk / 2),
+                h=P["fach_h"] + sp)
+
+
+def _platziert(s, p, d):
+    """Lokal x quer (links von d), y längs, z ab der Unterlage -> Lage der Schelle."""
+    s.rotate(V(0, 0, 0), V(0, 0, 1), math.degrees(math.atan2(d.y, d.x)) + 90.0)
+    s.translate(p)
+    return s
+
+
+def leitungsschellen():
+    """Zwei Tunnel mit Mittelsteg über den Pfaden, je 1x M3 durch die Schenkel."""
+    m, l, t = schelle_mass(), P["bg_l"] / 2, P["bg_dach"]
+    st = P["bg_steg"] / 2
     res = []
-    for i, (p, d) in enumerate(buegel_lagen()):
-        b, tw, dx = P["bg_b"][i] / 2, P["bg_tunnel"][i] / 2, P["bg_m3_dx"][i]
-        s = box(-b, b, -l, l, 0, dd + t).cut(box(-tw, tw, -l - 1, l + 1, -1, dd))
-        for sx in (-1, 1):
-            s = s.cut(Part.makeCylinder(1.7, dd + t + 2, V(sx * dx, 0, -1)))
-        w = math.degrees(math.atan2(d.y, d.x)) - 90.0          # lokal y = Bündelrichtung
-        s.rotate(V(0, 0, 0), V(0, 0, 1), w)
-        s.translate(p)
+    for p, d in buegel_lagen():
+        s = box(m["x0"], m["x1"], -l, l, 0, m["h"] + t)
+        s = s.cut(box(m["xb"], -st, -l - 1, l + 1, -1, m["h"]))
+        s = s.cut(box(st, m["xs"], -l - 1, l + 1, -1, m["h"]))
+        for x in m["m3"]:
+            s = s.cut(Part.makeCylinder(1.7, m["h"] + t + 2, V(x, 0, -1)))
+        res.append(_platziert(s, p, d))
+    return res
+
+
+def schelle_fuss(i, h, l=None):
+    """Unterlage unter der Schelle i (Fläche der Schelle, Höhe h nach unten)."""
+    p, d = buegel_lagen()[i]
+    m = schelle_mass()
+    l = (P["bg_l"] / 2 + 1.0) if l is None else l
+    return _platziert(box(m["x0"], m["x1"], -l, l, -h, 0), p, d)
+
+
+def buegel_bohrungen(teil, art, nur):
+    """M3 der Schellen in die Unterlage: Muttern 8 mm unter der Auflage, seitlich nach außen
+    eingeschoben ("seite") oder von unten eingepresst ("unten", Verbindungsplatte)."""
+    m = schelle_mass()
+    lagen = buegel_lagen()
+    for i in nur:
+        p, d = lagen[i]
+        q = V(-d.y, d.x, 0)
+        for x in m["m3"]:
+            c = _quer(p, d, x)
+            teil = teil.cut(Part.makeCylinder(1.7, 14, V(c.x, c.y, p.z - 13)))
+            if art == "seite":
+                sx = 1 if x > 0 else -1
+                teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - 8.0), V(0, 0, 1), q * sx,
+                                              P["bg_schenkel"] / 2 + 2.0))
+            elif art == "unten":
+                teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - P["vp_t"] + 1.3), V(0, 0, 1)))
+    return teil
+
+
+def schelle_einzeln():
+    """Eine Schelle in Druckbett-Lage (Dach unten)."""
+    s = leitungsschellen()[0].copy()
+    p, d = buegel_lagen()[0]
+    s.translate(-p)
+    s.rotate(V(0, 0, 0), V(0, 0, 1), -(math.degrees(math.atan2(d.y, d.x)) + 90.0))
+    s.rotate(V(0, 0, 0), V(1, 0, 0), 180.0)
+    return s
+
+
+def leitungssockel():
+    """Druckteile in der Ablage hinten unter den beiden Schellen: heben die Pfade auf die
+    Höhe der X-Kette; 2x M3 von unten durch die Ablage in Muttern (von unten eingepresst)."""
+    lagen = buegel_lagen()
+    z_r = rinne_hinten_z() + P["rh_t"]
+    res = []
+    for i in range(len(P["bg_oben_y"]), len(lagen)):
+        p, d = lagen[i]
+        s = schelle_fuss(i, p.z - z_r, P["sockel_l"] / 2)
+        s = buegel_bohrungen(s, "seite", [i])
+        for dy in (-P["sockel_m3_dy"], P["sockel_m3_dy"]):
+            c = _quer(p, d, 0.0, dy)
+            s = s.cut(Part.makeCylinder(1.7, 10, V(c.x, c.y, z_r - 1)))
+            s = s.cut(fc_dok.mutter(3, V(c.x, c.y, z_r + 1.3), V(0, 0, 1)))
         res.append(s)
     return res
 
 
-def buegel_bohrungen(teil, druck=True, nur=None):
-    """M3 der Leitungsbügel in ein Teil: im Druckteil Muttern 8 mm unter der Auflage
-    (seitlich herausgeführt bzw. von unten eingepresst), in Blech nur Bohrungen."""
-    for i, (p, d) in enumerate(buegel_lagen()):
-        if nur is not None and i not in nur:
-            continue
-        for sx in (-1, 1):
-            c = _quer(p, d, sx * P["bg_m3_dx"][i])
-            if not teil.BoundBox.isInside(V(c.x, c.y, p.z - 1)):
-                continue
-            teil = teil.cut(Part.makeCylinder(1.7, 14, V(c.x, c.y, p.z - 13)))
-            if druck == "seite":
-                q = V(-d.y, d.x, 0) * sx
-                teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - 8.0), V(0, 0, 1), q, 12.0))
-            elif druck == "laengs_kopf":                # Schlitz nach vorn in die Plattenaussparung
-                teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - 8.0), V(0, 0, 1), V(0, 1, 0), 13.0))
-            elif druck == "unten":
-                teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - P["vp_t"] + 1.3), V(0, 0, 1)))
-    return teil
+def sockel_loecher():
+    lagen = buegel_lagen()
+    return [_quer(p, d, 0.0, dy) for p, d in lagen[len(P["bg_oben_y"]):]
+            for dy in (-P["sockel_m3_dy"], P["sockel_m3_dy"])]
 
 
 def bogen_y_vor():
@@ -542,11 +706,11 @@ def leitungsbogen():
     mit den beiden M5 des Kettenendes (länger, von unten durch Anschlussteil, Halter und
     Bogen, Muttern seitlich eingeschoben)."""
     g = geo()
-    r, d = P["leitung_r"], P["leitung_d"]
+    r = P["leitung_r"]
     xc = (g["k_x0"] + g["k_x1"]) / 2
     yv = bogen_y_vor()
     cy, z1, z2 = yv - r, g["z_mo"] + r, P["leitung_oben_z"] - r
-    ri = r - d / 2
+    ri = r - P["fach_h"] / 2
     b, wt, wr = P["fuehrung_b"] / 2, P["wange_t"], P["wange_r"]
     z_h = g["z_mo"] + P["kette_h"] / 2 + P["hy_dicke"]   # Oberkante Halter Y
     yb = P["hy_y"][0]
@@ -558,6 +722,9 @@ def leitungsbogen():
         return s.common(box(x0 - 1, x1 + 1, cy, cy + rad + 1, z1 - rad - 1, z2 + rad + 1))
 
     kern = stadion(ri, xc - b, xc + b).fuse(box(xc - b, xc + b, yb, cy, z_h, z2 + ri))
+    st = P["fach_steg"] / 2
+    kern = kern.fuse([stadion(ri + 8.0, xc - st, xc + st),         # Trennsteg zwischen den Pfaden
+                      schelle_fuss(0, 12.0)])                       # Auflage der Schelle
     w = stadion(wr, xa0, xa1)              # nur am Bogen: dahinter versetzen sich die Leitungen
     w = w.cut(box(xc - b, xc + b, yb - 1, cy + wr + 1, z1 - wr - 1, z2 + wr + 1))
     s = kern.fuse(w)
@@ -567,7 +734,7 @@ def leitungsbogen():
     for dx, y in P["vp_m4_bogen"]:
         s = s.cut(Part.makeCylinder(2.25, 16, V(xc + dx, y, zv - 15)))
         s = s.cut(fc_dok.mutter(4, V(xc + dx, y, zv - 8.0), V(0, 0, 1), V(0, -1, 0), y - yb + 1))
-    s = buegel_bohrungen(s, "seite", nur=[0])
+    s = buegel_bohrungen(s, "seite", [0])
     lx, _ = leitung_bei_y(26.0)
     s = s.cut(box(lx - 15, lx + 15, 22.0, 30.0, z_h - 1, z_h + 2.5))   # Kabelbinder im Halter Y
     for z in (z1 - 15.0, z2 + 15.0):                                    # Kabelbinder um das Bündel
@@ -602,9 +769,9 @@ def umlenkkopf():
     diesen Bogen (R60) senkrecht hinunter in die Rinne hinten. Rückwand am Mast (2x M4,
     Muttern seitlich eingeschoben), Wange auf der Gegenseite, zur Kettenseite offen
     (Leitungen von der Seite einlegen, Kabelbinder)."""
-    r, d = P["leitung_r"], P["leitung_d"]
+    r, hh = P["leitung_r"], P["fach_h"] / 2
     yh, xa, zo = P["leitung_hinten_y"], P["leitung_ab_x"], P["leitung_oben_z"]
-    ri = r - d / 2
+    ri = r - hh
     b, wt = P["fuehrung_b"] / 2, P["wange_t"]
     cy, cz = yh + r, zo - r
     ys1 = P["leitung_s_y"][1]
@@ -612,9 +779,12 @@ def umlenkkopf():
     z_u = min(P["kopf_m4_z"]) - 30.0
     kern = zyl_x(ri, xa - b, xa + b, cy, cz).common(box(xa - b, xa + b, cy - ri, cy, cz, cz + ri))
     kern = kern.fuse(box(xa - b, xa + b, cy, ys1 + 5.0, cz, cz + ri))
-    rw = box(xa - 15.0, xa + b, y_rw, yh - d / 2, z_u, P["mast_oben"])
-    wa = box(xa + b, xa + b + wt + 2.0, y_rw, ys1 + 5.0, z_u, zo + d / 2 + 5.0)   # Wange 5
-    s = kern.fuse([rw, wa]).removeSplitter()
+    rw = box(xa - 15.0, xa + b, y_rw, yh - hh, z_u, P["mast_oben"])
+    wa = box(xa + b, xa + b + wt + 2.0, y_rw, cy, z_u, zo + hh + 5.0)   # Wange 5, nur am Bogen
+    st = P["fach_steg"] / 2                                         # Trennsteg zwischen den Pfaden
+    tr = zyl_x(ri + 8.0, xa - st, xa + st, cy, cz).common(box(xa - st, xa + st, cy - ri - 8.0, cy, cz, cz + ri + 8.0))
+    tr = tr.fuse(box(xa - st, xa + st, yh - hh - 0.01, yh - hh + 8.0, z_u, cz))
+    s = kern.fuse([rw, wa, tr, schelle_fuss(2, 12.0)]).removeSplitter()
     zv = cz + ri - P["vp_t"]                                            # Verbindungsplatte
     s = s.cut(box(xa - b - 1, xa + b, P["vp_y"][0], ys1 + 6.0, zv, cz + ri + 1))
     for dx, y in P["vp_m4_kopf"]:
@@ -623,7 +793,7 @@ def umlenkkopf():
     for z in P["kopf_m4_z"]:
         s = s.cut(Part.makeCylinder(2.25, 12, V(xa, y_rw - 1, z), V(0, 1, 0)))
         s = s.cut(fc_dok.mutter(4, V(xa, y_rw + 6.0, z), V(0, 1, 0), V(-1, 0, 0), 17.0))
-    s = buegel_bohrungen(s, "laengs_kopf", nur=[2])
+    s = buegel_bohrungen(s, "seite", [2])
     for z in (z_u + 15.0, cz - 30.0):                    # Kabelbinder um das Bündel
         s = s.cut(box(xa - 16, xa + b + wt + 1, y_rw + 3.0, y_rw + 6.0, z - 2.5, z + 2.5))
     return s.removeSplitter()
@@ -636,20 +806,22 @@ def verbindungsplatte():
     xc = (g["k_x0"] + g["k_x1"]) / 2
     xa = P["leitung_ab_x"]
     b = P["fuehrung_b"] / 2
-    z1 = P["leitung_oben_z"] - P["leitung_d"] / 2
+    z1 = P["leitung_oben_z"] - P["fach_h"] / 2
     z0 = z1 - P["vp_t"]
     s = box(xc - b, xa + b, P["vp_y"][0], P["vp_y"][1], z0, z1)
     for x0, pts in ((xc, P["vp_m4_bogen"]), (xa, P["vp_m4_kopf"])):
         for dx, y in pts:
             s = s.cut(Part.makeCylinder(2.25, P["vp_t"] + 2, V(x0 + dx, y, z0 - 1)))
             s = s.cut(Part.makeCylinder(4.0, 5.5, V(x0 + dx, y, z1 - 4.5)))   # Zylinderkopf M4 versenkt
-    return buegel_bohrungen(s, "unten", nur=[1])
+    return buegel_bohrungen(s, "unten", [1])
 
 
 def rinne_hinten_z():
-    """Unterkante der Ablage hinten (Oberseite = Unterseite der Leitungen)."""
+    """Unterkante der Ablage hinten. Oberseite unter dem Brennerpfad, der nach dem Bogen am
+    Mast unten liegt (Pfade übereinander) und beim Verdrillen mit der Kante tiefer kommt."""
     gx = geo_x()
-    return gx["z_ku"] + P["kette_h"] / 2 - P["leitung_d"] / 2 - P["rh_t"]
+    rk = math.hypot(P["fach_steg"] / 2 + P["fach_b"][0], P["fach_h"] / 2)
+    return gx["z_ku"] + P["kette_h"] / 2 - rk - P["bg_spiel"] - P["rh_t"]
 
 
 def brenner_weg():
@@ -689,7 +861,7 @@ def rohr(w, d):
 
 
 def leitung():
-    return rohr(leitung_weg(), P["leitung_d"])
+    return Part.makeCompound([pfad(0), pfad(1)])
 
 
 def brenner_leitung():
@@ -707,7 +879,8 @@ def rinne_hinten():
     s = box(x0, x1, yh - 20.0, yh + 20.0, z0, z0 + t)
     for x in P["rh_halter_x"]:                           # M4 in die Rinnenhalter
         s = s.cut(Part.makeCylinder(2.25, t + 2, V(x + P["rh_halter_b"] / 2, yh, z0 - 1)))
-    s = buegel_bohrungen(s, False, nur=[3, 4])          # M3 Leitungsbügel, Muttern unten
+    for c in sockel_loecher():                           # M3 von unten in die Leitungssockel
+        s = s.cut(Part.makeCylinder(1.7, t + 2, V(c.x, c.y, z0 - 1)))
     xm = P["leitung_ab_x"] + P["mast_dx"]
     for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):       # M4 Mast: Gewinde in der hinteren Stirn
         s = s.cut(Part.makeCylinder(1.65, 11, V(xm + dx, yh - 21.0, z0 + t / 2), V(0, 1, 0)))
@@ -968,7 +1141,8 @@ def main():
     xpf = halter_x()
     pfad = os.path.join(OUT, "energiekette.FCStd")
     doc, offen = fc_dok.dokument(pfad)
-    for alt in ("ekx_festhalter", "ek_leitungsclips", "Kette_20x38_R125", "Kette_X_20x38_R65"):  # ersetzt
+    for alt in ("ekx_festhalter", "ek_leitungsclips", "Kette_20x38_R125", "Kette_X_20x38_R65",
+                "ek_leitungsbuegel"):  # ersetzt
         if doc.getObject(alt):
             doc.removeObject(alt)
     fc_dok.teil(doc, "ek_traeger_40x20", tr, "stahl")
@@ -983,7 +1157,8 @@ def main():
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
               "ek_leitungsbogen": (leitungsbogen(), "druck"), "ekx_mast": (mast(), "alu"),
               "ekx_umlenkkopf": (umlenkkopf(), "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
-              "ek_leitungsbuegel": (Part.makeCompound(leitungsbuegel()), "druck"),
+              "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
+              "ekx_leitungssockel": (Part.makeCompound(leitungssockel()), "druck"),
               "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
               "ek_einsteckteil_links": (einsteckteil_links(), "druck")}
     for n, (shp, farbe) in portal.items():
@@ -1005,9 +1180,8 @@ def main():
              "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
              "ek_stuetzen_kopf": stuetzen_kopf(), "ek_leitungsbogen": leitungsbogen(),
              "ekx_umlenkkopf": umlenkkopf(), "ek_verbindungsplatte": verbindungsplatte(),
-             "ek_leitungsbuegel_44": leitungsbuegel()[0],          # Bogen und Platte (2 Stück)
-             "ek_leitungsbuegel_kopf": leitungsbuegel()[2],        # Umlenkkopf
-             "ek_leitungsbuegel_40": leitungsbuegel()[3]}          # Ablage hinten (2 Stück)
+             "ek_leitungsschelle": schelle_einzeln(),             # 5 Stück
+             "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
     mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
     for n, s in druck.items():
         s.exportStep(os.path.join(OUT, n + ".step"))
@@ -1040,10 +1214,18 @@ def main():
                       ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
                       ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", leitungsbogen()),
                       ("Mast", mast()), ("Umlenkkopf", umlenkkopf()),
-                      ("Verbindungsplatte", verbindungsplatte())):
+                      ("Verbindungsplatte", verbindungsplatte()),
+                      ("Schellen", Part.makeCompound(leitungsschellen())),
+                      ("Sockel", Part.makeCompound(leitungssockel()))):
             f.write("Leitung / %s: %.2f mm³\n" % (n, le.common(sh).Volume))
         for wx in P["xk_wagen_x"]:
             f.write("Leitung / X-Kette bei Wagen %.0f: %.2f mm³\n" % (wx, le.common(kette_x(wx)).Volume))
+        p0, p1 = le.Solids[:3], le.Solids[3:]
+        p0, p1 = Part.makeCompound(p0), Part.makeCompound(p1)
+        f.write("Pfade Brenner / Steuerung: %.2f mm³\n" % p0.common(p1).Volume)
+        for k, n in ((0, "Brenner"), (1, "Steuerung")):
+            (_, r1), (_, r2), _, _ = pfad_ecken(fach_mitten()[k])
+            f.write("Pfad %s: kleinster Biegeradius (Mitte) R%.1f\n" % (n, min(r1[1:-1] + r2[1:-1])))
         bw = brenner_weg()
         f.write("Leitungen Y-Ende -> X-Festpunkt: ca. %.0f mm, Adern X-Ende -> Brenner: ca. %.0f mm (R%.0f)\n"
                 % (leitung_weg().Length, bw.Length, P["leitung_r"]))

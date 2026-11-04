@@ -56,8 +56,9 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ekx_rinnenhalter | je 1× M4 seitlich (Ablage hinten) |
 | ek_leitungsbogen | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich |
 | ekx_umlenkkopf | 2× M4 vom Mast, 2× M4 Verbindungsplatte, Muttern seitlich |
-| ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsbügel (Muttern von unten) |
-| ek_leitungsbuegel | 2× M3 je Bügel in Muttern im Druckteil bzw. unter der Ablage hinten |
+| ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsschelle (Muttern von unten) |
+| ek_leitungsschelle | 2× M3 × 25 durch die Schenkel in Muttern der Unterlage (Bogen, Kopf, Sockel seitlich eingeschoben; Platte von unten) |
+| ekx_leitungssockel | 2× M3 von unten durch die Ablage hinten in eingepresste Muttern |
 | ub_kanalhalter | 2× M5 durch (Distanzstück) |
 | ekx_halter | 2× M5 oben (Kettenende) |
 | ekx_stopfen | 2× M5 seitlich |
