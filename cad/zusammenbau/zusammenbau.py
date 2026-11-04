@@ -28,7 +28,7 @@ import fc_dok  # noqa: E402
 P = dict(
     portal_y=None,              # Mitte Portal in Y; None = Rahmenmitte
     bruecke_wand=4.0,
-    bruecke_verl_rechts=47.0,   # Brücke rechts verlängert: Stirn trägt den Kettenturm
+    bruecke_verl_rechts=48.5,   # Brücke rechts verlängert bis an den Kettenturm (energiekette a_x1 = -68.5)
     wagen_x=None,               # Lage X-Wagen; None = Rahmenmitte
     x_schiene=15.0,
     x_riemen_dicke=3.8,

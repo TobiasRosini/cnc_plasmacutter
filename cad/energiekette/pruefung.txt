@@ -34,6 +34,6 @@ Leitung / X-Kette bei Wagen 644: 0.00 mm³
 Pfade Brenner / Steuerung: 0.00 mm³
 Pfad Brenner: kleinster Biegeradius (Mitte) R59.8
 Pfad Steuerung: kleinster Biegeradius (Mitte) R50.5
-Leitungen Y-Ende -> X-Festpunkt: ca. 1315 mm, Adern X-Ende -> Brenner: ca. 403 mm (R60)
+Leitungen Y-Ende -> X-Festpunkt: ca. 1311 mm, Adern X-Ende -> Brenner: ca. 404 mm (R60)
 Adern bei X an der Gegenseite bis Rahmen-x 724 (Brückenstirn 720)
 Adern oben bis 563 über Brücken-UK (Z unten), ca. 1470 mm über Boden; bei Z oben 100 mm Schlaufe mehr

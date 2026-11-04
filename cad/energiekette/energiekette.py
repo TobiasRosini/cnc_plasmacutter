@@ -111,7 +111,7 @@ P = dict(
     # Gegenseite, trägt sich das obere Trum über den Festpunkt hinaus frei.
     xk_radius=75.0,             # 2400.03.075.0 (R65 gibt es nicht; Adern innen in der Kehre > R60)
     xk_glieder=14,              # 644 mm, igus: S/2 + K = 283 + 346 = 629
-    xk_y_vorn=17.0,             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
+    xk_y_vorn=13.5,             # Vorderkante Kette; hinteres M5 des festen Endes mit 3 mm Wand hinter dem Träger             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
     xk_traeger_uk=225.0,        # über Y-Kette (unteres Trum bis 220) und X-Motor
     xk_ablage_x0=15.0,          # Ablage beginnt hier (x ab Schienenmitte Kettenseite)
     xk_halter_dx=-10.0,         # bewegtes Ende neben der Wagenmitte (am Z-Kopf)
@@ -172,7 +172,7 @@ P = dict(
     brenner_stummel_z=475.0,    # Oberkante Tülle + Stummel am Brenner (X-Wagen-z), Z unten
     brenner_y=136.0,
     # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
-    rh_halter_x=[40.0, 250.0, 440.0],
+    rh_halter_x=[40.0, 250.0],  # dazu ein dritter unter dem festen Kettenende (hinteres M5)
     rh_halter_b=20.0,
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
@@ -386,20 +386,19 @@ def festhalter_zm():
 def ablagehalter_x():
     """Druckteil auf Höhe der X-Ablage, innen am Turm (2x M5 durch den Turm), mit
     einem Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die
-    untere Wand). Er ist so breit wie die Rinne und gleicht damit den Versatz
-    zwischen Turm (y +-20) und Ablage aus; oben liegt bei X am Ende die Schlaufe auf."""
+    untere Wand). Er reicht über Rinne und Turm; oben liegt bei X am Ende die Schlaufe auf."""
     g, gx = geo(), geo_x()
     x0, x1 = g["a_x1"], ablage_x0()
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    ymt = ym_traeger()
     z0, h = gx["z_t0"], P["traeger_h"]
-    s = box(x0, x1, gx["r_y0"], gx["r_y1"], z0, gx["z_ku"])
-    s = s.fuse(box(x1 - 0.01, x1 + 25, ym - 17.8, ym + 17.8, z0 + 2.2, z0 + h - 2.2))
+    s = box(x0, x1, min(gx["r_y0"], P["ausleger_y"][0]), max(gx["r_y1"], P["ausleger_y"][1]), z0, gx["z_ku"])
+    s = s.fuse(box(x1 - 0.01, x1 + 25, ymt - 17.8, ymt + 17.8, z0 + 2.2, z0 + h - 2.2))
     zm = festhalter_zm()
     for y in P["turm_x_y"]:                                        # Turm: Mutter von unten
         s = s.cut(m5_quer(x0, y, zm, 1, V(0, 0, -1), zm - z0 + 1))
     for x, y in zapfen_loecher():                                  # Zapfen: Mutter von der Seite
         s = s.cut(Part.makeCylinder(2.75, 15, V(x, y, z0 + 1)))
-        sy = -1 if y < ym else 1
+        sy = -1 if y < ymt else 1
         s = s.cut(fc_dok.mutter(5, V(x, y, z0 + 10), V(0, 0, 1), V(0, sy, 0), 9))
     return s.removeSplitter()
 
@@ -411,7 +410,7 @@ def ablage_x0():
 
 def zapfen_loecher():
     gx = geo_x()
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    ym = ym_traeger()
     return [(ablage_x0() + 12.5, ym - 10.0), (ablage_x0() + 12.5, ym + 10.0)]
 
 
@@ -877,7 +876,7 @@ def rinne_hinten():
     x0 = P["leitung_ab_x"] - 15.0
     x1 = gx["xf"] + P["end_laenge"] / 2 + 2.0
     s = box(x0, x1, yh - 20.0, yh + 20.0, z0, z0 + t)
-    for x in P["rh_halter_x"]:                           # M4 in die Rinnenhalter
+    for x in rh_halter_xs():                             # M4 in die Rinnenhalter
         s = s.cut(Part.makeCylinder(2.25, t + 2, V(x + P["rh_halter_b"] / 2, yh, z0 - 1)))
     for c in sockel_loecher():                           # M3 von unten in die Leitungssockel
         s = s.cut(Part.makeCylinder(1.7, t + 2, V(c.x, c.y, z0 - 1)))
@@ -888,22 +887,33 @@ def rinne_hinten():
 
 
 def rinnenhalter():
-    """Druckteile unter der Ablage: tragen die Rinne hinten (je 2x M5 von unten in
-    Nietmuttern der Ablage, Rinne mit 1x M4 in eine Mutter, seitlich eingeschoben)."""
+    """Druckteile unter der Ablage: tragen die Ablage hinten (je 2x M5 von unten in
+    Nietmuttern der Ablage, Ablage hinten mit 1x M4 in eine Mutter, seitlich eingeschoben).
+    L-Profil: Platte unter der Ablage, dahinter hoch bis zur Ablage hinten. Der letzte
+    sitzt unter dem festen Kettenende und reicht hinter der Ablage bis unter die Rinne
+    (hinteres M5 des Kettenendes in eine seitlich eingeschobene Mutter)."""
     gx = geo_x()
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    ym = ym_traeger()
     yh = P["leitung_hinten_y"]
     z_r = rinne_hinten_z()
     z0 = gx["z_t0"] - 8.0
+    b = P["rh_halter_b"]
+    y_tr = ym - 20.0                                     # Rückseite der Ablage
+    yc = (gx["y0"] + gx["y1"]) / 2
+    y_fest = [yc + dy for dy in (-P["end_C"] / 2, P["end_C"] / 2) if abs(yc + dy - ym) >= 18.0]
     res = None
-    for x in P["rh_halter_x"]:
-        b = P["rh_halter_b"]
-        s = box(x, x + b, yh - 22.0, ym + 20.0, z0, gx["z_t0"])           # unter der Ablage
-        s = s.fuse(box(x, x + b, yh - 20.0, gx["r_y0"] - 1.0, gx["z_t0"] - 0.01, z_r))  # hinten hoch zur Ablage hinten
+    for i, x in enumerate(rh_halter_xs()):
+        s = box(x, x + b, yh - 20.0, ym + 20.0, z0, gx["z_t0"])            # unter der Ablage
+        s = s.fuse(box(x, x + b, yh - 20.0, y_tr, gx["z_t0"] - 0.01, z_r))  # hoch zur Ablage hinten
+        if i == len(rh_halter_xs()) - 1:
+            s = s.fuse(box(x, x + b, gx["r_y0"], y_tr, gx["z_t0"] - 0.01, gx["z_ri"]))   # unter der Rinne
+            for y in y_fest:
+                s = s.cut(Part.makeCylinder(2.75, 16, V(x + b / 2, y, gx["z_ri"] - 15)))
+                s = s.cut(fc_dok.mutter(5, V(x + b / 2, y, gx["z_ri"] - 8), V(0, 0, 1), V(1, 0, 0), b / 2 + 1))
         for y in (ym - 10.0, ym + 10.0):                               # M5 von unten, Nietmutter in der Ablage
             s = s.cut(Part.makeCylinder(2.75, 10, V(x + b / 2, y, z0 - 1)))
         s = s.cut(Part.makeCylinder(2.25, 12, V(x + b / 2, yh, z_r - 11)))
-        s = s.cut(fc_dok.mutter(4, V(x + b / 2, yh, z_r - 6), V(0, 0, 1), V(1, 0, 0), b))
+        s = s.cut(fc_dok.mutter(4, V(x + b / 2, yh, z_r - 6), V(0, 0, 1), V(1, 0, 0), b / 2 + 1))
         res = s if res is None else res.fuse(s)
     return res.removeSplitter()
 
@@ -950,33 +960,49 @@ def geo_x():
                 r_y0=y0 - rl - t, r_y1=y1 + rl + t, x_re=P["xk_bruecke_links_x"] + xs)
 
 
+def ym_traeger():
+    """Mitte der X-Ablage in y: bündig mit Platte und Turm (Brückentiefe)."""
+    return sum(P["ausleger_y"]) / 2
+
+
+def x_fest_loch():
+    """x der Bohrungen des festen X-Kettenendes."""
+    return geo_x()["xf"] + loch_versatz()
+
+
+def rh_halter_xs():
+    """Rinnenhalter (x der linken Kante); der letzte unter dem festen Kettenende."""
+    return P["rh_halter_x"] + [x_fest_loch() - P["rh_halter_b"] / 2]
+
+
 def stopfen_loecher():
     gx = geo_x()
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
     zm = gx["z_t0"] + P["traeger_h"] / 2
-    return [(-14.0, zm), (0.0, zm)]          # innerhalb der Plattenbreite (y +-20)
+    return [(ym_traeger() - 10.0, zm), (ym_traeger() + 10.0, zm)]
 
 
 def ablage_x():
-    """Alu 40x20x2 flach (in y 40 breit) + Rinne, an der Kettenseite auf dem Zapfen des
-    Ablagehalters, an der Gegenseite stumpf an der Platte (Stopfen mit M5-Muttern). Die
-    Rinne endet hinter dem festen Kettenende (2x M5 durch den Rinnenboden, neben der
-    Ablage); dahinter liegt die Kehre der Leitungen."""
+    """Alu 40x20x2 flach (in y 40 breit, bündig mit Platte und Turm) + Rinne, an der
+    Kettenseite auf dem Zapfen des Ablagehalters, an der Gegenseite stumpf an der Platte
+    (Stopfen mit M5-Muttern). Die Rinne steht hinten über die Ablage über und endet
+    hinter dem festen Kettenende (2x M5 durch den Rinnenboden: vorn in eine Nietmutter
+    der Ablage, hinten in den Rinnenhalter); dahinter liegt die Kehre der Leitungen."""
     gx = geo_x()
     x0 = ablage_x0()
     x1 = gx["x_re"]
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    ym = ym_traeger()
     z0 = gx["z_t0"]
     tr = box(x0, x1, ym - 20, ym + 20, z0, z0 + P["traeger_h"])
     tr = tr.cut(box(x0 - 1, x1 + 1, ym - 18, ym + 18, z0 + 2, z0 + P["traeger_h"] - 2))
     for x, y in zapfen_loecher():                                  # M5 von unten in den Zapfen
         tr = tr.cut(Part.makeCylinder(2.75, 4, V(x, y, z0 - 1)))
-    for x in P["rh_halter_x"]:                                     # Nietmuttern M5 für die Rinnenhalter
+    for x in rh_halter_xs():                                       # Nietmuttern M5 für die Rinnenhalter
         for y in (ym - 10.0, ym + 10.0):
             tr = tr.cut(Part.makeCylinder(3.5, 4, V(x + P["rh_halter_b"] / 2, y, z0 - 1)))
     yc = (gx["y0"] + gx["y1"]) / 2
-    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmuttern M5 für das feste Kettenende
-        tr = tr.cut(Part.makeCylinder(3.5, 4, V(gx["xf"] + loch_versatz(), yc + dy, z0 + P["traeger_h"] - 3)))
+    for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmutter M5 für das feste Kettenende
+        if abs(yc + dy - ym) < 18.0:                               # (das hintere M5 geht in den Rinnenhalter)
+            tr = tr.cut(Part.makeCylinder(3.5, 4, V(x_fest_loch(), yc + dy, z0 + P["traeger_h"] - 3)))
     t = P["rinne_t"]
     xr = gx["xf"] + P["end_laenge"] / 2
     ri = box(x0, xr, gx["r_y0"], gx["r_y1"], gx["z_ri"], gx["z_ri"] + t)
@@ -991,7 +1017,7 @@ def ablage_x():
 def stopfen_x():
     """Stopfen (Druck) im linken Ende der X-Ablage, 2x M5 längs in Muttern."""
     gx = geo_x()
-    ym = (gx["r_y0"] + gx["r_y1"]) / 2
+    ym = ym_traeger()
     z0 = gx["z_t0"]
     L = 25.0
     res = None
@@ -1014,7 +1040,7 @@ def stuetze_x_links():
     x0 = gx["x_re"]
     t = P["ausleger_t"]
     py0, py1 = P["ausleger_y"]
-    s = box(x0, x0 + t, py0, py1, P["bruecke_z"][0], gx["z_t0"] + P["traeger_h"] + 5)
+    s = box(x0, x0 + t, py0, py1, P["bruecke_z"][0], gx["z_t0"] + P["traeger_h"])   # oben bündig mit der Ablage
     for y, z in P["turm_loecher_links"]:
         s = s.cut(Part.makeCylinder(3.3, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
     for y, z in stopfen_loecher():

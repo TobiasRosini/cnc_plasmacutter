@@ -53,7 +53,7 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ek_einsteckteil rechts/links | je 4× M6 seitlich |
 | ek_halter_y | 2× M5 oben (Kettenende), 2× M5 von oben in Schlitze (Turm) |
 | ekx_ablagehalter | 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
-| ekx_rinnenhalter | je 1× M4 seitlich (Ablage hinten) |
+| ekx_rinnenhalter | je 2× M5 von unten in Nietmuttern der Ablage, 1× M4 seitlich (Ablage hinten); der dritte zusätzlich 1× M5 seitlich (hinteres M5 des festen X-Kettenendes) |
 | ek_leitungsbogen | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich |
 | ekx_umlenkkopf | 2× M4 vom Mast, 2× M4 Verbindungsplatte, Muttern seitlich |
 | ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsschelle (Muttern von unten) |
