@@ -347,8 +347,9 @@ def main():
                 if "Ablauf" in paar and "Wanne" in paar and "kaefig" not in paar:
                     continue            # Ablauf geht durch den Wannenboden (gewollt)
                 if ("Kupplung" in paar and ("Spindel" in paar or "Motor" in paar)) \
-                        or ("Stäbe" in paar and "halter" in paar):
-                    continue            # Welle in Kupplung, Stäbe im Presssitz (gewollt)
+                        or ("Stäbe" in paar and ("halter" in paar or "traeger" in paar)) \
+                        or ("Zielstift" in paar and "klemmdeckel" in paar):
+                    continue            # Welle in Kupplung, Stäbe/Stift im Presssitz, Trägerbohrung wird aufgerieben (gewollt)
                 if not a.Shape.BoundBox.intersect(c.Shape.BoundBox):
                     continue
                 v = a.Shape.common(c.Shape).Volume

@@ -127,6 +127,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 - **Y rechts/links:** hinten über der Y-Riemenscheibe, genau über der Schiene, Achse längs (Halter am Y-Motorhalter); Stahlfahne abgekantet auf der Klemmplatte am festen Ende des Y-Winkels. Über das M12-Gewinde fein einstellbar (Portal rechtwinklig).
 - **X:** am rechten Y-Winkel (Kastenseite) auf der Sattelrückwand, Achse quer; Ziel ist ein eingepresster Zylinderstift 6 × 10 (Stahl) in der rechten Fläche des X-Wagenkörpers. Schaltet ab ca. 82 mm Wagenmitte.
 - **Z:** oben, senkrecht durch den Z-Kopf; Stahlfahne auf dem Z-Schlitten.
+- **Schwimmkopf** (04.11.2026): ein fünfter LJ12A3-4-Z/AY, senkrecht im oberen Steg des Halters, Ziel Zylinderstift 6 × 10 im Klemmdeckel (**noch bestellen**).
 - Andere Achsenden über Software-Endlagen in LinuxCNC.
 
 ### Energiekette Y (Stand 23.10.2026)

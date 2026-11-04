@@ -14,7 +14,7 @@ Stand 03.11.2026. Seiten von vorn gesehen. Schaltschrank und Plasmagerät stehen
 | 6 | Motor Z | Schaltschrank (Treiber) | Z-Motor auf dem Z-Kopf | igus CF10.07.05 | 7,5 | ✓ | ✓ | 5,0 m |
 | 7 | Referenzschalter X | Schaltschrank (24 V, Eingang) | LJ12A3 am rechten Y-Winkel | igus CF9.02.03.INI, 3 × 0,25 | 4,5 | ✓ | – | 3,1 m |
 | 8 | Referenzschalter Z | Schaltschrank | LJ12A3 im Z-Kopf | igus CF9.02.03.INI | 4,5 | ✓ | ✓ | 5,0 m |
-| 9 | Schalter Schwimmkopf | Schaltschrank | Schalter am Schwimmkopf (fährt mit Z) | igus CF9.02.03.INI (3 × 0,25, je nach Schalter 2 oder 3 Adern) | 4,5 | ✓ | ✓ | 5,3 m |
+| 9 | Schalter Schwimmkopf | Schaltschrank (24 V, Eingang) | LJ12A3-4-Z/AY im oberen Steg des Schwimmkopf-Halters (fährt mit Z) | igus CF9.02.03.INI, 3 × 0,25 | 4,5 | ✓ | ✓ | 5,3 m |
 | (10) | Ohmsche Antastung (falls gewählt) | Schaltschrank | Brennerkappe | 1 Ader, hochspannungsfest isoliert | ~3 | ✓ | ✓ | 5,0 m |
 
 Längen bis zu den Klemmen im Schaltschrank (bzw. bis zum Brenneranschluss vorn am Plasmagerät), aus dem Modell, ohne Reserve:
@@ -72,5 +72,4 @@ Leitungen, die innen in der Kehre anliegen, biegen sich enger als der Kettenradi
 ## Offen
 
 - Längen der fest verlegten Y-Leitungen nach Verlegeweg am Rahmen.
-- Schalter für den Schwimmkopf festlegen (Typ, Adernzahl).
 - Entscheidung Schwimmkopf oder ohmsche Antastung (Nr. 10).

@@ -69,9 +69,11 @@ def GEWOLLT_GRUND(e):
         return "Muttertasche/Schraube endet im Schlitten"
     if "z_halter" in na and "z_traeger" in nb:
         return "Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)"
+    if "z_traeger" in na and "Stäbe" in nb:
+        return "Schmierkanal des Nippels M6, endet an der Welle (gewollt)"
     if "motorbock" in na and "Motor_X" in nb:
         return "Langloch zum Spannen: der Motor wird darin verschoben"
-    if "Referenzschalter" in nb:
+    if "Referenzschalter" in nb or "Schalter_Schwimmkopf" in nb:
         return "Bohrung für den Schalter (Schalter steckt darin)"
     return ""
 

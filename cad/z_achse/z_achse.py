@@ -82,8 +82,20 @@ P = dict(
     # Schwimmkopf vor dem Schlitten (Höhen über Schlitten-UK). Der Brenner darf nur
     # am Verbundrohr (135-375 über der Düse) gespannt werden.
     stab_d=8.0,
+    stab_l=100.0,               # Welle Ø8 h6 x 100, in Sacklöchern beider Stege eingefangen
+    stab_sack=13.0,             # Tiefe der Sacklöcher (unten eingepresst, oben Steckpassung)
     stab_x=31.0,
     stab_y=123.0,
+    traeger_bohrung=7.8,        # gedruckt, auf 8 aufgerieben
+    nippel_butzen=7.0,          # Butzen für den Schmiernippel M6 seitlich am Träger
+    oben_m5_x=18.0,             # oberer Steg: 2x M5 von oben in die Schlitten-Oberkante
+    oben_m5_tiefe=9.0,
+    # Schalter Schwimmkopf: LJ12A3-4-Z/AY wie die Referenzschalter, senkrecht im oberen Steg
+    # (Mutter eingepresst, Kontermutter oben), Ziel Zylinderstift 6 x 10 im Klemmdeckel
+    sk_schalter=(25.0, 151.0),
+    sk_ziel=(24.0, 150.0),
+    sk_schalter_rueck=0.5,      # Sensorfläche über der Unterseite des oberen Stegs
+    steg_oben_vorn=164.0,       # oberer Steg vorn länger (Mutter des Schalters)
     sk_x=39.0,                  # Halbe Breite von Stegen und Träger
     rueck_x=22.0,               # Rückenplatte des Halters
     rueck_dicke=6.0,            # 2 mm dünner seit Schlitten 12: Träger bleibt an seiner Stelle
@@ -203,6 +215,8 @@ def schlitten(g):
         s = s.cut(zyl(8.0, 5, x, g["y_sl"] - 4.5, z, V(0, 1, 0)))
     for x, z in P["halter_schrauben"]:                    # Schwimmkopf-Halter: M5-Gewinde
         s = s.cut(zyl(P["m5_kern"], P["sl_dicke"] + 2, x, g["y_wa"] - 1, s0 + z, V(0, 1, 0)))
+    for x, y in oben_schrauben(g):                        # oberer Steg: M5 in die Oberkante
+        s = s.cut(zyl(P["m5_kern"], P["oben_m5_tiefe"] + 1, x, y, s0 + P["sl_hoehe"] - P["oben_m5_tiefe"]))
     for x in fahne_schrauben():                           # Referenzfahne: M4 in die Oberkante
         s = s.cut(zyl(P["m4_kern"], 9, x, (g["y_wa"] + g["y_sl"]) / 2, s0 + P["sl_hoehe"] - 8))
     return s
@@ -343,20 +357,19 @@ def sk_vorn():
 
 
 def halter(g):
-    """Schwimmkopf-Halter (Druck): Rückenplatte am Schlitten, unterer und oberer Steg,
-    in beiden die Stäbe Ø8 eingepresst. Seitlich liegend (Rücken unten) ohne Stützen
-    zu drucken. Der Träger liegt auf dem unteren Steg; hebt er sich um den
-    Schwimmweg, betätigt er den Schalter unter dem oberen Steg."""
+    """Schwimmkopf-Halter unten (Druck): Rückenplatte am Schlitten (3x M5 gesenkt) und
+    unterer Steg mit den Sacklöchern der Stäbe (eingepresst). Seitlich liegend (Rücken
+    unten) ohne Stützen zu drucken. Der Träger liegt auf dem unteren Steg; hebt er sich,
+    schaltet der Schalter im oberen Steg."""
     (u0, u1), _, (o0, o1) = sk_hoehen(g)
     y0, yr, yv = g["y_sl"], g["y_sl"] + P["rueck_dicke"], sk_vorn()
     bx, rx = P["sk_x"], P["rueck_x"]
-    s = box(-rx, rx, y0, yr, u0, o1)
+    s = box(-rx, rx, y0, yr, u0, o0)
     s = s.fuse(box(-bx, bx, y0, yv, u0, u1))
-    s = s.fuse(box(-bx, bx, y0 + 2.5, yv, o0, o1))          # über dem Schlitten: Referenzfahne frei
     s = s.removeSplitter()
-    s = s.cut(zyl(P["brenner_d"] + 2, o1 - u0 + 2, 0, P["brenner_y"], u0 - 1))
+    s = s.cut(zyl(P["brenner_d"] + 2, u1 - u0 + 2, 0, P["brenner_y"], u0 - 1))
     for x in (-P["stab_x"], P["stab_x"]):
-        s = s.cut(zyl(P["stab_d"] - 0.1, o1 - u0 + 2, x, P["stab_y"], u0 - 1))
+        s = s.cut(zyl(P["stab_d"] - 0.1, P["stab_sack"] + 0.01, x, P["stab_y"], u1 - P["stab_sack"]))
     for x, z in P["halter_schrauben"]:                   # M5 gesenkt in den Schlitten
         z += g["s0"]
         s = s.cut(zyl(P["m5_durchgang"], P["rueck_dicke"] + 2, x, y0 - 1, z, V(0, 1, 0)))
@@ -367,16 +380,60 @@ def halter(g):
     return s.removeSplitter()
 
 
+def oben_schrauben(g):
+    return [(sx * P["oben_m5_x"], (g["y_wa"] + g["y_sl"]) / 2) for sx in (-1, 1)]
+
+
+def schalter_lage(g):
+    """Sensorfläche und Lage der beiden Muttern (eingepresst, Kontermutter) ab der Fläche."""
+    _, _, (o0, o1) = sk_hoehen(g)
+    zf = o0 + P["sk_schalter_rueck"]
+    return zf, (o1 - 4.5 - zf, o1 - zf)
+
+
+def halter_oben(g):
+    """Oberer Steg (Druck): liegt auf der Rückenplatte, nach hinten über die Schlitten-
+    Oberkante verlängert und dort mit 2x M5 von oben verschraubt (nach dem Träger
+    montiert, fängt die Stäbe in seinen Sacklöchern ein). Darin der Schalter. Flach
+    (Oberseite unten) zu drucken."""
+    _, _, (o0, o1) = sk_hoehen(g)
+    y0 = g["y_sl"]
+    bx, ex = P["sk_x"], P["oben_m5_x"] + 8.0
+    s = box(-bx, bx, y0 + 2.5, P["steg_oben_vorn"], o0, o1)        # über dem Schlitten: Referenzfahne frei
+    s = s.fuse(box(-ex, ex, g["y_wa"] - 4.0, y0 + 2.6, o0, o1)).removeSplitter()
+    s = s.cut(zyl(P["brenner_d"] + 2, o1 - o0 + 2, 0, P["brenner_y"], o0 - 1))
+    for x in (-P["stab_x"], P["stab_x"]):
+        s = s.cut(zyl(P["stab_d"], P["stab_sack"], x, P["stab_y"], o0 - 0.01))
+    for x, y in oben_schrauben(g):
+        s = s.cut(zyl(P["m5_durchgang"], o1 - o0 + 2, x, y, o0 - 1))
+        s = s.cut(zyl(P["m5_senk_d"], P["m5_senk_tiefe"] + 1, x, y, o1 - P["m5_senk_tiefe"]))
+    sx, sy = P["sk_schalter"]
+    s = s.cut(zyl(12.2, o1 - o0 + 2, sx, sy, o0 - 1))
+    s = s.cut(sechskant(17.4, 4.6, sx, sy, o1 - 4.5))                # Mutter M12 eingepresst
+    return s.removeSplitter()
+
+
 def traeger(g):
-    """Brennerträger (Druck), hintere Klemmschale: gleitet auf den Stäben, der Brenner
-    liegt in der Halbschale und wird mit dem Klemmdeckel (4x M4 in Muttern, von oben
-    und unten eingeschoben) auf dem Verbundrohr gespannt."""
+    """Brennerträger (Druck), hintere Klemmschale: gleitet auf den Stäben (Bohrungen auf
+    8 aufgerieben, je ein Schmiernippel M6 seitlich auf halber Höhe), der Brenner liegt
+    in der Halbschale und wird mit dem Klemmdeckel (4x M4 in Muttern, von oben und unten
+    eingeschoben) auf dem Verbundrohr gespannt."""
     _, (c0, c1), _ = sk_hoehen(g)
     yb = P["brenner_y"]
     s = box(-P["sk_x"], P["sk_x"], g["y_sl"] + P["rueck_dicke"] + 0.5, yb, c0, c1)
     s = s.cut(zyl(P["brenner_d"], c1 - c0 + 2, 0, yb, c0 - 1))
-    for x in (-P["stab_x"], P["stab_x"]):
-        s = s.cut(zyl(P["stab_d"] + 0.5, c1 - c0 + 2, x, P["stab_y"], c0 - 1))
+    bx, nb, zm = P["sk_x"], P["nippel_butzen"], (c0 + c1) / 2
+    for sx in (-1, 1):                                   # Butzen für den Schmiernippel, unten 45°
+        pr = [V(sx * bx, P["stab_y"] - 6, zm - 6 - nb), V(sx * (bx + nb), P["stab_y"] - 6, zm - 6),
+              V(sx * (bx + nb), P["stab_y"] - 6, zm + 6), V(sx * bx, P["stab_y"] - 6, zm + 6)]
+        bu = Part.Face(Part.makePolygon(pr + [pr[0]])).extrude(V(0, 12, 0))
+        s = s.fuse(bu)
+    s = s.removeSplitter()
+    for sx in (-1, 1):
+        x = sx * P["stab_x"]
+        s = s.cut(zyl(P["traeger_bohrung"], c1 - c0 + 2, x, P["stab_y"], c0 - 1))   # aufreiben auf 8
+        s = s.cut(zyl(5.0, bx + nb - P["stab_x"] + 1, sx * (bx + nb + 0.5), P["stab_y"], zm,
+                      V(-sx, 0, 0)))                     # M6 bis in die Stabbohrung
     for x in (-P["klemm_x"], P["klemm_x"]):
         for i, dz in enumerate(P["klemm_z"]):
             z = c0 + dz
@@ -387,7 +444,8 @@ def traeger(g):
 
 
 def klemmdeckel(g):
-    """Vordere Klemmschale (Druck), 0,5 mm Spalt zum Träger."""
+    """Vordere Klemmschale (Druck), 0,5 mm Spalt zum Träger; oben der Stahlstift als
+    Ziel des Schalters."""
     _, (c0, c1), _ = sk_hoehen(g)
     yb, kx = P["brenner_y"], P["klemm_x"] + 6.0
     s = box(-kx, kx, yb + P["klemm_spalt"], sk_vorn(), c0, c1)
@@ -395,6 +453,8 @@ def klemmdeckel(g):
     for x in (-P["klemm_x"], P["klemm_x"]):
         for dz in P["klemm_z"]:
             s = s.cut(zyl(P["m4_durchgang"], 30, x, sk_vorn() + 1, c0 + dz, V(0, -1, 0)))
+    zx, zy = P["sk_ziel"]
+    s = s.cut(zyl(5.9, 10.5, zx, zy, c1 - 10.5))          # Zylinderstift 6 x 10 (Ziel des Schalters)
     return s.removeSplitter()
 
 
@@ -433,14 +493,29 @@ def kaufteile(g):
     mo, _ = kt.nema23(56.0, 8.0, kabel_winkel=270.0)
     mo.translate(V(0, g["y_sp"], g["z_mp"] + P["kopf_platte"]))
     d["Z_Motor_NEMA23"] = fc_dok.fest(mo)
-    (u0, _), (_, c1), (o0, o1) = sk_hoehen(g)
+    (u0, u1), (_, c1), (o0, o1) = sk_hoehen(g)
     st = None
+    z_st = u1 - P["stab_sack"] + ((o0 - u1) + 2 * P["stab_sack"] - P["stab_l"]) / 2
     for x in (-P["stab_x"], P["stab_x"]):
-        s = zyl(P["stab_d"], o1 - u0, x, P["stab_y"], u0)
+        s = zyl(P["stab_d"], P["stab_l"], x, P["stab_y"], z_st)
         st = s if st is None else st.fuse(s)
     d["Z_Stäbe_D8"] = st
-    # Schalter (Platzhalter) unter dem oberen Steg, über der Ecke des Klemmdeckels
-    d["Z_Schalter"] = box(20.0, 30.0, 140.0, 146.0, c1 + 1.0, o0)
+    zf, mu = schalter_lage(g)
+    sch = kt.naeherungsschalter_m12(50.0, mu)
+    sch.translate(V(P["sk_schalter"][0], P["sk_schalter"][1], zf))
+    d["Z_Schalter_Schwimmkopf"] = fc_dok.fest(sch)
+    zx, zy = P["sk_ziel"]
+    d["Z_Zielstift_6x10"] = zyl(6.0, 10.0, zx, zy, c1 - 10.0)
+    _, (c0, _), _ = sk_hoehen(g)
+    nip = None
+    for sx in (-1, 1):                                   # Kegelschmiernippel M6 (SW7)
+        x0 = sx * (P["sk_x"] + P["nippel_butzen"])
+        n = sechskant(7.0, 5.0, 0, 0, 0)
+        n = n.fuse(zyl(5.0, 5.0, 0, 0, 5.0)).fuse(Part.makeSphere(2.5, V(0, 0, 10.0)))
+        n.rotate(V(0, 0, 0), V(0, 1, 0), 90.0 * sx)
+        n.translate(V(x0, P["stab_y"], (c0 + c1) / 2))
+        nip = n if nip is None else nip.fuse(n)
+    d["Z_Schmiernippel_M6"] = nip
     b = kt.brenner_sp80m()
     b.translate(V(0, P["brenner_y"], g["c0"] - P["brenner_unter_traeger"]))
     d["Brenner_SP80M"] = fc_dok.fest(b)
@@ -453,14 +528,16 @@ def teile(lage=None):
     eigen = {"z_grundplatte": (grundplatte(), "alu"), "z_leisten_20x20": (leisten(), "alu"),
              "z_schlitten": (schlitten(g), "alu"), "z_mutterblock": (mutterblock(g), "druck"),
              "z_kopf": (zkopf(g), "druck"), "z_motorhalter": (zmotorhalter(g), "druck"),
-             "z_halter": (halter(g), "druck"), "z_traeger": (traeger(g), "druck"),
+             "z_halter": (halter(g), "druck"), "z_halter_oben": (halter_oben(g), "druck"),
+             "z_traeger": (traeger(g), "druck"),
              "z_klemmdeckel": (klemmdeckel(g), "druck"), "z_ref_fahne": (ref_fahne(g), "stahl")}
     kauf = {n: (s, "zukauf") for n, s in kaufteile(g).items()}
     return g, eigen, kauf
 
 
 GEWOLLT = [{"Z_Spindel_SFU1204", "Z_Kupplung"}, {"Z_Motor_NEMA23", "Z_Kupplung"},
-           {"Z_Stäbe_D8", "z_halter"}]          # Presssitz / Welle in Bohrung
+           {"Z_Stäbe_D8", "z_halter"}, {"Z_Zielstift_6x10", "z_klemmdeckel"},
+           {"Z_Stäbe_D8", "z_traeger"}]         # Presssitz / Welle in Bohrung / Trägerbohrung wird aufgerieben
 
 
 def main():

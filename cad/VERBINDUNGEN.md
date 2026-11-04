@@ -50,6 +50,8 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | x_wagenkoerper | 4× M4 (Motorbock), 6× M5 (Z-Grundplatte), 4× M3 (Spritzschutz), alle seitlich |
 | z_kopf | 8× M4 unten (FK10, Motorhalter), 2× M5 von unten in Schlitze (Halter X-Kette) |
 | z_mutterblock | 4× M4 hinten |
+| z_halter_oben | 1× M12 eingepresst (Schalter Schwimmkopf); 2× M5 von oben in Gewinde im Schlitten |
+| z_traeger | Kegelschmiernippel M6 in Gewinde, im Druck geschnitten |
 | ek_einsteckteil rechts/links | je 4× M6 seitlich |
 | ek_halter_y | 2× M5 oben (Kettenende), 2× M5 von oben in Schlitze (Turm) |
 | ekx_ablagehalter | 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
