@@ -164,6 +164,7 @@ P = dict(
     mast_m4_dx=10.0,            # M4 unten in Gewinde in der Stirn der Ablage hinten
     rh_t=8.0,                   # Ablage hinten: Alu-Flachstange 40 x 8 (statt Winkel)
     kopf_m4_z=[470.0, 560.0],   # M4 Kopf an den Mast
+    kopf_m4_dx=10.0,            # neben dem Trennsteg (der Kopf ist dort geteilt)
     # Verbindungsplatte (Druck) unter dem freien Leitungsstück zwischen Bogen und Kopf:
     # liegt in Aussparungen oben in beiden, je 2x M4 von oben (gesenkt) in Muttern
     vp_t=15.0,
@@ -758,12 +759,16 @@ def leitungsbogen():
     st = P["fach_steg"] / 2
     kern = kern.fuse([stadion(ri + 8.0, xc - st, xc + st),         # Trennsteg zwischen den Pfaden
                       schelle_fuss(0, 12.0)])                       # Auflage der Schelle
-    w = stadion(wr, xa0, xa1)              # nur am Bogen: dahinter versetzen sich die Leitungen
+    # Wangen = ganze Seitenplatten (Bogen und Kern), außen bündig mit der Schellenauflage:
+    # die Hälften werden auf der Wange liegend gedruckt
+    fb = kern.BoundBox
+    xa0, xa1 = min(xa0, fb.XMin), max(xa1, fb.XMax)
+    w = stadion(wr, xa0, xa1).fuse(box(xa0, xa1, yb, cy, z_h, z2 + ri))
     w = w.cut(box(xc - b, xc + b, yb - 1, cy + wr + 1, z1 - wr - 1, z2 + wr + 1))
     s = kern.fuse(w)
     s = s.cut(box(xa0 - 1, xa1 + 1, yb - 1, P["hy_y"][1] + 0.5, z1 - wr - 1, z_h))   # Halter Y
     zv = z2 + ri - P["vp_t"]                                            # Verbindungsplatte
-    s = s.cut(box(xc - b - 1, xc + b + 1, yb - 1, P["vp_y"][1], zv, z2 + ri + 1))
+    s = s.cut(box(xc - b - 1, xa1 + 1, yb - 1, P["vp_y"][1], zv, z2 + ri + 1))
     for dx, y in P["vp_m4_bogen"]:
         s = s.cut(Part.makeCylinder(2.25, 16, V(xc + dx, y, zv - 15)))
         s = s.cut(fc_dok.mutter(4, V(xc + dx, y, zv - 8.0), V(0, 0, 1), V(0, -1, 0), y - yb + 1))
@@ -777,8 +782,28 @@ def leitungsbogen():
         x = xc + dx
         s = s.cut(Part.makeCylinder(2.75, 25, V(x, yl, z_h - 1)))
         sx = 1 if dx > 0 else -1
-        s = s.cut(fc_dok.mutter(5, V(x, yl, z_h + 15), V(0, 0, 1), V(sx, 0, 0), b + wt - abs(dx) + 2))
+        s = s.cut(fc_dok.mutter(5, V(x, yl, z_h + 15), V(0, 0, 1), V(sx, 0, 0), max(xa1 - x, x - xa0) + 2))
+    yq = cy + 20.0                                                      # M3 quer durch alle drei Teile
+    for z in (z1 - 17.5, z2 + 20.0):
+        s = m3_quer_durch(s, xa0, xa1, yq, z)
     return s.removeSplitter()
+
+
+def m3_quer_durch(s, x0, x1, y, z):
+    """M3 quer (x) durch dreiteilige Führung: Kopf gesenkt bei x0, Mutter in Tasche bei x1."""
+    s = s.cut(Part.makeCylinder(1.7, x1 - x0 + 2, V(x0 - 1, y, z), V(1, 0, 0)))
+    s = s.cut(Part.makeCylinder(3.2, 3.5, V(x0 - 1, y, z), V(1, 0, 0)))           # Zylinderkopf
+    return s.cut(fc_dok.mutter(3, V(x1 - 1.0, y, z), V(1, 0, 0)))                 # Mutter außen
+
+
+def dreiteilig(s, xm):
+    """Teilt eine Führung am Trennsteg (xm +- fach_steg/2): zwei Hälften mit je einer Wange
+    (auf der Wange liegend gedruckt) und der Trennsteg als flache Scheibe dazwischen."""
+    st = P["fach_steg"] / 2
+    bb = s.BoundBox
+    def teil(x0, x1):
+        return s.common(box(x0, x1, bb.YMin - 1, bb.YMax + 1, bb.ZMin - 1, bb.ZMax + 1)).removeSplitter()
+    return [teil(bb.XMin - 1, xm - st), teil(xm - st, xm + st), teil(xm + st, bb.XMax + 1)]
 
 
 def mast():
@@ -793,7 +818,7 @@ def mast():
     for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):
         s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xm + dx, y1 - mt - 1, z0 + P["rh_t"] / 2), V(0, 1, 0)))
     for z in P["kopf_m4_z"]:
-        s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa, y1 - mt - 1, z), V(0, 1, 0)))
+        s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + P["kopf_m4_dx"], y1 - mt - 1, z), V(0, 1, 0)))
     return s
 
 
@@ -813,7 +838,10 @@ def umlenkkopf():
     kern = zyl_x(ri, xa - b, xa + b, cy, cz).common(box(xa - b, xa + b, cy - ri, cy, cz, cz + ri))
     kern = kern.fuse(box(xa - b, xa + b, cy, ys1 + 5.0, cz, cz + ri))
     rw = box(xa - 15.0, xa + b, y_rw, yh - hh, z_u, P["mast_oben"])
-    wa = box(xa + b, xa + b + wt + 2.0, y_rw, cy, z_u, zo + hh + 5.0)   # Wange 5, nur am Bogen
+    fu = schelle_fuss(2, 12.0).BoundBox
+    xw = max(xa + b + wt + 2.0, fu.XMax)                                # außen bündig mit der Schellenauflage
+    wa = box(xa + b, xw, y_rw, cy, z_u, zo + hh + 5.0)                  # Wange = ganze Seitenplatte,
+    wa = wa.fuse(box(xa + b, xw, cy, ys1 + 5.0, z_u, cz + ri))          # vorn nur bis unter die Schelle
     st = P["fach_steg"] / 2                                         # Trennsteg zwischen den Pfaden
     tr = zyl_x(ri + 8.0, xa - st, xa + st, cy, cz).common(box(xa - st, xa + st, cy - ri - 8.0, cy, cz, cz + ri + 8.0))
     tr = tr.fuse(box(xa - st, xa + st, yh - hh - 0.01, yh - hh + 8.0, z_u, cz))
@@ -823,12 +851,15 @@ def umlenkkopf():
     for dx, y in P["vp_m4_kopf"]:
         s = s.cut(Part.makeCylinder(2.25, 16, V(xa + dx, y, zv - 15)))
         s = s.cut(fc_dok.mutter(4, V(xa + dx, y, zv - 8.0), V(0, 0, 1), V(0, 1, 0), ys1 + 5.0 - y + 1))
+    xm4 = xa + P["kopf_m4_dx"]                                          # neben dem Trennsteg (Teilung)
     for z in P["kopf_m4_z"]:
-        s = s.cut(Part.makeCylinder(2.25, 12, V(xa, y_rw - 1, z), V(0, 1, 0)))
-        s = s.cut(fc_dok.mutter(4, V(xa, y_rw + 6.0, z), V(0, 1, 0), V(-1, 0, 0), 17.0))
+        s = s.cut(Part.makeCylinder(2.25, 12, V(xm4, y_rw - 1, z), V(0, 1, 0)))
+        s = s.cut(fc_dok.mutter(4, V(xm4, y_rw + 6.0, z), V(0, 1, 0), V(1, 0, 0), xw - xm4 + 1))
     s = buegel_bohrungen(s, "seite", [2])
+    for y, z in ((cy + 18.0, cz + 20.0), (cy - 22.0, cz + 20.0)):      # M3 quer durch alle drei Teile
+        s = m3_quer_durch(s, xa - b, xw, y, z)
     for z in (z_u + 15.0, cz - 30.0):                    # Kabelbinder um das Bündel
-        s = s.cut(box(xa - 16, xa + b + wt + 1, y_rw + 3.0, y_rw + 6.0, z - 2.5, z + 2.5))
+        s = s.cut(box(xa - 16, xw + 1, y_rw + 3.0, y_rw + 6.0, z - 2.5, z + 2.5))
     return s.removeSplitter()
 
 
@@ -1191,8 +1222,17 @@ def kette(portal_y):
     return unten.fuse([oben, ring]).removeSplitter()
 
 
+def fuehrungen():
+    """Leitungsbogen und Umlenkkopf, je dreiteilig (Hälfte, Trennsteg, Hälfte)."""
+    g = geo()
+    lb = dreiteilig(leitungsbogen(), (g["k_x0"] + g["k_x1"]) / 2)
+    uk = dreiteilig(umlenkkopf(), P["leitung_ab_x"])
+    return lb, uk
+
+
 def main():
     tr, ri = traeger_rinne()
+    lb, uk = fuehrungen()
     st = stuetzen()
     au = ausleger()
     ei = einsteckteil()
@@ -1215,8 +1255,8 @@ def main():
               "ek_Leitung": (leitung(), "zukauf"),
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
-              "ek_leitungsbogen": (leitungsbogen(), "druck"), "ekx_mast": (mast(), "alu"),
-              "ekx_umlenkkopf": (umlenkkopf(), "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
+              "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"),
+              "ekx_umlenkkopf": (Part.makeCompound(uk), "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
               "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
               "ekx_leitungssockel": (Part.makeCompound(leitungssockel()), "druck"),
               "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
@@ -1238,8 +1278,10 @@ def main():
     druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": einsteckteil_links(),
              "ek_halter_y": halter_y(), "ekx_ablagehalter": ablagehalter_x(),
              "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
-             "ek_stuetzen_kopf": stuetzen_kopf(), "ek_leitungsbogen": leitungsbogen(),
-             "ekx_umlenkkopf": umlenkkopf(), "ek_verbindungsplatte": verbindungsplatte(),
+             "ek_stuetzen_kopf": stuetzen_kopf(),
+             "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
+             "ekx_umlenkkopf_a": uk[0], "ekx_umlenkkopf_steg": uk[1], "ekx_umlenkkopf_b": uk[2],
+             "ek_verbindungsplatte": verbindungsplatte(),
              "ek_leitungsschelle": schelle_einzeln(),             # 5 Stück
              "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
     mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
@@ -1272,8 +1314,8 @@ def main():
         le = leitung()
         for n, sh in (("Turm", au), ("Halter Y", halter_y()), ("Ablagehalter X", ablagehalter_x()),
                       ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
-                      ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", leitungsbogen()),
-                      ("Mast", mast()), ("Umlenkkopf", umlenkkopf()),
+                      ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", Part.makeCompound(lb)),
+                      ("Mast", mast()), ("Umlenkkopf", Part.makeCompound(uk)),
                       ("Verbindungsplatte", verbindungsplatte()),
                       ("Schellen", Part.makeCompound(leitungsschellen())),
                       ("Sockel", Part.makeCompound(leitungssockel()))):

@@ -1,14 +1,13 @@
 Druckbarkeit (Überhang flacher als 45° = kritisch; schräge Stellen bis 6 mm und waagerechte bis 10 mm Spannweite gelten als druckbar)
 Lage: Modellachse, die beim Druck nach oben zeigt (Koordinaten wie im Teileskript)
-grün 26, gelb 9
+grün 32, gelb 7
 
 GRÜN  ek_einsteckteil              Lage +Y oben, Auflage 7380 mm², Höhe 32 mm, 10 kleine Stellen
 GRÜN  ek_einsteckteil_links        Lage +Y oben, Auflage 3908 mm², Höhe 32 mm, 10 kleine Stellen
 GRÜN  ek_halter_y                  Lage +Z oben, Auflage 3381 mm², Höhe 20 mm, 4 kleine Stellen
-GELB  ek_leitungsbogen             Lage +Y oben, Auflage 2690 mm², Höhe 120 mm, 25 kleine Stellen, 3 größere:
-        waagerecht   1559 mm², Spannweite  46.0, Länge  52.2,  52.5 mm über dem Bett, Mitte (464, -34)
-        waagerecht    612 mm², Spannweite  15.0, Länge  41.0,  20.0 mm über dem Bett, Mitte (566, -34)
-        schräg        124 mm², Spannweite  10.2, Länge  12.0,  27.1 mm über dem Bett, Mitte (568, -9)
+GRÜN  ek_leitungsbogen_a           Lage +X oben, Auflage 12684 mm², Höhe 28 mm, 11 kleine Stellen
+GRÜN  ek_leitungsbogen_b           Lage -X oben, Auflage 12392 mm², Höhe 29 mm, 11 kleine Stellen
+GRÜN  ek_leitungsbogen_steg        Lage +X oben, Auflage 9559 mm², Höhe 3 mm, 0 kleine Stellen
 GRÜN  ek_leitungsschelle           Lage +Z oben, Auflage 841 mm², Höhe 17 mm, 0 kleine Stellen
 GRÜN  ek_stuetzen_kopf             Lage -Z oben, Auflage 2332 mm², Höhe 40 mm, 4 kleine Stellen
 GRÜN  ek_verbindungsplatte         Lage +Z oben, Auflage 5280 mm², Höhe 15 mm, 2 kleine Stellen
@@ -17,11 +16,9 @@ GRÜN  ekx_halter                   Lage -Y oben, Auflage 5189 mm², Höhe 74 mm
 GRÜN  ekx_leitungssockel           Lage -Z oben, Auflage 1815 mm², Höhe 15 mm, 4 kleine Stellen
 GRÜN  ekx_rinnenhalter             Lage +Z oben, Auflage 10838 mm², Höhe 28 mm, 4 kleine Stellen
 GRÜN  ekx_stopfen                  Lage +Z oben, Auflage 890 mm², Höhe 16 mm, 6 kleine Stellen
-GELB  ekx_umlenkkopf               Lage +Y oben, Auflage 6151 mm², Höhe 117 mm, 17 kleine Stellen, 4 größere:
-        schräg        777 mm², Spannweite  18.5, Länge  37.8,  26.5 mm über dem Bett, Mitte (539, 27)
-        schräg        776 mm², Spannweite  18.5, Länge  37.8,  26.5 mm über dem Bett, Mitte (539, 5)
-        schräg        104 mm², Spannweite  10.5, Länge  12.0,  78.4 mm über dem Bett, Mitte (568, -7)
-        schräg         98 mm², Spannweite   8.1, Länge  12.0,  85.7 mm über dem Bett, Mitte (568, 40)
+GRÜN  ekx_umlenkkopf_a             Lage -X oben, Auflage 6061 mm², Höhe 30 mm, 5 kleine Stellen
+GRÜN  ekx_umlenkkopf_b             Lage -X oben, Auflage 16907 mm², Höhe 27 mm, 15 kleine Stellen
+GRÜN  ekx_umlenkkopf_steg          Lage +X oben, Auflage 7423 mm², Höhe 3 mm, 0 kleine Stellen
 GELB  ub_kanalknoten               Lage -Y oben, Auflage 14825 mm², Höhe 67 mm, 3 kleine Stellen, 1 größere:
         waagerecht   4797 mm², Spannweite  25.5, Länge 188.2,  63.7 mm über dem Bett, Mitte (979, 52)
 GRÜN  ub_uebergang_unten           Lage -Y oben, Auflage 2291 mm², Höhe 64 mm, 2 kleine Stellen
