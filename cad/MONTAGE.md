@@ -29,10 +29,10 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Spritzschutz Y: Flachstahl 50 × 3 innen an die Längsträger, je 6 Blindnieten Ø4.
 - Auflage: Kammträger in die Wanne stellen (x −200 / 0 / +200), Auflageleisten in jede zweite Schlitzposition stecken (`cad/auflage/README.md`).
 - Wannenkäfig: 3× M6 je Seite durch die Außenwand des Rings (Zugang Ø12 innen, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr des Untertischs.
-- Geräteboden (Stahlblech 3 mm) auf die unteren Längsrohre: 4× M6 von oben in Nietmuttern. Darauf Plasmagerät vorn rechts und Schaltschrank vorn links (`cad/unterbau/README.md`).
+- Geräteboden (Siebdruckplatte 9 mm) auf die unteren Längsrohre: 6× M6 von oben in Nietmuttern. Darauf Plasmagerät rechts (250 mm hinter der Schrankfront) und Schaltschrank vorn links (`cad/unterbau/README.md`).
 - Tropfboden unter dem Wannenkäfig (Gefälle nach hinten), Ablauf durch die Hülse; Befestigung noch offen.
-- Kabelkanäle: 40 × 40 auf dem Y-Kettenträger vom festen Kettenende bis y 1450 (3× M4 in Nietmuttern), senkrecht 25 × 60 außen rechts (2 Distanzstücke, je 2× M5 in Nietmuttern), quer 60 × 40 über dem Plasmagerät in den Schaltschrank (Distanzstück am vorderen Bein).
-- Stützen der Y-Kette: je ein Rohr 20×40×2, 2× M6 durch die Innenwand (Zugang Ø13 außen) in Nietmuttern im Längsträger. Druckkopf mit 2× M5-Muttern (von unten in die Schlitze) einstecken und durch die Rohrwand verschrauben, Träger mit 2× M6 von unten in Nietmuttern.
+- Stützen der Y-Kette: hinten Rohr 20×40×2 (2× M6), vorn Rohr 40×40×2 hinter dem Bein (4× M6, in Längsträger und Längsrohr des Untertischs), jeweils durch die Innenwand (Zugang Ø13 außen) in Nietmuttern. Druckkopf mit 2× M5-Muttern (von unten in die Schlitze) einstecken und durch die Rohrwand verschrauben, Träger mit 2× M6 von unten in Nietmuttern.
+- Kabelkanäle (nach den Stützen): 40 × 40 auf dem Y-Kettenträger vom festen Kettenende bis y 1431 (3× M4 in Nietmuttern), senkrecht 25 × 60 außen auf der vorderen Stütze (4× M5 in Nietmuttern), quer 25 × 60 hinter dem Bein (2× M5 in Nietmuttern im Bein) in die obere rechte Ecke des Schaltschranks. Übergangsteile (Druck) auf die Kanalenden stecken: Bogen unten zwischen senkrechtem und Querkanal, Kopf oben über dem Trägerende (Kanal Y von hinten, senkrechter Kanal von unten). M3-Muttern vorher seitlich in die Schlitze schieben; Deckel nach dem Einlegen der Leitungen mit je 2× M3 schließen.
 
 ## Noch offen
 

@@ -1,4 +1,4 @@
-Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 61 gewollt
+Bohrungen ohne Gegenstück im Nachbarteil: 0 offen, 62 gewollt
 Bohrungen, die sich im selben Teil schneiden: 0
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_fest (Ø8.0 bei 687.0, 710.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
 gewollt P_links_Flachstange_40x15 -> P_links_winkel_fest (Ø8.0 bei 687.0, 736.0, 889.2): Senkung der Wagenschraube, wird vom Winkel überdeckt (erst Flachstange montieren)
@@ -58,6 +58,7 @@ gewollt Z_z_halter -> Z_z_traeger (Ø9.5 bei 360.0, 889.2, 1035.0): Schraubenkop
 gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 372.0, 889.0, 1019.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
 gewollt Z_z_halter -> Z_z_traeger (Ø8.5 bei 372.0, 889.0, 1043.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
 gewollt Z_z_halter -> Z_z_traeger (Ø9.5 bei 374.0, 889.2, 989.0): Schraubenkopf in der Rückenplatte, vom Brennerträger überdeckt (Halter vor dem Träger montieren)
+gewollt Z_z_halter_oben -> Z_Schalter_Schwimmkopf (Ø12.2 bei 385.0, 929.0, 1062.2): Bohrung für den Schalter (Schalter steckt darin)
 gewollt Z_z_kopf -> Z_Referenzschalter (Ø12.2 bei 406.0, 874.0, 1187.0): Bohrung für den Schalter (Schalter steckt darin)
 gewollt Z_z_traeger -> Z_Stäbe_D8 (Ø5.0 bei 319.6, 901.0, 1017.0): Schmierkanal des Nippels M6, endet an der Welle (gewollt)
 gewollt Z_z_traeger -> Z_Stäbe_D8 (Ø5.0 bei 400.4, 901.0, 1017.0): Schmierkanal des Nippels M6, endet an der Welle (gewollt)

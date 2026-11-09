@@ -42,9 +42,14 @@ _BERUEHRT = {}
 
 
 def offenes(pfad):
+    """Offenes Dokument zu pfad. Hat FreeCAD es nur teilweise geladen (beim Öffnen eines
+    Zusammenbaus nur die verlinkten Objekte), wird es vollständig nachgeladen; sonst
+    fehlen neue Teile im Zusammenbau."""
     pfad = os.path.abspath(pfad)
     for d in App.listDocuments().values():
         if d.FileName and os.path.abspath(d.FileName) == pfad:
+            if getattr(d, "Partial", False):
+                d = App.openDocument(pfad)
             return d
     return None
 

@@ -79,20 +79,19 @@ P = dict(
     # Befestigungen am Oberrahmen
     halter_loecher=[(-10.0, 52.0), (10.0, 52.0), (-10.0, 14.0), (10.0, 14.0)],  # (x ab Schiene, Abstand vor/hinter Schienenende)
     nietmutter_m6_d=9.0,        # M6-Nietmutter: 3 mm Wand trägt kein gutes M6-Gewinde
-    ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstützen rechts), ab Rahmenende
+    ek_stuetze_y=[10.0, 30.0],                   # M6-Nietmuttern außen (Kettenstütze hinten rechts), ab Rahmenende
     ek_stuetze_z=-20.0,                          # ab Rahmen-OK
+    ek_stuetze_vorn_y=[1446.0, 1466.0],          # Kettenstütze vorn (hinter dem Bein): Längsträger oben
+    ek_stuetze_vorn_z=[-20.0, -60.0],            # und Längsrohr Untertisch oben (= energiekette stuetze_vorn_*)
     # Vorderer Querträger 80 x 40 x 4 flach: steht 40 mm vor den Untertisch über, darunter
     # greifen Schraubzwingen (Flachstangen zum Schneiden einspannen); Oberrahmen 40 länger
     qv_tiefe=80.0,
     qv_wand=4.0,
     or_ueberstand=40.0,
-    # Kabelkanäle (Unterbau): Distanzstücke mit M5 in Nietmuttern, rechts außen bzw. am vorderen Bein
-    kanal_y=1420.0,
-    kanal_z_or=[820.0, 840.0],                   # Längsträger Oberrahmen rechts, außen
-    kanal_z_ut=[780.0, 800.0],                   # Längsrohr Untertisch oben rechts, außen
-    kanal_bein=[(12.0, 580.0), (28.0, 580.0)],   # vorderes Bein rechts, Rückseite (x, z)
+    # Querkanal (Unterbau): 2x M5 aus dem Kanal durch die Vorderwand in Nietmuttern im vorderen Bein rechts
+    kanal_bein=[(12.0, 627.5), (28.0, 627.5)],   # Rückseite (x, z)
     nietmutter_m5_d=7.0,
-    geraeteboden_y=[1050.0, 1420.0],             # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
+    geraeteboden_y=[560.0, 1050.0, 1420.0],      # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
     # Spritzschutz Y-Schienen: Flachstahl 50 x 3 innen an den Längsträgern, steht über die
     # Rahmenoberkante (Bleche dann höchstens 634 breit); zwischen den Y-Motor- und Umlenkhaltern
     schutz_t=3.0,
@@ -172,20 +171,16 @@ def rahmen():
             for y in (y_a - dy, y_e + dy):
                 lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                               V(x0 + r / 2 + dx, y, z_ok - P["wand"] - 1)))
-        # M8 quer für die Stützen der Y-Energiekette (nur rechts, an beiden Enden)
+        # M6 quer für die Stützen der Y-Energiekette (nur rechts): hinten am Rahmenende,
+        # vorn hinter dem Bein
         if i == 0:
-            for dy in P["ek_stuetze_y"]:
-                for y in (dy, ayo - dy):
-                    lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
-                                                  V(-1, y, z_ok + P["ek_stuetze_z"]), V(1, 0, 0)))
+            for y in P["ek_stuetze_y"] + P["ek_stuetze_vorn_y"]:
+                lt = lt.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
+                                              V(-1, y, z_ok + P["ek_stuetze_z"]), V(1, 0, 0)))
         xi = x0 + r - P["wand"] - 1 if i == 0 else x0 - 1      # Innenwand (Spritzschutz)
         for y in P["schutz_niet_y"]:
             lt = lt.cut(Part.makeCylinder(P["niet_d"] / 2, P["wand"] + 2,
                                           V(xi, y, z_ok + P["schutz_niet_z"]), V(1, 0, 0)))
-        if i == 0:                                       # Kabelkanal außen rechts
-            for z in P["kanal_z_or"]:
-                lt = lt.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
-                                              V(-1, P["kanal_y"], z), V(1, 0, 0)))
         teile["OR_Laengstraeger_%s" % "LR"[i]] = lt
     for i, y0 in enumerate((0.0, ay - r)):
         if i == 1:                                       # vorn 80 x 40 x 4 flach, steht über
@@ -226,10 +221,11 @@ def rahmen():
             lo = lo.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
                                           V(xi, P["wanne_mitte_y"] + y, z_ut + r - 10.0),
                                           V(1, 0, 0)))
-        if i == 0:                                       # Kabelkanal außen rechts
-            for z in P["kanal_z_ut"]:
-                lo = lo.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
-                                              V(-1, P["kanal_y"], z), V(1, 0, 0)))
+        if i == 0:                                       # Kettenstütze vorn
+            z = z_ok + P["ek_stuetze_vorn_z"][1]
+            for y in P["ek_stuetze_vorn_y"]:
+                lo = lo.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, P["wand"] + 2,
+                                              V(-1, y, z), V(1, 0, 0)))
         teile["UT_Laengsrohr_oben_%s" % "LR"[i]] = lo
         lu = rohr("Längsrohr unten", x0, r, z_u, ay - 2 * r, "y")
         for y in P["geraeteboden_y"]:                    # Geräteboden: M6 von oben in Nietmuttern

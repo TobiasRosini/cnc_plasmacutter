@@ -18,7 +18,7 @@ Stand 03.11.2026. Seiten von vorn gesehen. Schaltschrank und Plasmagerät stehen
 | (10) | Ohmsche Antastung (falls gewählt) | Schaltschrank | Brennerkappe | 1 Ader, hochspannungsfest isoliert | ~3 | ✓ | ✓ | 5,0 m |
 
 Längen bis zu den Klemmen im Schaltschrank (bzw. bis zum Brenneranschluss vorn am Plasmagerät), aus dem Modell, ohne Reserve:
-Schaltschrank bis festes Y-Kettenende ca. 1,75 m (Querkanal über dem Gerät 0,35, senkrecht außen rechts 0,5, Kanal auf dem Y-Träger 0,6, im Schrank 0,3), Y-Kette 1,06 m, Y-Ende bis X-Festpunkt 1,28 m, X-Kette 0,64 m, X-Ende bis Verbraucher 0,3–0,5 m. Plasmagerät bis festes Y-Kettenende ca. 1,6 m.
+Schaltschrank bis festes Y-Kettenende ca. 1,75 m (Querkanal hinter dem vorderen Bein 0,35, senkrecht außen rechts 0,45, Kanal auf dem Y-Träger 0,65, im Schrank an der Oberkante bis zu den Reihenklemmen 0,3), Y-Kette 1,06 m, Y-Ende bis X-Festpunkt 1,28 m, X-Kette 0,64 m, X-Ende bis Verbraucher 0,3–0,5 m. Plasmagerät (Front 250 mm hinter der Schrankfront) bis festes Y-Kettenende ca. 1,9 m.
 
 **Schlauchpaket SP80M:** muss mindestens 5,0 m lang sein (Länge noch messen).
 

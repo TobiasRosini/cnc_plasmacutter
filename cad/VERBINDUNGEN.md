@@ -11,16 +11,16 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Wannenkäfig am Untertisch | 6× M6 durch die Außenwand des Rings (innen Zugang Ø12, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr | **neu** (vorher M8 quer mit Mutter, Bohrungen lagen 10 mm versetzt) |
 | Y-Schienen | M4 direkt in die 3-mm-Wand geschnitten | ok |
 | Y-Motor- und Umlenkhalter (Druck) | 4× M6 in Nietmuttern, Köpfe gesenkt | ok |
-| Y-Kettenstützen | ein Rohr 20×40×2, 2× M6 durch die Innenwand (außen Zugang Ø13) in Nietmuttern M6 im Längsträger | **neu** (vorher 2 Rohre geschweißt, M8 durch alles) |
+| Y-Kettenstützen | hinten Rohr 20×40×2 (2× M6), vorn Rohr 40×40×2 (4× M6, Längsträger und Längsrohr Untertisch), durch die Innenwand (außen Zugang Ø13) in Nietmuttern M6 | **neu** (vorn 40×40 hinter dem Bein, trägt den senkrechten Kanal) |
 | Stützkopf (Druck) im Rohr | 2× M5 durch die Rohrwand in Muttern, die von unten in Schlitze im Zapfen geschoben werden | **neu** |
 | Y-Kettenträger auf Stützkopf | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
 | Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
-| Geräteboden auf untere Längsrohre | 4× M6 von oben in Nietmuttern M6 | **neu** |
+| Geräteboden (Siebdruck 9) auf untere Längsrohre | 6× M6 von oben in Nietmuttern M6 | **neu** |
 | Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
 | Halter Spritzschutz X an Flachstange | 2× M4 in Gewinde in der vorderen Stirn | **neu** |
 | Schutzstreifen X an Halter | 2× M4 mit Mutter je Seite | **neu** |
 | Kabelkanal auf Y-Träger | 3× M4 in Nietmuttern M4 | **neu** |
-| Kabelkanäle senkrecht / quer | Distanzstücke (Druck), je 2× M5 aus dem Kanal in Nietmuttern M5 | **neu** |
+| Kabelkanäle senkrecht / quer | je 2× M5 aus dem Kanal in Nietmuttern M5: senkrecht auf der vorderen Kettenstütze (2 Höhen), quer im vorderen Bein | **neu** (ohne Distanzstücke) |
 | Tropfboden | | offen |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 
@@ -61,7 +61,7 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsschelle (Muttern von unten) |
 | ek_leitungsschelle | 2× M3 × 25 durch die Schenkel in Muttern der Unterlage (Bogen, Kopf, Sockel seitlich eingeschoben; Platte von unten) |
 | ekx_leitungssockel | 2× M3 von unten durch die Ablage hinten in eingepresste Muttern |
-| ub_kanalhalter | 2× M5 durch (Distanzstück) |
 | ekx_halter | 2× M5 oben (Kettenende) |
+| ub_uebergang_unten / _oben | je 2× M3 für den Deckel, seitlich eingeschoben |
 | ekx_stopfen | 2× M5 seitlich |
 | ek_stuetzen_kopf | je 2× M5 von unten |

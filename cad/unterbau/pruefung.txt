@@ -1,9 +1,15 @@
-Geräteboden: Oberkante 143 über Boden, y 991 bis 1516
+Geräteboden: Oberkante 149 über Boden, y 485 bis 1516
 Tropfboden: Oberseite hinten 640, vorn 690 (Gefälle 3.3 %), Ränder 15; unter dem Käfig mind. 5 mm Luft
-Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 529 mm (gefordert 500): ok
-Plasmagerät: x 45 bis 260, y 985 bis 1500, Oberkante 513; Querkanal darüber ab 560
-Schaltschrank: x 275 bis 675, Oberkante 643, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
+Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 515 mm (gefordert 500): ok
+Plasmagerät: x 45 bis 260, y 735 bis 1250, Oberkante 519; vor der Front 166 mm bis zum Querkanal, 250 mm bis zur Schrankfront
+Geräteboden liegt auf: Mittelquerrohr 1 (485-525), Mittelquerrohr 2 (991-1031), Querrohr vorn (1476-1516); größte freie Spannweite in y 465 mm
+Querkanal z 615 bis 640, Einführung in die rechte Seitenwand des Schranks 9 mm unter der Oberkante; Muffe des Bogens bis zur Kettenstütze vorn 15 mm frei
+Schaltschrank: x 275 bis 675, Oberkante 649, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
 Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
-Wand an Bohrungen ub_kanalhalter_rahmen: ok (>= 3.0 mm)
-Wand an Bohrungen ub_kanalhalter_bein: ok (>= 3.0 mm)
-Kabelkanal senkrecht außen rechts: x -65 bis -40 -> Maschinenbreite höchstens 792 (Grenze 800, Portal links bis x 727,5)
+Wand an Bohrungen ub_uebergang_unten: ok (>= 3.0 mm)
+Wand an Bohrungen ub_uebergang_unten_deckel: ok (>= 3.0 mm)
+Wand an Bohrungen ub_uebergang_oben: ok (>= 3.0 mm)
+Wand an Bohrungen ub_uebergang_oben_deckel: ok (>= 3.0 mm)
+Bogen unten: Mitte x -30 z 650, R10 bis R35; senkrechter Kanal z 650 bis 1033, Querkanal ab x -30
+Kopf oben: Kanal Y endet bei y 1431; Breite außen bis x -68.45
+Kabelkanal senkrecht außen rechts: x -65 bis -40, Übergangsteile bis x -68.45 -> Maschinenbreite höchstens 796 (Grenze 800, Portal links bis x 727,5)
