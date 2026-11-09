@@ -126,7 +126,8 @@ P = dict(
     xk_glieder=14,              # 644 mm, igus: S/2 + K = 283 + 346 = 629
     xk_y_vorn=13.5,             # Vorderkante Kette; hinteres M5 des festen Endes mit 3 mm Wand hinter dem Träger             # Vorderkante Kette, Anschlussstück bleibt 1 mm vor dem Halter am Z-Kopf
     xk_traeger_uk=225.0,        # über Y-Kette (unteres Trum bis 220) und X-Motor
-    xk_ablage_x0=15.0,          # Ablage beginnt hier (x ab Schienenmitte Kettenseite)
+    xk_halter_dicke=15.0,       # Ablagehalter X: Platte innen am Turm (M5-Mutter 8 tief), dahinter beginnt die Ablage
+    xk_zapfen=25.0,             # Zapfen des Ablagehalters in der Ablage
     xk_halter_dx=-10.0,         # bewegtes Ende neben der Wagenmitte (am Z-Kopf)
     xk_wagen_x=(78.0, 644.0),   # X-Weg Wagenmitte (Rahmen-x)
     xk_reserve=40.0,            # Schlaufe bei X rechts xk_reserve/2 neben der Mitte des Anschlussteils (mind. end_laenge)
@@ -415,15 +416,15 @@ def festhalter_zm():
 
 
 def ablagehalter_x():
-    """Druckteil auf Höhe der X-Ablage, innen am Turm (2x M5 durch den Turm), mit
-    einem Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die
-    untere Wand). Er reicht über Rinne und Turm; oben liegt bei X am Ende die Schlaufe auf."""
+    """Druckteil auf Höhe der X-Ablage: Platte innen am Turm (2x M5 durch den Turm) mit
+    einem Zapfen, auf den die Ablage geschoben wird (2x M5 von unten durch die untere
+    Wand). Ablage und Rinne reichen bis an die Platte."""
     g, gx = geo(), geo_x()
     x0, x1 = g["a_x1"], ablage_x0()
     ymt = ym_traeger()
     z0, h = gx["z_t0"], P["traeger_h"]
     s = box(x0, x1, min(gx["r_y0"], P["ausleger_y"][0]), max(gx["r_y1"], P["ausleger_y"][1]), z0, gx["z_ku"])
-    s = s.fuse(box(x1 - 0.01, x1 + 25, ymt - 17.8, ymt + 17.8, z0 + 2.2, z0 + h - 2.2))
+    s = s.fuse(box(x1 - 0.01, x1 + P["xk_zapfen"], ymt - 17.8, ymt + 17.8, z0 + 2.2, z0 + h - 2.2))
     zm = festhalter_zm()
     for y in P["turm_x_y"]:                                        # Turm: Mutter von unten
         s = s.cut(m5_quer(x0, y, zm, 1, V(0, 0, -1), zm - z0 + 1))
@@ -435,14 +436,16 @@ def ablagehalter_x():
 
 
 def ablage_x0():
-    """Ende von X-Ablage und Rinne an der Kettenseite (auf dem Zapfen des Ablagehalters)."""
-    return P["xk_ablage_x0"]
+    """Ende von X-Ablage und Rinne an der Kettenseite: direkt hinter der Platte des
+    Ablagehalters am Turm (Ablage auf dessen Zapfen)."""
+    return geo()["a_x1"] + P["xk_halter_dicke"]
 
 
 def zapfen_loecher():
     gx = geo_x()
     ym = ym_traeger()
-    return [(ablage_x0() + 12.5, ym - 10.0), (ablage_x0() + 12.5, ym + 10.0)]
+    x = ablage_x0() + P["xk_zapfen"] / 2
+    return [(x, ym - 10.0), (x, ym + 10.0)]
 
 
 def weg(pts, r):
