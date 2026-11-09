@@ -72,6 +72,14 @@ P = dict(
     kanal_oben=1073.0,          # Oberkante Kabelkanal 40 x 40 auf dem Y-Kettenträger
     traeger_ok=1033.0,          # Oberkante Y-Kettenträger (= Unterkante Kanal darauf)
     traeger_x=(-34.0, 6.0),     # Y-Kettenträger und Kanal darauf
+    traeger_h=20.0,
+    # Kanalknoten (Druck) über der vorderen Kettenstütze
+    stuetze_ok=900.0,           # Oberkante vordere Kettenstütze (= energiekette stuetze_vorn_ok)
+    knoten_muffe=25.0,          # Träger und Kanal Y stecken so tief im Knoten (enden bei y 1437,25)
+    knoten_boden=15.0,          # unter dem Träger innen (über dem Umlenkhalter Y, OK 947)
+    knoten_schuerze=30.0,       # Vorderwand reicht so weit über die Stütze
+    knoten_stuetze=[(-28.0, 885.0), (-12.0, 885.0)],   # M5 von vorn in die Stütze (= energiekette stuetze_knoten)
+    knoten_traeger_y=[1419.0, 1431.0],                 # M5 von innen in den Träger (= energiekette traeger_knoten_y)
     quer_z=(615.0, 640.0),      # Querkanal flach (Deckel unten), oben bündig unter der Schrankdecke
     kanal_t=2.0,
     # Übergangsteile (Druck): Muffen 15 tief über den Kanalenden, Wand 3,2, Spiel 0,25 je Seite
@@ -79,18 +87,16 @@ P = dict(
     ue_spiel=0.25,
     ue_muffe=15.0,
     bogen_ri=10.0,              # Bogen unten: Innenradius (Außenradius = + 25)
-    kanal_y_ende=1431.0,        # Kanal auf dem Y-Träger steckt bis hier im Kopf oben (= energiekette kanal_ende_y)
     ue_m3_tiefe=5.0,            # Deckelschrauben M3: Mutter so tief unter der Deckelauflage
     # Befestigung ohne Distanzstücke: je 2x M5 von innen aus dem Kanal in Nietmuttern
     # senkrecht: in der vorderen Kettenstütze (= energiekette stuetze_kanal_*, Rahmen-z = 850 + z)
     stuetze_y0=1436.0,
     stuetze_uk=680.0,           # über der Muffe des unteren Bogens
     stuetze_kanal_y=[10.0, 30.0],
-    stuetze_kanal_z=[720.0, 940.0],
-    # Durchgriffe in der Rückwand des senkrechten Kanals (Deckel offen) zu den Schrauben der Stütze:
-    # M6 an den Rahmen (Zugang Ø13) und M5 des Stützkopfs (= energiekette, Rahmen-y, -z)
-    durchgriff=[(13.0, y, z) for y in (1446.0, 1466.0) for z in (790.0, 830.0)]
-    + [(10.0, y, 986.0) for y in (1448.0, 1464.0)],
+    stuetze_kanal_z=[720.0, 860.0],
+    # Durchgriffe in der Rückwand des senkrechten Kanals (Deckel offen) zu den M6 der Stütze
+    # am Rahmen (Zugang Ø13, = energiekette, Rahmen-y, -z)
+    durchgriff=[(13.0, y, z) for y in (1446.0, 1466.0) for z in (790.0, 830.0)],
     # quer: in der Rückseite des vorderen Beins (= grundrahmen kanal_bein)
     kanal_bein=[(12.0, 627.5), (28.0, 627.5)],
 )
@@ -187,7 +193,7 @@ def kanaele():
     (kx0, kx1), (ky0, ky1) = P["kanal_x"], P["kanal_y"]
     zq0, zq1 = P["quer_z"]
     xc, zc = bogen_mitte()
-    senk = rohr_kanal(kx0, kx1, ky0, ky1, zc, P["traeger_ok"], "z")
+    senk = rohr_kanal(kx0, kx1, ky0, ky1, zc, P["stuetze_ok"], "z")
     xs = P["schrank_x1"] - P["schrank"][0]
     quer = rohr_kanal(xc, xs, ky0, ky1, zq0, zq1, "x")
     t = P["kanal_t"]
@@ -254,33 +260,36 @@ def uebergang_unten():
     return k.removeSplitter(), de.removeSplitter()
 
 
-def uebergang_oben():
-    """Kopf am Ende des Kanals auf dem Y-Träger (Druck): Der Kanal 40 x 40 steckt von
-    hinten hinein, der senkrechte Kanal von unten in einer Muffe; oben flacher Deckel.
-    Steht mit Aussparung über dem Träger. Druck aufrecht (Deckelseite oben), nur die
-    Brücke der Vorderwand über dem Träger (40 mm) und der Bossen vorn links hängen über."""
+def knoten():
+    """Kanalknoten (Druck) vorn rechts: hier laufen Y-Träger mit Kanal, senkrechter Kanal und
+    vordere Kettenstütze zusammen. Träger und Kanal darauf stecken gemeinsam von hinten in
+    einer Muffe (2x M5 von innen in Nietmuttern im Träger), der senkrechte Kanal von unten.
+    Der Knoten sitzt auf der Stütze, eine Schürze der Vorderwand greift über sie (2x M5 von
+    vorn in Nietmuttern). Innen laufen die Leitungen vom Y-Kanal seitlich in den senkrechten
+    Kanal. Geschlossen, kein Deckel. Druck auf der Vorderseite liegend (Brücken bis 40 mm)."""
     w, sp, lm = P["ue_wand"], P["ue_spiel"], P["ue_muffe"]
     (kx0, kx1), (ky0, ky1) = P["kanal_x"], P["kanal_y"]
     (tx0, tx1), zt = P["traeger_x"], P["traeger_ok"]
+    ztu = zt - P["traeger_h"]                            # Unterkante Träger = Auflage im Knoten
     zk = P["kanal_oben"] + sp
-    xa, xl = kx0 - sp - w, tx1 + sp + w
+    zs = P["stuetze_ok"]
+    xa, xi = kx0 - sp - w, tx1 + sp + w
     yh, yv = ky0 - sp - w, ky1 + sp + w
-    zb = zt - lm
-    k = box(xa, xl, yh, yv, zb, zk)
-    k = k.cut(box(kx0 - sp, tx1 + sp, ky0 - sp, ky1 + sp, zt, zk + 1))          # Innenraum
-    k = k.cut(box(kx0 - sp, kx1 + sp, ky0 - sp, ky1 + sp, zb - 1, zt + 1))      # Muffe senkrecht
-    k = k.cut(box(tx0 - sp, tx1 + sp, yh - 1, yv + 1, zb - 1, zt))              # über dem Träger
-    k = k.cut(box(tx0 - sp, tx1 + sp, yh - 1, ky0, zt, zk + 1))                 # Einführung Kanal Y
-    ye = P["kanal_y_ende"]
-    bosse = [((tx0 - sp - 10.0, tx0 - sp), (ky0 - sp, ye), (0, 1, 0)),          # innen, führt den Kanal Y
-             ((tx1 + sp - 10.0, tx1 + sp), (ky1 + sp - 10.0, ky1 + sp), (-1, 0, 0))]   # vorn links
-    for (x0, x1), (y0, y1), _ in bosse:
-        k = k.fuse(box(x0, x1, y0, y1, zt, zk))
-    de = box(xa, xl, yh, yv, zk, zk + w)
-    for (x0, x1), (y0, y1), sl in bosse:
-        yb = y0 + 5.0 if y1 - y0 > 10.0 else (y0 + y1) / 2
-        k, de = m3_deckel(k, de, V((x0 + x1) / 2, yb, zk), (0, 0, -1), sl)
-    return k.removeSplitter(), de.removeSplitter()
+    ys = yh + P["knoten_muffe"]                          # Grund der Muffe für Träger und Kanal Y
+    k = box(xa, 0.0, yh, yv, zs, zk + w)                 # über der Stütze und dem senkrechten Kanal
+    k = k.fuse(box(0.0, xi, yh, yv, ztu - P["knoten_boden"], zk + w))   # unter dem Träger, über dem Umlenkhalter
+    k = k.fuse(box(xa, 0.0, ky1 + sp, yv, zs - P["knoten_schuerze"], zs))  # Schürze vorn über die Stütze
+    k = k.fuse(box(xa, kx0 - sp, yh, yv, zs - lm, zs))   # Muffe senkrecht: außen
+    k = k.fuse(box(xa, kx1, yh, ky0 - sp, zs - lm, zs))  # hinten (innen liegt der Kanal an der Stütze)
+    k = k.cut(box(kx0 - sp, kx1 + sp, ky0 - sp, ky1 + sp, zs - lm - 1, zk))       # senkrecht
+    k = k.cut(box(tx0 - sp, tx1 + sp, yh - 1, ys, ztu, zk))                       # Muffe Träger + Kanal Y
+    k = k.cut(box(tx0 - sp, tx1 + sp, ys - 1, ky1 + sp, zt, zk))                  # Leitungen über dem Träger
+    k = k.cut(box(kx1 + sp - 1, tx0 - sp + 1, ys, ky1 + sp, zt, zk))              # Übergang zur Seite
+    for x, z in P["knoten_stuetze"]:                     # M5 von vorn in die Stütze
+        k = k.cut(Part.makeCylinder(2.75, w + 2, V(x, yv + 1, z), V(0, -1, 0)))
+    for y in P["knoten_traeger_y"]:                      # M5 von innen in den Träger
+        k = k.cut(Part.makeCylinder(2.75, w + 2, V(xi + 1, y, ztu + P["traeger_h"] / 2), V(-1, 0, 0)))
+    return k.removeSplitter()
 
 
 def main():
@@ -299,9 +308,7 @@ def main():
     fc_dok.teil(doc, "ub_kabelkanal_senkrecht", senk, "zukauf")
     fc_dok.teil(doc, "ub_kabelkanal_quer", quer, "zukauf")
     uu, uud = uebergang_unten()
-    uo, uod = uebergang_oben()
-    druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud,
-             "ub_uebergang_oben": uo, "ub_uebergang_oben_deckel": uod}
+    druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud, "ub_kanalknoten": knoten()}
     for n, sh in druck.items():
         fc_dok.teil(doc, n, sh, "druck")
     fc_dok.speichern(doc, pfad, offen)
@@ -354,9 +361,12 @@ def main():
             fc_dok.schreibe_waende(f, n, sh)
         xc, zc = bogen_mitte()
         f.write("Bogen unten: Mitte x %.0f z %.0f, R%.0f bis R%.0f; senkrechter Kanal z %.0f bis %.0f, "
-                "Querkanal ab x %.0f\n" % (xc, zc, P["bogen_ri"], P["bogen_ri"] + 25, zc, P["traeger_ok"], xc))
-        f.write("Kopf oben: Kanal Y endet bei y %.0f; Breite außen bis x %.2f\n"
-                % (P["kanal_y_ende"], P["kanal_x"][0] - P["ue_spiel"] - P["ue_wand"]))
+                "Querkanal ab x %.0f\n" % (xc, zc, P["bogen_ri"], P["bogen_ri"] + 25, zc, P["stuetze_ok"], xc))
+        kb = knoten().BoundBox
+        f.write("Kanalknoten: x %.2f bis %.2f, y %.2f bis %.2f, z %.0f bis %.2f (Druckhöhe %.1f auf der "
+                "Vorderseite); Träger und Kanal Y enden bei y %.2f\n"
+                % (kb.XMin, kb.XMax, kb.YMin, kb.YMax, kb.ZMin, kb.ZMax, kb.YLength,
+                   P["kanal_y"][0] - P["ue_spiel"] - P["ue_wand"] + P["knoten_muffe"] - P["ue_spiel"]))
         xa = P["kanal_x"][0] - P["ue_spiel"] - P["ue_wand"]
         f.write("Kabelkanal senkrecht außen rechts: x %.0f bis %.0f, Übergangsteile bis x %.2f -> "
                 "Maschinenbreite höchstens %.0f (Grenze %.0f, Portal links bis x 727,5)\n"

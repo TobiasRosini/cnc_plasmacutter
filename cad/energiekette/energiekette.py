@@ -51,8 +51,9 @@ P = dict(
     # Rinnen Y und X: Alu-U-Profil 20 x 60 x 20 x 2 (Handel, ungekantet), innen 56
     rinne_t=2.0,
     rinne_rand=20.0,
-    kanal_ende_y=1431.0,        # Kabelkanal auf dem Träger vom festen Kettenende bis hier, steckt im
-                                # gedruckten Kopf (Unterbau), der in den senkrechten Kanal umlenkt
+    kanal_ende_y=1437.25,       # Kabelkanal auf dem Träger vom festen Kettenende bis hier; Kanal und
+    traeger_ende_y=1437.25,     # Träger stecken vorn gemeinsam im Kanalknoten (Unterbau, Muffe 25 tief)
+    traeger_knoten_y=[1419.0, 1431.0],  # M5-Nietmuttern in der Innenseite des Trägers (Knoten, = Unterbau)
     kanal_h=40.0,               # Kabelkanal 40 x 40 (PVC, Wand 2) auf dem Träger
     kanal_t=2.0,
     kanal_schraub_y=[950.0, 1150.0, 1350.0],   # M4 durch den Kanalboden in Nietmuttern im Träger
@@ -66,7 +67,8 @@ P = dict(
     end_flansch=7.0,
     end_loch=10.0,
     # Stützen: je ein Rechteckrohr außen am Längsträger, hinten 20x40x2 (40 entlang y) am
-    # Rahmenende, vorn 40x40x2 hinter dem Bein; oben ein Druckkopf unter dem Träger.
+    # Rahmenende mit Druckkopf unter dem Träger, vorn 40x40x2 hinter dem Bein unter dem
+    # Kanalknoten (Unterbau), in dem Träger und Kanäle zusammenlaufen.
     # Rohr an den Längsträger: 2x M6 durch die Innenwand in Nietmuttern (Grundrahmen
     # ek_stuetze_y/z), außen Zugangslöcher. Kopf ins Rohr: 2x M5 in eingepresste Muttern.
     # Träger auf den Kopf: 2x M6 von unten in Nietmuttern in der Trägerunterseite.
@@ -80,7 +82,9 @@ P = dict(
     stuetze_vorn_y0=1436.0,         # bis Rückseite Bein (1476) = Grundrahmen ek_stuetze_vorn_y
     stuetze_vorn_m6_z=[-20.0, -60.0],   # = Grundrahmen ek_stuetze_vorn_z
     stuetze_vorn_uk=-170.0,         # Rahmen-z 680, über der Muffe des Kanalbogens (Unterbau)
-    stuetze_kanal_z=[-130.0, 90.0],     # M5-Nietmuttern außen für den senkrechten Kanal (= Unterbau)
+    stuetze_vorn_ok=50.0,           # Rahmen-z 900: darauf sitzt der Kanalknoten (statt Stützkopf)
+    stuetze_knoten=[(-48.0, 35.0), (-32.0, 35.0)],  # M5-Nietmuttern in der Vorderwand (x, z; = Unterbau)
+    stuetze_kanal_z=[-130.0, 10.0],     # M5-Nietmuttern außen für den senkrechten Kanal (= Unterbau)
     stuetze_kanal_y=[10.0, 30.0],
     zugang_m6_d=13.0,
     kopf_h=15.0,
@@ -221,16 +225,21 @@ def geo():
 # ---------------------------------------------------------------- feste Teile
 def traeger_rinne():
     g = geo()
-    L = P["rahmen_laenge"]
     xm = (g["r_x0"] + g["r_x1"]) / 2
     tb, th = P["traeger_b"], P["traeger_h"]
     yh = g["y_hinten"]
+    L = P["traeger_ende_y"]                              # vorn im Kanalknoten (Unterbau)
     tr = box(xm - tb / 2, xm + tb / 2, yh, L, P["traeger_uk"], P["traeger_uk"] + th)
     tr = tr.cut(box(xm - tb / 2 + 2, xm + tb / 2 - 2, yh - 1, L + 1, P["traeger_uk"] + 2,
                     P["traeger_uk"] + th - 2))
-    for y in [ya + ri * P["traeger_m6_y"] for ya, ri, _, _, _ in stuetzen_lagen()]:   # M6-Nietmuttern zu den Stützköpfen
+    for ya, ri, _, _, _, _, kopf in stuetzen_lagen():   # M6-Nietmuttern zu den Stützköpfen
         for dx in (-10.0, 10.0):
-            tr = tr.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, 4, V(xm + dx, y, P["traeger_uk"] - 1)))
+            if kopf:
+                tr = tr.cut(Part.makeCylinder(P["nietmutter_m6_d"] / 2, 4,
+                                              V(xm + dx, ya + ri * P["traeger_m6_y"], P["traeger_uk"] - 1)))
+    for y in P["traeger_knoten_y"]:                      # M5-Nietmuttern innen: Träger im Kanalknoten
+        tr = tr.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, 4, V(xm + tb / 2 + 1, y, P["traeger_uk"] + th / 2),
+                                      V(-1, 0, 0)))
     xc = (g["k_x0"] + g["k_x1"]) / 2
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # Nietmuttern M5 für das feste Kettenende
         tr = tr.cut(Part.makeCylinder(3.5, 4, V(xc + dx, g["y_fest"] + loch_versatz(),
@@ -269,10 +278,12 @@ def kabelkanal_y():
 
 
 def stuetzen_lagen():
-    """Je Stütze: (y0, Richtung, Rohr (x, y), Unterkante, M6-z). Rohr von y0 bis
-    y0 + richt * Rohr-y; hinten am Rahmenende, vorn hinter dem vorderen Bein."""
-    return [(0.0, 1, P["stuetze"], -P["rohr"], [P["stuetze_m6_z"]]),
-            (P["stuetze_vorn_y0"], 1, P["stuetze_vorn"], P["stuetze_vorn_uk"], P["stuetze_vorn_m6_z"])]
+    """Je Stütze: (y0, Richtung, Rohr (x, y), Unterkante, M6-z, Oberkante, Stützkopf). Rohr von
+    y0 bis y0 + richt * Rohr-y; hinten am Rahmenende mit Druckkopf unter dem Träger, vorn
+    hinter dem vorderen Bein bis unter den Kanalknoten (Unterbau), der den Träger aufnimmt."""
+    return [(0.0, 1, P["stuetze"], -P["rohr"], [P["stuetze_m6_z"]], P["traeger_uk"] - P["kopf_h"], True),
+            (P["stuetze_vorn_y0"], 1, P["stuetze_vorn"], P["stuetze_vorn_uk"], P["stuetze_vorn_m6_z"],
+             P["stuetze_vorn_ok"], False)]
 
 
 def stuetzen():
@@ -280,9 +291,8 @@ def stuetzen():
     (nach unten verlängert, außen Nietmuttern M5 für den senkrechten Kabelkanal)."""
     t = P["stuetze_wand"]
     x1 = -P["rohr"] / 2                                # Außenfläche Längsträger
-    z1 = P["traeger_uk"] - P["kopf_h"]
     res = []
-    for ya, ri, (sx, sy), z0, m6_z in stuetzen_lagen():
+    for ya, ri, (sx, sy), z0, m6_z, z1, kopf in stuetzen_lagen():
         x0 = x1 - sx
         y0, y1 = sorted((ya, ya + ri * sy))
         st = box(x0, x1, y0, y1, z0, z1).cut(box(x0 + t, x1 - t, y0 + t, y1 - t, z0 - 1, z1 + 1))
@@ -291,14 +301,18 @@ def stuetzen():
             for z in m6_z:
                 st = st.cut(Part.makeCylinder(3.3, t + 2, V(x1 - t - 1, y, z), V(1, 0, 0)))
                 st = st.cut(Part.makeCylinder(P["zugang_m6_d"] / 2, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
-        for dy in P["kopf_m5_y"]:                          # M5 außen in den Kopfzapfen
-            st = st.cut(Part.makeCylinder(2.75, t + 2, V(x0 - 1, ya + ri * dy, z1 - P["kopf_m5_unter_ok"]),
-                                          V(1, 0, 0)))
-        if ya == P["stuetze_vorn_y0"]:                     # Nietmuttern M5 für den Kabelkanal
+        if kopf:
+            for dy in P["kopf_m5_y"]:                      # M5 außen in den Kopfzapfen
+                st = st.cut(Part.makeCylinder(2.75, t + 2, V(x0 - 1, ya + ri * dy, z1 - P["kopf_m5_unter_ok"]),
+                                              V(1, 0, 0)))
+        else:                                              # Nietmuttern M5: Kabelkanal außen, Knoten vorn
             for dy in P["stuetze_kanal_y"]:
                 for z in P["stuetze_kanal_z"]:
                     st = st.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, t + 2, V(x0 - 1, ya + ri * dy, z),
                                                   V(1, 0, 0)))
+            for x, z in P["stuetze_knoten"]:
+                st = st.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, t + 2, V(x, ya + ri * sy + 1, z),
+                                              V(0, -1, 0)))
         res.append(st)
     return res
 
@@ -313,7 +327,9 @@ def stuetzen_kopf():
     zo = P["traeger_uk"]
     zu = zo - P["kopf_h"]
     res = None
-    for ya, ri, (sx, sy), _, _ in stuetzen_lagen():
+    for ya, ri, (sx, sy), _, _, _, kopf in stuetzen_lagen():
+        if not kopf:
+            continue
         x0 = x1 - sx
         y0, y1 = sorted((ya, ya + ri * P["kopf_y"]))
         k = box(min(xm - P["traeger_b"] / 2, x0), max(xm + P["traeger_b"] / 2, x1), y0, y1, zu, zo)

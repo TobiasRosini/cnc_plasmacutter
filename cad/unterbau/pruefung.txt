@@ -8,8 +8,7 @@ Schaltschrank: x 275 bis 675, Oberkante 649, Tropfboden darüber ab 683; Abstand
 Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
 Wand an Bohrungen ub_uebergang_unten: ok (>= 3.0 mm)
 Wand an Bohrungen ub_uebergang_unten_deckel: ok (>= 3.0 mm)
-Wand an Bohrungen ub_uebergang_oben: ok (>= 3.0 mm)
-Wand an Bohrungen ub_uebergang_oben_deckel: ok (>= 3.0 mm)
-Bogen unten: Mitte x -30 z 650, R10 bis R35; senkrechter Kanal z 650 bis 1033, Querkanal ab x -30
-Kopf oben: Kanal Y endet bei y 1431; Breite außen bis x -68.45
+Wand an Bohrungen ub_kanalknoten: ok (>= 3.0 mm)
+Bogen unten: Mitte x -30 z 650, R10 bis R35; senkrechter Kanal z 650 bis 900, Querkanal ab x -30
+Kanalknoten: x -68.45 bis 9.45, y 1412.55 bis 1479.45, z 870 bis 1076.45 (Druckhöhe 66.9 auf der Vorderseite); Träger und Kanal Y enden bei y 1437.30
 Kabelkanal senkrecht außen rechts: x -65 bis -40, Übergangsteile bis x -68.45 -> Maschinenbreite höchstens 796 (Grenze 800, Portal links bis x 727,5)

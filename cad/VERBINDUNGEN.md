@@ -12,8 +12,10 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Y-Schienen | M4 direkt in die 3-mm-Wand geschnitten | ok |
 | Y-Motor- und Umlenkhalter (Druck) | 4× M6 in Nietmuttern, Köpfe gesenkt | ok |
 | Y-Kettenstützen | hinten Rohr 20×40×2 (2× M6), vorn Rohr 40×40×2 (4× M6, Längsträger und Längsrohr Untertisch), durch die Innenwand (außen Zugang Ø13) in Nietmuttern M6 | **neu** (vorn 40×40 hinter dem Bein, trägt den senkrechten Kanal) |
-| Stützkopf (Druck) im Rohr | 2× M5 durch die Rohrwand in Muttern, die von unten in Schlitze im Zapfen geschoben werden | **neu** |
-| Y-Kettenträger auf Stützkopf | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
+| Stützkopf hinten (Druck) im Rohr | 2× M5 durch die Rohrwand in Muttern, die von unten in Schlitze im Zapfen geschoben werden | **neu** |
+| Y-Kettenträger auf Stützkopf hinten | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
+| Kanalknoten (Druck) auf vorderer Stütze | 2× M5 von vorn durch die Schürze in Nietmuttern in der Vorderwand der Stütze | **neu** (ersetzt den vorderen Stützkopf) |
+| Y-Kettenträger im Kanalknoten | 2× M5 von innen durch die Knotenwand in Nietmuttern in der Innenseite des Trägers | **neu** |
 | Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
 | Geräteboden (Siebdruck 9) auf untere Längsrohre | 6× M6 von oben in Nietmuttern M6 | **neu** |
 | Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
@@ -62,6 +64,6 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ek_leitungsschelle | 2× M3 × 25 durch die Schenkel in Muttern der Unterlage (Bogen, Kopf, Sockel seitlich eingeschoben; Platte von unten) |
 | ekx_leitungssockel | 2× M3 von unten durch die Ablage hinten in eingepresste Muttern |
 | ekx_halter | 2× M5 oben (Kettenende) |
-| ub_uebergang_unten / _oben | je 2× M3 für den Deckel, seitlich eingeschoben |
+| ub_uebergang_unten | 2× M3 für den Deckel, seitlich eingeschoben |
 | ekx_stopfen | 2× M5 seitlich |
 | ek_stuetzen_kopf | je 2× M5 von unten |
