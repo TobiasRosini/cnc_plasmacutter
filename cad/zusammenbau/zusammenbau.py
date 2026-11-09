@@ -62,6 +62,9 @@ SEITEN_TEILE = {"links": ["winkel_fest", "x_klemmplatte", "y_ref_fahne", "x_schu
 
 def gruppe(doc, name):
     g = fc_dok.objekt(doc, "App::DocumentObjectGroup", name)
+    m = doc.getObject("Maschine")
+    if m is not None and g not in m.Group:
+        m.addObject(g)
     return g
 
 
@@ -88,6 +91,10 @@ def main():
     dx = fc_dok.quelle(XWAGEN)
     pfad = os.path.join(OUT, "zusammenbau.FCStd")
     doc, offen = fc_dok.dokument(pfad)
+    # Alle Baugruppen in einem Container, der nur die Darstellung um 180° um Z dreht:
+    # in FreeCAD ist dann die Vorderansicht vorn und rechts +X. Die Teile und alle
+    # Prüfungen bleiben in den Koordinaten der Skripte (vorn = +Y, rechts = kleines x).
+    maschine = fc_dok.objekt(doc, "App::Part", "Maschine")
 
     # --- Bezugsmaße aus den Einzelteilen
     schienen = dr.getObject("Dummy_Schienen_HGR15").Shape.Solids
@@ -293,6 +300,8 @@ def main():
         if o.TypeId == "Part::Feature":
             link(doc, "U_" + o.Name, o, App.Placement(), g_ub)
 
+    c = rahmen_bb.Center
+    maschine.Placement = App.Placement(V(2 * c.x, 2 * c.y, 0), App.Rotation(V(0, 0, 1), 180))
     fc_dok.speichern(doc, pfad, offen)
 
     # --- Prüfung
@@ -310,6 +319,9 @@ def main():
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
         f.write("Gesamtmaß: %.0f (X) x %.0f (Y) x %.0f (Z) mm\n"
                 % (gb.XLength, gb.YLength, gb.ZLength))
+        f.write("Darstellung in FreeCAD um 180° um Z gedreht (Vorderansicht = vorn): "
+                "x_FreeCAD = %.0f − x, y_FreeCAD = %.0f − y (Maße in Doku und Prüfung: Skript-Koordinaten)\n"
+                % (2 * c.x, 2 * c.y))
         f.write("Gesamtbreite %.0f mm, Grenze %.0f mm: %s\n"
                 % (gb.XLength, P["max_breite"],
                    "ok" if gb.XLength <= P["max_breite"] else

@@ -93,6 +93,8 @@ def teil(doc, name, shape, farbe=None, transparenz=0):
 def speichern(doc, pfad, war_offen):
     # Objekte, die das Skript nicht mehr erzeugt, entfernen
     for o in list(doc.Objects):
+        if o.TypeId in ("App::Origin", "App::Line", "App::Plane", "App::Point"):
+            continue                    # Ursprung eines App::Part (wird mit ihm angelegt)
         if o.Name not in _BERUEHRT.get(doc.Name, set()):
             doc.removeObject(o.Name)
     doc.recompute()

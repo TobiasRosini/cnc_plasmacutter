@@ -1,4 +1,5 @@
 Gesamtmaß: 793 (X) x 1578 (Y) x 1470 (Z) mm
+Darstellung in FreeCAD um 180° um Z gedreht (Vorderansicht = vorn): x_FreeCAD = 720 − x, y_FreeCAD = 1556 − y (Maße in Doku und Prüfung: Skript-Koordinaten)
 Gesamtbreite 793 mm, Grenze 800 mm: ok
 Rahmen außen 720, Portal steht je Seite 36 mm über
 Portalbrücke: 768 mm lang, OK 987 mm über Boden
