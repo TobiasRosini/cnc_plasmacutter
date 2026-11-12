@@ -114,5 +114,6 @@
  "ub_kanalknoten": 113,
  "ekx_umlenkkopf": 114,
  "ekx_distanzstueck": 115,
- "ekx_mastwinkel": 116
+ "ekx_mastwinkel": 116,
+ "ekx_schelle_einseitig": 117
 }

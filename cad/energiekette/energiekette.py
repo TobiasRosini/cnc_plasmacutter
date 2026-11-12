@@ -203,7 +203,9 @@ P = dict(
     # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
     rh_halter_x=[40.0, 250.0],  # dazu ein dritter unter dem festen Kettenende (hinteres M5)
     rh_halter_b=20.0,
-    rh_fase=3.0,                # Fase unten an den kurzen Kanten der Rinnenhalter
+    rh_fase=3.0,
+    sn_tief=4.0,                # Nippel der Spezialschelle am Umlenkkopf: Tiefe in die Wange
+    sn_dicke=2.0,                # Fase unten an den kurzen Kanten der Rinnenhalter
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
     xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
@@ -663,23 +665,51 @@ def _platziert(s, p, d):
     return s
 
 
-def schelle_lokal():
+def schelle_nippel():
+    """Spezialschelle am Umlenkkopf: (Ende des Dachs links, Nippel x0, x1, y halb, z0, z1)
+    in eigener Lage. Links ist die Wange die Tunnelwand."""
+    m, l = schelle_mass(), P["bg_l"] / 2
+    xd = P["fuehrung_b"] / 2 - 0.3                       # 0,3 vor der Innenseite der Wange
+    return xd, xd, xd + P["sn_tief"], l - 2.0, m["h"] + 0.5, m["h"] + 0.5 + P["sn_dicke"]
+
+
+def schelle_lokal(einseitig=False):
     """Schelle in eigener Lage (x quer, Steuerung positiv; y längs; z ab der Unterlage):
     zwei Tunnel mit Mittelsteg, je 1x M3 durch die Schenkel; alle senkrechten Kanten gerundet
-    (außen R3, Schenkel innen R2, Mittelsteg R0,9)."""
+    (außen R3, Schenkel innen R2, Mittelsteg R0,9).
+    einseitig: Spezialschelle am senkrechten Lauf des Umlenkkopfs. Nur rechts verschraubt;
+    links endet das Dach vor der Wange und greift mit einem Nippel in eine Vertiefung der
+    Wange (schräg einhängen, rechts herunterklappen, festschrauben)."""
     m, l, t = schelle_mass(), P["bg_l"] / 2, P["bg_dach"]
     st = P["bg_steg"] / 2
-    s = box(m["x0"], m["x1"], -l, l, 0, m["h"] + t)
+    xr = m["x1"]
+    if einseitig:
+        xr, n0, n1, nl, nz0, nz1 = schelle_nippel()
+    s = box(m["x0"], xr, -l, l, 0, m["h"] + t)
     s = s.cut(box(m["xb"], -st, -l - 1, l + 1, -1, m["h"]))
-    s = s.cut(box(st, m["xs"], -l - 1, l + 1, -1, m["h"]))
-    for xs, r in (((m["x0"], m["x1"]), 3.0), ((m["xb"], m["xs"]), 2.0), ((-st, st), 0.9)):
+    s = s.cut(box(st, m["xs"] if not einseitig else xr + 1, -l - 1, l + 1, -1, m["h"]))
+    for xs, r in (((m["x0"], xr), 3.0 if not einseitig else 1.0), ((m["xb"], m["xs"]), 2.0),
+                  ((-st, st), 0.9)):
         kanten = [e for e in s.Edges if isinstance(e.Curve, Part.Line)
                   and abs(e.Vertexes[0].X - e.Vertexes[1].X) < 1e-6
                   and abs(e.Vertexes[0].Y - e.Vertexes[1].Y) < 1e-6
                   and any(abs(e.Vertexes[0].X - x) < 1e-6 for x in xs)
                   and abs(abs(e.Vertexes[0].Y) - l) < 1e-6]
+        if einseitig and r == 1.0:                       # links nur das Dachende (3 hoch)
+            s = s.makeFillet(3.0, [e for e in kanten if abs(e.Vertexes[0].X - m["x0"]) < 1e-6])
+            s = s.makeFillet(1.0, [e for e in s.Edges if isinstance(e.Curve, Part.Line)
+                                   and abs(e.Vertexes[0].X - xr) < 1e-6 and abs(e.Vertexes[1].X - xr) < 1e-6
+                                   and abs(e.Vertexes[0].Y - e.Vertexes[1].Y) < 1e-6
+                                   and abs(abs(e.Vertexes[0].Y) - l) < 1e-6])
+            continue
         s = s.makeFillet(r, kanten)
-    for x in m["m3"]:
+    if einseitig:
+        nip = box(n0 - 0.5, n1, -nl, nl, nz0, nz1)
+        nip = nip.makeFillet(0.9, [e for e in nip.Edges if abs(e.Vertexes[0].X - n1) < 1e-6
+                                   and abs(e.Vertexes[1].X - n1) < 1e-6
+                                   and abs(e.Vertexes[0].Y - e.Vertexes[1].Y) < 1e-6])
+        s = s.fuse(nip).removeSplitter()
+    for x in (m["m3"][:1] if einseitig else m["m3"]):
         s = s.cut(Part.makeCylinder(1.7, m["h"] + t + 2, V(x, 0, -1)))
     return s
 
@@ -690,11 +720,8 @@ def leitungsschellen():
     res = []
     for p, d in buegel_lagen():
         res.append(_platziert(vorlage.copy(), p, d))
-    s = res[0].copy()                                   # am senkrechten Lauf (Umlenkkopf)
-    p, d = buegel_lagen()[0]
-    s.translate(-p)
-    s.rotate(V(0, 0, 0), V(0, 0, 1), -(math.degrees(math.atan2(d.y, d.x)) + 90.0))
-    s.transformShape(schelle_senkrecht())             # starr, bleibt deckungsgleich
+    s = schelle_lokal(einseitig=True)                   # am senkrechten Lauf (Umlenkkopf)
+    s.transformShape(schelle_senkrecht())
     res.append(s)
     return res
 
@@ -725,6 +752,13 @@ def buegel_bohrungen(teil, art, nur):
             elif art == "unten":
                 teil = teil.cut(fc_dok.mutter(3, V(c.x, c.y, p.z - P["vp_t"] + 1.3), V(0, 0, 1)))
     return teil
+
+
+def schelle_einseitig_einzeln():
+    """Spezialschelle in Druckbett-Lage (Dach unten)."""
+    s = schelle_lokal(einseitig=True)
+    s.rotate(V(0, 0, 0), V(1, 0, 0), 180.0)
+    return s
 
 
 def schelle_einzeln():
@@ -968,20 +1002,17 @@ def umlenkkopf():
         s = s.cut(Part.makeCylinder(2.25, 12, V(xm4, y_rw - 1, z), V(0, 1, 0)))
         s = s.cut(fc_dok.mutter(4, V(xm4, y_rw + 6.0, z), V(0, 1, 0), V(1, 0, 0), xw - xm4 + 1))
     s = buegel_bohrungen(s, "seite", [2])
-    # Schelle am senkrechten Lauf: Platz in der Wange, M3 in die Rückwand, Muttern seitlich
+    # Spezialschelle am senkrechten Lauf: rechts M3 in die Rückwand (Mutter seitlich), links
+    # Vertiefung in der Wange für den Nippel (oben eng, unten Luft zum schrägen Einhängen)
     t = schelle_senkrecht()
-    l = P["bg_l"] / 2 + 0.3
-    tasche = box(m["x0"] - 0.3, m["x1"] + 0.3, -l, l, 0, m["h"] + P["bg_dach"] + 1)
-    tasche.transformShape(t)
-    s = s.cut(tasche)
-    zugang = box(m["xs"] - 0.3, xw - xa + 1, -l, l, m["h"] + P["bg_dach"], 80)   # Zugang zur linken M3
-    zugang.transformShape(t)
-    s = s.cut(zugang)
-    for x in m["m3"]:
-        sx = 1 if x > 0 else -1
-        s = s.cut(Part.makeCylinder(1.7, 14, V(x, 0, -13)).transformGeometry(t))
-        s = s.cut(fc_dok.mutter(3, t.multiply(V(x, 0, -8.0)), t.multiply(V(0, 0, 1)) - t.multiply(V(0, 0, 0)),
-                                V(sx, 0, 0), P["bg_schenkel"] / 2 + 6.0))
+    _, n0, n1, nl, nz0, nz1 = schelle_nippel()
+    vt = box(n0 - 1.0, n1 + 0.5, -nl - 0.3, nl + 0.3, nz0 - 1.5, nz1 + 0.2)
+    vt.transformShape(t)
+    s = s.cut(vt)
+    x = m["m3"][0]
+    s = s.cut(Part.makeCylinder(1.7, 14, V(x, 0, -13)).transformGeometry(t))
+    s = s.cut(fc_dok.mutter(3, t.multiply(V(x, 0, -8.0)), t.multiply(V(0, 0, 1)) - t.multiply(V(0, 0, 0)),
+                            V(-1, 0, 0), P["bg_schenkel"] / 2 + 6.0))
     z = z_u + 15.0                                                      # Kabelbinder um das Bündel
     s = s.cut(box(xa - 16, xw + 1, y_rw + 3.0, y_rw + 6.0, z - 2.5, z + 2.5))
     return s.removeSplitter()
@@ -1438,7 +1469,8 @@ def main():
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
              "ekx_umlenkkopf": uk, "ekx_distanzstueck": distanzstueck(), "ekx_mastwinkel": mastwinkel(),
              "ek_verbindungsplatte": verbindungsplatte(),
-             "ek_leitungsschelle": schelle_einzeln(),             # 6 Stück
+             "ek_leitungsschelle": schelle_einzeln(),             # 5 Stück
+             "ekx_schelle_einseitig": schelle_einseitig_einzeln(),
              "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
     mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
     for n, s in druck.items():

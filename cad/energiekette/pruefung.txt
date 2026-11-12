@@ -19,6 +19,7 @@ Wand an Bohrungen ekx_distanzstueck: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_mastwinkel: ok (>= 3.0 mm)
 Wand an Bohrungen ek_verbindungsplatte: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsschelle: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_schelle_einseitig: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_leitungssockel: ok (>= 3.0 mm)
 Leitung / Turm: 0.00 mm³
 Leitung / Halter Y: 0.00 mm³

@@ -101,7 +101,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 095 | ek_leitungsbogen_b | 1 | Druck | 157 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
 | 096 | ekx_mast | 1 | Alu | 356 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
 | 101 | ek_verbindungsplatte | 1 | Druck | 90 × 60 × 15 | Energieketten | energiekette/ek_verbindungsplatte.step |  |
-| 102 | ek_leitungsschelle | 6 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
+| 102 | ek_leitungsschelle | 5 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
 | 103 | ekx_leitungssockel | 2 | Druck | 57 × 32 × 15 | Energieketten | energiekette/ekx_leitungssockel.step |  |
 | 104 | ub_geraeteboden | 1 | Kaufteil | 1031 × 720 × 9 | Unterbau |  |  |
 | 105 | ub_tropfboden | 1 | Alu | 1498 × 640 × 32 | Unterbau | unterbau/ub_tropfboden.step |  |
@@ -116,5 +116,6 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 114 | ekx_umlenkkopf | 1 | Druck | 152 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
 | 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
 | 116 | ekx_mastwinkel | 1 | Druck | 106 × 94 × 38 | Energieketten | energiekette/ekx_mastwinkel.step |  |
+| 117 | ekx_schelle_einseitig | 1 | Druck | 53 × 17 × 15 | Energieketten | energiekette/ekx_schelle_einseitig.step |  |
 
-112 verschiedene Teile, 186 Stück.
+113 verschiedene Teile, 186 Stück.
