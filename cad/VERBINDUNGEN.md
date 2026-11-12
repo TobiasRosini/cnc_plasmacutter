@@ -60,6 +60,7 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ekx_rinnenhalter | je 2× M5 von unten in Nietmuttern der Ablage, 1× M4 seitlich (Ablage hinten); der dritte zusätzlich 1× M5 seitlich (hinteres M5 des festen X-Kettenendes) |
 | ek_leitungsbogen (a, steg, b) | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich; 2× M3 × 55 quer durch alle drei Teile, Mutter außen in Tasche |
 | ekx_umlenkkopf | 2× M4 vom Mast, 2× M4 Verbindungsplatte, Muttern seitlich; 2 Leitungsschellen (oben und am senkrechten Lauf) |
+| ekx_distanzstueck | 2× M4 × 20 von hinten durch den Mast, Muttern von links eingeschoben; 2 Kabelbinder quer |
 | ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsschelle (Muttern von unten) |
 | ek_leitungsschelle | 2× M3 × 25 durch die Schenkel in Muttern der Unterlage (Bogen, Kopf oben und am senkrechten Lauf, Sockel seitlich eingeschoben; Platte von unten) |
 | ekx_leitungssockel | 2× M3 von unten durch die Ablage hinten in eingepresste Muttern |

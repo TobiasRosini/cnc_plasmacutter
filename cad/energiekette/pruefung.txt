@@ -15,6 +15,7 @@ Wand an Bohrungen ek_leitungsbogen_a: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsbogen_steg: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsbogen_b: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_umlenkkopf: ok (>= 3.0 mm)
+Wand an Bohrungen ekx_distanzstueck: ok (>= 3.0 mm)
 Wand an Bohrungen ek_verbindungsplatte: ok (>= 3.0 mm)
 Wand an Bohrungen ek_leitungsschelle: ok (>= 3.0 mm)
 Wand an Bohrungen ekx_leitungssockel: ok (>= 3.0 mm)
@@ -28,6 +29,7 @@ Leitung / Rinnenhalter: 0.00 mm³
 Leitung / Leitungsbogen: 0.00 mm³
 Leitung / Mast: 0.00 mm³
 Leitung / Umlenkkopf: 0.00 mm³
+Leitung / Distanzstück: 0.00 mm³
 Leitung / Verbindungsplatte: 0.00 mm³
 Leitung / Schellen: 0.00 mm³
 Leitung / Sockel: 0.00 mm³

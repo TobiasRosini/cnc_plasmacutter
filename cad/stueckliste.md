@@ -99,7 +99,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 093 | ek_leitungsbogen_a | 1 | Druck | 157 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
 | 094 | ek_leitungsbogen_steg | 1 | Druck | 130 × 107 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
 | 095 | ek_leitungsbogen_b | 1 | Druck | 157 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
-| 096 | ekx_mast | 1 | Alu | 360 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
+| 096 | ekx_mast | 1 | Alu | 356 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
 | 101 | ek_verbindungsplatte | 1 | Druck | 90 × 60 × 15 | Energieketten | energiekette/ek_verbindungsplatte.step |  |
 | 102 | ek_leitungsschelle | 6 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
 | 103 | ekx_leitungssockel | 2 | Druck | 57 × 32 × 15 | Energieketten | energiekette/ekx_leitungssockel.step |  |
@@ -113,6 +113,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 111 | ub_uebergang_unten | 1 | Druck | 64 × 54 × 54 | Unterbau | unterbau/ub_uebergang_unten.step |  |
 | 112 | ub_uebergang_unten_deckel | 1 | Druck | 54 × 54 × 3 | Unterbau | unterbau/ub_uebergang_unten_deckel.step |  |
 | 113 | ub_kanalknoten | 1 | Druck | 206 × 78 × 67 | Unterbau | unterbau/ub_kanalknoten.step |  |
-| 114 | ekx_umlenkkopf | 1 | Druck | 155 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
+| 114 | ekx_umlenkkopf | 1 | Druck | 152 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
+| 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
 
-110 verschiedene Teile, 184 Stück.
+111 verschiedene Teile, 185 Stück.

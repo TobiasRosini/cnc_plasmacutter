@@ -160,15 +160,16 @@ P = dict(
     wange_r=75.0,               # Wangen bis zu diesem Radius um die Bogenmitte
     mast=(40.0, 8.0),           # Alu-Flachstange 40 x 8 (wie Kettenturm)
     mast_dx=5.0,                # Mastmitte neben der Leitung (Abstand zur Y-Kette)
-    mast_oben=595.0,
+    mast_oben=591.5,            # = Oberkante Umlenkkopf (leitung_oben_z + fach_h / 2 + 5)
     mast_m4_dx=10.0,            # M4 unten in Gewinde in der Stirn der Ablage hinten
     rh_t=8.0,                   # Ablage hinten: Alu-Flachstange 40 x 8 (statt Winkel)
     kopf_m4_z=[470.0, 560.0],   # M4 Kopf an den Mast
     kopf_m4_dx=10.0,            # M4 Kopf an den Mast, x ab leitung_ab_x
     kopf_breit_z=478.0,         # Kopf ab hier nach rechts verbreitert (Schelle), darunter läuft die Y-Kette
     schelle_senk_z=495.0,       # Schelle am senkrechten Lauf (Mitte)
-    mast_kb_z=[350.0, 410.0],   # Kabelbinder-Schlitze im Mast unter dem Kopf
-    mast_kb_dx=20.0,            # Schlitz neben dem Steuerungspfad, x ab leitung_ab_x
+    dist_z=(350.0, 430.0),      # Distanzstück am Mast unter dem Kopf (Auflage der Leitungen)
+    dist_kb_z=[362.0, 418.0],   # Kabelbinder quer durch das Distanzstück
+    dist_m4_z=[380.0, 400.0],   # M4 von hinten durch den Mast in Muttern im Distanzstück
     # Verbindungsplatte (Druck) unter dem freien Leitungsstück zwischen Bogen und Kopf:
     # liegt in Aussparungen oben in beiden, je 2x M4 von oben (gesenkt) in Muttern
     vp_t=15.0,
@@ -818,8 +819,7 @@ def dreiteilig(s, xm):
 
 def mast():
     """Alu-Flachstange 40 x 8 hinter der Ablage hinten: unten 2x M4 in Gewinde in deren
-    hinterer Stirn, oben der Umlenkkopf (2x M4). Unter dem Kopf Schlitze 2,5 x 5 für
-    Kabelbinder um die Leitungen (links neben dem Bündel, rechts um die Mastkante)."""
+    hinterer Stirn, oben der Umlenkkopf (2x M4), darunter das Distanzstück (2x M4)."""
     yh, xa = P["leitung_hinten_y"], P["leitung_ab_x"]
     mb, mt = P["mast"]
     xm = xa + P["mast_dx"]
@@ -830,9 +830,30 @@ def mast():
         s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xm + dx, y1 - mt - 1, z0 + P["rh_t"] / 2), V(0, 1, 0)))
     for z in P["kopf_m4_z"]:
         s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + P["kopf_m4_dx"], y1 - mt - 1, z), V(0, 1, 0)))
-    xk = xa + P["mast_kb_dx"]                     # Kabelbinder: Schlitz links, rechts um die Mastkante
-    for z in P["mast_kb_z"]:
-        s = s.cut(box(xk - 1.0, xk + 1.5, y1 - mt - 1, y1 + 1, z - 2.5, z + 2.5))
+    for z in P["dist_m4_z"]:                      # Distanzstück
+        s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + P["kopf_m4_dx"], y1 - mt - 1, z), V(0, 1, 0)))
+    return s
+
+
+def distanzstueck():
+    """Druckteil auf dem Mast unter dem Umlenkkopf: füllt den Abstand vom Mast bis hinter die
+    Leitungen (Auflage wie die Rückwand des Kopfs), zwei Kanäle quer für Kabelbinder um das
+    Bündel. Rechts nicht breiter als die Leitungen (Y-Kette). 2x M4 von hinten durch den Mast,
+    Muttern von links eingeschoben."""
+    xa, yh = P["leitung_ab_x"], P["leitung_hinten_y"]
+    mb, mt = P["mast"]
+    y1 = yh - 20.0                                # Vorderseite Mast
+    y2 = yh - P["fach_h"] / 2                     # Rückseite der Leitungen
+    x0 = xa - P["fach_steg"] / 2 - P["fach_b"][0]
+    x1 = xa + P["mast_dx"] + mb / 2
+    z0, z1 = P["dist_z"]
+    s = box(x0, x1, y1, y2, z0, z1)
+    for z in P["dist_kb_z"]:
+        s = s.cut(box(x0 - 1, x1 + 1, y1 + 3.0, y1 + 6.0, z - 2.5, z + 2.5))
+    xm4 = xa + P["kopf_m4_dx"]
+    for z in P["dist_m4_z"]:
+        s = s.cut(Part.makeCylinder(2.25, y2 - y1 - 1.5, V(xm4, y1 - 0.01, z), V(0, 1, 0)))
+        s = s.cut(fc_dok.mutter(4, V(xm4, y1 + 6.5, z), V(0, 1, 0), V(1, 0, 0), x1 - xm4 + 1))
     return s
 
 
@@ -850,7 +871,8 @@ def umlenkkopf():
     Mast (2x M4, Muttern seitlich eingeschoben), Wange auf der Gegenseite, zur Kettenseite
     offen (Leitungen von der Seite einlegen). Am senkrechten Lauf hält eine Leitungsschelle
     die Pfade an der Rückwand, die dafür oberhalb der Y-Kette nach rechts verbreitert ist;
-    darunter ein Kabelbinder. Auf der Wange liegend stützenfrei druckbar."""
+    darunter ein Kabelbinder. Unten vorn im Bogen ausgeschnitten. Auf der Wange liegend
+    stützenfrei druckbar."""
     r, hh = P["leitung_r"], P["fach_h"] / 2
     yh, xa, zo = P["leitung_hinten_y"], P["leitung_ab_x"], P["leitung_oben_z"]
     ri = r - hh
@@ -869,6 +891,10 @@ def umlenkkopf():
     wa = box(xa + b, xw, y_rw, cy, z_u, zo + hh + 5.0)                  # Wange = ganze Seitenplatte,
     wa = wa.fuse(box(xa + b, xw, cy, ys1 + 5.0, z_u, cz + ri))          # vorn nur bis unter die Schelle
     s = kern.fuse([rw, wa, schelle_fuss(2, 12.0)]).removeSplitter()
+    # unten vorn unter dem Bogen weg: Viertelkreis um die vordere untere Ecke, endet vorn an
+    # der Unterseite des Kerns und unten 10 mm vor den Leitungen
+    rb = cz - z_u
+    s = s.cut(Part.makeCylinder(rb, xw - xa + b + 2, V(xa - b - 1, ys1 + 5.0, z_u), V(1, 0, 0)))
     zv = cz + ri - P["vp_t"]                                            # Verbindungsplatte
     s = s.cut(box(xa - b - 1, xa + b, P["vp_y"][0], ys1 + 6.0, zv, cz + ri + 1))
     for dx, y in P["vp_m4_kopf"]:
@@ -882,7 +908,9 @@ def umlenkkopf():
     # Schelle am senkrechten Lauf: Platz in der Wange, M3 in die Rückwand, Muttern seitlich
     t = schelle_senkrecht()
     l = P["bg_l"] / 2 + 0.3
-    s = s.cut(box(m["x0"] - 0.3, m["x1"] + 0.3, -l, l, 0, m["h"] + P["bg_dach"] + 1).transformGeometry(t))
+    tasche = box(m["x0"] - 0.3, m["x1"] + 0.3, -l, l, 0, m["h"] + P["bg_dach"] + 1)
+    tasche.transformShape(t)
+    s = s.cut(tasche)
     for x in m["m3"]:
         sx = 1 if x > 0 else -1
         s = s.cut(Part.makeCylinder(1.7, 14, V(x, 0, -13)).transformGeometry(t))
@@ -1284,7 +1312,7 @@ def main():
               "ek_Leitung": (leitung(), "zukauf"),
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
-              "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"),
+              "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (distanzstueck(), "druck"),
               "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
               "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
               "ekx_leitungssockel": (Part.makeCompound(leitungssockel()), "druck"),
@@ -1309,7 +1337,7 @@ def main():
              "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
              "ek_stuetzen_kopf": stuetzen_kopf(),
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
-             "ekx_umlenkkopf": uk,
+             "ekx_umlenkkopf": uk, "ekx_distanzstueck": distanzstueck(),
              "ek_verbindungsplatte": verbindungsplatte(),
              "ek_leitungsschelle": schelle_einzeln(),             # 6 Stück
              "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
@@ -1344,7 +1372,7 @@ def main():
         for n, sh in (("Turm", au), ("Halter Y", halter_y()), ("Ablagehalter X", ablagehalter_x()),
                       ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
                       ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", Part.makeCompound(lb)),
-                      ("Mast", mast()), ("Umlenkkopf", uk),
+                      ("Mast", mast()), ("Umlenkkopf", uk), ("Distanzstück", distanzstueck()),
                       ("Verbindungsplatte", verbindungsplatte()),
                       ("Schellen", Part.makeCompound(leitungsschellen())),
                       ("Sockel", Part.makeCompound(leitungssockel()))):
