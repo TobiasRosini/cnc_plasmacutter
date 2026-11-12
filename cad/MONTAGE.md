@@ -2,7 +2,7 @@
 
 Alle Schraubverbindungen mit Ausführung und offenen Kandidaten: `cad/VERBINDUNGEN.md`.
 
-Prüfung: `python3 cad/live.py cad/pruefe_montage.py` → `cad/zusammenbau/montage.txt`. Jede Schraubenbohrung wird bis 3 mm über ihr Ende hinaus verfolgt; trifft sie ein anliegendes Teil, muss dort eine Bohrung oder ein Gewinde sein. Aktuell: **0 offen**, 54 bekannte, gewollte Fälle, keine sich schneidenden Bohrungen (Schraubenköpfe unter Deckteilen, Muttertaschen, Klemmschrauben auf den Brenner, Schalter in Bohrungen).
+Prüfung: `python3 cad/live.py cad/pruefe_montage.py` → `cad/zusammenbau/montage.txt`. Jede Schraubenbohrung wird bis 3 mm über ihr Ende hinaus verfolgt; trifft sie ein anliegendes Teil, muss dort eine Bohrung oder ein Gewinde sein. Aktuell (12.11.2026): **0 offen**, 62 bekannte, gewollte Fälle, keine sich schneidenden Bohrungen (Schraubenköpfe unter Deckteilen, Muttertaschen, Klemmschrauben auf den Brenner, Schalter in Bohrungen).
 
 ## Reihenfolge Portal
 

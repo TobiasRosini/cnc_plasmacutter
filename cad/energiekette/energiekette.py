@@ -974,6 +974,9 @@ def umlenkkopf():
     tasche = box(m["x0"] - 0.3, m["x1"] + 0.3, -l, l, 0, m["h"] + P["bg_dach"] + 1)
     tasche.transformShape(t)
     s = s.cut(tasche)
+    zugang = box(m["xs"] - 0.3, xw - xa + 1, -l, l, m["h"] + P["bg_dach"], 80)   # Zugang zur linken M3
+    zugang.transformShape(t)
+    s = s.cut(zugang)
     for x in m["m3"]:
         sx = 1 if x > 0 else -1
         s = s.cut(Part.makeCylinder(1.7, 14, V(x, 0, -13)).transformGeometry(t))
