@@ -1049,7 +1049,12 @@ def verbindungsplatte():
         links.append(V(q.x, q.y, z0 - 1) + n * (m["x1"] + 1.0))
         rechts.append(V(q.x, q.y, z0 - 1) + n * (m["x0"] - 1.0))
         y -= 1.0
-    band = Part.Face(Part.makePolygon(links + rechts[::-1] + [links[0]])).extrude(V(0, 0, z1 - z0 + 2))
+    kl, kr = Part.BSplineCurve(), Part.BSplineCurve()                  # glatter Rand
+    kl.interpolate(links)
+    kr.interpolate(rechts)
+    rand = Part.Wire([kl.toShape(), Part.LineSegment(links[-1], rechts[-1]).toShape(),
+                      kr.toShape().reversed(), Part.LineSegment(rechts[0], links[0]).toShape()])
+    band = Part.Face(rand).extrude(V(0, 0, z1 - z0 + 2))
     _, xb1 = bogen_x()
     tasche_b = box(xc - b - 1, xb1 + 1, P["hy_y"][0] - 1, y1, z0 - 1, z1 + 1)
     tasche_k = box(xa - b - 1, xa + b, y0, P["leitung_s_y"][1] + 6.0, z0 - 1, z1 + 1)
@@ -1425,6 +1430,37 @@ def fuehrungen():
     return lb, umlenkkopf()
 
 
+# Darstellung im Dokument: Portalteile in Portalmitte, Halter X auf dem Wagen
+LAGE_PORTAL = V(0, 700, 0)
+LAGE_WAGEN = V(340, 700, 57)
+
+
+def sexy(teile, nachbarn, log=None):
+    """Rundet die freien Außenkanten der Druckteile (fc_dok.verrunden). teile: Name ->
+    (Form oder Liste, Normale der Druckbett-Seite, Lage im Dokument). nachbarn: (Name, Form)
+    in Dokumentlage (Kontaktflächen bleiben scharf; das Teil selbst zählt nicht). Gibt
+    Name -> Form bzw. Liste zurück."""
+    import time
+    res = {}
+    for n, (form, bett, lage) in teile.items():
+        einzeln = form if isinstance(form, list) else [form]
+        neu = []
+        for k in einzeln:
+            t0 = time.time()
+            nb = []                                     # Nachbarn in die Lage des Teils
+            for nn, x in nachbarn:
+                if nn != n:
+                    x = x.copy()
+                    x.translate(-lage)
+                    nb.append(x)
+            r, anz, kand = fc_dok.verrunden(k, nb, bett)
+            neu.append(r)
+            if log is not None:
+                log.append("Radien %s: %d von %d Kanten (%.0f s)" % (n, anz, kand, time.time() - t0))
+        res[n] = neu if isinstance(form, list) else neu[0]
+    return res
+
+
 def main():
     tr, ri = traeger_rinne()
     lb, uk = fuehrungen()
@@ -1434,6 +1470,39 @@ def main():
     xtr, xri = ablage_x()
     xst = stuetze_x_links()
     xpf = halter_x()
+    # Druckteile mit Radien an allen freien Außenkanten
+    roh = {"ek_halter_y": (halter_y(), (0, 0, -1), LAGE_PORTAL),
+           "ekx_ablagehalter": (ablagehalter_x(), (-1, 0, 0), LAGE_PORTAL),
+           "ekx_rinnenhalter": (rinnenhalter().Solids, (0, 0, -1), LAGE_PORTAL),
+           "ekx_stopfen": (stopfen_x(), (0, 0, -1), LAGE_PORTAL),
+           "ekx_halter": (xpf, (0, 1, 0), LAGE_WAGEN),
+           "ek_stuetzen_kopf": (stuetzen_kopf(), (0, 0, 1), V(0, 0, 0)),
+           "ek_leitungsbogen_a": (lb[0], (-1, 0, 0), LAGE_PORTAL),
+           "ek_leitungsbogen_steg": (lb[1], (-1, 0, 0), LAGE_PORTAL),
+           "ek_leitungsbogen_b": (lb[2], (1, 0, 0), LAGE_PORTAL),
+           "ekx_umlenkkopf": (uk, (1, 0, 0), LAGE_PORTAL),
+           "ek_verbindungsplatte": (verbindungsplatte(), (0, 0, -1), LAGE_PORTAL),
+           "ekx_leitungssockel": (leitungssockel(), (0, 0, 1), LAGE_PORTAL),
+           "ekx_distanzstueck": (distanzstueck(), (0, 1, 0), LAGE_PORTAL),
+           "ekx_mastwinkel": (mastwinkel(), (0, 0, -1), LAGE_PORTAL)}
+
+    def verschoben(f, lage):
+        f = f.copy()
+        f.translate(lage)
+        return f
+    nachbarn = [("", verschoben(f, LAGE_PORTAL)) for f in
+                [au, ei, einsteckteil_links(), xtr, xri, rinne_hinten(), mast(), xst,
+                 Part.makeCompound(leitungsschellen()), kette_x(360.0)]]
+    nachbarn += [("", f) for f in [tr, ri, kabelkanal_y(), kette(700.0)] + st]
+    nachbarn += [("", verschoben(fc_dok.quelle(os.path.join(os.path.dirname(OUT), "z_achse",
+                                                             "z_achse.FCStd")).getObject("z_kopf").Shape,
+                                 LAGE_WAGEN))]
+    for n, (form, _, lage) in roh.items():
+        nachbarn += [(n, verschoben(f, lage)) for f in (form if isinstance(form, list) else [form])]
+    log = []
+    sx = sexy(roh, nachbarn, log)
+    lb = [sx["ek_leitungsbogen_a"], sx["ek_leitungsbogen_steg"], sx["ek_leitungsbogen_b"]]
+    uk, xpf = sx["ekx_umlenkkopf"], sx["ekx_halter"]
     pfad = os.path.join(OUT, "energiekette.FCStd")
     doc, offen = fc_dok.dokument(pfad)
     for alt in ("ekx_festhalter", "ek_leitungsclips", "Kette_20x38_R125", "Kette_X_20x38_R65",
@@ -1444,25 +1513,25 @@ def main():
     fc_dok.teil(doc, "ek_rinne", ri, "alu")
     fc_dok.teil(doc, "ek_kabelkanal", kabelkanal_y(), "zukauf")
     fc_dok.teil(doc, "ek_stuetzen", Part.makeCompound(st), "stahl")
-    fc_dok.teil(doc, "ek_stuetzen_kopf", stuetzen_kopf(), "druck")
+    fc_dok.teil(doc, "ek_stuetzen_kopf", sx["ek_stuetzen_kopf"], "druck")
     portal = {"ek_ausleger": (au, "alu"), "ek_einsteckteil": (ei, "druck"),
-              "ek_halter_y": (halter_y(), "druck"), "ekx_ablagehalter": (ablagehalter_x(), "druck"),
+              "ek_halter_y": (sx["ek_halter_y"], "druck"), "ekx_ablagehalter": (sx["ekx_ablagehalter"], "druck"),
               "ek_Leitung": (leitung(), "zukauf"),
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
-              "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
-              "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (distanzstueck(), "druck"),
-              "ekx_mastwinkel": (mastwinkel(), "druck"),
-              "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
+              "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (Part.makeCompound(sx["ekx_rinnenhalter"]), "druck"),
+              "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (sx["ekx_distanzstueck"], "druck"),
+              "ekx_mastwinkel": (sx["ekx_mastwinkel"], "druck"),
+              "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (sx["ek_verbindungsplatte"], "druck"),
               "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
-              "ekx_leitungssockel": (Part.makeCompound(leitungssockel()), "druck"),
-              "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (stopfen_x(), "druck"),
+              "ekx_leitungssockel": (Part.makeCompound(sx["ekx_leitungssockel"]), "druck"),
+              "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (sx["ekx_stopfen"], "druck"),
               "ek_einsteckteil_links": (einsteckteil_links(), "druck")}
     for n, (shp, farbe) in portal.items():
         o = fc_dok.teil(doc, n, shp, farbe)
-        o.Placement = App.Placement(V(0, 700, 0), App.Rotation())  # Darstellung in Portalmitte
+        o.Placement = App.Placement(LAGE_PORTAL, App.Rotation())  # Darstellung in Portalmitte
     for n, shp, farbe in (("ekx_halter", xpf, "druck"), ("ekx_Leitung_Brenner", brenner_leitung(), "zukauf")):
         o = fc_dok.teil(doc, n, shp, farbe)
-        o.Placement = App.Placement(V(340, 700, 57), App.Rotation())
+        o.Placement = App.Placement(LAGE_WAGEN, App.Rotation())
     fc_dok.teil(doc, "Kette_igus_2400_03_R125", kette(700.0), "zukauf")
     k = fc_dok.teil(doc, "Kette_X_igus_2400_03_R75", kette_x(360.0), "zukauf")
     k.Placement = App.Placement(V(0, 700, 0), App.Rotation())
@@ -1472,15 +1541,15 @@ def main():
                  ("ekx_rinne_hinten", rinne_hinten())):
         s.exportStep(os.path.join(OUT, n + ".step"))
     druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": einsteckteil_links(),
-             "ek_halter_y": halter_y(), "ekx_ablagehalter": ablagehalter_x(),
-             "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
-             "ek_stuetzen_kopf": stuetzen_kopf(),
+             "ek_halter_y": sx["ek_halter_y"], "ekx_ablagehalter": sx["ekx_ablagehalter"],
+             "ekx_rinnenhalter": Part.makeCompound(sx["ekx_rinnenhalter"]), "ekx_stopfen": sx["ekx_stopfen"],
+             "ekx_halter": xpf, "ek_stuetzen_kopf": sx["ek_stuetzen_kopf"],
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
-             "ekx_umlenkkopf": uk, "ekx_distanzstueck": distanzstueck(), "ekx_mastwinkel": mastwinkel(),
-             "ek_verbindungsplatte": verbindungsplatte(),
+             "ekx_umlenkkopf": uk, "ekx_distanzstueck": sx["ekx_distanzstueck"],
+             "ekx_mastwinkel": sx["ekx_mastwinkel"], "ek_verbindungsplatte": sx["ek_verbindungsplatte"],
              "ek_leitungsschelle": schelle_einzeln(),             # 5 Stück
              "ekx_schelle_einseitig": schelle_einseitig_einzeln(),
-             "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
+             "ekx_leitungssockel": sx["ekx_leitungssockel"][0]}   # 2 Stück
     mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
     for n, s in druck.items():
         s.exportStep(os.path.join(OUT, n + ".step"))
@@ -1503,6 +1572,7 @@ def main():
         sl = kette_x(P["xk_wagen_x"][0]).BoundBox
         f.write("X-Kette Schlaufe bei X an der Kettenseite bis x %.1f (Turm innen %.1f)\n"
                 % (sl.XMin, g["a_x1"]))
+        f.write("\n".join(log) + "\n")
         fc_dok.schreibe_waende(f, "ek_einsteckteil", ei)
         fc_dok.schreibe_waende(f, "ek_einsteckteil_links", einsteckteil_links())
         for n, sh in druck.items():

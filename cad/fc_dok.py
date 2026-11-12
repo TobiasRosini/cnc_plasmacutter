@@ -219,3 +219,138 @@ def mutter(m, p, achse, schlitz=None, laenge=0.0):
         s = s.fuse(Part.makeBox(laenge, sw, h, V(0, -sw / 2, -h / 2)))
     mat = App.Matrix(x.x, y.x, z.x, p.x, x.y, y.y, z.y, p.y, x.z, y.z, z.z, p.z, 0, 0, 0, 1)
     return s.transformGeometry(mat)
+
+
+def _kontaktflaechen(shape, nachbarn, tol=0.05):
+    """Indizes der Flächen, die an einem Nachbarteil anliegen (Stichproben im Flächeninneren)."""
+    res = set()
+    for i, f in enumerate(shape.Faces):
+        bb = f.BoundBox
+        bb.enlarge(0.5)
+        nb = [n for n in nachbarn if n.BoundBox.intersect(bb)]
+        if not nb:
+            continue
+        u0, u1, v0, v1 = f.ParameterRange
+        pts = []
+        for a, b in ((0.5, 0.5), (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), (0.75, 0.75)):
+            u, v = u0 + a * (u1 - u0), v0 + b * (v1 - v0)
+            p = f.valueAt(u, v)
+            if f.isInside(p, 1e-4, True):
+                pts.append(p)
+        if not pts:
+            pts = [f.CenterOfMass]
+        for p in pts:
+            vx = Part.Vertex(p)
+            if any(vx.distToShape(n)[0] < tol for n in nb):
+                res.add(i)
+                break
+    return res
+
+
+def _konvex(e, f1, f2):
+    """True, wenn die Kante zwischen f1 und f2 eine Außenkante ist."""
+    p = e.valueAt((e.FirstParameter + e.LastParameter) / 2)
+    t = e.tangentAt((e.FirstParameter + e.LastParameter) / 2)
+    n1 = f1.normalAt(*f1.Surface.parameter(p))
+    n2 = f2.normalAt(*f2.Surface.parameter(p))
+    w = n1.cross(t)
+    if w.Length < 1e-9:
+        return False
+    w.normalize()
+    if f1.distToShape(Part.Vertex(p + w * 0.05))[0] > 1e-3:
+        w = -w
+    return n2.dot(w) < -1e-3
+
+
+def _innen(shape, f, weite=15.0):
+    """True, wenn vor der Fläche f innerhalb von weite mm wieder Material liegt (Wand eines
+    Schlitzes, Tunnels, einer Tasche)."""
+    p = f.CenterOfMass
+    if not f.isInside(p, 1e-4, True):
+        u0, u1, v0, v1 = f.ParameterRange
+        p = f.valueAt((u0 + u1) / 2, (v0 + v1) / 2)
+    n = f.normalAt(*f.Surface.parameter(p))
+    strahl = Part.LineSegment(p + n * 0.05, p + n * weite).toShape()
+    try:
+        return strahl.common(shape).Length > 1e-3
+    except Exception:
+        return False
+
+
+def _duenn(shape, grenze=3.0):
+    return {(round(x), round(y), round(z)) for d, x, y, z, _ in duenne_waende(shape, grenze)}
+
+
+def verrunden(shape, nachbarn=(), bett=None, radien=(2.0, 1.0, 0.5), loch_r=8.0):
+    """Rundet die freien Außenkanten eines Druckteils ("make it sexy"). Scharf bleiben:
+    Kanten an Flächen, die an einem Nachbarteil anliegen (saubere Fugen im Zusammenbau),
+    Kanten an der Druckbett-Fläche (bett = Normale der Unterseite beim Druck), Innenkanten,
+    Ränder von Bohrungen, Muttertaschen, Schlitzen und Tunneln. Jede Kante bekommt den
+    größten Radius aus radien, der geht, ohne Wände an Bohrungen unter 3 mm zu bringen.
+    Gibt (form, gerundet, kandidaten) zurück."""
+    s = shape
+    v0 = s.Volume
+    duenn0 = _duenn(s)
+    kontakt = _kontaktflaechen(s, list(nachbarn))
+    zmax = None
+    if bett is not None:
+        bett = App.Vector(bett).normalize()
+        zmax = max(v.Point.dot(bett) for v in s.Vertexes)
+    def gesperrt(i, f):
+        if i in kontakt:
+            return True
+        st = f.Surface.TypeId
+        if "Plane" in st:
+            if bett is not None:
+                n = f.normalAt(*f.Surface.parameter(f.CenterOfMass))
+                if n.dot(bett) > 0.999 and abs(f.CenterOfMass.dot(bett) - zmax) < 0.05:
+                    return True
+        elif "Cylinder" in st:
+            if f.Surface.Radius < loch_r:
+                return True
+        elif f.Area < 200.0:                            # kleine Freiformflächen: Muttertaschen
+            return True
+        return _innen(s, f)
+    sperre = {i for i, f in enumerate(s.Faces) if gesperrt(i, f)}
+    kand = []
+    for e in s.Edges:
+        if e.Length < 1.0 or not any(k in e.Curve.TypeId for k in ("Line", "Circle", "BSpline")):
+            continue
+        fl = [i for i, f in enumerate(s.Faces) if any(e.isSame(x) for x in f.Edges)]
+        if len(fl) != 2 or sperre & set(fl):
+            continue
+        if not _konvex(e, s.Faces[fl[0]], s.Faces[fl[1]]):
+            continue
+        kand.append((e.valueAt((e.FirstParameter + e.LastParameter) / 2), e.Length))
+
+    def finde(form, m, l):
+        for e in form.Edges:
+            if abs(e.Length - l) < 1e-3 and e.distToShape(Part.Vertex(m))[0] < 1e-3:
+                return e
+        return None
+
+    def gut(neu, alt):
+        return (neu.isValid() and len(neu.Solids) == len(alt.Solids)
+                and 0 < alt.Volume - neu.Volume < 0.05 * v0 and _duenn(neu) <= duenn0)
+
+    for r in radien[:1]:                                # erst alle auf einmal
+        try:
+            neu = s.makeFillet(r, [finde(s, m, l) for m, l in kand])
+            if gut(neu, s):
+                return neu, len(kand), len(kand)
+        except Exception:
+            pass
+    n = 0
+    for m, l in kand:                                   # sonst Kante für Kante
+        e = finde(s, m, l)
+        if e is None:
+            continue
+        for r in radien:
+            try:
+                neu = s.makeFillet(r, [e])
+            except Exception:
+                continue
+            if gut(neu, s):
+                s, n = neu, n + 1
+                break
+    return s, n, len(kand)
