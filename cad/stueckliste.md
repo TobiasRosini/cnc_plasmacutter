@@ -91,7 +91,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 085 | ekx_ablagehalter | 1 | Druck | 64 × 40 × 22 | Energieketten | energiekette/ekx_ablagehalter.step |  |
 | 086 | ekx_rinne_hinten | 1 | Alu | 477 × 40 × 8 | Energieketten | energiekette/ekx_rinne_hinten.step |  |
 | 087 | ekx_rinnenhalter_1 | 2 | Druck | 183 × 20 × 18 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
-| 088 | ekx_rinnenhalter_2 | 1 | Druck | 183 × 28 × 20 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
+| 088 | ekx_rinnenhalter_2 | 1 | Druck | 183 × 28 × 22 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
 | 089 | ekx_halter | 1 | Druck | 119 × 75 × 44 | Energieketten | energiekette/ekx_halter.step |  |
 | 090 | Kette_igus_2400_03_R75 | 1 | Kaufteil | 400 × 186 × 55 | Energieketten |  |  |
 | 091 | Kette_igus_2400_03_R125 | 1 | Kaufteil | 539 × 285 × 55 | Energieketten |  |  |

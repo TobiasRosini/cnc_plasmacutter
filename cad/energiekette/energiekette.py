@@ -203,6 +203,7 @@ P = dict(
     # Rinne hinten (Alu-Winkel 40 x 20 x 2) auf Haltern (Druck) an der Ablage
     rh_halter_x=[40.0, 250.0],  # dazu ein dritter unter dem festen Kettenende (hinteres M5)
     rh_halter_b=20.0,
+    rh_fase=3.0,                # Fase unten an den kurzen Kanten der Rinnenhalter
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
     xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
@@ -662,18 +663,33 @@ def _platziert(s, p, d):
     return s
 
 
-def leitungsschellen():
-    """Zwei Tunnel mit Mittelsteg über den Pfaden, je 1x M3 durch die Schenkel."""
+def schelle_lokal():
+    """Schelle in eigener Lage (x quer, Steuerung positiv; y längs; z ab der Unterlage):
+    zwei Tunnel mit Mittelsteg, je 1x M3 durch die Schenkel; alle senkrechten Kanten gerundet
+    (außen R3, Schenkel innen R2, Mittelsteg R0,9)."""
     m, l, t = schelle_mass(), P["bg_l"] / 2, P["bg_dach"]
     st = P["bg_steg"] / 2
+    s = box(m["x0"], m["x1"], -l, l, 0, m["h"] + t)
+    s = s.cut(box(m["xb"], -st, -l - 1, l + 1, -1, m["h"]))
+    s = s.cut(box(st, m["xs"], -l - 1, l + 1, -1, m["h"]))
+    for xs, r in (((m["x0"], m["x1"]), 3.0), ((m["xb"], m["xs"]), 2.0), ((-st, st), 0.9)):
+        kanten = [e for e in s.Edges if isinstance(e.Curve, Part.Line)
+                  and abs(e.Vertexes[0].X - e.Vertexes[1].X) < 1e-6
+                  and abs(e.Vertexes[0].Y - e.Vertexes[1].Y) < 1e-6
+                  and any(abs(e.Vertexes[0].X - x) < 1e-6 for x in xs)
+                  and abs(abs(e.Vertexes[0].Y) - l) < 1e-6]
+        s = s.makeFillet(r, kanten)
+    for x in m["m3"]:
+        s = s.cut(Part.makeCylinder(1.7, m["h"] + t + 2, V(x, 0, -1)))
+    return s
+
+
+def leitungsschellen():
+    """Alle Schellen: auf den Lagen von buegel_lagen, dazu eine am senkrechten Lauf."""
+    vorlage = schelle_lokal()
     res = []
     for p, d in buegel_lagen():
-        s = box(m["x0"], m["x1"], -l, l, 0, m["h"] + t)
-        s = s.cut(box(m["xb"], -st, -l - 1, l + 1, -1, m["h"]))
-        s = s.cut(box(st, m["xs"], -l - 1, l + 1, -1, m["h"]))
-        for x in m["m3"]:
-            s = s.cut(Part.makeCylinder(1.7, m["h"] + t + 2, V(x, 0, -1)))
-        res.append(_platziert(s, p, d))
+        res.append(_platziert(vorlage.copy(), p, d))
     s = res[0].copy()                                   # am senkrechten Lauf (Umlenkkopf)
     p, d = buegel_lagen()[0]
     s.translate(-p)
@@ -753,6 +769,14 @@ def zyl_x(r, x0, x1, y, z):
     return Part.makeCylinder(r, x1 - x0, V(x0, y, z), V(1, 0, 0))
 
 
+def bogen_x():
+    """x-Bereich des Leitungsbogens (Wangen außen bündig mit der Schellenauflage)."""
+    g = geo()
+    xc, b, wt = (g["k_x0"] + g["k_x1"]) / 2, P["fuehrung_b"] / 2, P["wange_t"]
+    fu = schelle_fuss(0, 12.0).BoundBox
+    return min(xc - b - wt, fu.XMin), max(xc + b + wt, fu.XMax)
+
+
 def leitungsbogen():
     """Druckteil auf dem Halter Y: die Leitungen treten am bewegten Kettenende nach vorn
     aus und laufen innen um diesen Bogen (R60 Mittellinie) hoch und zurück nach hinten.
@@ -781,8 +805,7 @@ def leitungsbogen():
                       schelle_fuss(0, 12.0)])                       # Auflage der Schelle
     # Wangen = ganze Seitenplatten (Bogen und Kern), außen bündig mit der Schellenauflage:
     # die Hälften werden auf der Wange liegend gedruckt
-    fb = kern.BoundBox
-    xa0, xa1 = min(xa0, fb.XMin), max(xa1, fb.XMax)
+    xa0, xa1 = bogen_x()
     w = stadion(wr, xa0, xa1).fuse(box(xa0, xa1, yb, cy, z_h, z2 + ri))
     w = w.cut(box(xc - b, xc + b, yb - 1, cy + wr + 1, z1 - wr - 1, z2 + wr + 1))
     s = kern.fuse(w)
@@ -970,7 +993,24 @@ def verbindungsplatte():
     b = P["fuehrung_b"] / 2
     z1 = P["leitung_oben_z"] - P["fach_h"] / 2
     z0 = z1 - P["vp_t"]
-    s = box(xc - b, xa + b, P["vp_y"][0], P["vp_y"][1], z0, z1)
+    y0, y1 = P["vp_y"]
+    s = box(xc - b, xa + b, y0, y1, z0, z1)
+    # Grundriss: Band entlang der Leitungen (Breite der Schelle + 1 mm je Seite), in den
+    # Aussparungen von Bogen und Kopf voll wie die Aussparung
+    m = schelle_mass()
+    links, rechts = [], []
+    y = y1 + 3.0
+    while y >= y0 - 3.0:
+        q, d = leitung_punkt(y=y, z_min=P["leitung_oben_z"] - 1)
+        n = V(-d.y, d.x, 0)
+        links.append(V(q.x, q.y, z0 - 1) + n * (m["x1"] + 1.0))
+        rechts.append(V(q.x, q.y, z0 - 1) + n * (m["x0"] - 1.0))
+        y -= 1.0
+    band = Part.Face(Part.makePolygon(links + rechts[::-1] + [links[0]])).extrude(V(0, 0, z1 - z0 + 2))
+    _, xb1 = bogen_x()
+    tasche_b = box(xc - b - 1, xb1 + 1, P["hy_y"][0] - 1, y1, z0 - 1, z1 + 1)
+    tasche_k = box(xa - b - 1, xa + b, y0, P["leitung_s_y"][1] + 6.0, z0 - 1, z1 + 1)
+    s = s.common(band.fuse([tasche_b, tasche_k])).removeSplitter()
     for x0, pts in ((xc, P["vp_m4_bogen"]), (xa, P["vp_m4_kopf"])):
         for dx, y in pts:
             s = s.cut(Part.makeCylinder(2.25, P["vp_t"] + 2, V(x0 + dx, y, z0 - 1)))
@@ -1037,7 +1077,7 @@ def rinne_hinten():
     yh = P["leitung_hinten_y"]
     z0, t = rinne_hinten_z(), P["rh_t"]
     x0 = P["leitung_ab_x"] - 15.0
-    x1 = gx["xf"] + P["end_laenge"] / 2 + 2.0
+    x1 = rinne_hinten_x1()
     s = box(x0, x1, yh - 20.0, yh + 20.0, z0, z0 + t)
     for x in rh_halter_xs():                             # M4 in die Rinnenhalter
         s = s.cut(Part.makeCylinder(2.25, t + 2, V(x + P["rh_halter_b"] / 2, yh, z0 - 1)))
@@ -1051,12 +1091,18 @@ def rinne_hinten():
     return s
 
 
+def rinne_hinten_x1():
+    """Linkes Ende der Ablage hinten (etwas über das feste X-Kettenende hinaus)."""
+    return geo_x()["xf"] + P["end_laenge"] / 2 + 2.0
+
+
 def rinnenhalter():
     """Druckteile unter der Ablage: tragen die Ablage hinten (je 2x M5 von unten in
     Nietmuttern der Ablage, Ablage hinten mit 1x M4 in eine Mutter, seitlich eingeschoben).
     L-Profil: Platte unter der Ablage, dahinter hoch bis zur Ablage hinten. Der letzte
-    sitzt unter dem festen Kettenende und reicht hinter der Ablage bis unter die Rinne
-    (hinteres M5 des Kettenendes in eine seitlich eingeschobene Mutter)."""
+    sitzt unter dem festen Kettenende, schließt links mit der Ablage hinten ab und reicht
+    hinter der Ablage bis unter die Rinne (hinteres M5 des Kettenendes in eine seitlich
+    eingeschobene Mutter). Unten an den kurzen Kanten gefast."""
     gx = geo_x()
     ym = ym_traeger()
     yh = P["leitung_hinten_y"]
@@ -1067,11 +1113,18 @@ def rinnenhalter():
     yc = (gx["y0"] + gx["y1"]) / 2
     y_fest = [yc + dy for dy in (-P["end_C"] / 2, P["end_C"] / 2) if abs(yc + dy - ym) >= 18.0]
     res = None
+    fa = P["rh_fase"]
     for i, x in enumerate(rh_halter_xs()):
-        s = box(x, x + b, yh - 20.0, ym + 20.0, z0, gx["z_t0"])            # unter der Ablage
-        s = s.fuse(box(x, x + b, yh - 20.0, y_tr, gx["z_t0"] - 0.01, z_r))  # hoch zur Ablage hinten
-        if i == len(rh_halter_xs()) - 1:
-            s = s.fuse(box(x, x + b, gx["r_y0"], y_tr, gx["z_t0"] - 0.01, gx["z_ri"]))   # unter der Rinne
+        letzter = i == len(rh_halter_xs()) - 1
+        xr = rinne_hinten_x1() if letzter else x + b                    # links bündig mit der Ablage hinten
+        s = box(x, xr, yh - 20.0, ym + 20.0, z0, gx["z_t0"])            # unter der Ablage
+        s = s.fuse(box(x, xr, yh - 20.0, y_tr, gx["z_t0"] - 0.01, z_r))  # hoch zur Ablage hinten
+        for y, sy in ((yh - 20.0, 1), (ym + 20.0, -1)):                 # Fasen unten an den kurzen Kanten
+            fase = Part.Face(Part.makePolygon([V(x - 1, y - sy, z0 - 1), V(x - 1, y + sy * (fa + 1), z0 - 1),
+                                               V(x - 1, y - sy, z0 + fa + 1), V(x - 1, y - sy, z0 - 1)]))
+            s = s.cut(fase.extrude(V(xr - x + 2, 0, 0)))
+        if letzter:
+            s = s.fuse(box(x, xr, gx["r_y0"], y_tr, gx["z_t0"] - 0.01, gx["z_ri"]))   # unter der Rinne
             for y in y_fest:
                 s = s.cut(Part.makeCylinder(2.75, 16, V(x + b / 2, y, gx["z_ri"] - 15)))
                 s = s.cut(fc_dok.mutter(5, V(x + b / 2, y, gx["z_ri"] - 8), V(0, 0, 1), V(1, 0, 0), b / 2 + 1))

@@ -8,15 +8,15 @@ GRÜN  ek_halter_y                  Lage +Z oben, Auflage 3381 mm², Höhe 20 mm
 GRÜN  ek_leitungsbogen_a           Lage +X oben, Auflage 12684 mm², Höhe 28 mm, 11 kleine Stellen
 GRÜN  ek_leitungsbogen_b           Lage -X oben, Auflage 12392 mm², Höhe 29 mm, 11 kleine Stellen
 GRÜN  ek_leitungsbogen_steg        Lage +X oben, Auflage 9559 mm², Höhe 3 mm, 0 kleine Stellen
-GRÜN  ek_leitungsschelle           Lage +Z oben, Auflage 841 mm², Höhe 17 mm, 0 kleine Stellen
+GRÜN  ek_leitungsschelle           Lage +Z oben, Auflage 834 mm², Höhe 17 mm, 0 kleine Stellen
 GRÜN  ek_stuetzen_kopf             Lage -Z oben, Auflage 2332 mm², Höhe 40 mm, 4 kleine Stellen
-GRÜN  ek_verbindungsplatte         Lage +Z oben, Auflage 5280 mm², Höhe 15 mm, 2 kleine Stellen
+GRÜN  ek_verbindungsplatte         Lage +Z oben, Auflage 4106 mm², Höhe 15 mm, 2 kleine Stellen
 GRÜN  ekx_ablagehalter             Lage +X oben, Auflage 1350 mm², Höhe 40 mm, 10 kleine Stellen
 GRÜN  ekx_distanzstueck            Lage -Y oben, Auflage 3520 mm², Höhe 14 mm, 4 kleine Stellen
 GRÜN  ekx_halter                   Lage -Y oben, Auflage 5189 mm², Höhe 74 mm, 4 kleine Stellen
 GRÜN  ekx_leitungssockel           Lage -Z oben, Auflage 1815 mm², Höhe 15 mm, 4 kleine Stellen
 GRÜN  ekx_mastwinkel               Lage +Z oben, Auflage 3540 mm², Höhe 106 mm, 4 kleine Stellen
-GRÜN  ekx_rinnenhalter             Lage +Z oben, Auflage 10838 mm², Höhe 28 mm, 4 kleine Stellen
+GRÜN  ekx_rinnenhalter             Lage +Z oben, Auflage 10832 mm², Höhe 28 mm, 4 kleine Stellen
 GRÜN  ekx_stopfen                  Lage +Z oben, Auflage 890 mm², Höhe 16 mm, 6 kleine Stellen
 GRÜN  ekx_umlenkkopf               Lage -X oben, Auflage 11948 mm², Höhe 60 mm, 22 kleine Stellen
 GELB  ub_kanalknoten               Lage -Y oben, Auflage 14825 mm², Höhe 67 mm, 3 kleine Stellen, 1 größere:
