@@ -113,5 +113,6 @@
  "ub_uebergang_unten_deckel": 112,
  "ub_kanalknoten": 113,
  "ekx_umlenkkopf": 114,
- "ekx_distanzstueck": 115
+ "ekx_distanzstueck": 115,
+ "ekx_mastwinkel": 116
 }

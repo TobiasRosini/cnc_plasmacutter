@@ -170,6 +170,15 @@ P = dict(
     dist_z=(350.0, 430.0),      # Distanzstück am Mast unter dem Kopf (Auflage der Leitungen)
     dist_kb_z=[362.0, 418.0],   # Kabelbinder quer durch das Distanzstück
     dist_m4_z=[380.0, 400.0],   # M4 von hinten durch den Mast in Muttern im Distanzstück
+    # Versteifungswinkel (Druck) außen an der Ecke Mast / Ablage hinten: Schenkel hinter dem Mast,
+    # Bodenplatte unter der Ablage, zwei Rippen hinten
+    mw_t=6.0,                   # Wandstärke Schenkel und Bodenplatte
+    mw_h=100.0,                 # Höhe des Schenkels ab Unterkante Ablage
+    mw_tief=40.0,               # Rippen nach hinten
+    mw_rippe=5.0,
+    mw_x=(1.0, 39.0),           # Breite (links vor dem Rinnenhalter)
+    mw_m4_oben_z=85.0,          # M4 oben in Gewinde im Mast, z ab Unterkante Ablage
+    mw_m4_ablage_y=[-156.0, -129.5],   # M4 von unten in Gewinde in der Ablage (neben den Leitungen)
     # Verbindungsplatte (Druck) unter dem freien Leitungsstück zwischen Bogen und Kopf:
     # liegt in Aussparungen oben in beiden, je 2x M4 von oben (gesenkt) in Muttern
     vp_t=15.0,
@@ -832,7 +841,38 @@ def mast():
         s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + P["kopf_m4_dx"], y1 - mt - 1, z), V(0, 1, 0)))
     for z in P["dist_m4_z"]:                      # Distanzstück
         s = s.cut(Part.makeCylinder(2.25, mt + 2, V(xa + P["kopf_m4_dx"], y1 - mt - 1, z), V(0, 1, 0)))
+    for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):          # Versteifungswinkel oben: Gewinde M4
+        s = s.cut(Part.makeCylinder(1.65, mt + 2, V(xm + dx, y1 - mt - 1, z0 + P["mw_m4_oben_z"]),
+                                    V(0, 1, 0)))
     return s
+
+
+def mastwinkel():
+    """Versteifungswinkel (Druck) außen an der Ecke Mast / Ablage hinten: Schenkel hinter
+    dem Mast, Bodenplatte unter Mast und Ablage, zwei Rippen nach hinten. Die beiden M4 des
+    Masts in die Ablagestirn gehen länger auch durch den Schenkel, oben 2x M4 in Gewinde im
+    Mast, unten 2x M4 von unten in Gewinde in der Ablage. Auf der Bodenplatte stehend
+    stützenfrei druckbar."""
+    yh, xa = P["leitung_hinten_y"], P["leitung_ab_x"]
+    mt = P["mast"][1]
+    t, h, tief, rb = P["mw_t"], P["mw_h"], P["mw_tief"], P["mw_rippe"]
+    x0, x1 = P["mw_x"]
+    z0 = rinne_hinten_z()
+    yr = yh - 20.0 - mt                                     # Rückseite Mast
+    yv = yh + 20.0                                          # Vorderkante Ablage
+    s = box(x0, x1, yr - t - tief, yv, z0 - t, z0)          # Bodenplatte
+    s = s.fuse(box(x0, x1, yr - t, yr, z0 - t, z0 + h))     # Schenkel
+    for xr in (x0, x1 - rb):                                # Rippen
+        tri = Part.Face(Part.makePolygon([V(xr, yr - t, z0 + h), V(xr, yr - t, z0),
+                                          V(xr, yr - t - tief, z0), V(xr, yr - t, z0 + h)]))
+        s = s.fuse(tri.extrude(V(rb, 0, 0)))
+    xm = xa + P["mast_dx"]
+    for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):
+        for z in (z0 + P["rh_t"] / 2, z0 + P["mw_m4_oben_z"]):
+            s = s.cut(Part.makeCylinder(2.25, t + 2, V(xm + dx, yr - t - 1, z), V(0, 1, 0)))
+    for y in P["mw_m4_ablage_y"]:
+        s = s.cut(Part.makeCylinder(2.25, t + 2, V(xm, y, z0 - t - 1)))
+    return s.removeSplitter()
 
 
 def distanzstueck():
@@ -1006,6 +1046,8 @@ def rinne_hinten():
     xm = P["leitung_ab_x"] + P["mast_dx"]
     for dx in (-P["mast_m4_dx"], P["mast_m4_dx"]):       # M4 Mast: Gewinde in der hinteren Stirn
         s = s.cut(Part.makeCylinder(1.65, 11, V(xm + dx, yh - 21.0, z0 + t / 2), V(0, 1, 0)))
+    for y in P["mw_m4_ablage_y"]:                         # M4 Versteifungswinkel von unten
+        s = s.cut(Part.makeCylinder(1.65, t + 2, V(xm, y, z0 - 1)))
     return s
 
 
@@ -1313,6 +1355,7 @@ def main():
               "ekx_traeger_40x20": (xtr, "alu"), "ekx_rinne": (xri, "alu"),
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (rinnenhalter(), "druck"),
               "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (distanzstueck(), "druck"),
+              "ekx_mastwinkel": (mastwinkel(), "druck"),
               "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (verbindungsplatte(), "druck"),
               "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
               "ekx_leitungssockel": (Part.makeCompound(leitungssockel()), "druck"),
@@ -1337,7 +1380,7 @@ def main():
              "ekx_rinnenhalter": rinnenhalter(), "ekx_stopfen": stopfen_x(), "ekx_halter": xpf,
              "ek_stuetzen_kopf": stuetzen_kopf(),
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
-             "ekx_umlenkkopf": uk, "ekx_distanzstueck": distanzstueck(),
+             "ekx_umlenkkopf": uk, "ekx_distanzstueck": distanzstueck(), "ekx_mastwinkel": mastwinkel(),
              "ek_verbindungsplatte": verbindungsplatte(),
              "ek_leitungsschelle": schelle_einzeln(),             # 6 Stück
              "ekx_leitungssockel": leitungssockel()[0]}           # 2 Stück
@@ -1372,7 +1415,7 @@ def main():
         for n, sh in (("Turm", au), ("Halter Y", halter_y()), ("Ablagehalter X", ablagehalter_x()),
                       ("Ablage", xtr), ("Rinne X", xri), ("Rinne hinten", rinne_hinten()),
                       ("Rinnenhalter", rinnenhalter()), ("Leitungsbogen", Part.makeCompound(lb)),
-                      ("Mast", mast()), ("Umlenkkopf", uk), ("Distanzstück", distanzstueck()),
+                      ("Mast", mast()), ("Umlenkkopf", uk), ("Distanzstück", distanzstueck()), ("Mastwinkel", mastwinkel()),
                       ("Verbindungsplatte", verbindungsplatte()),
                       ("Schellen", Part.makeCompound(leitungsschellen())),
                       ("Sockel", Part.makeCompound(leitungssockel()))):

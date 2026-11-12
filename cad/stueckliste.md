@@ -115,5 +115,6 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 113 | ub_kanalknoten | 1 | Druck | 206 × 78 × 67 | Unterbau | unterbau/ub_kanalknoten.step |  |
 | 114 | ekx_umlenkkopf | 1 | Druck | 152 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
 | 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
+| 116 | ekx_mastwinkel | 1 | Druck | 106 × 94 × 38 | Energieketten | energiekette/ekx_mastwinkel.step |  |
 
-111 verschiedene Teile, 185 Stück.
+112 verschiedene Teile, 186 Stück.

@@ -273,7 +273,7 @@ def main():
     for n in ("ek_ausleger", "ek_einsteckteil", "ekx_traeger_40x20", "ekx_rinne",
               "ekx_stuetze_links", "ekx_stopfen", "ek_einsteckteil_links",
               "ek_halter_y", "ekx_ablagehalter", "ekx_rinne_hinten", "ekx_rinnenhalter", "ek_Leitung",
-              "ek_leitungsbogen", "ekx_mast", "ekx_umlenkkopf", "ekx_distanzstueck",
+              "ek_leitungsbogen", "ekx_mast", "ekx_umlenkkopf", "ekx_distanzstueck", "ekx_mastwinkel",
               "ek_verbindungsplatte", "ek_leitungsschellen", "ekx_leitungssockel"):
         link(doc, "P_rechts_" + n, dek.getObject(n), pl_portal, g_e)
     link(doc, "X_ekx_halter", dek.getObject("ekx_halter"), plw, g_e)
