@@ -205,7 +205,8 @@ P = dict(
     rh_halter_b=20.0,
     rh_fase=3.0,
     sn_tief=4.0,                # Nippel der Spezialschelle am Umlenkkopf: Tiefe in die Wange
-    sn_dicke=2.0,                # Fase unten an den kurzen Kanten der Rinnenhalter
+    sn_dicke=2.0,
+    kopf_steg=12.0,             # Umlenkkopf: Steg unter den Leitungen (Rest nur Wange)                # Fase unten an den kurzen Kanten der Rinnenhalter
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
     xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
@@ -968,7 +969,8 @@ def umlenkkopf():
     Mast (2x M4, Muttern seitlich eingeschoben), Wange auf der Gegenseite, zur Kettenseite
     offen (Leitungen von der Seite einlegen). Am senkrechten Lauf hält eine Leitungsschelle
     die Pfade an der Rückwand, die dafür oberhalb der Y-Kette nach rechts verbreitert ist;
-    darunter ein Kabelbinder. Unten vorn im Bogen ausgeschnitten. Auf der Wange liegend
+    darunter ein Kabelbinder. Unter den Leitungen nur ein 12-mm-Steg, sonst nur die Wange;
+    unten vorn im Bogen ausgeschnitten. Auf der Wange liegend
     stützenfrei druckbar."""
     r, hh = P["leitung_r"], P["fach_h"] / 2
     yh, xa, zo = P["leitung_hinten_y"], P["leitung_ab_x"], P["leitung_oben_z"]
@@ -979,8 +981,14 @@ def umlenkkopf():
     y_rw = yh - 20.0                                     # Rückseite = Vorderseite Mast
     z_u = min(P["kopf_m4_z"]) - 30.0
     m = schelle_mass()
-    kern = zyl_x(ri, xa - b, xa + b, cy, cz).common(box(xa - b, xa + b, cy - ri, cy, cz, cz + ri))
-    kern = kern.fuse(box(xa - b, xa + b, cy, ys1 + 5.0, cz, cz + ri))
+    # Kern nur als Steg (kopf_steg dick) unter den Leitungen, unter der Verbindungsplatte
+    # unterhalb ihrer Aussparung; daneben bleibt nur die Wange
+    ks = P["kopf_steg"]
+    zv = cz + ri - P["vp_t"]                                            # Unterseite Verbindungsplatte
+    viertel = box(xa - b, xa + b, cy - ri, cy, cz, cz + ri)
+    kern = zyl_x(ri, xa - b, xa + b, cy, cz).cut(zyl_x(ri - ks, xa - b - 1, xa + b + 1, cy, cz)).common(viertel)
+    kern = kern.fuse([box(xa - b, xa + b, cy, ys1 + 5.0, cz + ri - ks, cz + ri),
+                      box(xa - b, xa + b, P["vp_y"][0] - 5.0, ys1 + 5.0, zv - ks, cz + ri)])
     rw = box(xa - 15.0, xa + b, y_rw, yh - hh, z_u, P["mast_oben"])
     rw = rw.fuse(box(xa + m["x0"] - 1.0, xa - 14.0, y_rw, yh - hh, P["kopf_breit_z"], P["mast_oben"]))
     fu = schelle_fuss(2, 12.0).BoundBox
@@ -988,15 +996,16 @@ def umlenkkopf():
     wa = box(xa + b, xw, y_rw, cy, z_u, zo + hh + 5.0)                  # Wange = ganze Seitenplatte,
     wa = wa.fuse(box(xa + b, xw, cy, ys1 + 5.0, z_u, cz + ri))          # vorn nur bis unter die Schelle
     s = kern.fuse([rw, wa, schelle_fuss(2, 12.0)]).removeSplitter()
-    # unten vorn unter dem Bogen weg: Viertelkreis um die vordere untere Ecke, endet vorn an
-    # der Unterseite des Kerns und unten 10 mm vor den Leitungen
-    rb = cz - z_u
-    s = s.cut(Part.makeCylinder(rb, xw - xa + b + 2, V(xa - b - 1, ys1 + 5.0, z_u), V(1, 0, 0)))
-    zv = cz + ri - P["vp_t"]                                            # Verbindungsplatte
+    # unten vorn weg: Viertelellipse um die vordere untere Ecke, endet vorn 2 mm unter dem
+    # Steg und unten 10 mm vor den Leitungen
+    ey, ez = ys1 + 5.0 - (yh + hh) - 10.0, zv - ks - 2.0 - z_u
+    m0 = V(xa - b - 1, ys1 + 5.0, z_u)
+    ell = Part.Ellipse(m0 + V(0, 0, ez), m0 + V(0, ey, 0), m0)
+    s = s.cut(Part.Face(Part.Wire(ell.toShape())).extrude(V(xw - xa + b + 2, 0, 0)))
     s = s.cut(box(xa - b - 1, xa + b, P["vp_y"][0], ys1 + 6.0, zv, cz + ri + 1))
-    for dx, y in P["vp_m4_kopf"]:
-        s = s.cut(Part.makeCylinder(2.25, 16, V(xa + dx, y, zv - 15)))
-        s = s.cut(fc_dok.mutter(4, V(xa + dx, y, zv - 8.0), V(0, 0, 1), V(0, 1, 0), ys1 + 5.0 - y + 1))
+    for dx, y in P["vp_m4_kopf"]:                                       # Muttern von unten eingepresst
+        s = s.cut(Part.makeCylinder(2.25, ks + 2, V(xa + dx, y, zv - ks - 1)))
+        s = s.cut(fc_dok.mutter(4, V(xa + dx, y, zv - ks + fc_dok.MUTTER[4][1] / 2 - 0.5), V(0, 0, 1)))
     xm4 = xa + P["kopf_m4_dx"]
     for z in P["kopf_m4_z"]:
         s = s.cut(Part.makeCylinder(2.25, 12, V(xm4, y_rw - 1, z), V(0, 1, 0)))

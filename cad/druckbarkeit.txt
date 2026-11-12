@@ -19,7 +19,7 @@ GRÜN  ekx_mastwinkel               Lage +Z oben, Auflage 3540 mm², Höhe 106 m
 GRÜN  ekx_rinnenhalter             Lage +Z oben, Auflage 10832 mm², Höhe 28 mm, 4 kleine Stellen
 GRÜN  ekx_schelle_einseitig        Lage +Z oben, Auflage 723 mm², Höhe 17 mm, 1 kleine Stellen
 GRÜN  ekx_stopfen                  Lage +Z oben, Auflage 890 mm², Höhe 16 mm, 6 kleine Stellen
-GRÜN  ekx_umlenkkopf               Lage -X oben, Auflage 11964 mm², Höhe 60 mm, 19 kleine Stellen
+GRÜN  ekx_umlenkkopf               Lage -X oben, Auflage 10383 mm², Höhe 60 mm, 17 kleine Stellen
 GELB  ub_kanalknoten               Lage -Y oben, Auflage 14825 mm², Höhe 67 mm, 3 kleine Stellen, 1 größere:
         waagerecht   4797 mm², Spannweite  25.5, Länge 188.2,  63.7 mm über dem Bett, Mitte (979, 52)
 GRÜN  ub_uebergang_unten           Lage -Y oben, Auflage 2291 mm², Höhe 64 mm, 2 kleine Stellen
