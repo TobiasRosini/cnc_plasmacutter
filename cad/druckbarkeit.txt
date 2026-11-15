@@ -1,6 +1,6 @@
 Druckbarkeit (Überhang flacher als 45° = kritisch; schräge Stellen bis 6 mm und waagerechte bis 10 mm Spannweite gelten als druckbar)
 Lage: Modellachse, die beim Druck nach oben zeigt (Koordinaten wie im Teileskript)
-grün 36, gelb 7
+grün 38, gelb 7
 
 GRÜN  ek_einsteckteil              Lage +Y oben, Auflage 7379 mm², Höhe 32 mm, 10 kleine Stellen
 GRÜN  ek_einsteckteil_links        Lage +Y oben, Auflage 3906 mm², Höhe 32 mm, 10 kleine Stellen
@@ -20,6 +20,8 @@ GRÜN  ekx_rinnenhalter             Lage +Z oben, Auflage 10823 mm², Höhe 28 m
 GRÜN  ekx_schelle_einseitig        Lage +Z oben, Auflage 723 mm², Höhe 17 mm, 33 kleine Stellen
 GRÜN  ekx_stopfen                  Lage +Z oben, Auflage 888 mm², Höhe 16 mm, 6 kleine Stellen
 GRÜN  ekx_umlenkkopf               Lage -X oben, Auflage 10381 mm², Höhe 60 mm, 17 kleine Stellen
+GRÜN  ub_ablauf_deckel             Lage +Z oben, Auflage 1465 mm², Höhe 18 mm, 0 kleine Stellen
+GRÜN  ub_ablauf_halter             Lage -X oben, Auflage 3898 mm², Höhe 50 mm, 12 kleine Stellen
 GRÜN  ub_abstand_hinten            Lage +X oben, Auflage 1233 mm², Höhe 20 mm, 1 kleine Stellen
 GRÜN  ub_abstand_vorn              Lage -Z oben, Auflage 573 mm², Höhe 16 mm, 0 kleine Stellen
 GELB  ub_kanalknoten               Lage -Y oben, Auflage 14821 mm², Höhe 67 mm, 29 kleine Stellen, 1 größere:

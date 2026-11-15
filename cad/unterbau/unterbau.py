@@ -81,14 +81,24 @@ P = dict(
     rosette_rand=8.0,
     rosette_t=5.0,
     rosette_spiel=0.3,
-    # Ablauf hinter der Haube: Messing-Tankdurchführung 3/4" im Wannenboden, PE-Klemmverbinder
-    # 25 x 3/4", HDPE-Rohr d25, Winkel-Kugelhahn, Schlauchtülle 3/4", Schlauch nach hinten.
+    # Ablauf hinter der Haube: Messing-Tankdurchführung 3/4" im Wannenboden, darunter
+    # PE-Klemmwinkel 90° 25 x 3/4", gerades HDPE-Rohr d25 waagerecht nach hinten, am Ende
+    # Kugelhahn (Klemm 25 x 3/4") und Schlauchtülle 3/4" bis an die Rahmenrückseite.
+    # Gehalten von einem Halter (Druck) am hinteren oberen Querrohr des Untertischs.
     # Maße Platzhalter bis zum Kauf.
     wanne_boden=730.0,          # Unterseite Wannenboden (Wand 3)
-    ablauf_klemm=(44.0, 60.0),  # Klemmverbinder Ø, Länge
-    hahn_z=555.0,               # Mitte Kugelhahn
-    hahn=45.0,                  # Gehäuse Würfel
-    schlauch=(27.0, -10.0, 15.0),   # Außen-Ø, Ende y (hinter dem Rahmen), Gefälle bis dorthin
+    ablauf_klemm=44.0,          # Ø Klemmverschraubungen
+    rohr_z=660.0,               # Achse des waagerechten Rohrs
+    hahn=45.0,                  # Gehäuse Kugelhahn (Würfel)
+    hahn_y=60.0,                # Gehäuse hinten (dahinter Abgang 3/4" und Tülle bis y 0)
+    schlauch=(27.0, -80.0),     # Außen-Ø, Ende (Schlauch hängt hinten herunter)
+    # Halter: Platte an der Innenseite des Querrohrs (y 40, z 770-810), Arm über den Hahn,
+    # Schelle ums Rohr, Deckel unten mit 2x M4 in eingepresste Muttern
+    ablauf_halter_m5=[(345.0, 790.0), (375.0, 790.0)],   # = grundrahmen ablauf_halter_m5
+    halter_b=50.0,              # Breite (x)
+    halter_t=12.0,              # Platte (y) und Arm (z)
+    halter_schelle=(165.0, 195.0),    # Schelle y von, bis
+    halter_spalt=1.0,           # Klemmspalt zwischen Schelle und Deckel
     # Kabelkanäle senkrecht und quer: derselbe Typ PVC 25 x 60 mit Deckel, Wand 2
     kanal_y=(1416.0, 1476.0),   # direkt hinter dem vorderen Bein (Rückseite 1476)
     kanal_x=(-65.0, -40.0),     # senkrecht außen auf der vorderen Kettenstütze (40 x 40, x -40 bis 0), Deckel außen
@@ -202,10 +212,12 @@ def abstand_m5():
     return [(x, y) for x in P["kaefig_rohr_x"] for y in P["haube_kaefig_y"]]
 
 
-def ablauf_klemm_z():
-    """Klemmverbinder unter der Tankdurchführung: Unterkante, Oberkante."""
-    zt = P["wanne_boden"] - 30.0                          # Gewinde der Tankdurchführung endet
-    return zt - P["ablauf_klemm"][1], zt
+def ablauf_teile():
+    """Lagen des Ablaufstrangs: (y Bogen, y Rohrende im Hahn, y Hahn vorn, y Hahn hinten)."""
+    ya = P["ablauf"][1]
+    yh1 = P["hahn_y"]
+    yh0 = yh1 + P["hahn"]
+    return ya, yh0 + 45.0, yh0, yh1
 
 
 def haube():
@@ -272,29 +284,65 @@ def abstandshalter():
 
 
 def ablauf():
-    """Ablaufstrang als ein Kaufteil-Platzhalter: Tankdurchführung, Klemmverbinder, Rohr,
-    Winkel-Kugelhahn (Hebel nach links), Schlauchtülle, Schlauch nach hinten hinaus."""
+    """Ablaufstrang als ein Kaufteil-Platzhalter: Tankdurchführung, Klemmwinkel 90°, gerades
+    HDPE-Rohr nach hinten, Kugelhahn (Hebel nach links), Schlauchtülle, Schlauch."""
     xa, ya = P["ablauf"]
-    zw = P["wanne_boden"]
+    zw, zr, kd = P["wanne_boden"], P["rohr_z"], P["ablauf_klemm"]
     s = Part.makeCylinder(24.0, 5.0, V(xa, ya, zw + 3))                  # Flansch innen
     s = s.fuse(Part.makeCylinder(13.2, 38.0, V(xa, ya, zw - 30)))       # Gewinde durch den Boden
     s = s.fuse(Part.makeCylinder(20.0, 12.0, V(xa, ya, zw - 12)))       # Gegenmutter
-    kd, _ = P["ablauf_klemm"]
-    k0, k1 = ablauf_klemm_z()
-    s = s.fuse(Part.makeCylinder(kd / 2, k1 - k0, V(xa, ya, k0)))       # Klemmverbinder
-    zh, hw = P["hahn_z"], P["hahn"]
-    s = s.fuse(Part.makeCylinder(12.5, k0 - zh, V(xa, ya, zh)))         # HDPE-Rohr d25
-    s = s.fuse(Part.makeCylinder(kd / 2, 30.0, V(xa, ya, zh + hw / 2 - 5)))   # Klemmanschluss Hahn
-    s = s.fuse(box(xa - hw / 2, xa + hw / 2, ya - hw / 2, ya + hw / 2, zh - hw / 2, zh + hw / 2))
-    s = s.fuse(box(xa + hw / 2, xa + hw / 2 + 100, ya - 5, ya + 5, zh + hw / 2 - 8, zh + hw / 2 - 3))  # Hebel
-    yt = ya - hw / 2
-    s = s.fuse(Part.makeCylinder(15.0, 15.0, V(xa, yt, zh), V(0, -1, 0)))   # Abgang 3/4"
-    s = s.fuse(Part.makeCylinder(11.0, 45.0, V(xa, yt - 15, zh), V(0, -1, 0)))  # Schlauchtülle
-    sd, ye, fall = P["schlauch"]
-    p0 = V(xa, yt - 30, zh)
-    p1 = V(xa, ye, zh - fall)
-    s = s.fuse(Part.makeCylinder(sd / 2, (p1 - p0).Length, p0, p1 - p0))
+    s = s.fuse(Part.makeCylinder(kd / 2, zw - 30 - zr, V(xa, ya, zr)))  # Klemmwinkel: senkrecht
+    s = s.fuse(Part.makeSphere(kd / 2, V(xa, ya, zr)))
+    s = s.fuse(Part.makeCylinder(kd / 2, 55.0, V(xa, ya, zr), V(0, -1, 0)))   # waagerecht
+    _, ye, yh0, yh1 = ablauf_teile()
+    s = s.fuse(Part.makeCylinder(12.5, ya - 45.0 - ye, V(xa, ye, zr), V(0, 1, 0)))   # HDPE-Rohr d25
+    s = s.fuse(Part.makeCylinder(kd / 2, 50.0, V(xa, yh0 - 5.0, zr), V(0, 1, 0)))     # Klemm am Hahn
+    hw = P["hahn"]
+    s = s.fuse(box(xa - hw / 2, xa + hw / 2, yh1, yh0, zr - hw / 2, zr + hw / 2))
+    s = s.fuse(box(xa + hw / 2, xa + hw / 2 + 100, (yh0 + yh1) / 2 - 5, (yh0 + yh1) / 2 + 5,
+                   zr - 2.5, zr + 2.5))                                 # Hebel nach links
+    s = s.fuse(Part.makeCylinder(15.0, 15.0, V(xa, yh1, zr), V(0, -1, 0)))     # Abgang 3/4"
+    s = s.fuse(Part.makeCylinder(11.0, yh1 - 15.0, V(xa, yh1 - 15.0, zr), V(0, -1, 0)))   # Tülle bis y 0
+    sd, se = P["schlauch"]
+    s = s.fuse(Part.makeCylinder(sd / 2, 20.0 - se, V(xa, 20.0, zr), V(0, -1, 0)))
     return s.removeSplitter()
+
+
+def ablauf_halter():
+    """Halter (Druck) des Ablaufrohrs: Platte an der Innenseite des hinteren oberen Querrohrs
+    (2x M5 in Nietmuttern), Arm über den Kugelhahn nach vorn, dort die obere
+    Hälfte der Schelle ums Rohr; Deckel (untere Hälfte) mit 2x M4 von unten in Muttern, die
+    seitlich in den Halter geschoben werden. Profil in y-z, gedruckt auf der Seite liegend.
+    Gibt (Halter, Deckel) zurück."""
+    xa = P["ablauf"][0]
+    b, t, zr = P["halter_b"], P["halter_t"], P["rohr_z"]
+    x0, x1 = xa - b / 2, xa + b / 2
+    ys0, ys1 = P["halter_schelle"]
+    yq = P["rohr"]                                       # Innenseite Querrohr (y 40)
+    zq0, zq1 = P["unten_ok"] + 630.0, P["unten_ok"] + 670.0    # Querrohr oben z 770..810
+    za = zr + P["hahn"] / 2 + 2.5                        # Arm über dem Hahn
+    rr = 12.5 + 0.1
+    sp = P["halter_spalt"] / 2
+    h = box(x0, x1, yq, yq + t, za, zq1 - 2.0)          # Platte
+    h = h.fuse(box(x0, x1, yq, ys1, za, za + t))        # Arm
+    h = h.fuse(box(x0, x1, ys0, ys1, zr + sp, za))      # obere Schellenhälfte
+    h = h.cut(Part.makeCylinder(rr, ys1 - ys0 + 2, V(xa, ys0 - 1, zr), V(0, 1, 0)))
+    # Tropfendach 45° zur Druckoberseite (-x): gedruckt auf +x liegend, Bohrung waagerecht
+    c = rr / math.sqrt(2)
+    pts = [V(xa - c, ys0 - 1, zr + c), V(xa - rr * math.sqrt(2), ys0 - 1, zr), V(xa - c, ys0 - 1, zr - c),
+           V(xa, ys0 - 1, zr)]
+    h = h.cut(Part.Face(Part.makePolygon(pts + [pts[0]])).extrude(V(0, ys1 - ys0 + 2, 0)))
+    for x, z in P["ablauf_halter_m5"]:                   # M5 in die Nietmuttern
+        h = h.cut(Part.makeCylinder(2.75, t + 2, V(x, yq - 1, z), V(0, 1, 0)))
+    d = box(x0, x1, ys0, ys1, zr - rr - 6.0, zr - sp)   # Deckel
+    d = d.cut(Part.makeCylinder(rr, ys1 - ys0 + 2, V(xa, ys0 - 1, zr), V(0, 1, 0)))
+    ym = (ys0 + ys1) / 2
+    for dx in (-19.0, 19.0):                             # M4 von unten, Mutter seitlich im Halter
+        p = V(xa + dx, ym, 0)
+        d = d.cut(Part.makeCylinder(2.25, 40, V(p.x, p.y, zr - 30)))
+        h = h.cut(Part.makeCylinder(2.25, 22, V(p.x, p.y, zr)))
+        h = h.cut(fc_dok.mutter(4, V(p.x, p.y, zr + 9.0), V(0, 0, 1), V(1 if dx > 0 else -1, 0, 0), 12.0))
+    return h.removeSplitter(), d.removeSplitter()
 
 
 def rohr_kanal(x0, x1, y0, y1, z0, z1, achse):
@@ -432,9 +480,11 @@ def main():
     fc_dok.teil(doc, "ub_kabelkanal_quer", quer, "zukauf")
     uu, uud = uebergang_unten()
     (ah0, ah1), (av0, av1) = abstandshalter()
+    ahl, ade = ablauf_halter()
     druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud, "ub_kanalknoten": knoten(),
              "ub_rosette_kanal": rosette_kanal(),
-             "ub_abstand_hinten": ah0, "ub_abstand_vorn": av0}     # Abstandshalter je 2 Stück
+             "ub_abstand_hinten": ah0, "ub_abstand_vorn": av0,     # Abstandshalter je 2 Stück
+             "ub_ablauf_halter": ahl, "ub_ablauf_deckel": ade}
     log = []                                            # Radien und Fasen an den Druckteilen
     druck = fc_dok.sexy(druck, pfad, log)
     dx = P["kaefig_rohr_x"][1] - P["kaefig_rohr_x"][0]
@@ -498,15 +548,17 @@ def main():
                    dach_z(P["front_y"] - st) - P["haube_t"],
                    P["schrank_x1"] - sb - P["geraet_x0"] - gx))
         xa, ya = P["ablauf"]
-        k0, k1 = ablauf_klemm_z()
-        f.write("Ablauf: y %.0f (%.0f hinter der Wannenmitte), Klemmverbinder z %.0f bis %.0f, %.0f mm "
-                "hinter der Tropfkante der Haube; Kugelhahn Mitte z %.0f (Hebel nach links), Schlauch Ø%.0f "
-                "nach hinten bis y %.0f; Hahn %.0f mm vor der Rahmenrückseite\n"
-                % (ya, P["kaefig_y"][0] + (P["kaefig_y"][1] - P["kaefig_y"][0]) / 2 - ya, k0, k1,
-                   P["mittelquer_y"] - ya - P["ablauf_klemm"][0] / 2, P["hahn_z"], P["schlauch"][0],
-                   P["schlauch"][1], ya))
+        _, ye, yh0, yh1 = ablauf_teile()
+        f.write("Ablauf: y %.0f (%.0f hinter der Wannenmitte, %.0f hinter der Tropfkante der Haube), "
+                "Klemmwinkel 90° auf Rohrachse z %.0f, HDPE-Rohr d25 y %.0f bis %.0f (%.0f lang), "
+                "Kugelhahn y %.0f bis %.0f (Hebel nach links), Tülle bis y 0 (Rahmenrückseite); "
+                "Halter am hinteren Querrohr oben, Schelle y %.0f bis %.0f\n"
+                % (ya, P["kaefig_y"][0] + (P["kaefig_y"][1] - P["kaefig_y"][0]) / 2 - ya,
+                   P["mittelquer_y"] - ya - P["ablauf_klemm"] / 2, P["rohr_z"], ye, ya - 45.0,
+                   ya - 45.0 - ye + 2 * 20.0, yh1, yh0, *P["halter_schelle"]))
         kol = [("Haube", hb), ("Gerät", ge), ("Druckluft", dl), ("Schrank", sc), ("Querkanal", quer),
-               ("Rosette Kanal", druck["ub_rosette_kanal"]), ("Ablauf", ab)]
+               ("Rosette Kanal", druck["ub_rosette_kanal"]), ("Ablauf", ab),
+               ("Ablaufhalter", druck["ub_ablauf_halter"]), ("Schellendeckel", druck["ub_ablauf_deckel"])]
         for i, (na, a) in enumerate(kol):
             for nb_, b in kol[i + 1:]:
                 v = a.common(b).Volume

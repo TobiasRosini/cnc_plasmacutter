@@ -26,6 +26,8 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Haube an Geräteboden | Spax 3,5 × 8, je 4 durch den Flansch (vorgebohrt Ø2,5) | **neu** |
 | Haube an vorderen Beinen | je 2× M5 in Nietmuttern (Innenseite) | **neu** |
 | Haube am Wannenkäfig | 4× M5 (× 55 hinten, × 30 vorn) durch Abstandshalter in Nietmuttern in den unteren Längsrohren | **neu** |
+| Ablaufhalter an Querrohr Untertisch hinten | 2× M5 in Nietmuttern (Innenseite) | **neu** |
+| Schellendeckel Ablaufhalter | 2× M4 von unten in seitlich eingeschobene Muttern | **neu** |
 | Rosette Kanal | 3× M3 durch das Blech in eingepresste Muttern | **neu** |
 | Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
 

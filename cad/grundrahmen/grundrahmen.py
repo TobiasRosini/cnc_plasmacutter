@@ -94,6 +94,9 @@ P = dict(
     # Haube über dem Geräteraum (Unterbau): Seitenwände je 2x M5 in Nietmuttern in der
     # Innenseite der vorderen Beine (y ab Rahmenvorderkante, z) (= unterbau haube_bein)
     haube_bein=[(-20.0, 300.0), (-20.0, 560.0)],
+    # Halter des Wannenablaufs: 2x M5 in Nietmuttern in der Innenseite des hinteren oberen
+    # Querrohrs des Untertischs (x, z) (= unterbau ablauf_halter_m5)
+    ablauf_halter_m5=[(345.0, 790.0), (375.0, 790.0)],
     geraeteboden_y=[560.0, 1050.0, 1420.0],      # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
     # Spritzschutz Y-Schienen: Flachstahl 50 x 3 innen an den Längsträgern, steht über die
     # Rahmenoberkante (Bleche dann höchstens 634 breit); zwischen den Y-Motor- und Umlenkhaltern
@@ -245,6 +248,10 @@ def rahmen():
         for x in P["trenn_schrauben_x"]:                 # Nietmutter M8 in der Oberseite
             q = q.cut(Part.makeCylinder(P["nietmutter_m8_d"] / 2, P["wand"] + 2,
                                         V(x, y0 + r / 2, z_oben - P["wand"] - 1)))
+        if y0 == 0.0:                                    # hinten: Halter des Wannenablaufs (Innenseite)
+            for x, z in P["ablauf_halter_m5"]:
+                q = q.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
+                                            V(x, r - P["wand"] - 1, z), V(0, 1, 0)))
         teile["UT_Querrohr_oben_%s" % "VH"[i]] = q
         teile["UT_Querrohr_unten_%s" % "VH"[i]] = rohr(
             "Querrohr unten", r, y0, z_u, ax - 2 * r, "x")

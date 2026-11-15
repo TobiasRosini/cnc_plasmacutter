@@ -6,7 +6,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 
 1. [ ] **Stellfüße und Rollen** an den Fußplatten (100 × 100 × 8, Ø13). Konzept laut Rahmen-README: Im Betrieb heben die Füße den Rahmen über die Rollen, zum Verfahren werden sie hochgedreht. Zu entscheiden: Fußtyp (Gelenkfuß M12?), Rollen (Lenk-/Bockrollen, Feststeller, Lochbild), Anbindung (M12 in 8 mm schneiden = gut 4 Gänge, oder Mutter aufschweißen), Lage der Rollen (eigene Laschen?). Grenze 800 mm Breite beachten (heute 793).
 2. [x] **Wasserschutz über dem Geräteraum** (15.11.2026): Haube aus Alu 0,5 als U auf dem Kopf, so lang wie der Geräteboden, an Geräteboden, vorderen Beinen und Wannenkäfig; Querkanal durch eine gedruckte Rosette (`cad/unterbau/README.md`).
-3. [x] **Wannenablauf** (15.11.2026): Messing-Tankdurchführung hinter der Haube (440 hinter der Wannenmitte), HDPE-Rohr d25, Winkel-Kugelhahn, Schlauchtülle, Schlauch nach hinten. Maße beim Kauf prüfen.
+3. [x] **Wannenablauf** (15.11.2026): Messing-Tankdurchführung hinter der Haube (440 hinter der Wannenmitte), Klemmwinkel 90°, gerades HDPE-Rohr d25 nach hinten, Kugelhahn und Schlauchtülle an der Rahmenrückseite, Ablaufhalter (Druck) am hinteren Querrohr. Maße beim Kauf prüfen.
 4. [ ] **Schutz der PE-Wanne** vor Plasmastrahl und heißer Schlacke (Projektstand Abschnitt 6, „sicherheitsrelevant“): Boden- und Wandschutz konstruktiv vorsehen oder bewusst über Wasserstand und Schnittbereich lösen. Entscheidung offen.
 5. [ ] **Anschlusskasten** an der Kastenseite des rechten Y-Winkels (Übergang Y-/X-Kette, Lötstellen der LJ12A3-Leitungen).
 6. [ ] **Leitungsführung**: Clips für den Bogen über dem Y-Ende und am Abgang hinter der Ablage; Funkenschutz der Adern am Brenner (Gewebe- oder Silikonschlauch).

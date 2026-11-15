@@ -10,7 +10,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 004 | UT_Laengsrohr_oben_L | 1 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
 | 005 | UT_Laengsrohr_unten | 2 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
 | 006 | UT_Laengsrohr_oben_R | 1 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
-| 007 | UT_Querrohr_oben | 2 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
+| 007 | UT_Querrohr_oben_H | 1 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 008 | UT_Querrohr_unten | 4 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 009 | wannenkaefig | 1 | Stahl | 1235 × 640 × 100 | Untertisch | wannenkaefig/wannenkaefig.step |  |
 | 011 | Wanne | 1 | Stahl (Wanne) | 1194 × 597 × 119 | Untertisch |  |  |
@@ -117,9 +117,12 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 117 | ekx_schelle_einseitig | 1 | Druck | 53 × 17 × 15 | Energieketten | energiekette/ekx_schelle_einseitig.step |  |
 | 118 | UT_Bein_4 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
 | 119 | ub_haube | 1 | Alu | 1031 × 664 × 551 | Unterbau | unterbau/ub_haube.step |  |
-| 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 451 × 212 × 147 | Unterbau |  |  |
+| 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 520 × 147 × 101 | Unterbau |  |  |
 | 121 | ub_rosette_kanal | 1 | Druck | 77 × 42 × 5 | Unterbau | unterbau/ub_rosette_kanal.step |  |
 | 123 | ub_abstand_hinten | 2 | Druck | 42 × 30 × 20 | Unterbau | unterbau/ub_abstand_hinten.step |  |
 | 124 | ub_abstand_vorn | 2 | Druck | 30 × 20 × 16 | Unterbau | unterbau/ub_abstand_vorn.step |  |
+| 125 | UT_Querrohr_oben_V | 1 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
+| 126 | ub_ablauf_halter | 1 | Druck | 155 × 148 × 50 | Unterbau | unterbau/ub_ablauf_halter.step |  |
+| 127 | ub_ablauf_deckel | 1 | Druck | 50 × 30 × 18 | Unterbau | unterbau/ub_ablauf_deckel.step |  |
 
-117 verschiedene Teile, 191 Stück.
+120 verschiedene Teile, 193 Stück.

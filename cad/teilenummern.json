@@ -5,7 +5,7 @@
  "UT_Laengsrohr_oben_L": 4,
  "UT_Laengsrohr_unten": 5,
  "UT_Laengsrohr_oben_R": 6,
- "UT_Querrohr_oben": 7,
+ "UT_Querrohr_oben_H": 7,
  "UT_Querrohr_unten": 8,
  "wannenkaefig": 9,
  "Ablauf": 10,
@@ -122,5 +122,8 @@
  "ub_rosette_kanal": 121,
  "ub_rosette_ablauf": 122,
  "ub_abstand_hinten": 123,
- "ub_abstand_vorn": 124
+ "ub_abstand_vorn": 124,
+ "UT_Querrohr_oben_V": 125,
+ "ub_ablauf_halter": 126,
+ "ub_ablauf_deckel": 127
 }
