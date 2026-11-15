@@ -1436,7 +1436,7 @@ LAGE_WAGEN = V(340, 700, 57)
 
 
 def sexy(teile, nachbarn, log=None):
-    """Rundet die freien Außenkanten der Druckteile (fc_dok.verrunden). teile: Name ->
+    """Radien und Fasen an den freien Außenkanten der Druckteile (fc_dok.verrunden). teile: Name ->
     (Form oder Liste, Normale der Druckbett-Seite, Lage im Dokument). nachbarn: (Name, Form)
     in Dokumentlage (Kontaktflächen bleiben scharf; das Teil selbst zählt nicht). Gibt
     Name -> Form bzw. Liste zurück."""
@@ -1453,24 +1453,19 @@ def sexy(teile, nachbarn, log=None):
                     x = x.copy()
                     x.translate(-lage)
                     nb.append(x)
-            r, anz, kand = fc_dok.verrunden(k, nb, bett)
+            r, b = fc_dok.verrunden(k, nb, bett)
             neu.append(r)
             if log is not None:
-                log.append("Radien %s: %d von %d Kanten (%.0f s)" % (n, anz, kand, time.time() - t0))
+                log.append("Radien %s: R2 an %d von %d senkrechten Kanten, Fase an %d von %d "
+                           "waagerechten (%.0f s)" % (n, b["radius"][0], b["radius"][1], b["fase"][0],
+                                                      b["fase"][1], time.time() - t0))
         res[n] = neu if isinstance(form, list) else neu[0]
     return res
 
 
-def main():
-    tr, ri = traeger_rinne()
-    lb, uk = fuehrungen()
-    st = stuetzen()
-    au = ausleger()
-    ei = einsteckteil()
-    xtr, xri = ablage_x()
-    xst = stuetze_x_links()
-    xpf = halter_x()
-    # Druckteile mit Radien an allen freien Außenkanten
+def druckteile_roh(tr, ri, lb, uk, st, au, ei, xtr, xri, xst, xpf):
+    """Druckteile, die Radien bekommen: Name -> (Form oder Liste, Normale der Druckbett-Seite,
+    Lage im Dokument), dazu die Nachbarn (Name, Form) in Dokumentlage."""
     roh = {"ek_halter_y": (halter_y(), (0, 0, -1), LAGE_PORTAL),
            "ekx_ablagehalter": (ablagehalter_x(), (-1, 0, 0), LAGE_PORTAL),
            "ekx_rinnenhalter": (rinnenhalter().Solids, (0, 0, -1), LAGE_PORTAL),
@@ -1499,6 +1494,20 @@ def main():
                                  LAGE_WAGEN))]
     for n, (form, _, lage) in roh.items():
         nachbarn += [(n, verschoben(f, lage)) for f in (form if isinstance(form, list) else [form])]
+    return roh, nachbarn
+
+
+def main():
+    tr, ri = traeger_rinne()
+    lb, uk = fuehrungen()
+    st = stuetzen()
+    au = ausleger()
+    ei = einsteckteil()
+    xtr, xri = ablage_x()
+    xst = stuetze_x_links()
+    xpf = halter_x()
+    # Druckteile mit Radien an allen freien Außenkanten
+    roh, nachbarn = druckteile_roh(tr, ri, lb, uk, st, au, ei, xtr, xri, xst, xpf)
     log = []
     sx = sexy(roh, nachbarn, log)
     lb = [sx["ek_leitungsbogen_a"], sx["ek_leitungsbogen_steg"], sx["ek_leitungsbogen_b"]]

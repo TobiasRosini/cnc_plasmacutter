@@ -262,7 +262,7 @@ def _konvex(e, f1, f2):
     return n2.dot(w) < -1e-3
 
 
-def _innen(shape, f, weite=15.0):
+def _innen(shape, f, weite=8.0):
     """True, wenn vor der Fläche f innerhalb von weite mm wieder Material liegt (Wand eines
     Schlitzes, Tunnels, einer Tasche)."""
     p = f.CenterOfMass
@@ -281,76 +281,172 @@ def _duenn(shape, grenze=3.0):
     return {(round(x), round(y), round(z)) for d, x, y, z, _ in duenne_waende(shape, grenze)}
 
 
-def verrunden(shape, nachbarn=(), bett=None, radien=(2.0, 1.0, 0.5), loch_r=8.0):
-    """Rundet die freien Außenkanten eines Druckteils ("make it sexy"). Scharf bleiben:
-    Kanten an Flächen, die an einem Nachbarteil anliegen (saubere Fugen im Zusammenbau),
-    Kanten an der Druckbett-Fläche (bett = Normale der Unterseite beim Druck), Innenkanten,
-    Ränder von Bohrungen, Muttertaschen, Schlitzen und Tunneln. Jede Kante bekommt den
-    größten Radius aus radien, der geht, ohne Wände an Bohrungen unter 3 mm zu bringen.
-    Gibt (form, gerundet, kandidaten) zurück."""
-    s = shape
-    v0 = s.Volume
-    duenn0 = _duenn(s)
-    kontakt = _kontaktflaechen(s, list(nachbarn))
-    zmax = None
-    if bett is not None:
-        bett = App.Vector(bett).normalize()
-        zmax = max(v.Point.dot(bett) for v in s.Vertexes)
+def _bohrung(f):
+    """True für die Wand einer Bohrung (Zylinder mit Material außen), False für eine
+    gerundete Außenecke (konvexer Zylinder)."""
+    su = f.Surface
+    p = f.CenterOfMass
+    if not f.isInside(p, 1e-4, True):
+        u0, u1, v0, v1 = f.ParameterRange
+        p = f.valueAt((u0 + u1) / 2, (v0 + v1) / 2)
+    r = p - su.Center
+    r = r - su.Axis * r.dot(su.Axis)
+    return f.normalAt(*su.parameter(p)).dot(r) < 0
+
+
+def _sperre(s, nachbarn, bett, loch_r, schlitz):
+    """Flächen, deren Kanten scharf bleiben: Kontakt zu Nachbarteilen, Druckbett-Seite,
+    Bohrungen, Muttertaschen (kleine Freiformflächen), Wände von Schlitzen."""
+    kontakt = _kontaktflaechen(s, nachbarn)
+    zmax = max(v.Point.dot(bett) for v in s.Vertexes)
     def gesperrt(i, f):
         if i in kontakt:
             return True
         st = f.Surface.TypeId
         if "Plane" in st:
-            if bett is not None:
-                n = f.normalAt(*f.Surface.parameter(f.CenterOfMass))
-                if n.dot(bett) > 0.999 and abs(f.CenterOfMass.dot(bett) - zmax) < 0.05:
-                    return True
-        elif "Cylinder" in st:
-            if f.Surface.Radius < loch_r:
+            n = f.normalAt(*f.Surface.parameter(f.CenterOfMass))
+            if n.dot(bett) > 0.999 and abs(f.CenterOfMass.dot(bett) - zmax) < 0.05:
                 return True
-        elif f.Area < 200.0:                            # kleine Freiformflächen: Muttertaschen
+        elif "Cylinder" in st:
+            if f.Surface.Radius < loch_r and _bohrung(f):
+                return True
+        elif f.Area < 200.0:
             return True
-        return _innen(s, f)
-    sperre = {i for i, f in enumerate(s.Faces) if gesperrt(i, f)}
-    kand = []
+        return _innen(s, f, schlitz)
+    return {i for i, f in enumerate(s.Faces) if gesperrt(i, f)}
+
+
+def _zuege(s, sperre, bett, senkrecht):
+    """Freie konvexe Außenkanten einer Richtungsklasse, zu Zügen verbunden (Kanten mit
+    gemeinsamem Eckpunkt). senkrecht: beide Flächen parallel zur Druckrichtung."""
+    kanten = []
     for e in s.Edges:
-        if e.Length < 1.0 or not any(k in e.Curve.TypeId for k in ("Line", "Circle", "BSpline")):
+        if e.Length < 1.0 or not any(k in e.Curve.TypeId for k in ("Line", "Circle", "BSpline", "Ellipse")):
             continue
         fl = [i for i, f in enumerate(s.Faces) if any(e.isSame(x) for x in f.Edges)]
         if len(fl) != 2 or sperre & set(fl):
             continue
-        if not _konvex(e, s.Faces[fl[0]], s.Faces[fl[1]]):
+        f1, f2 = s.Faces[fl[0]], s.Faces[fl[1]]
+        if not _konvex(e, f1, f2):
             continue
-        kand.append((e.valueAt((e.FirstParameter + e.LastParameter) / 2), e.Length))
+        p = e.valueAt((e.FirstParameter + e.LastParameter) / 2)
+        quer = max(abs(f.normalAt(*f.Surface.parameter(p)).dot(bett)) for f in (f1, f2))
+        if (quer < 0.02) != senkrecht:
+            continue
+        kanten.append(e)
+    def schluessel(v):
+        return tuple(round(c, 3) for c in v.Point)
+    eltern = list(range(len(kanten)))
+    def wurzel(i):
+        while eltern[i] != i:
+            eltern[i] = eltern[eltern[i]]
+            i = eltern[i]
+        return i
+    an = {}
+    for i, e in enumerate(kanten):
+        for v in e.Vertexes:
+            k = schluessel(v)
+            if k in an:
+                eltern[wurzel(i)] = wurzel(an[k])
+            else:
+                an[k] = i
+    zuege = {}
+    for i, e in enumerate(kanten):
+        zuege.setdefault(wurzel(i), []).append(
+            (e.valueAt((e.FirstParameter + e.LastParameter) / 2), e.Length))
+    return list(zuege.values())
+
+
+def verrunden(shape, nachbarn, bett, radius=2.0, fase=1.0, loch_r=8.0, schlitz=8.0):
+    """Gibt einem Druckteil Radien und Fasen ("make it sexy"), je nach Lage der Kante beim
+    Druck (bett = Normale der Unterseite beim Druck):
+      - senkrechte Kanten (in Druckrichtung): Radius, wie Eckradien eines Frästeils,
+      - waagerechte Kanten (Oberseite, Überhänge): Fase, druckt stützenfrei.
+    Gerundet bzw. gefast wird je Kantenzug mit einem Maß; geht es nicht, der ganze Zug mit
+    dem halben Maß, sonst in tangential durchlaufenden Teilzügen, zuletzt Kante für Kante. Scharf bleiben Kanten an Flächen, die an einem
+    Nachbarteil anliegen (saubere Fugen im Zusammenbau), an der Druckbett-Seite,
+    Innenkanten und Ränder von Bohrungen, Muttertaschen und Schlitzen (lichte Weite bis
+    schlitz). Keine Rundung darf eine Wand an einer Bohrung unter 3 mm bringen.
+    Gibt (form, {"radius": (bearbeitet, kandidaten, offen), "fase": (...)}) zurück, offen =
+    [(Mitte, Länge)] der Kanten, die scharf bleiben mussten."""
+    bett = App.Vector(bett).normalize()
+    nachbarn = list(nachbarn)
+    s = shape
+    v0 = s.Volume
+    duenn0 = _duenn(s)
 
     def finde(form, m, l):
-        for e in form.Edges:
-            if abs(e.Length - l) < 1e-3 and e.distToShape(Part.Vertex(m))[0] < 1e-3:
+        """Kante wiederfinden; eine Nachbarbearbeitung kann sie gekürzt haben."""
+        nah = [e for e in form.Edges if e.distToShape(Part.Vertex(m))[0] < 1e-3]
+        for e in nah:
+            if abs(e.Length - l) < 1e-3:
                 return e
-        return None
+        return nah[0] if len(nah) == 1 else None
+
+    def teilzuege(form, z):
+        """Zug in tangential durchlaufende Teilzüge zerlegen."""
+        es = [finde(form, m, l) for m, l in z]
+        def tangente(e, v):
+            t = e.tangentAt(e.parameterAt(v))
+            return t.normalize() if t.Length > 1e-9 else t
+        eltern = list(range(len(z)))
+        def wurzel(i):
+            while eltern[i] != i:
+                i = eltern[i]
+            return i
+        for i in range(len(z)):
+            for j in range(i + 1, len(z)):
+                if es[i] is None or es[j] is None:
+                    continue
+                for v in es[i].Vertexes:
+                    w = [x for x in es[j].Vertexes if x.Point.distanceToPoint(v.Point) < 1e-3]
+                    if w and tangente(es[i], v).cross(tangente(es[j], w[0])).Length < 0.02:
+                        eltern[wurzel(j)] = wurzel(i)
+        res = {}
+        for i in range(len(z)):
+            res.setdefault(wurzel(i), []).append(z[i])
+        return list(res.values())
 
     def gut(neu, alt):
         return (neu.isValid() and len(neu.Solids) == len(alt.Solids)
                 and 0 < alt.Volume - neu.Volume < 0.05 * v0 and _duenn(neu) <= duenn0)
 
-    for r in radien[:1]:                                # erst alle auf einmal
+    def versuch(form, op, mass, kanten):
+        es = [finde(form, m, l) for m, l in kanten]
+        if not es or None in es:
+            return None
         try:
-            neu = s.makeFillet(r, [finde(s, m, l) for m, l in kand])
-            if gut(neu, s):
-                return neu, len(kand), len(kand)
+            neu = form.makeFillet(mass, es) if op == "radius" else form.makeChamfer(mass, es)
         except Exception:
-            pass
-    n = 0
-    for m, l in kand:                                   # sonst Kante für Kante
-        e = finde(s, m, l)
-        if e is None:
-            continue
-        for r in radien:
-            try:
-                neu = s.makeFillet(r, [e])
-            except Exception:
-                continue
-            if gut(neu, s):
-                s, n = neu, n + 1
-                break
-    return s, n, len(kand)
+            return None
+        return neu if gut(neu, form) else None
+
+    bericht = {}
+    for op, mass, senkrecht in (("radius", radius, True), ("fase", fase, False)):
+        zuege = _zuege(s, _sperre(s, nachbarn, bett, loch_r, schlitz), bett, senkrecht)
+        alle = [k for z in zuege for k in z]
+        offen = []
+        neu = versuch(s, op, mass, alle) if alle else None     # erst alle auf einmal
+        if neu is not None:
+            s, n = neu, len(alle)
+        else:
+            n = 0
+            def zug(z, stufe):
+                nonlocal s, n
+                for m in (mass, mass / 2):
+                    neu = versuch(s, op, m, z)
+                    if neu is not None:
+                        s, n = neu, n + len(z)
+                        return
+                if stufe == 0 and len(z) > 1:                   # tangentiale Teilzüge
+                    for t in teilzuege(s, z):
+                        zug(t, 1)
+                elif len(z) > 1:                                # Kante für Kante
+                    for k in z:
+                        zug([k], 2)
+                else:
+                    offen.append(z[0])
+            for z in zuege:
+                zug(z, 0)
+        bericht[op] = (n, len(alle), offen)
+    return s, bericht
