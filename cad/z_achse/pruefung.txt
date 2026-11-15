@@ -9,6 +9,13 @@ z_halter_oben    gültig: True, 78.0 x 72.0 x 15.0 mm
 z_traeger        gültig: True, 92.0 x 21.5 x 70.0 mm
 z_klemmdeckel    gültig: True, 60.0 x 22.0 x 70.0 mm
 z_ref_fahne      gültig: True, 20.0 x 24.0 x 3.0 mm
+Radien z_mutterblock: R2 an 4 von 4 senkrechten Kanten, Fase an 13 von 13 waagerechten (17 s)
+Radien z_kopf: R2 an 2 von 2 senkrechten Kanten, Fase an 0 von 0 waagerechten (23 s)
+Radien z_motorhalter: R2 an 12 von 12 senkrechten Kanten, Fase an 39 von 39 waagerechten (13 s)
+Radien z_halter: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (3 s)
+Radien z_halter_oben: R2 an 6 von 6 senkrechten Kanten, Fase an 19 von 21 waagerechten (5 s)
+Radien z_traeger: R2 an 6 von 6 senkrechten Kanten, Fase an 14 von 22 waagerechten (19 s)
+Radien z_klemmdeckel: R2 an 2 von 2 senkrechten Kanten, Fase an 6 von 6 waagerechten (2 s)
 Wand an Bohrungen z_grundplatte: ok (>= 3.0 mm)
 Wand an Bohrungen z_leisten_20x20: ok (>= 3.0 mm)
 Wand an Bohrungen z_schlitten: ok (>= 3.0 mm)

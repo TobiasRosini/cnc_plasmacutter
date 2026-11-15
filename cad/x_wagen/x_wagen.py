@@ -383,6 +383,9 @@ def main():
              "x_ref_stift": (ref_stift(), "stahl")}
     kauf = kaufteile()
     pfad = os.path.join(OUT, "x_wagen.FCStd")
+    log = []                                            # Radien und Fasen an den Druckteilen
+    sx = fc_dok.sexy({n: s for n, (s, f) in teile.items() if f == "druck"}, pfad, log)
+    teile.update({n: (s, teile[n][1]) for n, s in sx.items()})
     doc, offen = fc_dok.dokument(pfad)
     for n, (shp, farbe) in teile.items():
         fc_dok.teil(doc, n, shp, farbe)
@@ -412,6 +415,7 @@ def main():
                     f.write("Kollision %s / %s: %.1f mm³\n" % (na, nb, v))
                     n += 1
         f.write("Kollisionen: %d\n" % n)
+        f.write("\n".join(log) + "\n")
         for nm, (shp, _) in teile.items():
             fc_dok.schreibe_waende(f, nm, shp)
         f.write("Riemenscheibe Mitte y %.1f, Rollen y %.1f, Motorplatte UK z %.1f\n"

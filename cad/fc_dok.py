@@ -363,6 +363,33 @@ def _zuege(s, sperre, bett, senkrecht):
     return list(zuege.values())
 
 
+def _sicher(op):
+    """op() (gibt eine Form zurück) in einem Kindprozess: Fasen und Rundungen bringen
+    OpenCascade manchmal zum Absturz, der sich in Python nicht abfangen lässt; dann endet nur
+    das Kind. Ergebnis über eine BREP-Datei. None bei Fehler oder Absturz."""
+    import tempfile
+    fd, pfad = tempfile.mkstemp(suffix=".brep")
+    os.close(fd)
+    try:
+        pid = os.fork()
+        if pid == 0:
+            code = 1
+            try:
+                op().exportBrep(pfad)
+                code = 0
+            except BaseException:
+                pass
+            os._exit(code)
+        _, st = os.waitpid(pid, 0)
+        if not (os.WIFEXITED(st) and os.WEXITSTATUS(st) == 0):
+            return None
+        s = Part.Shape()
+        s.importBrep(pfad)
+        return s
+    finally:
+        os.remove(pfad)
+
+
 def verrunden(shape, nachbarn, bett, radius=2.0, fase=1.0, loch_r=8.0, schlitz=8.0):
     """Gibt einem Druckteil Radien und Fasen ("make it sexy"), je nach Lage der Kante beim
     Druck (bett = Normale der Unterseite beim Druck):
@@ -421,18 +448,17 @@ def verrunden(shape, nachbarn, bett, radius=2.0, fase=1.0, loch_r=8.0, schlitz=8
         es = [finde(form, m, l) for m, l in kanten]
         if not es or None in es:
             return None
-        try:
-            neu = form.makeFillet(mass, es) if op == "radius" else form.makeChamfer(mass, es)
-        except Exception:
-            return None
-        return neu if gut(neu, form) else None
+        neu = _sicher(lambda: form.makeFillet(mass, es) if op == "radius" else form.makeChamfer(mass, es))
+        return neu if neu is not None and gut(neu, form) else None
 
     bericht = {}
     for op, mass, senkrecht in (("radius", radius, True), ("fase", fase, False)):
         zuege = _zuege(s, _sperre(s, nachbarn, bett, loch_r, schlitz), bett, senkrecht)
         alle = [k for z in zuege for k in z]
         offen = []
-        neu = versuch(s, op, mass, alle) if alle else None     # erst alle auf einmal
+        # erst alle auf einmal (nur bei wenigen Kanten: sehr viele auf einmal haben
+        # OpenCascade abstürzen lassen, nicht abfangbar)
+        neu = versuch(s, op, mass, alle) if 0 < len(alle) <= 20 else None
         if neu is not None:
             s, n = neu, len(alle)
         else:
@@ -456,3 +482,76 @@ def verrunden(shape, nachbarn, bett, radius=2.0, fase=1.0, loch_r=8.0, schlitz=8
                 zug(z, 0)
         bericht[op] = (n, len(alle), offen)
     return s, bericht
+
+
+CAD = os.path.dirname(os.path.abspath(__file__))
+ZUSAMMENBAU = os.path.join(CAD, "zusammenbau", "zusammenbau.FCStd")
+
+
+def drucklage(name):
+    """Normale der Druckbett-Seite eines Druckteils aus cad/druckbarkeit.txt (Lage, in der
+    pruefe_druck.py das Teil druckt; "+Z oben" -> Bett bei -Z)."""
+    with open(os.path.join(CAD, "druckbarkeit.txt"), encoding="utf-8") as f:
+        for z in f:
+            t = z.split()
+            if len(t) > 3 and t[1] == name and t[2] == "Lage":
+                a = {"X": App.Vector(1, 0, 0), "Y": App.Vector(0, 1, 0), "Z": App.Vector(0, 0, 1)}[t[3][1]]
+                return a * (-1 if t[3][0] == "+" else 1)
+    raise KeyError("Drucklage von %s fehlt in druckbarkeit.txt (pruefe_druck.py laufen lassen)" % name)
+
+
+def nachbarn_im_zusammenbau(dok_pfad, name, form, rand=1.0):
+    """Nachbarn eines Teils (Objekt name im Dokument dok_pfad) aus dem Zusammenbau, in den
+    Koordinaten des Teils, für jede Lage, in der es eingebaut ist. Nur Teile, deren
+    Hüllquader den von form (um rand vergrößert) schneidet. Gibt (nachbarn, lagen) zurück."""
+    zb = quelle(ZUSAMMENBAU)
+    ziel = os.path.abspath(dok_pfad)
+    alle, eigen = [], []
+    for o in zb.Objects:
+        if o.TypeId == "App::Link":
+            lo = o.LinkedObject
+            if lo is None or lo is o or not hasattr(lo, "Shape") or lo.Shape.isNull():
+                continue
+            s = lo.Shape.copy()
+            s.Placement = o.LinkPlacement               # Link ersetzt die Objekt-Platzierung
+            if os.path.abspath(lo.Document.FileName) == ziel and lo.Name == name:
+                eigen.append(o)
+                continue
+        elif o.TypeId == "Part::Feature" and not o.Shape.isNull():
+            s = o.Shape.copy()
+        else:
+            continue
+        alle.append(s)
+    bb = form.BoundBox
+    bb.enlarge(rand)
+    res = []
+    for inst in eigen:
+        inv = inst.LinkPlacement.inverse()
+        for s in alle:
+            t = s.copy()
+            t.Placement = inv.multiply(t.Placement)
+            if t.BoundBox.intersect(bb):
+                res.append(t)
+    return res, len(eigen)
+
+
+def radien_zeile(name, bericht, sekunden):
+    return ("Radien %s: R2 an %d von %d senkrechten Kanten, Fase an %d von %d waagerechten (%.0f s)"
+            % (name, bericht["radius"][0], bericht["radius"][1], bericht["fase"][0],
+               bericht["fase"][1], sekunden))
+
+
+def sexy(teile, dok_pfad, log):
+    """Radien und Fasen (verrunden) für die Druckteile einer Baugruppe: teile = Name ->
+    Form in Teilekoordinaten (wie im Dokument dok_pfad, ohne Objekt-Platzierung). Drucklage
+    aus druckbarkeit.txt, Nachbarn aus dem Zusammenbau. Gibt Name -> Form zurück."""
+    import time
+    res = {}
+    for n, s in teile.items():
+        t0 = time.time()
+        nb, lagen = nachbarn_im_zusammenbau(dok_pfad, n, s)
+        r, b = verrunden(s, nb, drucklage(n))
+        res[n] = r
+        log.append(radien_zeile(n, b, time.time() - t0)
+                   + ("" if lagen else " – nicht im Zusammenbau, ohne Nachbarn"))
+    return res

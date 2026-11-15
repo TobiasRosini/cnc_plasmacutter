@@ -725,6 +725,11 @@ def main():
     yfa = y_ref_fahne()
 
     pfad = os.path.join(OUT, "y_portalwinkel.FCStd")
+    log = []                                            # Radien und Fasen an den Druckteilen
+    druck = fc_dok.sexy(druck, pfad, log)
+    wm, wk, sl, kf, ks, xk = (druck[n] for n in ("winkel_fest", "winkel_kasten", "spannschlitten",
+                                                 "klemmplatte_fest", "klemmplatte_schlitten",
+                                                 "x_klemmplatte"))
     doc, offen = fc_dok.dokument(pfad)
     fc_dok.teil(doc, "Flachstange_40x15", fl, "alu")
     for name, shp in druck.items():
@@ -771,6 +776,7 @@ def main():
                     % (name, shp.isValid(), bb.XLength, bb.YLength, bb.ZLength,
                        shp.Volume / 1000 * 1.27))
         f.write("Flachstange gültig: %s\n\n" % fl.isValid())
+        f.write("\n".join(log) + "\n\n")
         for nm, shp in list(druck.items()) + [("flachstange", fl)]:
             fc_dok.schreibe_waende(f, nm, shp)
         f.write("\n")

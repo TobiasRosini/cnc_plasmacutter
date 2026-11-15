@@ -543,6 +543,9 @@ GEWOLLT = [{"Z_Spindel_SFU1204", "Z_Kupplung"}, {"Z_Motor_NEMA23", "Z_Kupplung"}
 def main():
     g, eigen, kauf = teile()
     pfad = os.path.join(OUT, "z_achse.FCStd")
+    log = []                                            # Radien und Fasen an den Druckteilen
+    sx = fc_dok.sexy({n: s for n, (s, f) in eigen.items() if f == "druck"}, pfad, log)
+    eigen.update({n: (s, eigen[n][1]) for n, s in sx.items()})
     doc, offen = fc_dok.dokument(pfad)
     for n, (shp, farbe) in list(eigen.items()) + list(kauf.items()):
         fc_dok.teil(doc, n, shp, farbe)
@@ -559,6 +562,7 @@ def main():
             bb = shp.BoundBox
             f.write("%-16s gültig: %s, %.1f x %.1f x %.1f mm\n"
                     % (n, shp.isValid(), bb.XLength, bb.YLength, bb.ZLength))
+        f.write("\n".join(log) + "\n")
         for n, (shp, _) in eigen.items():
             fc_dok.schreibe_waende(f, n, shp)
         for lage in (0.0, 1.0):

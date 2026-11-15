@@ -21,7 +21,7 @@ import struct
 import subprocess
 
 CAD = os.path.dirname(os.path.abspath(__file__))
-GRENZ_NZ = -math.cos(math.radians(45.0))
+GRENZ_NZ = -math.cos(math.radians(45.0)) - 1e-3   # 45°-Fasen gelten als druckbar
 KLEIN = 6.0         # mm Spannweite, darunter überbrückbar (Oberseite von Querbohrungen)
 BRUECKE = 10.0      # mm Spannweite waagerechter Stellen: kurze Brücke (Decke über Muttertasche, Senkung)
 BETT_TOL = 0.05
@@ -120,7 +120,23 @@ def bewerte(tri):
     return bett, stellen, gross
 
 
+def bisherige_lagen():
+    """Lagen aus der letzten druckbarkeit.txt: Die Radien und Fasen der Druckteile richten
+    sich nach dieser Lage (fc_dok.drucklage), deshalb bleibt sie, solange sie grün ist."""
+    res = {}
+    try:
+        with open(os.path.join(CAD, "druckbarkeit.txt"), encoding="utf-8") as f:
+            for z in f:
+                t = z.split()
+                if len(t) > 4 and t[2] == "Lage":
+                    res[t[1]] = t[3] + " " + t[4].rstrip(",")
+    except OSError:
+        pass
+    return res
+
+
 def main():
+    alt = bisherige_lagen()
     stls = subprocess.run(["git", "ls-files", "*.stl"], cwd=os.path.dirname(CAD),
                           capture_output=True, text=True).stdout.split()
     zeilen, gruen, gelb = [], [], []
@@ -136,6 +152,11 @@ def main():
             if beste is None or wert < beste[0]:
                 beste = (wert, name, bett, stellen, gross, tri)
         teil = os.path.splitext(os.path.basename(rel))[0]
+        if teil in alt and alt[teil] in LAGEN and beste is not None and not beste[4]:
+            tri = [[LAGEN[alt[teil]](*p) for p in t] for t in tri0]
+            bett, stellen, gross = bewerte(tri)
+            if bett >= MIN_BETT and not gross:            # bisherige Lage weiter grün: bleibt
+                beste = (None, alt[teil], bett, stellen, gross, tri)
         if beste is None:
             gelb.append(teil)
             zeilen.append("GELB  %-28s keine Lage mit ebener Auflage >= %.0f mm²" % (teil, MIN_BETT))

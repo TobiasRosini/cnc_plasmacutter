@@ -6,6 +6,9 @@ Geräteboden liegt auf: Mittelquerrohr 1 (485-525), Mittelquerrohr 2 (991-1031),
 Querkanal z 615 bis 640, Einführung in die rechte Seitenwand des Schranks 9 mm unter der Oberkante; Muffe des Bogens bis zur Kettenstütze vorn 15 mm frei
 Schaltschrank: x 275 bis 675, Oberkante 649, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
 Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
+Radien ub_uebergang_unten: R2 an 8 von 8 senkrechten Kanten, Fase an 6 von 6 waagerechten (11 s)
+Radien ub_uebergang_unten_deckel: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (2 s)
+Radien ub_kanalknoten: R2 an 11 von 11 senkrechten Kanten, Fase an 33 von 33 waagerechten (7 s)
 Wand an Bohrungen ub_uebergang_unten: ok (>= 3.0 mm)
 Wand an Bohrungen ub_uebergang_unten_deckel: ok (>= 3.0 mm)
 Wand an Bohrungen ub_kanalknoten: ok (>= 3.0 mm)

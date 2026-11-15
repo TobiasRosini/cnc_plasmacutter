@@ -309,6 +309,8 @@ def main():
     fc_dok.teil(doc, "ub_kabelkanal_quer", quer, "zukauf")
     uu, uud = uebergang_unten()
     druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud, "ub_kanalknoten": knoten()}
+    log = []                                            # Radien und Fasen an den Druckteilen
+    druck = fc_dok.sexy(druck, pfad, log)
     for n, sh in druck.items():
         fc_dok.teil(doc, n, sh, "druck")
     fc_dok.speichern(doc, pfad, offen)
@@ -357,6 +359,7 @@ def main():
         xa, ya = P["ablauf"]
         f.write("Ablauf: durch den Tropfboden bei z %.0f, Hülse Ø%.0f bis %.0f\n"
                 % (tropf_z(ya), P["huelse"][1], tropf_z(ya) + P["huelse"][2]))
+        f.write("\n".join(log) + "\n")
         for n, sh in druck.items():
             fc_dok.schreibe_waende(f, n, sh)
         xc, zc = bogen_mitte()

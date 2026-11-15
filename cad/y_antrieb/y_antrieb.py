@@ -163,6 +163,9 @@ def main():
         teile[n + "_l"] = (gespiegelt(teile[n][0]), teile[n][1])
 
     pfad = os.path.join(OUT, "y_antrieb.FCStd")
+    log = []                                            # Radien und Fasen an den Druckteilen
+    sx = fc_dok.sexy({n: s for n, (s, f) in teile.items() if f == "druck"}, pfad, log)
+    teile.update({n: (s, teile[n][1]) for n, s in sx.items()})
     doc, offen = fc_dok.dokument(pfad)
     for n, (shp, farbe) in teile.items():
         o = fc_dok.teil(doc, n, shp, farbe)
@@ -179,6 +182,7 @@ def main():
         Mesh.Mesh(shp.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))
 
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
+        f.write("\n".join(log) + "\n")
         for n in ("y_motorhalter", "y_umlenkhalter"):
             shp = teile[n][0]
             bb = shp.BoundBox

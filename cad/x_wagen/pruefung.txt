@@ -3,6 +3,8 @@ x_spritzschutz gültig: True, 60.0 x 69.0 x 1.0 mm
 x_motorbock    gültig: True, 84.0 x 89.7 x 93.5 mm
 x_ref_stift    gültig: True, 10.0 x 6.0 x 6.0 mm
 Kollisionen: 0
+Radien x_wagenkoerper: R2 an 1 von 1 senkrechten Kanten, Fase an 6 von 6 waagerechten (63 s)
+Radien x_motorbock: R2 an 17 von 22 senkrechten Kanten, Fase an 83 von 102 waagerechten (95 s)
 Wand an Bohrungen x_wagenkoerper: ok (>= 3.0 mm)
 Wand an Bohrungen x_spritzschutz: ok (>= 3.0 mm)
 Wand an Bohrungen x_motorbock: ok (>= 3.0 mm)

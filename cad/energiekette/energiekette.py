@@ -715,13 +715,22 @@ def schelle_lokal(einseitig=False):
     return s
 
 
-def leitungsschellen():
-    """Alle Schellen: auf den Lagen von buegel_lagen, dazu eine am senkrechten Lauf."""
-    vorlage = schelle_lokal()
+def schellen_lagen():
+    """Lagen der Schellen (lokal -> Modell): auf buegel_lagen, dazu die einseitige am
+    senkrechten Lauf. Gibt ([Placement], Placement) zurück."""
+    lagen = [App.Placement(p, App.Rotation(V(0, 0, 1), math.degrees(math.atan2(d.y, d.x)) + 90.0))
+             for p, d in buegel_lagen()]
+    return lagen, App.Placement(schelle_senkrecht())
+
+
+def leitungsschellen(vorlagen=None):
+    """Alle Schellen: auf den Lagen von buegel_lagen, dazu eine am senkrechten Lauf.
+    vorlagen = (Schelle, einseitige Schelle) lokal, z. B. mit Radien; sonst neu erzeugt."""
+    vorlage = vorlagen[0] if vorlagen else schelle_lokal()
     res = []
     for p, d in buegel_lagen():
         res.append(_platziert(vorlage.copy(), p, d))
-    s = schelle_lokal(einseitig=True)                   # am senkrechten Lauf (Umlenkkopf)
+    s = vorlagen[1].copy() if vorlagen else schelle_lokal(einseitig=True)   # am senkrechten Lauf
     s.transformShape(schelle_senkrecht())
     res.append(s)
     return res
@@ -755,16 +764,16 @@ def buegel_bohrungen(teil, art, nur):
     return teil
 
 
-def schelle_einseitig_einzeln():
+def schelle_einseitig_einzeln(vorlage=None):
     """Spezialschelle in Druckbett-Lage (Dach unten)."""
-    s = schelle_lokal(einseitig=True)
+    s = vorlage.copy() if vorlage is not None else schelle_lokal(einseitig=True)
     s.rotate(V(0, 0, 0), V(1, 0, 0), 180.0)
     return s
 
 
-def schelle_einzeln():
+def schelle_einzeln(vorlagen=None):
     """Eine Schelle in Druckbett-Lage (Dach unten)."""
-    s = leitungsschellen()[0].copy()
+    s = leitungsschellen(vorlagen)[0].copy()
     p, d = buegel_lagen()[0]
     s.translate(-p)
     s.rotate(V(0, 0, 0), V(0, 0, 1), -(math.degrees(math.atan2(d.y, d.x)) + 90.0))
@@ -1456,10 +1465,36 @@ def sexy(teile, nachbarn, log=None):
             r, b = fc_dok.verrunden(k, nb, bett)
             neu.append(r)
             if log is not None:
-                log.append("Radien %s: R2 an %d von %d senkrechten Kanten, Fase an %d von %d "
-                           "waagerechten (%.0f s)" % (n, b["radius"][0], b["radius"][1], b["fase"][0],
-                                                      b["fase"][1], time.time() - t0))
+                log.append(fc_dok.radien_zeile(n, b, time.time() - t0))
         res[n] = neu if isinstance(form, list) else neu[0]
+    return res
+
+
+def schellen_sexy(nachbarn, log):
+    """Radien und Fasen an den Schellen-Vorlagen (lokal; Dach beim Druck unten = Bett +z).
+    Nachbarn (Name, Form in Dokumentlage) aus allen Einbaulagen zurück in die Vorlage."""
+    import time
+    lagen, senk = schellen_lagen()
+    res = []
+    for einseitig, name, pls in ((False, "ek_leitungsschelle", lagen), (True, "ekx_schelle_einseitig", [senk])):
+        t0 = time.time()
+        v = schelle_lokal(einseitig=einseitig)
+        bb = v.BoundBox
+        bb.enlarge(1.0)
+        nb = []
+        for pl in pls:
+            inv = pl.inverse()
+            for nn, x in nachbarn:
+                if nn == "ek_leitungsschellen":
+                    continue
+                y = x.copy()
+                y.translate(-LAGE_PORTAL)
+                y.Placement = inv.multiply(y.Placement)
+                if y.BoundBox.intersect(bb):
+                    nb.append(y)
+        r, b = fc_dok.verrunden(v, nb, (0, 0, 1))
+        res.append(r)
+        log.append(fc_dok.radien_zeile(name, b, time.time() - t0))
     return res
 
 
@@ -1479,15 +1514,18 @@ def druckteile_roh(tr, ri, lb, uk, st, au, ei, xtr, xri, xst, xpf):
            "ek_verbindungsplatte": (verbindungsplatte(), (0, 0, -1), LAGE_PORTAL),
            "ekx_leitungssockel": (leitungssockel(), (0, 0, 1), LAGE_PORTAL),
            "ekx_distanzstueck": (distanzstueck(), (0, 1, 0), LAGE_PORTAL),
-           "ekx_mastwinkel": (mastwinkel(), (0, 0, -1), LAGE_PORTAL)}
+           "ekx_mastwinkel": (mastwinkel(), (0, 0, -1), LAGE_PORTAL),
+           "ek_einsteckteil": (ei, fc_dok.drucklage("ek_einsteckteil"), LAGE_PORTAL),
+           "ek_einsteckteil_links": (einsteckteil_links(), fc_dok.drucklage("ek_einsteckteil_links"),
+                                     LAGE_PORTAL)}
 
     def verschoben(f, lage):
         f = f.copy()
         f.translate(lage)
         return f
     nachbarn = [("", verschoben(f, LAGE_PORTAL)) for f in
-                [au, ei, einsteckteil_links(), xtr, xri, rinne_hinten(), mast(), xst,
-                 Part.makeCompound(leitungsschellen()), kette_x(360.0)]]
+                [au, xtr, xri, rinne_hinten(), mast(), xst, kette_x(360.0)]]
+    nachbarn += [("ek_leitungsschellen", verschoben(Part.makeCompound(leitungsschellen()), LAGE_PORTAL))]
     nachbarn += [("", f) for f in [tr, ri, kabelkanal_y(), kette(700.0)] + st]
     nachbarn += [("", verschoben(fc_dok.quelle(os.path.join(os.path.dirname(OUT), "z_achse",
                                                              "z_achse.FCStd")).getObject("z_kopf").Shape,
@@ -1510,6 +1548,8 @@ def main():
     roh, nachbarn = druckteile_roh(tr, ri, lb, uk, st, au, ei, xtr, xri, xst, xpf)
     log = []
     sx = sexy(roh, nachbarn, log)
+    ei = sx["ek_einsteckteil"]
+    schellen = schellen_sexy(nachbarn, log)
     lb = [sx["ek_leitungsbogen_a"], sx["ek_leitungsbogen_steg"], sx["ek_leitungsbogen_b"]]
     uk, xpf = sx["ekx_umlenkkopf"], sx["ekx_halter"]
     pfad = os.path.join(OUT, "energiekette.FCStd")
@@ -1531,10 +1571,10 @@ def main():
               "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (sx["ekx_distanzstueck"], "druck"),
               "ekx_mastwinkel": (sx["ekx_mastwinkel"], "druck"),
               "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (sx["ek_verbindungsplatte"], "druck"),
-              "ek_leitungsschellen": (Part.makeCompound(leitungsschellen()), "druck"),
+              "ek_leitungsschellen": (Part.makeCompound(leitungsschellen(schellen)), "druck"),
               "ekx_leitungssockel": (Part.makeCompound(sx["ekx_leitungssockel"]), "druck"),
               "ekx_stuetze_links": (xst, "alu"), "ekx_stopfen": (sx["ekx_stopfen"], "druck"),
-              "ek_einsteckteil_links": (einsteckteil_links(), "druck")}
+              "ek_einsteckteil_links": (sx["ek_einsteckteil_links"], "druck")}
     for n, (shp, farbe) in portal.items():
         o = fc_dok.teil(doc, n, shp, farbe)
         o.Placement = App.Placement(LAGE_PORTAL, App.Rotation())  # Darstellung in Portalmitte
@@ -1549,15 +1589,15 @@ def main():
     for n, s in (("ek_ausleger", au), ("ek_rinne", ri), ("ek_einsteckteil", ei), ("ekx_halter", xpf),
                  ("ekx_rinne_hinten", rinne_hinten())):
         s.exportStep(os.path.join(OUT, n + ".step"))
-    druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": einsteckteil_links(),
+    druck = {"ek_einsteckteil": ei, "ek_einsteckteil_links": sx["ek_einsteckteil_links"],
              "ek_halter_y": sx["ek_halter_y"], "ekx_ablagehalter": sx["ekx_ablagehalter"],
              "ekx_rinnenhalter": Part.makeCompound(sx["ekx_rinnenhalter"]), "ekx_stopfen": sx["ekx_stopfen"],
              "ekx_halter": xpf, "ek_stuetzen_kopf": sx["ek_stuetzen_kopf"],
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
              "ekx_umlenkkopf": uk, "ekx_distanzstueck": sx["ekx_distanzstueck"],
              "ekx_mastwinkel": sx["ekx_mastwinkel"], "ek_verbindungsplatte": sx["ek_verbindungsplatte"],
-             "ek_leitungsschelle": schelle_einzeln(),             # 5 Stück
-             "ekx_schelle_einseitig": schelle_einseitig_einzeln(),
+             "ek_leitungsschelle": schelle_einzeln(schellen),     # 5 Stück
+             "ekx_schelle_einseitig": schelle_einseitig_einzeln(schellen[1]),
              "ekx_leitungssockel": sx["ekx_leitungssockel"][0]}   # 2 Stück
     mast().exportStep(os.path.join(OUT, "ekx_mast.step"))
     for n, s in druck.items():
@@ -1583,7 +1623,7 @@ def main():
                 % (sl.XMin, g["a_x1"]))
         f.write("\n".join(log) + "\n")
         fc_dok.schreibe_waende(f, "ek_einsteckteil", ei)
-        fc_dok.schreibe_waende(f, "ek_einsteckteil_links", einsteckteil_links())
+        fc_dok.schreibe_waende(f, "ek_einsteckteil_links", sx["ek_einsteckteil_links"])
         for n, sh in druck.items():
             if n not in ("ek_einsteckteil", "ek_einsteckteil_links"):
                 fc_dok.schreibe_waende(f, n, sh)
