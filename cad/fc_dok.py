@@ -264,17 +264,23 @@ def _konvex(e, f1, f2):
 
 def _innen(shape, f, weite=8.0):
     """True, wenn vor der Fläche f innerhalb von weite mm wieder Material liegt (Wand eines
-    Schlitzes, Tunnels, einer Tasche)."""
-    p = f.CenterOfMass
-    if not f.isInside(p, 1e-4, True):
-        u0, u1, v0, v1 = f.ParameterRange
-        p = f.valueAt((u0 + u1) / 2, (v0 + v1) / 2)
-    n = f.normalAt(*f.Surface.parameter(p))
-    strahl = Part.LineSegment(p + n * 0.05, p + n * weite).toShape()
-    try:
-        return strahl.common(shape).Length > 1e-3
-    except Exception:
+    Schlitzes, Tunnels, einer Tasche). Geprüft an Punkten, die wirklich auf der Fläche liegen
+    (bei Ringflächen liegt der Schwerpunkt im Loch); innen nur, wenn alle Material sehen."""
+    u0, u1, v0, v1 = f.ParameterRange
+    pts = [f.CenterOfMass] + [f.valueAt(u0 + a * (u1 - u0), v0 + b * (v1 - v0))
+                              for a in (0.1, 0.3, 0.5, 0.7, 0.9) for b in (0.1, 0.3, 0.5, 0.7, 0.9)]
+    pts = [p for p in pts if f.isInside(p, 1e-4, True)][:3]
+    if not pts:
         return False
+    for p in pts:
+        n = f.normalAt(*f.Surface.parameter(p))
+        strahl = Part.LineSegment(p + n * 0.05, p + n * weite).toShape()
+        try:
+            if strahl.common(shape).Length <= 1e-3:
+                return False
+        except Exception:
+            return False
+    return True
 
 
 def _duenn(shape, grenze=3.0):
