@@ -117,10 +117,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 117 | ekx_schelle_einseitig | 1 | Druck | 53 × 17 × 15 | Energieketten | energiekette/ekx_schelle_einseitig.step |  |
 | 118 | UT_Bein_4 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
 | 119 | ub_haube | 1 | Alu | 1031 × 664 × 551 | Unterbau | unterbau/ub_haube.step |  |
-| 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 907 × 209 × 145 | Unterbau |  |  |
+| 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 451 × 212 × 147 | Unterbau |  |  |
 | 121 | ub_rosette_kanal | 1 | Druck | 77 × 42 × 5 | Unterbau | unterbau/ub_rosette_kanal.step |  |
-| 122 | ub_rosette_ablauf | 1 | Druck | 75 × 75 × 15 | Unterbau | unterbau/ub_rosette_ablauf.step |  |
 | 123 | ub_abstand_hinten | 2 | Druck | 42 × 30 × 20 | Unterbau | unterbau/ub_abstand_hinten.step |  |
 | 124 | ub_abstand_vorn | 2 | Druck | 30 × 20 × 16 | Unterbau | unterbau/ub_abstand_vorn.step |  |
 
-118 verschiedene Teile, 192 Stück.
+117 verschiedene Teile, 191 Stück.

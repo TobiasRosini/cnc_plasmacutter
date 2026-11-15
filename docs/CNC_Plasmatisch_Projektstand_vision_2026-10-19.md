@@ -203,7 +203,7 @@ Vorläufige Planungswerte:
 
 - **Wannenkäfig** aus Stahl-Rechteckrohr 20 × 20 × 2 (`cad/wannenkaefig/`): hängt mit dem oberen Ring im Grundrahmen, trägt den Wannenboden auf Querrohren und hält die Wände. Wanne steht 120 mm unter Rahmenoberkante, Blechunterseite = Rahmenoberkante.
 - Austauschbare Opferleisten auf Trägern, die im Wasser auf dem Wannenboden direkt über den Querrohren des Käfigs stehen; die Last geht durch den Boden ins Stahlrohr, die PE-Wände tragen nichts.
-- **Ablauf** mittig im Wannenboden, Ø25–32 mm, der Käfigboden ist dort frei.
+- **Ablauf** 440 mm hinter der Wannenmitte (hinter der Haube über dem Geräteraum): Messing-Tankdurchführung 3/4", HDPE-Rohr d25, Winkel-Kugelhahn, Schlauch nach hinten.
 - Wanne wird zum Reinigen **nach oben herausgehoben** (Portal ganz hinten); der Käfig bleibt fest im Rahmen.
 - Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
 - **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Wannenboden und Seiten sind konstruktiv zu schützen; Wasserstand und Schnittbereich müssen das Risiko berücksichtigen. Wasserbett ersetzt keine geeignete Lüftung/Absaugung.

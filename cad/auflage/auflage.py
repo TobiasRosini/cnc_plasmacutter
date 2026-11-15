@@ -7,7 +7,7 @@ gesteckt, ohne Schrauben im Wasser.
   alle Querrohre des Wannenkäfigs, die Last geht durch den PE-Boden direkt in die
   Rohre. Oben Schlitze im Raster 25 mm; normal steckt man jede zweite Position
   (Teilung 50), für kleine Teile alle. Unten Aussparungen für Wasser und Schlamm,
-  der mittlere Träger auch über dem Ablauf.
+  der mittlere Träger bei -440 auch über dem Ablauf (unterbau ablauf).
 - Auflageleisten: Flachstahl 50 x 3, quer (X), 530 lang (lichte Öffnung am Bördel 540).
   Oberkante 1 mm über dem Bördel = Rahmenoberkante = Blechunterseite. Bis auf die
   obersten 15 mm stehen sie im Wasser.
