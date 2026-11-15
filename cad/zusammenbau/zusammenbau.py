@@ -129,7 +129,6 @@ def main():
     dk = fc_dok.quelle(KAEFIG)
     plk = App.Placement(V(rahmen_bb.Center.x, wy, rahmen_bb.ZMax), App.Rotation())
     link(doc, "W_Wannenkaefig", dk.getObject("Wannenkaefig"), plk, g_w)
-    link(doc, "W_Ablauf", dk.getObject("Ablauf"), plk, g_w)
     da = fc_dok.quelle(AUFLAGE)                      # Kammträger und Leisten (gleiche Koordinaten)
     for n in ("Kammtraeger", "Auflageleisten"):
         link(doc, "W_" + n, da.getObject(n), plk, g_w)

@@ -91,6 +91,9 @@ P = dict(
     # Querkanal (Unterbau): 2x M5 aus dem Kanal durch die Vorderwand in Nietmuttern im vorderen Bein rechts
     kanal_bein=[(12.0, 627.5), (28.0, 627.5)],   # Rückseite (x, z)
     nietmutter_m5_d=7.0,
+    # Haube über dem Geräteraum (Unterbau): Seitenwände je 2x M5 in Nietmuttern in der
+    # Innenseite der vorderen Beine (y ab Rahmenvorderkante, z) (= unterbau haube_bein)
+    haube_bein=[(-20.0, 300.0), (-20.0, 560.0)],
     geraeteboden_y=[560.0, 1050.0, 1420.0],      # M6-Nietmuttern oben in den unteren Längsrohren (= unterbau boden_loch_y)
     # Spritzschutz Y-Schienen: Flachstahl 50 x 3 innen an den Längsträgern, steht über die
     # Rahmenoberkante (Bleche dann höchstens 634 breit); zwischen den Y-Motor- und Umlenkhaltern
@@ -206,6 +209,11 @@ def rahmen():
             for x, z in P["kanal_bein"]:
                 bein = bein.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
                                                   V(x0 + x, y0 - 1, z), V(0, 1, 0)))
+        if i >= 2:                                       # vorn: Haube (Innenseite)
+            xi = x0 + r - P["wand"] - 1 if x0 == 0 else x0 - 1
+            for dy, z in P["haube_bein"]:
+                bein = bein.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
+                                                  V(xi, ay + dy, z), V(1, 0, 0)))
         teile["UT_Bein_%d" % (i + 1)] = bein
         fk = P["fuss_kante"]
         fx = min(max(x0 + r / 2 - fk / 2, 0), ax - fk)

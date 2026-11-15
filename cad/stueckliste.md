@@ -4,7 +4,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 
 | Nr. | Teil | Stk. | Art | Maße (mm) | Baugruppe | Datei | Bemerkung |
 |---:|---|---:|---|---|---|---|---|
-| 001 | UT_Bein | 3 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
+| 001 | UT_Bein | 2 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
 | 002 | UT_Fussplatte | 4 | Stahl | 100 × 100 × 8 | Untertisch |  |  |
 | 003 | UT_Bein_3 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
 | 004 | UT_Laengsrohr_oben_L | 1 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
@@ -13,7 +13,6 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 007 | UT_Querrohr_oben | 2 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 008 | UT_Querrohr_unten | 4 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 009 | wannenkaefig | 1 | Stahl | 1235 × 640 × 100 | Untertisch | wannenkaefig/wannenkaefig.step |  |
-| 010 | Ablauf | 1 | Kaufteil | 120 × 32 × 32 | Untertisch |  |  |
 | 011 | Wanne | 1 | Stahl (Wanne) | 1194 × 597 × 119 | Untertisch |  |  |
 | 012 | kammtraeger | 3 | Stahl | 1080 × 87 × 3 | Untertisch | auflage/kammtraeger.step |  |
 | 013 | auflageleiste | 22 | Stahl | 530 × 50 × 3 | Untertisch | auflage/auflageleiste.step |  |
@@ -66,9 +65,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 060 | z_halter_oben | 1 | Druck | 78 × 72 × 15 | Z-Achse | z_achse/z_halter_oben.step |  |
 | 061 | Zielstift_6x10 | 1 | Kaufteil | 10 × 6 × 6 | Z-Achse |  |  |
 | 062 | Schmiernippel_M6 | 2 | Kaufteil | 13 × 8 × 7 | Z-Achse |  |  |
-| 063 | y_motorhalter | 1 | Druck | 108 × 64 × 49 | Y-Antrieb | y_antrieb/y_motorhalter.step | Spiegelteil zu 065 |
+| 063 | y_motorhalter | 1 | Druck | 108 × 64 × 49 | Y-Antrieb | y_antrieb/y_motorhalter.step |  |
 | 064 | Motor_NEMA23_99 | 2 | Kaufteil | 99 × 88 × 56 | Y-Antrieb |  |  |
-| 065 | y_motorhalter_l | 1 | Druck | 108 × 64 × 49 | Y-Antrieb | y_antrieb/y_motorhalter_l.step | Spiegelteil zu 063 |
+| 065 | y_motorhalter_l | 1 | Druck | 108 × 64 × 49 | Y-Antrieb | y_antrieb/y_motorhalter_l.step |  |
 | 066 | y_umlenkhalter | 1 | Druck | 97 × 64 × 49 | Y-Antrieb | y_antrieb/y_umlenkhalter.step | Spiegelteil zu 068 |
 | 067 | Umlenkrolle_44 | 2 | Kaufteil | 44 × 44 × 19 | Y-Antrieb |  |  |
 | 068 | y_umlenkhalter_l | 1 | Druck | 97 × 64 × 49 | Y-Antrieb | y_antrieb/y_umlenkhalter_l.step | Spiegelteil zu 066 |
@@ -104,18 +103,24 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 102 | ek_leitungsschelle | 5 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
 | 103 | ekx_leitungssockel | 2 | Druck | 57 × 32 × 15 | Energieketten | energiekette/ekx_leitungssockel.step |  |
 | 104 | ub_geraeteboden | 1 | Kaufteil | 1031 × 720 × 9 | Unterbau |  |  |
-| 105 | ub_tropfboden | 1 | Alu | 1498 × 640 × 32 | Unterbau | unterbau/ub_tropfboden.step |  |
 | 106 | Plasmageraet_XPro_CUT_70CNC | 1 | Kaufteil | 515 × 370 × 215 | Unterbau |  |  |
 | 107 | Druckluft_Einheit | 1 | Kaufteil | 180 × 80 × 60 | Unterbau |  |  |
 | 108 | Schaltschrank_400x500x200 | 1 | Kaufteil | 500 × 400 × 200 | Unterbau |  |  |
 | 109 | ub_kabelkanal_senkrecht | 1 | Kaufteil | 250 × 60 × 25 | Unterbau |  |  |
 | 110 | ub_kabelkanal_quer | 1 | Kaufteil | 305 × 60 × 25 | Unterbau |  |  |
-| 111 | ub_uebergang_unten | 1 | Druck | 64 × 54 × 54 | Unterbau | unterbau/ub_uebergang_unten.step |  |
-| 112 | ub_uebergang_unten_deckel | 1 | Druck | 54 × 54 × 3 | Unterbau | unterbau/ub_uebergang_unten_deckel.step |  |
+| 111 | ub_uebergang_unten | 1 | Druck | 64 × 53 × 53 | Unterbau | unterbau/ub_uebergang_unten.step |  |
+| 112 | ub_uebergang_unten_deckel | 1 | Druck | 53 × 53 × 3 | Unterbau | unterbau/ub_uebergang_unten_deckel.step |  |
 | 113 | ub_kanalknoten | 1 | Druck | 206 × 78 × 67 | Unterbau | unterbau/ub_kanalknoten.step |  |
 | 114 | ekx_umlenkkopf | 1 | Druck | 152 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
 | 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
 | 116 | ekx_mastwinkel | 1 | Druck | 106 × 94 × 38 | Energieketten | energiekette/ekx_mastwinkel.step |  |
 | 117 | ekx_schelle_einseitig | 1 | Druck | 53 × 17 × 15 | Energieketten | energiekette/ekx_schelle_einseitig.step |  |
+| 118 | UT_Bein_4 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
+| 119 | ub_haube | 1 | Alu | 1031 × 664 × 551 | Unterbau | unterbau/ub_haube.step |  |
+| 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 907 × 209 × 145 | Unterbau |  |  |
+| 121 | ub_rosette_kanal | 1 | Druck | 77 × 42 × 5 | Unterbau | unterbau/ub_rosette_kanal.step |  |
+| 122 | ub_rosette_ablauf | 1 | Druck | 75 × 75 × 15 | Unterbau | unterbau/ub_rosette_ablauf.step |  |
+| 123 | ub_abstand_hinten | 2 | Druck | 42 × 30 × 20 | Unterbau | unterbau/ub_abstand_hinten.step |  |
+| 124 | ub_abstand_vorn | 2 | Druck | 30 × 20 × 16 | Unterbau | unterbau/ub_abstand_vorn.step |  |
 
-113 verschiedene Teile, 186 Stück.
+118 verschiedene Teile, 192 Stück.

@@ -1,17 +1,27 @@
 Geräteboden: Oberkante 149 über Boden, y 485 bis 1516
-Tropfboden: Oberseite hinten 640, vorn 690 (Gefälle 3.3 %), Ränder 15; unter dem Käfig mind. 5 mm Luft
-Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 515 mm (gefordert 500): ok
+Haube (Alu 0.5): x 40 bis 680, y 485 bis 1516, Dach oben hinten 665, vorn 700 (Gefälle 3.4 %), unter dem Käfig vorn 11.4 mm Luft; Abwicklung ca. 1766 x 1031 mm; Gewicht ca. 2.4 kg
+Abstandshalter bei y 600: 41.1 mm hoch (M5 x 55)
+Abstandshalter bei y 1350: 15.6 mm hoch (M5 x 30)
+Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): 524 mm (gefordert 500): ok
 Plasmagerät: x 45 bis 260, y 735 bis 1250, Oberkante 519; vor der Front 166 mm bis zum Querkanal, 250 mm bis zur Schrankfront
 Geräteboden liegt auf: Mittelquerrohr 1 (485-525), Mittelquerrohr 2 (991-1031), Querrohr vorn (1476-1516); größte freie Spannweite in y 465 mm
 Querkanal z 615 bis 640, Einführung in die rechte Seitenwand des Schranks 9 mm unter der Oberkante; Muffe des Bogens bis zur Kettenstütze vorn 15 mm frei
-Schaltschrank: x 275 bis 675, Oberkante 649, Tropfboden darüber ab 683; Abstand zum Gerät 15 mm
-Ablauf: durch den Tropfboden bei z 669, Hülse Ø44 bis 689
-Radien ub_uebergang_unten: R2 an 8 von 8 senkrechten Kanten, Fase an 6 von 6 waagerechten (11 s)
+Schaltschrank: x 275 bis 675, Oberkante 649, Haubendach darüber ab 692; Abstand zum Gerät 15 mm
+Ablauf: Klemmverbinder z 640 bis 700 durch das Haubendach (z 678), Kugelhahn Mitte z 555 (x 338 bis 382, neben dem Gerät bis x 260; Hebel nach links), Schlauch Ø27 nach hinten bis y -10, Hahn 371 mm vor dem Haubenende
+Radien ub_uebergang_unten: R2 an 8 von 8 senkrechten Kanten, Fase an 6 von 6 waagerechten (12 s)
 Radien ub_uebergang_unten_deckel: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (2 s)
-Radien ub_kanalknoten: R2 an 11 von 11 senkrechten Kanten, Fase an 33 von 33 waagerechten (7 s)
+Radien ub_kanalknoten: R2 an 11 von 11 senkrechten Kanten, Fase an 33 von 33 waagerechten (8 s)
+Radien ub_rosette_kanal: R2 an 4 von 4 senkrechten Kanten, Fase an 12 von 12 waagerechten (4 s)
+Radien ub_abstand_hinten: R2 an 0 von 0 senkrechten Kanten, Fase an 2 von 2 waagerechten (2 s)
+Radien ub_abstand_vorn: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (2 s)
+Radien ub_rosette_ablauf: R2 an 0 von 0 senkrechten Kanten, Fase an 3 von 3 waagerechten (2 s)
 Wand an Bohrungen ub_uebergang_unten: ok (>= 3.0 mm)
 Wand an Bohrungen ub_uebergang_unten_deckel: ok (>= 3.0 mm)
 Wand an Bohrungen ub_kanalknoten: ok (>= 3.0 mm)
+Wand an Bohrungen ub_rosette_kanal: ok (>= 3.0 mm)
+Wand an Bohrungen ub_abstand_hinten: ok (>= 3.0 mm)
+Wand an Bohrungen ub_abstand_vorn: ok (>= 3.0 mm)
+Wand an Bohrungen ub_rosette_ablauf: ok (>= 3.0 mm)
 Bogen unten: Mitte x -30 z 650, R10 bis R35; senkrechter Kanal z 650 bis 900, Querkanal ab x -30
 Kanalknoten: x -68.45 bis 9.45, y 1412.55 bis 1479.45, z 870 bis 1076.45 (Druckhöhe 66.9 auf der Vorderseite); Träger und Kanal Y enden bei y 1437.30
 Kabelkanal senkrecht außen rechts: x -65 bis -40, Übergangsteile bis x -68.45 -> Maschinenbreite höchstens 796 (Grenze 800, Portal links bis x 727,5)

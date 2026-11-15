@@ -151,13 +151,13 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 
 ### Halbzeuge (vereinheitlicht 03.11.2026)
 
-- **Alu:** Rechteckrohr 80 × 40 × 4 (Brücke; Reststück für die Halter des X-Spritzschutzes), Flachstange 40 × 15 (Y-Flachstangen), Flachstange 40 × 8 (Kettenturm, Platte links, Mast, Ablage hinten), Rechteckrohr 40 × 20 × 2 (X-Ablage), U-Profil 20 × 60 × 20 × 2 (Rinnen Y und X, Handel), Platte 12 (Z-Grundplatte, Z-Schlitten), Vierkant 20 × 20 (Z-Leisten), Blech 1,5 (Tropfboden, wird noch überarbeitet).
+- **Alu:** Rechteckrohr 80 × 40 × 4 (Brücke; Reststück für die Halter des X-Spritzschutzes), Flachstange 40 × 15 (Y-Flachstangen), Flachstange 40 × 8 (Kettenturm, Platte links, Mast, Ablage hinten), Rechteckrohr 40 × 20 × 2 (X-Ablage), U-Profil 20 × 60 × 20 × 2 (Rinnen Y und X, Handel), Platte 12 (Z-Grundplatte, Z-Schlitten), Vierkant 20 × 20 (Z-Leisten), Blech 0,5 (Haube über dem Geräteraum, 1250 × 2500).
 - **Stahl:** Rechteckrohr 40 × 40 × 3, 80 × 40 × 4, 20 × 20 × 2, 20 × 40 × 2, 40 × 20 × 2 (Y-Kettenträger), Flachstahl 50 × 3 (Auflageleisten, Spritzschutz X und Y), Blech 3 (Kammträger, Geräteboden), Fußplatten 8, Blech 1 (Spritzschutz am X-Wagen).
 
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 
 - Unter der Wanne ein Geräteboden (Stahlblech 3 mm, Oberkante 143) mit Plasmagerät vorn rechts und Schaltschrank 400 × 500 × 200 vorn links, beide Front nach vorn. Über dem Geräteboden mindestens 500 mm frei (Druckluft-Einheit hinten am Gerät).
-- Darüber ein Tropfboden mit Gefälle nach hinten, damit Wasser aus der Wanne nicht auf die Elektronik tropft.
+- Darüber eine Haube (Alu 0,5, U auf dem Kopf, Stand 15.11.2026) mit Gefälle nach hinten, damit Wasser aus der Wanne nicht auf die Elektronik tropft.
 - Leitungen vom festen Ende der Y-Kette im Kabelkanal auf dem Kettenträger nach vorn bis vor die vorderste Portalstellung, außen rechts senkrecht hinunter, quer über dem Plasmagerät in den Schaltschrank. Gesamtbreite damit 793 mm. Details `cad/unterbau/README.md`, Leitungen `docs/Kabelliste.md`.
 
 ### Gantry Squaring

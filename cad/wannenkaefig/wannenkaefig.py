@@ -50,13 +50,16 @@ P = dict(
     # Böden: Querrohre unter dem Wannenboden (y-Lagen ab Mitte); Mitte frei für Ablauf
     querrohre_y=[110.0, 330.0, 550.0],
     pfosten_y=[0.0],            # zusätzlich zu den Ecken, an beiden Längsseiten
-    ablauf_d=32.0,              # Ø25-32
-    ablauf_l=120.0,
     # Befestigung am Rahmen: je Seite 3x M6 durch die Außenwand des Rings in
     # Nietmuttern im Längsrohr des Untertischs; innen im Ring ein Zugangsloch
     bolzen_y=[-450.0, 0.0, 450.0],
     m6_durchgang=6.6,
     zugang_d=12.0,
+    # Haube über dem Geräteraum (Unterbau) hängt mit 4 Abstandshaltern am unteren Rahmen:
+    # M5 von unten in Nietmuttern in der Unterseite der Längsrohre (y ab Wannenmitte,
+    # = unterbau haube_kaefig_y - Wannenmitte)
+    haube_y=[-256.0, 494.0],
+    nietmutter_m5_d=7.0,
 )
 
 
@@ -119,22 +122,19 @@ def kaefig():
                                         V(-sx, 0, 0)))
             s = s.cut(Part.makeCylinder(P["zugang_d"] / 2, t + 2, V(sx * (ax - r + t + 1), y, z),
                                         V(-sx, 0, 0)))
+    zb = g["z_boden"] - r                                        # Unterseite unterer Rahmen
+    for sx in (-1, 1):
+        for y in P["haube_y"]:
+            s = s.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, t + 2,
+                                        V(sx * (ax - r / 2), y, zb - 1)))
     return s.removeSplitter()
-
-
-def ablauf():
-    g = geo()
-    return Part.makeCylinder(P["ablauf_d"] / 2, P["ablauf_l"],
-                             V(0, 0, g["z_boden"] + 3 - P["ablauf_l"]))
 
 
 def main():
     k = kaefig()
-    a = ablauf()
     pfad = os.path.join(OUT, "wannenkaefig.FCStd")
     doc, offen = fc_dok.dokument(pfad)
-    fc_dok.teil(doc, "Wannenkaefig", k, "stahl")
-    fc_dok.teil(doc, "Ablauf", a, "zukauf")
+    fc_dok.teil(doc, "Wannenkaefig", k, "stahl")         # Ablauf: unterbau.py
     fc_dok.speichern(doc, pfad, offen)
     k.exportStep(os.path.join(OUT, "wannenkaefig.step"))
 

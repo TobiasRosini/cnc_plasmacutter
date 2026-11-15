@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 """
 Unterbau unter der Wanne: Geräteboden mit Plasmagerät und Schaltschrank, darüber
-ein Tropfboden, der Wasser von der Wanne nach hinten ableitet, und der Kabelweg
+eine Haube, die Wasser von der Wanne nach hinten ableitet, und der Kabelweg
 von der Y-Energiekette zum Schaltschrank.
 
 - Geräteboden: Siebdruckplatte 9 mm auf den unteren Längsrohren (vom ersten
   Mittelquerrohr bis vorn), 6x M6 in Nietmuttern. Darauf rechts das Plasmagerät
   (Front nach vorn, 250 mm hinter der Schrankfront: Platz für Schlauchpaket und
   Stecker), links vorn der Schaltschrank 400 x 500 x 200.
-- Tropfboden: Alu-Blech 1,5 mm unter dem Wannenkäfig, Gefälle nach hinten, Ränder
-  seitlich und vorn hochgekantet, hinten über den Rahmen hinaus mit Tropfkante.
-  Der Wannenablauf geht durch eine Hülse.
+- Haube: U auf dem Kopf aus Alu 0,5 über dem Geräteraum, so lang wie der Geräteboden,
+  Dach mit Gefälle nach hinten und Tropfkante. Der Wannenablauf (Tankdurchführung,
+  HDPE-Rohr, Winkel-Kugelhahn, Schlauch nach hinten) geht durch das Dach (Rosette),
+  der Querkanal durch die rechte Wand (Rosette).
 - Kabelweg: Der Kabelkanal auf dem Y-Kettenträger reicht bis hinter das vordere
   Bein; dort außen rechts an der vorderen Kettenstütze senkrecht hinunter, dann
   quer direkt hinter dem Bein in die obere rechte Ecke des Schaltschranks.
@@ -59,13 +60,34 @@ P = dict(
     # Schaltschrank links neben dem Gerät
     schrank=(400.0, 200.0, 500.0),      # Breite (x), Tiefe (y), Höhe
     schrank_x1=675.0,
-    # Tropfboden
-    tropf_t=1.5,
-    tropf_z=(640.0, 690.0),     # Oberseite hinten (Tropfkante) / vorn
-    tropf_y=(-20.0, 1476.0),    # hinten 20 über den Rahmen hinaus, vorn bis an die Beine
-    tropf_rand=15.0,
-    tropf_kante=10.0,           # hinten nach unten gekantet
-    huelse=(40.0, 44.0, 20.0),  # Durchführung Ablauf: innen, außen, Höhe über dem Blech
+    # Haube über dem Geräteraum: U auf dem Kopf aus Alu 0,5, so lang wie der Geräteboden,
+    # Dach mit Gefälle nach hinten (Tropfkante), Wände auf dem Geräteboden (Flansch nach
+    # außen, Spax), vorn an den Beinen (M5 in Nietmuttern), oben mit Abstandshaltern (Druck)
+    # am unteren Rahmen des Wannenkäfigs (M5 in Nietmuttern)
+    haube_t=0.5,
+    haube_x=(40.0, 680.0),      # Außenseiten der Wände = Innenseiten der Beine
+    dach_z=(665.0, 700.0),      # Oberseite Dach hinten / vorn
+    haube_kante=10.0,           # Tropfkante hinten nach unten
+    haube_flansch=12.0,         # unten nach außen auf den Geräteboden
+    haube_spax_y=[520.0, 810.0, 1150.0, 1450.0],    # Spax 3,5 x 8 durch den Flansch (zwischen den M6 des Bodens)
+    haube_bein=[(-20.0, 300.0), (-20.0, 560.0)],    # M5 in die Beine (= grundrahmen haube_bein)
+    haube_kaefig_y=[600.0, 1350.0],                 # Abstandshalter unter den Käfig-Längsrohren (= wannenkaefig haube_y)
+    kaefig_rohr_x=(50.0, 670.0),                    # Mitte der unteren Käfig-Längsrohre (20 x 20)
+    abstand=(20.0, 30.0),       # Abstandshalter x, y
+    # Rosette (Druck) innen um den Querkanal in der rechten Haubenwand: Flansch 5 dick,
+    # 8 breit, 3x M3 von außen durch das Blech in eingepresste Muttern
+    rosette_rand=8.0,
+    rosette_t=5.0,
+    rosette_spiel=0.3,
+    # Ablauf: Messing-Tankdurchführung 3/4" im Wannenboden, PE-Klemmverbinder 25 x 3/4",
+    # HDPE-Rohr d25 durch das Dach (Rosette mit Kragen), Winkel-Kugelhahn, Schlauchtülle 3/4",
+    # Schlauch nach hinten. Maße Platzhalter bis zum Kauf.
+    wanne_boden=730.0,          # Unterseite Wannenboden (Wand 3)
+    ablauf_klemm=(44.0, 60.0),  # Klemmverbinder Ø, Länge
+    hahn_z=555.0,               # Mitte Kugelhahn
+    hahn=45.0,                  # Gehäuse Würfel
+    schlauch=(27.0, -10.0, 15.0),   # Außen-Ø, Ende y (hinter dem Rahmen), Gefälle bis dorthin
+    rosette_dach=(45.5, 75.0, 5.0, 15.0),   # Ø innen, Ø Flansch, Flansch dick, Kragen über dem Blech
     # Kabelkanäle senkrecht und quer: derselbe Typ PVC 25 x 60 mit Deckel, Wand 2
     kanal_y=(1416.0, 1476.0),   # direkt hinter dem vorderen Bein (Rückseite 1476)
     kanal_x=(-65.0, -40.0),     # senkrecht außen auf der vorderen Kettenstütze (40 x 40, x -40 bis 0), Deckel außen
@@ -116,6 +138,10 @@ def geraeteboden():
     for x in (r / 2, ax - r / 2):
         for y in P["boden_loch_y"]:
             b = b.cut(Part.makeCylinder(3.3, P["boden_t"] + 2, V(x, y, z0 - 1)))
+    (hx0, hx1), f = P["haube_x"], P["haube_flansch"]
+    for x in (hx0 - f / 2, hx1 + f / 2):                 # Vorbohrung Spax der Haube
+        for y in P["haube_spax_y"]:
+            b = b.cut(Part.makeCylinder(1.25, 7.0, V(x, y, z0 + P["boden_t"] - 7.0)))
     return b
 
 
@@ -142,38 +168,164 @@ def schaltschrank():
     return box(x1 - sb, x1, y1 - st, y1, z0, z0 + sh)
 
 
-def tropf_z(y):
-    (y0, y1), (z0, z1) = P["tropf_y"], P["tropf_z"]
+def dach_z(y):
+    """Oberseite des Haubendachs bei y (Gefälle nach hinten)."""
+    (z0, z1), y0, y1 = P["dach_z"], P["mittelquer_y"], P["aussen_y"]
     return z0 + (z1 - z0) * (y - y0) / (y1 - y0)
 
 
-def schraege(x0, x1, y0, y1, dz0, dz1):
-    """Körper zwischen den Flächen tropf_z + dz0 und tropf_z + dz1 über x0..x1, y0..y1."""
-    pts = [V(x0, y0, tropf_z(y0) + dz0), V(x0, y1, tropf_z(y1) + dz0),
-           V(x0, y1, tropf_z(y1) + dz1), V(x0, y0, tropf_z(y0) + dz1)]
-    f = Part.Face(Part.makePolygon(pts + [pts[0]]))
-    return f.extrude(V(x1 - x0, 0, 0))
+def dach_neigung():
+    (z0, z1) = P["dach_z"]
+    return math.degrees(math.atan2(z1 - z0, P["aussen_y"] - P["mittelquer_y"]))
 
 
-def tropfboden():
-    r, ax = P["rohr"], P["aussen_x"]
-    t, rd = P["tropf_t"], P["tropf_rand"]
-    x0, x1 = r, ax - r
-    y0, y1 = P["tropf_y"]
-    s = schraege(x0, x1, y0, y1, -t, 0)                  # Boden (Oberseite = tropf_z)
-    s = s.fuse(schraege(x0, x0 + t, y0, y1, 0, rd))      # Rand rechts
-    s = s.fuse(schraege(x1 - t, x1, y0, y1, 0, rd))      # Rand links
-    zf = tropf_z(y1)
-    s = s.fuse(box(x0, x1, y1 - t, y1, zf - t, zf + rd))  # Rand vorn
-    zh = tropf_z(y0)
-    s = s.fuse(box(x0, x1, y0, y0 + t, zh - t - P["tropf_kante"], zh))   # Tropfkante hinten
+def dach(x0, x1, dz0, dz1, y0=None, y1=None):
+    """Körper zwischen dach_z + dz0 und dach_z + dz1 über x0..x1 (y0..y1, sonst Haubenlänge)."""
+    y0 = P["mittelquer_y"] if y0 is None else y0
+    y1 = P["aussen_y"] if y1 is None else y1
+    pts = [V(x0, y0, dach_z(y0) + dz0), V(x0, y1, dach_z(y1) + dz0),
+           V(x0, y1, dach_z(y1) + dz1), V(x0, y0, dach_z(y0) + dz1)]
+    return Part.Face(Part.makePolygon(pts + [pts[0]])).extrude(V(x1 - x0, 0, 0))
+
+
+def kanal_loch():
+    """Ausschnitt für den Querkanal in der rechten Haubenwand (y0, y1, z0, z1)."""
+    (ky0, ky1), (zq0, zq1), s = P["kanal_y"], P["quer_z"], 0.5
+    return ky0 - s, ky1 + s, zq0 - s, zq1 + s
+
+
+def rosette_kanal_m3():
+    """M3 der Kanal-Rosette (y, z): hinten, oben, unten (vorn steht außen das Bein)."""
+    y0, y1, z0, z1 = kanal_loch()
+    rd = P["rosette_rand"] / 2
+    return [(y0 - rd, (z0 + z1) / 2), ((y0 + y1) / 2, z1 + rd), ((y0 + y1) / 2, z0 - rd)]
+
+
+def abstand_m5():
+    """M5 der Abstandshalter (x, y) unter den Käfig-Längsrohren."""
+    return [(x, y) for x in P["kaefig_rohr_x"] for y in P["haube_kaefig_y"]]
+
+
+def ablauf_klemm_z():
+    """Klemmverbinder unter der Tankdurchführung: Unterkante, Oberkante."""
+    zt = P["wanne_boden"] - 30.0                          # Gewinde der Tankdurchführung endet
+    return zt - P["ablauf_klemm"][1], zt
+
+
+def haube():
+    """U auf dem Kopf aus Alu 0,5: Dach mit Gefälle nach hinten und Tropfkante, Wände auf
+    dem Geräteboden mit Flansch nach außen, vorn an den Beinen."""
+    t, (x0, x1) = P["haube_t"], P["haube_x"]
+    y0, y1 = P["mittelquer_y"], P["aussen_y"]
+    zb = boden_ok()
+    h = dach(x0, x1, -t, 0)                                              # Dach
+    h = h.fuse(box(x0, x1, y0, y0 + t, dach_z(y0) - P["haube_kante"], dach_z(y0)))   # Tropfkante
+    for xa, xb in ((x0, x0 + t), (x1 - t, x1)):                         # Wände
+        w = box(xa, xb, y0, y1, zb, P["dach_z"][1]).common(dach(xa - 1, xb + 1, -100.0 - 700.0, 0))
+        h = h.fuse(w)
+    f = P["haube_flansch"]
+    yb = y1 - P["rohr"]                                                  # vorn stehen die Beine
+    h = h.fuse([box(x0 - f, x0, y0, yb, zb, zb + t), box(x1, x1 + f, y0, yb, zb, zb + t)])
+    for y in P["haube_spax_y"]:                                          # Spax in den Boden
+        for x in (x0 - f / 2, x1 + f / 2):
+            h = h.cut(Part.makeCylinder(2.0, t + 2, V(x, y, zb - 1)))
+    for dy, z in P["haube_bein"]:                                        # M5 in die Beine
+        for x in (x0, x1 - t):
+            h = h.cut(Part.makeCylinder(2.75, t + 2, V(x - 1, y1 + dy, z), V(1, 0, 0)))
+    ly0, ly1, lz0, lz1 = kanal_loch()                                    # Querkanal, rechte Wand
+    h = h.cut(box(x0 - 1, x0 + t + 1, ly0, ly1, lz0, lz1))
+    for y, z in rosette_kanal_m3():
+        h = h.cut(Part.makeCylinder(1.7, t + 2, V(x0 - 1, y, z), V(1, 0, 0)))
+    for x, y in abstand_m5():                                            # Abstandshalter
+        h = h.cut(Part.makeCylinder(2.75, 20, V(x, y, dach_z(y) - 10)))
+    xa, ya = P["ablauf"]                                                 # Ablaufrohr
+    h = h.cut(Part.makeCylinder(P["ablauf_klemm"][0] / 2 + 1.0, 30, V(xa, ya, dach_z(ya) - 15)))
+    for k in range(3):
+        a = math.radians(90 + 120 * k)
+        p = V(xa + 30 * math.cos(a), ya + 30 * math.sin(a), 0)
+        h = h.cut(Part.makeCylinder(1.7, 30, V(p.x, p.y, dach_z(p.y) - 15)))
+    return h.removeSplitter()
+
+
+def rosette_kanal():
+    """Rosette (Druck) innen an der rechten Haubenwand um den Querkanal: Flansch um den
+    Ausschnitt, 3x M3 von außen durch das Blech in eingepresste Muttern (vorn steht außen
+    das Bein, dort keine Schraube). Druck auf der Blechseite liegend."""
+    x = P["haube_x"][0] + P["haube_t"]
+    rt, rr, sp = P["rosette_t"], P["rosette_rand"], P["rosette_spiel"]
+    (ky0, ky1), (zq0, zq1) = P["kanal_y"], P["quer_z"]
+    y0, y1, z0, z1 = kanal_loch()
+    r = box(x, x + rt, y0 - rr, y1 + rr, z0 - rr, z1 + rr)
+    r = r.cut(box(x - 1, x + rt + 1, ky0 - sp, ky1 + sp, zq0 - sp, zq1 + sp))
+    for y, z in rosette_kanal_m3():
+        r = r.cut(Part.makeCylinder(1.7, rt + 2, V(x - 1, y, z), V(1, 0, 0)))
+        r = r.cut(fc_dok.mutter(3, V(x + rt - 1.2, y, z), V(1, 0, 0)))
+    return r.removeSplitter()
+
+
+def rosette_ablauf_lage():
+    """Lage der Ablauf-Rosette (eigene Koordinaten: Flansch unten auf z 0) auf dem Dach."""
     xa, ya = P["ablauf"]
-    di, da, hh = P["huelse"]
-    za = tropf_z(ya)
-    s = s.cut(Part.makeCylinder(di / 2, 60, V(xa, ya, za - 30)))
-    hu = Part.makeCylinder(da / 2, hh + t, V(xa, ya, za - t)).cut(
-        Part.makeCylinder(di / 2, hh + t + 2, V(xa, ya, za - t - 1)))
-    return s.fuse(hu).removeSplitter()
+    return App.Placement(V(xa, ya, dach_z(ya)), App.Rotation(V(1, 0, 0), dach_neigung()))
+
+
+def rosette_ablauf():
+    """Rosette (Druck) auf dem Haubendach um das Ablaufrohr: Flansch auf dem Blech, Kragen
+    15 mm hoch gegen Tropfwasser, 3x M3 von unten durch das Blech in eingepresste Muttern.
+    In eigenen Koordinaten (Flansch unten, so gedruckt); rosette_ablauf_lage setzt sie aufs Dach."""
+    di, da, ft, kr = P["rosette_dach"]
+    r = Part.makeCylinder(da / 2, ft).fuse(Part.makeCylinder(di / 2 + 2.5, kr))
+    r = r.cut(Part.makeCylinder(di / 2, kr + 2, V(0, 0, -1)))
+    for k in range(3):
+        a = math.radians(90 + 120 * k)
+        p = V(30 * math.cos(a), 30 * math.sin(a), 0)
+        r = r.cut(Part.makeCylinder(1.7, ft + 2, p + V(0, 0, -1)))
+        r = r.cut(fc_dok.mutter(3, p + V(0, 0, ft - 1.2), V(0, 0, 1)))
+    return r.removeSplitter()
+
+
+def abstandshalter():
+    """Abstandshalter (Druck) zwischen Haubendach und Käfig-Längsrohr: unten mit dem Gefälle
+    des Dachs, oben eben am Rohr, M5 von unten durch Blech und Halter in die Nietmutter.
+    Gibt [(Form hinten), (Form vorn)] je für links und rechts zurück (gleiche Teile)."""
+    bx, by = P["abstand"]
+    zk = P["kaefig_uk"]
+    res = []
+    for y in P["haube_kaefig_y"]:
+        teile = []
+        for x in P["kaefig_rohr_x"]:
+            a = dach(x - bx / 2, x + bx / 2, 0, zk - dach_z(y) + 5.0, y - by / 2, y + by / 2)
+            a = a.common(box(x - bx / 2, x + bx / 2, y - by / 2, y + by / 2, 0, zk))
+            a = a.cut(Part.makeCylinder(2.75, 100, V(x, y, dach_z(y) - 10)))
+            teile.append(a.removeSplitter())
+        res.append(teile)
+    return res
+
+
+def ablauf():
+    """Ablaufstrang als ein Kaufteil-Platzhalter: Tankdurchführung, Klemmverbinder, Rohr,
+    Winkel-Kugelhahn (Hebel nach links), Schlauchtülle, Schlauch nach hinten hinaus."""
+    xa, ya = P["ablauf"]
+    zw = P["wanne_boden"]
+    s = Part.makeCylinder(24.0, 5.0, V(xa, ya, zw + 3))                  # Flansch innen
+    s = s.fuse(Part.makeCylinder(13.2, 38.0, V(xa, ya, zw - 30)))       # Gewinde durch den Boden
+    s = s.fuse(Part.makeCylinder(20.0, 12.0, V(xa, ya, zw - 12)))       # Gegenmutter
+    kd, _ = P["ablauf_klemm"]
+    k0, k1 = ablauf_klemm_z()
+    s = s.fuse(Part.makeCylinder(kd / 2, k1 - k0, V(xa, ya, k0)))       # Klemmverbinder
+    zh, hw = P["hahn_z"], P["hahn"]
+    s = s.fuse(Part.makeCylinder(12.5, k0 - zh, V(xa, ya, zh)))         # HDPE-Rohr d25
+    s = s.fuse(Part.makeCylinder(kd / 2, 30.0, V(xa, ya, zh + hw / 2 - 5)))   # Klemmanschluss Hahn
+    s = s.fuse(box(xa - hw / 2, xa + hw / 2, ya - hw / 2, ya + hw / 2, zh - hw / 2, zh + hw / 2))
+    s = s.fuse(box(xa + hw / 2, xa + hw / 2 + 100, ya - 5, ya + 5, zh + hw / 2 - 8, zh + hw / 2 - 3))  # Hebel
+    yt = ya - hw / 2
+    s = s.fuse(Part.makeCylinder(15.0, 15.0, V(xa, yt, zh), V(0, -1, 0)))   # Abgang 3/4"
+    s = s.fuse(Part.makeCylinder(11.0, 45.0, V(xa, yt - 15, zh), V(0, -1, 0)))  # Schlauchtülle
+    sd, ye, fall = P["schlauch"]
+    p0 = V(xa, yt - 30, zh)
+    p1 = V(xa, ye, zh - fall)
+    s = s.fuse(Part.makeCylinder(sd / 2, (p1 - p0).Length, p0, p1 - p0))
+    return s.removeSplitter()
 
 
 def rohr_kanal(x0, x1, y0, y1, z0, z1, achse):
@@ -296,28 +448,60 @@ def main():
     bo = geraeteboden()
     ge, dl = plasmageraet()
     sc = schaltschrank()
-    tr = tropfboden()
+    hb = haube()
+    ab = ablauf()
     senk, quer = kanaele()
     pfad = os.path.join(OUT, "unterbau.FCStd")
     doc, offen = fc_dok.dokument(pfad)
     fc_dok.teil(doc, "ub_geraeteboden", bo, "zukauf")
-    fc_dok.teil(doc, "ub_tropfboden", tr, "alu")
+    fc_dok.teil(doc, "ub_haube", hb, "alu", 60)
+    fc_dok.teil(doc, "Ablauf_Kugelhahn_Schlauch", ab, "zukauf")
     fc_dok.teil(doc, "Plasmageraet_XPro_CUT_70CNC", ge, "dummy")
     fc_dok.teil(doc, "Druckluft_Einheit", dl, "dummy")
     fc_dok.teil(doc, "Schaltschrank_400x500x200", sc, "dummy")
     fc_dok.teil(doc, "ub_kabelkanal_senkrecht", senk, "zukauf")
     fc_dok.teil(doc, "ub_kabelkanal_quer", quer, "zukauf")
     uu, uud = uebergang_unten()
-    druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud, "ub_kanalknoten": knoten()}
+    (ah0, ah1), (av0, av1) = abstandshalter()
+    druck = {"ub_uebergang_unten": uu, "ub_uebergang_unten_deckel": uud, "ub_kanalknoten": knoten(),
+             "ub_rosette_kanal": rosette_kanal(),
+             "ub_abstand_hinten": ah0, "ub_abstand_vorn": av0}     # Abstandshalter je 2 Stück
     log = []                                            # Radien und Fasen an den Druckteilen
     druck = fc_dok.sexy(druck, pfad, log)
+    # Ablauf-Rosette in eigener Lage runden (Nachbarn Haube und Ablauf dorthin), dann aufs Dach
+    import time
+    t0, pl, ro = time.time(), rosette_ablauf_lage(), rosette_ablauf()
+    nb = []
+    for x in (hb, ab):
+        x = x.copy()
+        x.Placement = pl.inverse().multiply(x.Placement)
+        nb.append(x)
+    try:
+        ro, b = fc_dok.verrunden(ro, nb, fc_dok.drucklage("ub_rosette_ablauf"))
+        log.append(fc_dok.radien_zeile("ub_rosette_ablauf", b, time.time() - t0))
+    except KeyError:
+        log.append("Radien ub_rosette_ablauf: keine Drucklage in druckbarkeit.txt (pruefe_druck.py, dann neu)")
+    rosette_druck = ro
+    ro = ro.copy()
+    ro.Placement = pl                                   # Lage im Compound: Geometrie bleibt exakt
+    druck["ub_rosette_ablauf"] = Part.makeCompound([ro])
+    dx = P["kaefig_rohr_x"][1] - P["kaefig_rohr_x"][0]
+    def paar(s):
+        c = s.copy()
+        c.translate(V(dx, 0, 0))
+        return Part.makeCompound([s, c])
     for n, sh in druck.items():
-        fc_dok.teil(doc, n, sh, "druck")
+        fc_dok.teil(doc, n, paar(sh) if n.startswith("ub_abstand") else sh, "druck")
     fc_dok.speichern(doc, pfad, offen)
-    for n, s in (("ub_geraeteboden", bo), ("ub_tropfboden", tr)):
+    for alt in ("ub_tropfboden.step",):                  # ersetzt durch die Haube
+        if os.path.exists(os.path.join(OUT, alt)):
+            os.remove(os.path.join(OUT, alt))
+    for n, s in (("ub_geraeteboden", bo), ("ub_haube", hb)):
         s.exportStep(os.path.join(OUT, n + ".step"))
     import Mesh
     for n, s in druck.items():
+        if n == "ub_rosette_ablauf":
+            s = rosette_druck                            # in Drucklage (Flansch unten)
         s.exportStep(os.path.join(OUT, n + ".step"))
         Mesh.Mesh(s.tessellate(0.05)).write(os.path.join(OUT, n + ".stl"))
 
@@ -328,12 +512,19 @@ def main():
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
         f.write("Geräteboden: Oberkante %.0f über Boden, y %.0f bis %.0f\n"
                 % (ok, P["mittelquer_y"], P["aussen_y"]))
-        f.write("Tropfboden: Oberseite hinten %.0f, vorn %.0f (Gefälle %.1f %%), "
-                "Ränder %.0f; unter dem Käfig mind. %.0f mm Luft\n"
-                % (P["tropf_z"][0], P["tropf_z"][1],
-                   100 * (P["tropf_z"][1] - P["tropf_z"][0]) / (P["tropf_y"][1] - P["tropf_y"][0]),
-                   P["tropf_rand"], P["kaefig_uk"] - (tropf_z(P["kaefig_y"][1]) + P["tropf_rand"])))
-        h_rueck = tropf_z(y_hinten) - P["tropf_t"] - ok
+        (dz0, dz1), (hx0, hx1) = P["dach_z"], P["haube_x"]
+        f.write("Haube (Alu %.1f): x %.0f bis %.0f, y %.0f bis %.0f, Dach oben hinten %.0f, vorn %.0f "
+                "(Gefälle %.1f %%), unter dem Käfig vorn %.1f mm Luft; Abwicklung ca. %.0f x %.0f mm; "
+                "Gewicht ca. %.1f kg\n"
+                % (P["haube_t"], hx0, hx1, P["mittelquer_y"], P["aussen_y"], dz0, dz1,
+                   100 * (dz1 - dz0) / (P["aussen_y"] - P["mittelquer_y"]),
+                   P["kaefig_uk"] - dach_z(P["kaefig_y"][1]),
+                   (hx1 - hx0) + 2 * (dz1 - ok) + 2 * P["haube_flansch"], P["aussen_y"] - P["mittelquer_y"],
+                   hb.Volume * 2.7e-6))
+        for y in P["haube_kaefig_y"]:
+            f.write("Abstandshalter bei y %.0f: %.1f mm hoch (M5 x %.0f)\n"
+                    % (y, P["kaefig_uk"] - dach_z(y), math.ceil((P["kaefig_uk"] - dach_z(y) + 10) / 5) * 5))
+        h_rueck = dach_z(y_hinten) - P["haube_t"] - ok
         f.write("Höhe über dem Geräteboden an der Geräterückseite (Druckluft-Einheit): %.0f mm "
                 "(gefordert %.0f): %s\n" % (h_rueck, P["luft_ueber_geraet"],
                                             "ok" if h_rueck >= P["luft_ueber_geraet"] else "ZU NIEDRIG"))
@@ -351,14 +542,27 @@ def main():
                 "der Oberkante; Muffe des Bogens bis zur Kettenstütze vorn %.0f mm frei\n"
                 % (P["quer_z"][0], P["quer_z"][1], ok + sh - P["quer_z"][1],
                    P["stuetze_uk"] - bogen_mitte()[1] - P["ue_muffe"]))
-        f.write("Schaltschrank: x %.0f bis %.0f, Oberkante %.0f, Tropfboden darüber ab %.0f; "
+        f.write("Schaltschrank: x %.0f bis %.0f, Oberkante %.0f, Haubendach darüber ab %.0f; "
                 "Abstand zum Gerät %.0f mm\n"
                 % (P["schrank_x1"] - sb, P["schrank_x1"], ok + sh,
-                   tropf_z(P["front_y"] - st) - P["tropf_t"],
+                   dach_z(P["front_y"] - st) - P["haube_t"],
                    P["schrank_x1"] - sb - P["geraet_x0"] - gx))
         xa, ya = P["ablauf"]
-        f.write("Ablauf: durch den Tropfboden bei z %.0f, Hülse Ø%.0f bis %.0f\n"
-                % (tropf_z(ya), P["huelse"][1], tropf_z(ya) + P["huelse"][2]))
+        k0, k1 = ablauf_klemm_z()
+        f.write("Ablauf: Klemmverbinder z %.0f bis %.0f durch das Haubendach (z %.0f), Kugelhahn Mitte z %.0f "
+                "(x %.0f bis %.0f, neben dem Gerät bis x %.0f; Hebel nach links), Schlauch Ø%.0f nach hinten bis y %.0f, "
+                "Hahn %.0f mm vor dem Haubenende\n"
+                % (k0, k1, dach_z(ya), P["hahn_z"], xa - P["hahn"] / 2, xa + P["hahn"] / 2,
+                   P["geraet_x0"] + gx, P["schlauch"][0],
+                   P["schlauch"][1], ya - P["mittelquer_y"]))
+        kol = [("Haube", hb), ("Gerät", ge), ("Druckluft", dl), ("Schrank", sc), ("Querkanal", quer),
+               ("Rosette Kanal", druck["ub_rosette_kanal"]), ("Rosette Ablauf", druck["ub_rosette_ablauf"]),
+               ("Ablauf", ab)]
+        for i, (na, a) in enumerate(kol):
+            for nb_, b in kol[i + 1:]:
+                v = a.common(b).Volume
+                if v > 1e-3:
+                    f.write("Kollision %s / %s: %.1f mm³\n" % (na, nb_, v))
         f.write("\n".join(log) + "\n")
         for n, sh in druck.items():
             fc_dok.schreibe_waende(f, n, sh)

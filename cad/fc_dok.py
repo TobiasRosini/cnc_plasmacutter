@@ -549,8 +549,14 @@ def sexy(teile, dok_pfad, log):
     res = {}
     for n, s in teile.items():
         t0 = time.time()
+        try:
+            bett = drucklage(n)
+        except KeyError:                                # neues Teil: erst STL, dann pruefe_druck.py
+            res[n] = s
+            log.append("Radien %s: keine Drucklage in druckbarkeit.txt (pruefe_druck.py, dann neu)" % n)
+            continue
         nb, lagen = nachbarn_im_zusammenbau(dok_pfad, n, s)
-        r, b = verrunden(s, nb, drucklage(n))
+        r, b = verrunden(s, nb, bett)
         res[n] = r
         log.append(radien_zeile(n, b, time.time() - t0)
                    + ("" if lagen else " – nicht im Zusammenbau, ohne Nachbarn"))

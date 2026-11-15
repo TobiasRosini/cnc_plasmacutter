@@ -115,5 +115,12 @@
  "ekx_umlenkkopf": 114,
  "ekx_distanzstueck": 115,
  "ekx_mastwinkel": 116,
- "ekx_schelle_einseitig": 117
+ "ekx_schelle_einseitig": 117,
+ "UT_Bein_4": 118,
+ "ub_haube": 119,
+ "Ablauf_Kugelhahn_Schlauch": 120,
+ "ub_rosette_kanal": 121,
+ "ub_rosette_ablauf": 122,
+ "ub_abstand_hinten": 123,
+ "ub_abstand_vorn": 124
 }

@@ -30,14 +30,13 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Auflage: Kammträger in die Wanne stellen (x −200 / 0 / +200), Auflageleisten in jede zweite Schlitzposition stecken (`cad/auflage/README.md`).
 - Wannenkäfig: 3× M6 je Seite durch die Außenwand des Rings (Zugang Ø12 innen, Wanne vorher heraus) in Nietmuttern M6 im Längsrohr des Untertischs.
 - Geräteboden (Siebdruckplatte 9 mm) auf die unteren Längsrohre: 6× M6 von oben in Nietmuttern. Darauf Plasmagerät rechts (250 mm hinter der Schrankfront) und Schaltschrank vorn links (`cad/unterbau/README.md`).
-- Tropfboden unter dem Wannenkäfig (Gefälle nach hinten), Ablauf durch die Hülse; Befestigung noch offen.
+- Haube über dem Geräteraum (Alu 0,5, gekantet) nach Gerät und Schrank einsetzen: Rosette des Querkanals innen an die rechte Wand (3× M3 von außen), Wände mit den Flanschen auf den Geräteboden (je 4 Spax 3,5 × 8) und vorn an die Beine (je 2× M5 in Nietmuttern), Dach mit 4 Abstandshaltern an die Längsrohre des Wannenkäfigs (M5 × 55 hinten, × 30 vorn, in Nietmuttern). Ablauf: Tankdurchführung in den Wannenboden, Rohr durch die Rosette im Dach (3× M3 von unten) in den Winkel-Kugelhahn, Schlauch nach hinten.
 - Stützen der Y-Kette: hinten Rohr 20×40×2 (2× M6), vorn Rohr 40×40×2 hinter dem Bein (4× M6, in Längsträger und Längsrohr des Untertischs), jeweils durch die Innenwand (Zugang Ø13 außen) in Nietmuttern. Hinten Druckkopf mit 2× M5-Muttern (von unten in die Schlitze) einstecken und durch die Rohrwand verschrauben.
 - Kabelkanäle und Träger: senkrechter Kanal 25 × 60 außen auf die vordere Stütze (4× M5 in Nietmuttern), Querkanal 25 × 60 hinter dem Bein (2× M5 in Nietmuttern im Bein) in die obere rechte Ecke des Schaltschranks, Bogen unten (Druck) auf beide Enden stecken. Kanalknoten (Druck) von oben auf die vordere Stütze und den senkrechten Kanal setzen, 2× M5 von vorn in die Stütze. Y-Träger hinten auf den Stützkopf legen und vorn in die Muffe des Knotens schieben: hinten 2× M6 von unten, vorn 2× M5 von innen durch den Knoten in Nietmuttern im Träger. Kanal 40 × 40 auf dem Träger vom festen Kettenende bis in den Knoten (3× M4 in Nietmuttern). Leitungen durch den Knoten fädeln, sonst über die Kanaldeckel einlegen; Deckel des Bogens mit 2× M3 schließen (Muttern vorher seitlich einschieben).
 
 ## Noch offen
 
 - Rinnen (Y und X) und Kabelkanal auf den Trägern: Blindnieten Ø4 bzw. Schrauben, Lage beim Bau festlegen.
-- Befestigung Tropfboden.
 - Ketten igus 2400.03 (Y: 2400.03.125.0, 23 Glieder; X: 2400.03.075.0, 14 Glieder), Anschlussteile igus 2030.12PZ: 2 Bohrungen Ø6,1 im Abstand 25, 10 mm vom äußeren Ende, mit M5 verschrauben. Feste Enden: 2× M5 durch den Rinnenboden in Nietmuttern M5 im Y-Träger bzw. in der X-Ablage (X: hinteres M5 in eine Mutter im Rinnenhalter).
 - Stopfen links in der X-Ablage sichern (kleben oder Querstift).
 - Leitungen sind als Hüllrohre vereinfacht (Ø20 / Ø16). Führung des Bogens über dem Y-Ende und am Abgang hinter der Ablage (Clips) noch offen; Adern am Brenner gegen Funken schützen (Gewebe- oder Silikonschlauch).
