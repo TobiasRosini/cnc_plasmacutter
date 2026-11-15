@@ -17,3 +17,5 @@ Kompakter, rollbarer CNC-Plasmaschneidtisch für die Werkstatt.
 | `elektrik/` | Schaltpläne und Verdrahtung |
 
 Aktueller Stand: [docs/CNC_Plasmatisch_Projektstand_vision_2026-10-19.md](docs/CNC_Plasmatisch_Projektstand_vision_2026-10-19.md)
+
+Offene Aufgaben bis zum Bau: [docs/AUFGABEN.md](docs/AUFGABEN.md)
