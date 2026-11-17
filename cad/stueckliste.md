@@ -88,15 +88,15 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 084 | ek_halter_y | 1 | Druck | 67 × 52 × 20 | Energieketten | energiekette/ek_halter_y.step |  |
 | 085 | ekx_ablagehalter | 1 | Druck | 64 × 40 × 22 | Energieketten | energiekette/ekx_ablagehalter.step |  |
 | 086 | ekx_rinne_hinten | 1 | Alu | 477 × 40 × 8 | Energieketten | energiekette/ekx_rinne_hinten.step |  |
-| 087 | ekx_rinnenhalter_1 | 2 | Druck | 183 × 20 × 18 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
-| 088 | ekx_rinnenhalter_2 | 1 | Druck | 183 × 28 × 22 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
+| 087 | ekx_rinnenhalter_1 | 1 | Druck | 183 × 20 × 18 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
+| 088 | ekx_rinnenhalter_2 | 1 | Druck | 183 × 20 × 18 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
 | 089 | ekx_halter | 1 | Druck | 119 × 75 × 44 | Energieketten | energiekette/ekx_halter.step |  |
 | 090 | Kette_igus_2400_03_R75 | 1 | Kaufteil | 400 × 186 × 55 | Energieketten |  |  |
 | 091 | Kette_igus_2400_03_R125 | 1 | Kaufteil | 539 × 285 × 55 | Energieketten |  |  |
 | 092 | ek_kabelkanal | 1 | Kaufteil | 582 × 40 × 40 | Energieketten |  |  |
-| 093 | ek_leitungsbogen_a | 1 | Druck | 158 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
-| 094 | ek_leitungsbogen_steg | 1 | Druck | 126 × 116 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
-| 095 | ek_leitungsbogen_b | 1 | Druck | 158 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
+| 093 | ek_leitungsbogen_a | 1 | Druck | 157 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
+| 094 | ek_leitungsbogen_steg | 1 | Druck | 130 × 107 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
+| 095 | ek_leitungsbogen_b | 1 | Druck | 157 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
 | 096 | ekx_mast | 1 | Alu | 356 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
 | 101 | ek_verbindungsplatte | 1 | Druck | 90 × 60 × 15 | Energieketten | energiekette/ek_verbindungsplatte.step |  |
 | 102 | ek_leitungsschelle | 5 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
@@ -128,5 +128,8 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 130 | UT_Schweissmutter_M16 | 4 | Stahl | 28 × 24 × 13 | Untertisch |  |  |
 | 131 | UT_Stellfuss_M16 | 4 | Stahl | 215 × 50 × 50 | Untertisch |  |  |
 | 132 | schutzleiste | 2 | Stahl | 1080 × 115 × 3 | Untertisch | auflage/schutzleiste.step |  |
+| 133 | ekx_rinnenhalter_3 | 1 | Druck | 183 × 28 × 22 | Energieketten | energiekette/ekx_rinnenhalter.step |  |
+| 134 | ekx_anschlussdose | 1 | Druck | 68 × 50 × 37 | Energieketten | energiekette/ekx_anschlussdose.step |  |
+| 135 | ekx_anschlussdose_deckel | 1 | Druck | 68 × 50 × 3 | Energieketten | energiekette/ekx_anschlussdose_deckel.step |  |
 
-124 verschiedene Teile, 207 Stück.
+127 verschiedene Teile, 209 Stück.

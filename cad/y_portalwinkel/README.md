@@ -42,7 +42,7 @@ Ist FreeCAD offen (MCP-Addon, Port 9875), wird das offene Dokument live aktualis
 
 - **winkel_fest** (links) und **winkel_kasten** (rechts, gespiegelt gedruckt). Beide Y-Spannseiten zeigen nach vorn (+Y).
 - X-Riemen (Omega auf dem X-Wagen) hinten an beiden Sätteln: Zahnprofil in der Sattelrückwand, flache **x_klemmplatte** mit 4× M4 in Gewindeeinsätze (je Seite eine, rechts gespiegelt).
-- Kastenseite: Lasche für die Y-Energiekette außen, 2× M4-Einsätze hinten für die X-Energiekette. Der Anschlusskasten selbst ist noch offen.
+- Kastenseite: Lasche für die Y-Energiekette außen, 2× M4-Einsätze hinten für die X-Energiekette. Die Leitung des X-Referenzschalters wird in der Anschlussdose auf dem rechten Rinnenhalter gelötet (`cad/energiekette/README.md`).
 
 ## Spritzschutz untere X-Schiene
 

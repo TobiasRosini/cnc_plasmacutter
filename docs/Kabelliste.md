@@ -24,7 +24,7 @@ Schaltschrank bis festes Y-Kettenende ca. 1,75 m (Querkanal hinter dem vorderen 
 
 Kabelweg: `cad/unterbau/README.md`.
 
-Die LJ12A3 haben ein fest angespritztes PVC-Kabel, das nicht für Schleppketten gedacht ist. Es wird kurz vor der Kette (X: am Turm, Z und Schwimmkopf: am X-Wagen) auf die Kettenleitung verlötet und mit Schrumpfschlauch isoliert.
+Die LJ12A3 haben ein fest angespritztes PVC-Kabel, das nicht für Schleppketten gedacht ist. Es wird kurz vor der Kette (X: in der Anschlussdose auf dem rechten Rinnenhalter, `cad/energiekette/README.md`; Z und Schwimmkopf: am X-Wagen) auf die Kettenleitung verlötet und mit Schrumpfschlauch isoliert.
 
 ## Bestellung igus (chainflex, auf Länge geschnitten)
 

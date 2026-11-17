@@ -207,6 +207,22 @@ P = dict(
     sn_tief=4.0,                # Nippel der Spezialschelle am Umlenkkopf: Tiefe in die Wange
     sn_dicke=2.0,
     kopf_steg=12.0,             # Umlenkkopf: Steg unter den Leitungen (Rest nur Wange)                # Fase unten an den kurzen Kanten der Rinnenhalter
+    # Anschlussdose (Druck) auf dem rechten Rinnenhalter, zwischen Ablage hinten und Rinne X (darunter
+    # fährt hinter der Brücke der X-Motor): Die CF9-Leitung des X-Referenzschalters zweigt hier aus
+    # dem Strang ab (Verschraubung M12 links) und wird auf das 1 m lange PVC-Kabel des Schalters
+    # gelötet (Verschraubung M12 rechts, hinunter zum Schalter am rechten Y-Winkel). Topf stehend
+    # gedruckt, Deckel oben (2x M3 in seitlich eingeschobene Muttern in Ecksäulen); Topf mit 2x M4
+    # von innen durch den Rinnenhalter in Muttern, von unten eingepresst.
+    ad_x=(25.0, 75.0),          # x (ab Schienenmitte), Rinnenhalter 40-60
+    ad_y=(-116.0, -48.0),       # y ab Ablagemitte (Ablage hinten bis -123, Rinne X ab -43,5)
+    ad_h=40.0,                  # mit Deckel
+    ad_wand=3.0,
+    ad_deckel=3.0,
+    ad_m4_y=[-98.0, -66.0],     # M4 in den Rinnenhalter (x = Halter-Mitte)
+    ad_vs_d=12.4,               # Durchgang Kabelverschraubung M12 x 1,5 (Gegenmutter innen)
+    ad_vs_links_y=-100.0,       # Verschraubung links (Achse x): CF9 aus dem Strang
+    ad_vs_rechts_y=-82.0,       # Verschraubung rechts (Achse x): PVC zum Schalter
+    ad_saeule=9.0,              # Ecksäulen für die Deckelschrauben
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
     xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
@@ -1189,8 +1205,49 @@ def rinnenhalter():
             s = s.cut(Part.makeCylinder(2.75, 10, V(x + b / 2, y, z0 - 1)))
         s = s.cut(Part.makeCylinder(2.25, 12, V(x + b / 2, yh, z_r - 11)))
         s = s.cut(fc_dok.mutter(4, V(x + b / 2, yh, z_r - 6), V(0, 0, 1), V(1, 0, 0), b / 2 + 1))
+        if i == 0:                                                      # Anschlussdose: M4 von oben,
+            for dy in P["ad_m4_y"]:                                     # Mutter unten eingepresst
+                s = s.cut(Part.makeCylinder(2.25, z_r - z0 + 2, V(x + b / 2, ym + dy, z0 - 1)))
+                s = s.cut(fc_dok.mutter(4, V(x + b / 2, ym + dy, z0 + 1.7), V(0, 0, 1)))
         res = s if res is None else res.fuse(s)
     return res.removeSplitter()
+
+
+def anschlussdose():
+    """Anschlussdose auf dem rechten Rinnenhalter (Topf, Deckel), Lage wie die Rinnenhalter."""
+    ym = ym_traeger()
+    w, td = P["ad_wand"], P["ad_deckel"]
+    x0, x1 = P["ad_x"]
+    y0, y1 = ym + P["ad_y"][0], ym + P["ad_y"][1]
+    z0 = rinne_hinten_z()                                # Oberkante Rinnenhalter
+    z1 = z0 + P["ad_h"] - td                             # Oberkante Topf = Unterseite Deckel
+    topf = box(x0, x1, y0, y1, z0, z1).cut(box(x0 + w, x1 - w, y0 + w, y1 - w, z0 + w, z1 + 1))
+    a = P["ad_saeule"]
+    saeulen = [(x0 + w, y0 + w, 1), (x1 - w - a, y1 - w - a, -1)]
+    for xs, ys, r in saeulen:                            # Ecksäulen, M3 von oben, Mutter seitlich
+        topf = topf.fuse(box(xs, xs + a, ys, ys + a, z0 + w - 0.01, z1))
+    for xs, ys, r in saeulen:
+        c = V(xs + a / 2, ys + a / 2, 0)
+        topf = topf.cut(Part.makeCylinder(1.6, 14, V(c.x, c.y, z1 - 13)))
+        topf = topf.cut(fc_dok.mutter(3, V(c.x, c.y, z1 - 7), V(0, 0, 1), V(r, 0, 0), a))
+    xh = P["rh_halter_x"][0] + P["rh_halter_b"] / 2
+    for dy in P["ad_m4_y"]:                              # M4 von innen in den Rinnenhalter
+        topf = topf.cut(Part.makeCylinder(2.25, w + 2, V(xh, ym + dy, z0 - 1)))
+    # Verschraubungen waagerecht, stehend gedruckt -> Tropfenform mit Spitze nach oben
+    rv = P["ad_vs_d"] / 2
+    zm = (z0 + w + z1) / 2
+    q = rv / math.sqrt(2)
+    for xw, dy, rich in ((x1 - w - 1, P["ad_vs_links_y"], 1), (x0 - 1, P["ad_vs_rechts_y"], 1)):
+        yv = ym + dy
+        loch = Part.makeCylinder(rv, w + 2, V(xw, yv, zm), V(1, 0, 0))
+        tropfen = Part.Face(Part.makePolygon([V(xw, yv - q, zm + q), V(xw, yv, zm + rv * math.sqrt(2)),
+                                              V(xw, yv + q, zm + q), V(xw, yv - q, zm + q)])
+                            ).extrude(V(w + 2, 0, 0))
+        topf = topf.cut(loch.fuse(tropfen))
+    deckel = box(x0, x1, y0, y1, z1, z1 + td)
+    for xs, ys, r in saeulen:
+        deckel = deckel.cut(Part.makeCylinder(1.7, td + 2, V(xs + a / 2, ys + a / 2, z1 - 1)))
+    return topf.removeSplitter(), deckel
 
 
 def einsteckteil():
@@ -1515,6 +1572,8 @@ def druckteile_roh(tr, ri, lb, uk, st, au, ei, xtr, xri, xst, xpf):
            "ekx_leitungssockel": (leitungssockel(), (0, 0, 1), LAGE_PORTAL),
            "ekx_distanzstueck": (distanzstueck(), (0, 1, 0), LAGE_PORTAL),
            "ekx_mastwinkel": (mastwinkel(), (0, 0, -1), LAGE_PORTAL),
+           "ekx_anschlussdose": (anschlussdose()[0], (0, 0, -1), LAGE_PORTAL),
+           "ekx_anschlussdose_deckel": (anschlussdose()[1], (0, 0, -1), LAGE_PORTAL),
            "ek_einsteckteil": (ei, fc_dok.drucklage("ek_einsteckteil"), LAGE_PORTAL),
            "ek_einsteckteil_links": (einsteckteil_links(), fc_dok.drucklage("ek_einsteckteil_links"),
                                      LAGE_PORTAL)}
@@ -1570,6 +1629,8 @@ def main():
               "ekx_rinne_hinten": (rinne_hinten(), "alu"), "ekx_rinnenhalter": (Part.makeCompound(sx["ekx_rinnenhalter"]), "druck"),
               "ek_leitungsbogen": (Part.makeCompound(lb), "druck"), "ekx_mast": (mast(), "alu"), "ekx_distanzstueck": (sx["ekx_distanzstueck"], "druck"),
               "ekx_mastwinkel": (sx["ekx_mastwinkel"], "druck"),
+              "ekx_anschlussdose": (sx["ekx_anschlussdose"], "druck"),
+              "ekx_anschlussdose_deckel": (sx["ekx_anschlussdose_deckel"], "druck"),
               "ekx_umlenkkopf": (uk, "druck"), "ek_verbindungsplatte": (sx["ek_verbindungsplatte"], "druck"),
               "ek_leitungsschellen": (Part.makeCompound(leitungsschellen(schellen)), "druck"),
               "ekx_leitungssockel": (Part.makeCompound(sx["ekx_leitungssockel"]), "druck"),
@@ -1596,6 +1657,8 @@ def main():
              "ek_leitungsbogen_a": lb[0], "ek_leitungsbogen_steg": lb[1], "ek_leitungsbogen_b": lb[2],
              "ekx_umlenkkopf": uk, "ekx_distanzstueck": sx["ekx_distanzstueck"],
              "ekx_mastwinkel": sx["ekx_mastwinkel"], "ek_verbindungsplatte": sx["ek_verbindungsplatte"],
+             "ekx_anschlussdose": sx["ekx_anschlussdose"],
+             "ekx_anschlussdose_deckel": sx["ekx_anschlussdose_deckel"],
              "ek_leitungsschelle": schelle_einzeln(schellen),     # 5 Stück
              "ekx_schelle_einseitig": schelle_einseitig_einzeln(schellen[1]),
              "ekx_leitungssockel": sx["ekx_leitungssockel"][0]}   # 2 Stück
@@ -1634,7 +1697,8 @@ def main():
                       ("Mast", mast()), ("Umlenkkopf", uk), ("Distanzstück", distanzstueck()), ("Mastwinkel", mastwinkel()),
                       ("Verbindungsplatte", verbindungsplatte()),
                       ("Schellen", Part.makeCompound(leitungsschellen())),
-                      ("Sockel", Part.makeCompound(leitungssockel()))):
+                      ("Sockel", Part.makeCompound(leitungssockel())),
+                      ("Anschlussdose", Part.makeCompound(list(anschlussdose())))):
             f.write("Leitung / %s: %.2f mm³\n" % (n, le.common(sh).Volume))
         for wx in P["xk_wagen_x"]:
             f.write("Leitung / X-Kette bei Wagen %.0f: %.2f mm³\n" % (wx, le.common(kette_x(wx)).Volume))

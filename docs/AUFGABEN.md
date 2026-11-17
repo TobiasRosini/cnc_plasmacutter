@@ -8,7 +8,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 2. [x] **Wasserschutz über dem Geräteraum** (15.11.2026): Haube aus Alu 0,5 als U auf dem Kopf, so lang wie der Geräteboden, an Geräteboden, vorderen Beinen und Wannenkäfig; Querkanal durch eine gedruckte Rosette (`cad/unterbau/README.md`).
 3. [x] **Wannenablauf** (15.11.2026): Messing-Tankdurchführung hinter der Haube (440 hinter der Wannenmitte), Klemmwinkel 90°, gerades HDPE-Rohr d25 nach hinten, Kugelhahn und Schlauchtülle an der Rahmenrückseite, Ablaufhalter (Druck) am hinteren Querrohr. Maße beim Kauf prüfen.
 4. [x] **Bördelrand der Wanne schützen** (17.11.2026): Boden und Wände liegen unter Wasser und brauchen keinen Schutz, gefährdet ist nur der PE-Bördel (über dem Wasser, 1 mm unter dem Blech). Schutzleisten aus Blech 3 mm innen vor dem Bördel der Längswände, Auflageleisten auf 524 gekürzt, Softlimit X ±260 (`cad/auflage/README.md`).
-5. [ ] **Anschlusskasten** an der Kastenseite des rechten Y-Winkels (Übergang Y-/X-Kette, Lötstellen der LJ12A3-Leitungen).
+5. [x] **Anschlussdose X-Referenzschalter** (17.11.2026): Druckteil auf dem rechten Rinnenhalter, CF9 aus dem Strang und PVC-Kabel des Schalters über je eine Kabelverschraubung M12, gelötet (`cad/energiekette/README.md`). Z und Schwimmkopf werden weiter am X-Wagen gelötet.
 6. [ ] **Leitungsführung**: Clips für den Bogen über dem Y-Ende und am Abgang hinter der Ablage; Funkenschutz der Adern am Brenner (Gewebe- oder Silikonschlauch).
 7. [ ] **Stopfen links in der X-Ablage sichern** (kleben oder Querstift).
 8. [ ] Rinnen (Y, X) und Kabelkanal auf den Trägern: Blindnieten Ø4 bzw. Schrauben, Lage festlegen (sonst beim Bau).
@@ -25,7 +25,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 
 ## C. Beschaffung
 
-16. [ ] **Kaufteile festlegen und bestellen**: Schienen HGR15 (Längen aus dem Modell) und Wagen HGH15CA (X mit Metallabstreifer), Riemen HTD5M/15 (Längen) und Scheiben, SFU1204 mit FK10, Motoren NEMA23 (2 × 1,9 Nm, 2 × 1,2 Nm), 4 Step/Dir-Treiber, Netzteile 48 V/24 V, Mesa THCAD (Variante), igus-Ketten und chainflex-Leitungen (Kabelliste), Referenz- und Schwimmkopfschalter LJ12A3, Präzisionswellen Ø8, 4 Lenkrollen Ø125 mit Bremse (160 kg, Platte 100 × 80, Lochbild 80 × 60), Gewindestange M16 und Muttern für die Stellfüße.
+16. [ ] **Kaufteile festlegen und bestellen**: Schienen HGR15 (Längen aus dem Modell) und Wagen HGH15CA (X mit Metallabstreifer), Riemen HTD5M/15 (Längen) und Scheiben, SFU1204 mit FK10, Motoren NEMA23 (2 × 1,9 Nm, 2 × 1,2 Nm), 4 Step/Dir-Treiber, Netzteile 48 V/24 V, Mesa THCAD (Variante), igus-Ketten und chainflex-Leitungen (Kabelliste), Referenz- und Schwimmkopfschalter LJ12A3, Präzisionswellen Ø8, 2 Kabelverschraubungen M12 × 1,5 (Kabel 3–6,5), 4 Lenkrollen Ø125 mit Bremse (160 kg, Platte 100 × 80, Lochbild 80 × 60), Gewindestange M16 und Muttern für die Stellfüße.
 17. [ ] Bei Lieferung prüfen: Lochbild FK10, Schaltabstand LJ12A3 auf den Stift 6 mm, Länge Schlauchpaket SP80M (mind. 5,0 m), Längen der fest verlegten Y-Leitungen.
 
 ## D. Elektrik und Steuerung
