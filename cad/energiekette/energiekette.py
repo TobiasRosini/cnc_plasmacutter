@@ -147,6 +147,8 @@ P = dict(
     fach_h=13.0,                # Höhe beider Pfade (zwei Lagen)
     fach_steg=3.0,              # Abstand der Pfade (Trennsteg, Mittelsteg der Schellen)
     brenner_leitung_d=16.0,     # Adern des Brennerpakets zwischen X-Kette und Brenner
+    funkenschutz=(20.0, 26.0),  # darüber Feuerschutzschlauch (Glasseide, silikonbeschichtet) innen/außen,
+                                # vom X-Kettenende bis auf den Stummel über der Tülle; Hüllkörper = außen
     leitung_hinten_y=-143.0,    # Lauf hinter der Ablage (Kehre R60 in den Festpunkt)
     leitung_oben_z=580.0,       # Bogen über das Y-Kettenende nach hinten
     leitung_ab_x=16.0,          # dort hinter der Ablage senkrecht nach unten (Pfade nebeneinander in x)
@@ -1140,7 +1142,7 @@ def leitung():
 
 
 def brenner_leitung():
-    return rohr(brenner_weg(), P["brenner_leitung_d"])
+    return rohr(brenner_weg(), P["funkenschutz"][1])
 
 
 def rinne_hinten():
@@ -1711,10 +1713,10 @@ def main():
         bw = brenner_weg()
         f.write("Leitungen Y-Ende -> X-Festpunkt: ca. %.0f mm, Adern X-Ende -> Brenner: ca. %.0f mm (R%.0f)\n"
                 % (leitung_weg().Length, bw.Length, P["leitung_r"]))
-        x_max = max(v.x for v in bw.discretize(Number=100)) + P["brenner_leitung_d"] / 2
+        x_max = max(v.x for v in bw.discretize(Number=100)) + P["funkenschutz"][1] / 2
         f.write("Adern bei X an der Gegenseite bis Rahmen-x %.0f (Brückenstirn %.0f)\n"
                 % (P["xk_wagen_x"][1] + x_max, P["xk_bruecke_links_x"]))
-        z_max = max(v.z for v in bw.discretize(Number=100)) + P["brenner_leitung_d"] / 2
+        z_max = max(v.z for v in bw.discretize(Number=100)) + P["funkenschutz"][1] / 2
         f.write("Adern oben bis %.0f über Brücken-UK (Z unten), ca. %.0f mm über Boden; bei Z oben "
                 "100 mm Schlaufe mehr\n" % (z_max, z_max + 907.0))
 
