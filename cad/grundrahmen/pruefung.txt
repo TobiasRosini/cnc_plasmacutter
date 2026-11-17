@@ -1,16 +1,16 @@
-Außenmaß Rahmen: 720 x 1556 x 850 mm (X x Y x Z)
+Außenmaß Rahmen: 720 x 1556 x 750 mm (X x Y x Z)
 Lichtes Innenmaß zwischen den Rohren: 640 x 1436 mm (Wanne 600 x 1200)
 Schienenabstand Mitte-Mitte: 680 mm
-Masse Stahl (Rohre + Fußplatten): 64.5 kg
+Masse Stahl (Rohre + Eckplatten): 70.3 kg
 Stirnöffnung zum Herausziehen der Wanne: 640 breit x 670 hoch
 Überschneidungen gesamt: 0.000 mm³
 Wanne / Rahmen: 0.000 mm³
 
-Stellfüße und Rollen (z = 0: Unterkante Fußplatten)
-Boden im Betrieb bei z = -47: Rahmen-OK 897 mm über Boden, Rad 12 mm frei, Stange M12 29 mm unter der Platte (mit Kontermutter)
-Transport (Füße ganz eingedreht): Rad bei z = -35, Teller bei z = -25, Teller 10 mm über Boden, Fußplatten 35 mm über Boden; Hub je Fuß 22 mm
-Schwenkkreis Rolle R 89.4: Rahmenbreite außen 2.6 / 2.6 mm frei
-Radstand Transport: 536 (X) x 1126 (Y) mm
-Schwenkkreis gegen Rahmen/Füße (Fuß ausgedreht): 0.0 mm³
-Füße/Rollen gegen Rahmen: 0.000 mm³
+Stellfüße und Rollen (z = 0: Bezugsebene, 100 unter der Rahmenunterkante)
+Betrieb: Boden bei z = -72, Rahmen-OK 922 mm über Boden, Räder 12 mm frei, Stange zwischen Fußmutter und Kontermutter 126 mm frei, Stange oben bei z = 143
+Verfahren: Rad unten bei z = -60, Rahmenunterkante 160 über Boden, Füße 22 mm eingedreht (Teller 10 mm frei), Stange oben bei z = 165 (im Bein)
+Schwenkkreis Rolle R 109.0: 13.0 mm innerhalb der Außenkanten
+Radstand Verfahren: 476 (X) x 1272 (Y) mm, Füße 680 x 1476
+Schwenkkreis gegen Rahmen/Füße: 0.0 mm³
+Füße/Rollen/Eckplatten gegen Rahmen und untereinander: 0.000 mm³
 Durchbiegung Längsträger (Spannweite 1476 mm, 200 N mittig): 0.626 mm

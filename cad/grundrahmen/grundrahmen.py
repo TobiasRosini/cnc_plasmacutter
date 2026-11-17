@@ -6,7 +6,8 @@ Konzept (nur gerade Schnitte, keine Gehrungen, alles stumpf verschweißt):
   - Oben: 2 Längsträger (Y) über die volle Länge, tragen die HGR15-Schienen;
     M4-Gewinde direkt in die Rohroberseite geschnitten.
     2 Querträger (X) stumpf zwischen die Längsträger.
-  - 4 Eckbeine stumpf unter die Längsträger, unten Fußplatten.
+  - 4 Eckbeine stumpf unter die Längsträger bis zur Rahmenunterkante, darunter
+    je eine Eckplatte mit Lenkrolle und Stellfuß.
   - Unten: Längs- und Querrohre stumpf zwischen die Beine, dazu
     2 Mittelquerrohre als Auflage für den Wannenträger (folgt später).
   - Die Wanne (HDPE, ca. 600 x 1200 x 150) liegt innen zwischen den Beinen
@@ -53,30 +54,32 @@ P = dict(
 
     # Höhe
     hoehe_ok=850.0,             # Oberkante oberer Rahmen = Auflage der Schienen
-    fuss_dicke=8.0,             # Fußplatte unter jedem Bein
-    fuss_kante=100.0,
-    fuss_loch=13.0,             # Stellfuß M12 (Gewinde in der Schweißmutter)
-    unten_uk=100.0,             # Unterkante unterer Rahmen über Fußplatten-Unterkante
+    unten_uk=100.0,             # Unterkante unterer Rahmen = Unterkante Beine über z = 0
 
-    # Stellfüße und Rollen (Kaufteile: Maße Platzhalter bis zum Kauf). Die Koordinaten
-    # bleiben: z = 0 ist die Unterkante der Fußplatten. Im Betrieb stehen die Füße und
-    # heben die Rollen um rad_luft vom Boden; zum Verfahren werden sie eingedreht, bis
-    # die Maschine auf den Rollen steht.
-    # Fixfuß M12 (ohne Gelenk) in einer Schweißmutter DIN 929 oben auf der Fußplatte
-    # (im Bein, vor dem Bein schweißen), Kontermutter flach DIN 439 unter der Platte.
-    stellfuss_teller=(40.0, 18.0),               # Ø x Höhe (mit Gummi); Ø40 = Beinbreite, größer steht außen über
-    stellfuss_stange=80.0,                       # Gewindestange M12
-    schweissmutter=(18.0, 10.0),                 # DIN 929 M12: SW x Höhe
-    kontermutter=(19.0, 7.0),                    # DIN 439 M12: SW x Höhe
-    # Lenkrolle Ø100 auf einem Flacheisen 120 x 10 (140 lang) quer unter dem unteren
-    # Längsrohr, außen bündig, nach innen auskragend; 4x M8 direkt ins Flacheisen
-    rolle=dict(rad_d=100.0, rad_b=32.0, bauhoehe=125.0, ausladung=38.0,
-               platte=(85.0, 100.0), lochbild=(60.0, 80.0), loch_d=9.0),
-    rollenplatte=(140.0, 120.0, 10.0),           # x (quer) x y x Dicke
+    # Eckplatten mit Lenkrolle und Stellfuß (Stand 17.11.2026). Die Beine enden an der
+    # Rahmenunterkante, darunter je Ecke eine Platte unter Bein, Längs- und Querrohr.
+    # z = 0 bleibt Bezugsebene der Koordinaten (100 unter der Rahmenunterkante); der Boden
+    # liegt im Betrieb tiefer (siehe pruefung.txt). Im Betrieb heben die Füße die Rollen um
+    # rad_luft vom Boden, zum Verfahren werden sie eingedreht.
+    eckplatte=(175.0, 175.0, 10.0),              # x, y, Dicke; außen bündig
+    # Lenkrolle mit Bremse Ø125 (Datenblatt Tobi 17.11.2026): 160 kg, Bauhöhe 150, Rad 36
+    # breit, Platte 100 x 80, Lochbild 80 x 60, Langlöcher 9 x 14; Ausladung angenommen.
+    # 4x M8 direkt in die Eckplatte.
+    rolle=dict(rad_d=125.0, rad_b=36.0, bauhoehe=150.0, ausladung=45.0,
+               platte=(80.0, 100.0), lochbild=(60.0, 80.0), loch_d=9.0),
     m8_kern=6.8,
-    rolle_x=92.0,               # Lenkachse ab Rahmenaußenkante (Schwenkkreis bleibt im Rahmen)
-    rolle_y=195.0,              # Lenkachse ab Rahmenende (Schwenkkreis frei von Fußplatte/Fuß)
+    rolle_xy=122.0,             # Lenkachse ab beiden Außenkanten (diagonal vom Fuß weg)
     rad_luft=12.0,              # Rad über Boden im Betrieb
+    # Stellfuß (Eigenbau): Gewindestange M16 unter der Beinmitte, Schweißmutter oben auf
+    # der Eckplatte (im Bein), Kontermutter darunter, unten eine aufgeschweißte Mutter zum
+    # Drehen und die Lagerung/der Teller (Platzhalter, wird an der Drehmaschine entschieden).
+    # Eingedreht taucht die Stange ins Bein.
+    fuss_loch=17.0,
+    fuss_mutter=(24.0, 13.0),                    # M16 DIN 934: SW x Höhe
+    fuss_konter=(24.0, 8.0),                     # M16 DIN 439
+    fuss_teller=(50.0, 15.0),                    # Ø x Höhe, Platzhalter
+    fuss_stange=200.0,
+    fuss_luft=10.0,             # Teller über Boden beim Verfahren
 
     # Mittelquerrohre unten (Auflage Wannenträger), Lage als Anteil der Länge
     mitte_quer=[1 / 3, 2 / 3],
@@ -171,7 +174,7 @@ def rahmen():
     """Zwei verschraubte Baugruppen:
     - Oberrahmen (OR_): Längsträger mit den Y-Schienen und Querträger, trägt das
       ganze Portal.
-    - Untertisch (UT_): Beine, Fußplatten, unterer Rahmen, Mittelquerrohre und ein
+    - Untertisch (UT_): Beine, Eckplatten, unterer Rahmen, Mittelquerrohre und ein
       eigener oberer Rahmen direkt unter dem Oberrahmen; daran hängt der Wannenkäfig.
     Verschraubt mit M8 senkrecht durch die aufeinanderliegenden Querrohre an beiden
     Enden (dort liegen keine Schienen und keine Halter)."""
@@ -179,7 +182,6 @@ def rahmen():
     ax, ay = P["aussen_x"], P["aussen_y"]
     z_ok = P["hoehe_ok"]
     z_oben = z_ok - r                    # Unterkante Oberrahmen = Oberkante Untertisch
-    z_fuss = P["fuss_dicke"]
     z_u = P["unten_uk"]
     teile = {}
 
@@ -225,9 +227,10 @@ def rahmen():
     # ----- Untertisch
     GRUPPE[0] = "Untertisch"
     z_ut = z_oben - r                    # Unterkante oberer Rahmen Untertisch
-    bein_l = z_oben - z_fuss
+    z_u = P["unten_uk"]
+    bein_l = z_oben - z_u
     for i, (x0, y0) in enumerate([(0, 0), (ax - r, 0), (0, ay - r), (ax - r, ay - r)]):
-        bein = rohr("Bein", x0, y0, z_fuss, bein_l, "z")
+        bein = rohr("Bein", x0, y0, z_u, bein_l, "z")
         if i == 2:                                       # vorn rechts: Querkanal (Rückseite)
             for x, z in P["kanal_bein"]:
                 bein = bein.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
@@ -238,13 +241,6 @@ def rahmen():
                 bein = bein.cut(Part.makeCylinder(P["nietmutter_m5_d"] / 2, P["wand"] + 2,
                                                   V(xi, ay + dy, z), V(1, 0, 0)))
         teile["UT_Bein_%d" % (i + 1)] = bein
-        fk = P["fuss_kante"]
-        fx = min(max(x0 + r / 2 - fk / 2, 0), ax - fk)
-        fy = min(max(y0 + r / 2 - fk / 2, 0), ay - fk)
-        fp = box(fx, fx + fk, fy, fy + fk, 0, z_fuss)
-        fp = fp.cut(Part.makeCylinder(P["fuss_loch"] / 2, z_fuss + 2,
-                                      V(x0 + r / 2, y0 + r / 2, -1)))
-        teile["UT_Fussplatte_%d" % (i + 1)] = fp
     for i, x0 in enumerate((0.0, ax - r)):
         lo = rohr("Längsrohr Untertisch oben", x0, r, z_ut, ay - 2 * r, "y")
         xi = x0 + r - P["wand"] - 1 if i == 0 else x0 - 1      # Innenwand (zum Käfig)
@@ -299,52 +295,55 @@ def spritzschutz():
 
 
 def fuesse_rollen():
-    """Stellfüße (Betriebsstellung) mit Schweißmutter und Lenkrollen mit Flacheisen.
+    """Eckplatten mit Schweißmutter, Stellfüße (Betriebsstellung) und Lenkrollen.
     Gibt (stahl, kauf, info) zurück."""
     r = P["rohr"]
     ax, ay = P["aussen_x"], P["aussen_y"]
-    zf = P["fuss_dicke"]
-    sw, h = P["schweissmutter"]
-    rp_x, rp_y, rp_t = P["rollenplatte"]
-    z_rp = P["unten_uk"] - rp_t
+    ex, ey, et = P["eckplatte"]
+    z_pl = P["unten_uk"] - et
     form, d = kt.lenkrolle(**P["rolle"])
-    z_rad = z_rp - d["bauhoehe"]
+    z_rad = z_pl - d["bauhoehe"]
     boden = z_rad - P["rad_luft"]                    # Boden im Betrieb
-    th, tt = P["stellfuss_teller"][1], P["kontermutter"][1]
-    ueber = -boden - th                              # Stange unter der Platte (mit Kontermutter)
+    sw, mh = P["fuss_mutter"]
+    kw, kh = P["fuss_konter"]
+    td, th = P["fuss_teller"]
+    z_stange = boden + th                            # Unterkante Stange = Unterkante Fußmutter
     stahl, kauf = {}, {}
     for i, (x0, y0) in enumerate([(0, 0), (ax - r, 0), (0, ay - r), (ax - r, ay - r)]):
+        links, hinten = x0 == 0, y0 == 0
         c = V(x0 + r / 2, y0 + r / 2, 0)
-        m = kt.sechskant(sw, h, zf).cut(Part.makeCylinder(6.0, h + 2, V(0, 0, zf - 1)))
-        m.translate(V(c.x, c.y, 0))
-        stahl["UT_Schweissmutter_M12_%d" % (i + 1)] = fc_dok.fest(m)
-        f = kt.stellfuss_m12(P["stellfuss_teller"][0], th, P["stellfuss_stange"], ueber, False)
-        f = f.fuse(kt.sechskant(P["kontermutter"][0], tt, -tt)).removeSplitter()
-        f.translate(c)
-        kauf["UT_Stellfuss_M12_%d" % (i + 1)] = fc_dok.fest(f)
-        links = x0 == 0
-        hinten = y0 == 0
-        xa = P["rolle_x"] if links else ax - P["rolle_x"]
-        ya = P["rolle_y"] if hinten else ay - P["rolle_y"]
-        xp = 0.0 if links else ax - rp_x
-        pl = box(xp, xp + rp_x, ya - rp_y / 2, ya + rp_y / 2, z_rp, P["unten_uk"])
+        xp = 0.0 if links else ax - ex
+        yp = 0.0 if hinten else ay - ey
+        xa = P["rolle_xy"] if links else ax - P["rolle_xy"]
+        ya = P["rolle_xy"] if hinten else ay - P["rolle_xy"]
+        pl = box(xp, xp + ex, yp, yp + ey, z_pl, P["unten_uk"])
+        pl = pl.cut(Part.makeCylinder(P["fuss_loch"] / 2, et + 2, V(c.x, c.y, z_pl - 1)))
         lx, ly = P["rolle"]["lochbild"]
         for sx in (-1, 1):
             for sy in (-1, 1):
-                pl = pl.cut(Part.makeCylinder(P["m8_kern"] / 2, rp_t + 2,
-                                              V(xa + sx * lx / 2, ya + sy * ly / 2, z_rp - 1)))
-        stahl["UT_Rollenplatte_%d" % (i + 1)] = pl
+                pl = pl.cut(Part.makeCylinder(P["m8_kern"] / 2, et + 2,
+                                              V(xa + sx * lx / 2, ya + sy * ly / 2, z_pl - 1)))
+        stahl["UT_Eckplatte_%d" % (i + 1)] = pl
+        m = kt.sechskant(sw, mh, P["unten_uk"]).cut(
+            Part.makeCylinder(8.0, mh + 2, V(0, 0, P["unten_uk"] - 1)))
+        m.translate(V(c.x, c.y, 0))
+        stahl["UT_Schweissmutter_M16_%d" % (i + 1)] = fc_dok.fest(m)
+        f = Part.makeCylinder(8.0, P["fuss_stange"], V(0, 0, z_stange))
+        f = f.fuse([kt.sechskant(sw, mh, z_stange),                 # aufgeschweißt, zum Drehen
+                    Part.makeCylinder(td / 2, th, V(0, 0, boden)),  # Lagerung/Teller (Platzhalter)
+                    kt.sechskant(kw, kh, z_pl - kh)]).removeSplitter()   # Kontermutter
+        f.translate(V(c.x, c.y, 0))
+        stahl["UT_Stellfuss_M16_%d" % (i + 1)] = fc_dok.fest(f)
         ro = form.copy()
         if not hinten:                               # Rad läuft zur Rahmenmitte nach
             ro.rotate(V(0, 0, 0), V(0, 0, 1), 180)
-        ro.translate(V(xa, ya, z_rp))
+        ro.translate(V(xa, ya, z_pl))
         kauf["UT_Lenkrolle_%d" % (i + 1)] = fc_dok.fest(ro)
-    info = dict(z_rad=z_rad, boden=boden, ueber=ueber, huell_r=d["huell_r"],
-                z_kranz=z_rp - P["rolle"].get("platte_t", 4.0) - 12.0,
-                hub=P["rad_luft"])
-    # eingedreht (Transport): Teller direkt unter der Kontermutter
-    info["teller_eingedreht"] = -tt - th
-    info["luft_transport"] = info["teller_eingedreht"] - z_rad
+    hub = P["rad_luft"] + P["fuss_luft"]
+    info = dict(z_rad=z_rad, boden=boden, huell_r=d["huell_r"],
+                z_kranz=z_pl - 4.0 - 12.0, hub=hub,
+                stange_oben=z_stange + P["fuss_stange"],
+                ueber=z_pl - kh - (z_stange + mh))   # freie Stange zwischen Fußmutter und Kontermutter
     return stahl, kauf, info
 
 
@@ -418,14 +417,15 @@ def main():
         for g_, name, l in ZUSCHNITT:
             if g_ == "80x40x4":
                 f.write("\nRechteckrohr 80x40x4 Stahl: %s %.1f mm, 1 Stk\n" % (name, l))
-        f.write("\nFußplatten: 4x %gx%gx%g mm, Bohrung Ø%g\n"
-                % (P["fuss_kante"], P["fuss_kante"], P["fuss_dicke"], P["fuss_loch"]))
-        f.write("Schweißmuttern DIN 929 M12: 4 Stk, oben auf die Fußplatten über die Bohrung "
-                "(vor dem Bein anschweißen)\n")
-        f.write("Rollenplatten: 4x Flachstahl %gx%g, %g lang, je 4x M8 (Kernloch Ø%g) im "
-                "Lochbild %gx%g; quer unter das untere Längsrohr, außen bündig\n"
-                % (P["rollenplatte"][1], P["rollenplatte"][2], P["rollenplatte"][0],
-                   P["m8_kern"], *P["rolle"]["lochbild"]))
+        f.write("\nEckplatten: 4x Flachstahl %gx%gx%g unter Bein, Längs- und Querrohr, außen "
+                "bündig; Bohrung Ø%g unter der Beinmitte, 4x M8 (Kernloch Ø%g) im Lochbild %gx%g "
+                "für die Lenkrolle (Lenkachse %g von beiden Außenkanten)\n"
+                % (*P["eckplatte"], P["fuss_loch"], P["m8_kern"], *P["rolle"]["lochbild"],
+                   P["rolle_xy"]))
+        f.write("Schweißmuttern M16: 4 Stk oben auf die Eckplatten über die Bohrung (vor dem Bein "
+                "anschweißen)\n")
+        f.write("Stellfüße: 4x Gewindestange M16 x %g, unten Mutter M16 aufgeschweißt, "
+                "Kontermutter M16 flach, Lagerung/Teller offen\n" % P["fuss_stange"])
         f.write("Verschraubung Untertisch/Oberrahmen: %d x M8 senkrecht (je Ende %d), "
                 "M8x16 durch die Unterseite des oberen Querrohrs (Zugang Ø16 von oben) "
                 "in Nietmuttern M8 im unteren Querrohr\n"
@@ -434,8 +434,9 @@ def main():
                 "erstes Loch %g mm vom Schienenende\n"
                 % (len(schienen_loecher()), P["m4_kern"], P["schiene_teilung"], P["schiene_e"]))
 
-    alle = Part.makeCompound(list(teile.values()))
-    bb = alle.BoundBox
+    alle = Part.makeCompound(list(teile.values())
+                             + [v for k, v in fr_stahl.items() if "Eckplatte" in k])
+    bb = Part.makeCompound(list(teile.values())).BoundBox
     with open(os.path.join(OUT, "pruefung.txt"), "w") as f:
         f.write("Außenmaß Rahmen: %.0f x %.0f x %.0f mm (X x Y x Z)\n"
                 % (bb.XLength, bb.YLength, bb.ZLength))
@@ -443,7 +444,7 @@ def main():
                 % (P["innen_x"], P["innen_y"], P["wanne_x"], P["wanne_y"]))
         f.write("Schienenabstand Mitte-Mitte: %.0f mm\n"
                 % (P["schiene_x"][1] - P["schiene_x"][0]))
-        f.write("Masse Stahl (Rohre + Fußplatten): %.1f kg\n"
+        f.write("Masse Stahl (Rohre + Eckplatten): %.1f kg\n"
                 % (alle.Volume * P["dichte"]))
         f.write("Stirnöffnung zum Herausziehen der Wanne: %.0f breit x %.0f hoch\n"
                 % (P["innen_x"], P["hoehe_ok"] - r - (P["unten_uk"] + r)))
@@ -462,38 +463,37 @@ def main():
         f.write("Überschneidungen gesamt: %.3f mm³\n" % ueber)
         f.write("Wanne / Rahmen: %.3f mm³\n" % alle.common(dm["Dummy_Wanne"]).Volume)
         # Stellfüße und Rollen
-        f.write("\nStellfüße und Rollen (z = 0: Unterkante Fußplatten)\n")
-        f.write("Boden im Betrieb bei z = %.0f: Rahmen-OK %.0f mm über Boden, Rad %.0f mm frei, "
-                "Stange M12 %.0f mm unter der Platte (mit Kontermutter)\n"
-                % (fr["boden"], P["hoehe_ok"] - fr["boden"], P["rad_luft"], fr["ueber"]))
-        f.write("Transport (Füße ganz eingedreht): Rad bei z = %.0f, Teller bei z = %.0f, "
-                "Teller %.0f mm über Boden, Fußplatten %.0f mm über Boden; Hub je Fuß %.0f mm\n"
-                % (fr["z_rad"], fr["teller_eingedreht"], fr["luft_transport"], -fr["z_rad"],
-                   fr["luft_transport"] + P["rad_luft"]))
-        ax_ = P["aussen_x"]
-        f.write("Schwenkkreis Rolle R %.1f: Rahmenbreite außen %.1f / %.1f mm frei\n"
-                % (fr["huell_r"], P["rolle_x"] - fr["huell_r"], P["rolle_x"] - fr["huell_r"]))
-        f.write("Radstand Transport: %.0f (X) x %.0f (Y) mm\n"
-                % (ax_ - 2 * P["rolle_x"], P["aussen_y"] - 2 * P["rolle_y"]))
-        hinder = list(teile.values()) + list(fr_stahl.values()) \
-            + [s for n, s in fr_kauf.items() if "Stellfuss" in n]
-        hinder_c = Part.makeCompound(hinder)
+        f.write("\nStellfüße und Rollen (z = 0: Bezugsebene, %g unter der Rahmenunterkante)\n"
+                % P["unten_uk"])
+        f.write("Betrieb: Boden bei z = %.0f, Rahmen-OK %.0f mm über Boden, Räder %.0f mm frei, "
+                "Stange zwischen Fußmutter und Kontermutter %.0f mm frei, Stange oben bei z = %.0f\n"
+                % (fr["boden"], P["hoehe_ok"] - fr["boden"], P["rad_luft"], fr["ueber"],
+                   fr["stange_oben"]))
+        f.write("Verfahren: Rad unten bei z = %.0f, Rahmenunterkante %.0f über Boden, Füße %.0f mm "
+                "eingedreht (Teller %.0f mm frei), Stange oben bei z = %.0f (im Bein)\n"
+                % (fr["z_rad"], P["unten_uk"] - fr["z_rad"], fr["hub"], P["fuss_luft"],
+                   fr["stange_oben"] + fr["hub"]))
+        ax_, ay_ = P["aussen_x"], P["aussen_y"]
+        f.write("Schwenkkreis Rolle R %.1f: %.1f mm innerhalb der Außenkanten\n"
+                % (fr["huell_r"], P["rolle_xy"] - fr["huell_r"]))
+        f.write("Radstand Verfahren: %.0f (X) x %.0f (Y) mm, Füße %.0f x %.0f\n"
+                % (ax_ - 2 * P["rolle_xy"], ay_ - 2 * P["rolle_xy"], ax_ - r, ay_ - r))
+        hinder_c = Part.makeCompound(list(teile.values()) + list(fr_stahl.values()))
         v_schw = 0.0
-        for n in fr_kauf:
-            if "Lenkrolle" in n:
+        for xa in (P["rolle_xy"], ax_ - P["rolle_xy"]):
+            for ya in (P["rolle_xy"], ay_ - P["rolle_xy"]):
                 zyl = Part.makeCylinder(fr["huell_r"], fr["z_kranz"] - fr["z_rad"],
-                                        V(0, 0, fr["z_rad"]))
-                # Lenkachse = Mitte der Anschraubplatte
-                pl_ = fr_stahl[n.replace("Lenkrolle", "Rollenplatte")].BoundBox
-                xa = P["rolle_x"] if pl_.XMin < 1 else ax_ - P["rolle_x"]
-                zyl.translate(V(xa, pl_.Center.y, 0))
+                                        V(xa, ya, fr["z_rad"]))
                 v_schw += zyl.common(hinder_c).Volume
-        f.write("Schwenkkreis gegen Rahmen/Füße (Fuß ausgedreht): %.1f mm³\n" % v_schw)
-        v_k = 0.0
-        for n, k in fr_kauf.items():
-            v_k += k.common(hinder_c).Volume if "Lenkrolle" in n else \
-                k.common(Part.makeCompound(list(teile.values()) + list(fr_stahl.values()))).Volume
-        f.write("Füße/Rollen gegen Rahmen: %.3f mm³\n" % v_k)
+        f.write("Schwenkkreis gegen Rahmen/Füße: %.1f mm³\n" % v_schw)
+        v_k = sum(k.common(hinder_c).Volume for k in fr_kauf.values())
+        stahl_c = Part.makeCompound(list(teile.values()))
+        v_k += sum(k.common(stahl_c).Volume for n, k in fr_stahl.items())
+        for n, k in fr_stahl.items():
+            for n2, k2 in fr_stahl.items():
+                if n < n2 and k.BoundBox.intersect(k2.BoundBox):
+                    v_k += k.common(k2).Volume
+        f.write("Füße/Rollen/Eckplatten gegen Rahmen und untereinander: %.3f mm³\n" % v_k)
         f.write("Durchbiegung Längsträger (Spannweite %.0f mm, 200 N mittig): %.3f mm\n"
                 % ((P["aussen_y"] - r), durchbiegung(200.0, P["aussen_y"] - r)))
 

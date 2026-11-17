@@ -4,11 +4,11 @@ Untertisch
 Teil                           Länge mm    Stk
 Längsrohr Untertisch oben        1436.0      2
 Längsrohr unten                  1436.0      2
-Bein                              802.0      4
+Bein                              710.0      4
 Querrohr Untertisch oben          640.0      2
 Querrohr unten                    640.0      2
 Querrohr Mitte (unten)            640.0      2
-Summe: 12.79 m (44.6 kg)
+Summe: 12.42 m (43.3 kg)
 
 Oberrahmen
 Teil                           Länge mm    Stk
@@ -18,8 +18,8 @@ Summe: 3.75 m (13.1 kg)
 
 Rechteckrohr 80x40x4 Stahl: Querträger vorn (Oberrahmen) 640.0 mm, 1 Stk
 
-Fußplatten: 4x 100x100x8 mm, Bohrung Ø13
-Schweißmuttern DIN 929 M12: 4 Stk, oben auf die Fußplatten über die Bohrung (vor dem Bein anschweißen)
-Rollenplatten: 4x Flachstahl 120x10, 140 lang, je 4x M8 (Kernloch Ø6.8) im Lochbild 60x80; quer unter das untere Längsrohr, außen bündig
+Eckplatten: 4x Flachstahl 175x175x10 unter Bein, Längs- und Querrohr, außen bündig; Bohrung Ø17 unter der Beinmitte, 4x M8 (Kernloch Ø6.8) im Lochbild 60x80 für die Lenkrolle (Lenkachse 122 von beiden Außenkanten)
+Schweißmuttern M16: 4 Stk oben auf die Eckplatten über die Bohrung (vor dem Bein anschweißen)
+Stellfüße: 4x Gewindestange M16 x 200, unten Mutter M16 aufgeschweißt, Kontermutter M16 flach, Lagerung/Teller offen
 Verschraubung Untertisch/Oberrahmen: 6 x M8 senkrecht (je Ende 3), M8x16 durch die Unterseite des oberen Querrohrs (Zugang Ø16 von oben) in Nietmuttern M8 im unteren Querrohr
 Schienengewinde: 2x 22 x M4 (Kernloch Ø3.3), Teilung 60, erstes Loch 20 mm vom Schienenende

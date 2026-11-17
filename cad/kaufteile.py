@@ -203,21 +203,6 @@ def sechskant(sw, h, z0=0.0):
     return Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, h))
 
 
-def stellfuss_m12(teller_d=60.0, teller_h=20.0, stange_l=80.0, ueberstand=27.0,
-                  konter=True):
-    """Fixfuß (Maschinenfuß ohne Gelenk) M12: Teller mit Gummiauflage, Gewindestange
-    M12 x stange_l, Kontermutter M12 (SW19 x 10) direkt unter der Platte.
-    Lage: Achse Z, Unterkante Platte (Anlage der Kontermutter) in z = 0, Teller-
-    Unterseite in z = -ueberstand - teller_h; die Stange ragt nach oben durch Platte
-    und Schweißmutter. Maße Platzhalter bis zum Kauf."""
-    z_t = -ueberstand - teller_h
-    s = Part.makeCylinder(teller_d / 2, teller_h, V(0, 0, z_t))
-    s = s.fuse(Part.makeCylinder(6.0, stange_l, V(0, 0, -ueberstand)))
-    if konter:
-        s = s.fuse(sechskant(19.0, 10.0, -10.0))
-    return s.removeSplitter()
-
-
 def lenkrolle(rad_d=100.0, rad_b=32.0, bauhoehe=125.0, ausladung=38.0,
               platte=(85.0, 100.0), lochbild=(60.0, 80.0), loch_d=9.0, platte_t=4.0):
     """Lenkrolle mit Anschraubplatte (z. B. Ø100, Bauhöhe 125, Platte 100 x 85,

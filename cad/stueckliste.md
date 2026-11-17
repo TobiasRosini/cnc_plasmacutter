@@ -4,9 +4,8 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 
 | Nr. | Teil | Stk. | Art | Maße (mm) | Baugruppe | Datei | Bemerkung |
 |---:|---|---:|---|---|---|---|---|
-| 001 | UT_Bein | 2 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
-| 002 | UT_Fussplatte | 4 | Stahl | 100 × 100 × 8 | Untertisch |  |  |
-| 003 | UT_Bein_3 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
+| 001 | UT_Bein | 2 | Stahl | 710 × 40 × 40 | Untertisch |  |  |
+| 003 | UT_Bein_3 | 1 | Stahl | 710 × 40 × 40 | Untertisch |  |  |
 | 004 | UT_Laengsrohr_oben_L | 1 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
 | 005 | UT_Laengsrohr_unten | 2 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
 | 006 | UT_Laengsrohr_oben_R | 1 | Stahl | 1436 × 40 × 40 | Untertisch |  |  |
@@ -115,7 +114,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
 | 116 | ekx_mastwinkel | 1 | Druck | 106 × 94 × 38 | Energieketten | energiekette/ekx_mastwinkel.step |  |
 | 117 | ekx_schelle_einseitig | 1 | Druck | 53 × 17 × 15 | Energieketten | energiekette/ekx_schelle_einseitig.step |  |
-| 118 | UT_Bein_4 | 1 | Stahl | 802 × 40 × 40 | Untertisch |  |  |
+| 118 | UT_Bein_4 | 1 | Stahl | 710 × 40 × 40 | Untertisch |  |  |
 | 119 | ub_haube | 1 | Alu | 1031 × 664 × 551 | Unterbau | unterbau/ub_haube.step |  |
 | 120 | Ablauf_Kugelhahn_Schlauch | 1 | Kaufteil | 520 × 147 × 101 | Unterbau |  |  |
 | 121 | ub_rosette_kanal | 1 | Druck | 77 × 42 × 5 | Unterbau | unterbau/ub_rosette_kanal.step |  |
@@ -124,9 +123,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 125 | UT_Querrohr_oben_V | 1 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 126 | ub_ablauf_halter | 1 | Druck | 155 × 148 × 50 | Unterbau | unterbau/ub_ablauf_halter.step |  |
 | 127 | ub_ablauf_deckel | 1 | Druck | 50 × 30 × 18 | Unterbau | unterbau/ub_ablauf_deckel.step |  |
-| 128 | UT_Schweissmutter_M12 | 4 | Stahl | 21 × 18 × 10 | Untertisch |  |  |
-| 129 | UT_Rollenplatte | 4 | Stahl | 140 × 120 × 10 | Untertisch |  |  |
-| 130 | Stellfuss_M12 | 4 | Kaufteil | 98 × 40 × 40 | Untertisch |  |  |
-| 131 | Lenkrolle_100 | 4 | Kaufteil | 161 × 101 × 85 | Untertisch |  |  |
+| 128 | Lenkrolle_125 | 4 | Kaufteil | 187 × 125 × 80 | Untertisch |  |  |
+| 129 | UT_Eckplatte | 4 | Stahl | 175 × 175 × 10 | Untertisch |  |  |
+| 130 | UT_Schweissmutter_M16 | 4 | Stahl | 28 × 24 × 13 | Untertisch |  |  |
+| 131 | UT_Stellfuss_M16 | 4 | Stahl | 215 × 50 × 50 | Untertisch |  |  |
 
-124 verschiedene Teile, 209 Stück.
+123 verschiedene Teile, 205 Stück.
