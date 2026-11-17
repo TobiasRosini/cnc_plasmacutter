@@ -206,7 +206,7 @@ Vorläufige Planungswerte:
 - **Ablauf** 440 mm hinter der Wannenmitte (hinter der Haube über dem Geräteraum): Messing-Tankdurchführung 3/4", Klemmwinkel 90°, gerades HDPE-Rohr d25 nach hinten, Kugelhahn und Schlauchtülle an der Rahmenrückseite.
 - Wanne wird zum Reinigen **nach oben herausgehoben** (Portal ganz hinten); der Käfig bleibt fest im Rahmen.
 - Wanne zum Reinigen möglichst herausnehmbar; flacher Boden erleichtert das Entfernen von Schlamm.
-- **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Wannenboden und Seiten sind konstruktiv zu schützen; Wasserstand und Schnittbereich müssen das Risiko berücksichtigen. Wasserbett ersetzt keine geeignete Lüftung/Absaugung.
+- **Sicherheitsrelevant:** PE kann durch direkten Plasmastrahl und heiße Schlacke beschädigt werden. Boden und Wände liegen unter Wasser (Wasser 15 mm unter dem Blech) und sind damit geschützt, solange Wasser drin ist. Gefährdet ist der Bördel über dem Wasser: Schutzleisten aus Stahl innen vor dem Bördel und Softlimit X ±260 (Stand 17.11.2026, `cad/auflage/README.md`). Wasserbett ersetzt keine geeignete Lüftung/Absaugung.
 
 ## 7. Druckluft
 

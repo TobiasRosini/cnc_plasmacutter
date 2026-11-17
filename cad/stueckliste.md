@@ -14,7 +14,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 009 | wannenkaefig | 1 | Stahl | 1235 × 640 × 100 | Untertisch | wannenkaefig/wannenkaefig.step |  |
 | 011 | Wanne | 1 | Stahl (Wanne) | 1194 × 597 × 119 | Untertisch |  |  |
 | 012 | kammtraeger | 3 | Stahl | 1080 × 87 × 3 | Untertisch | auflage/kammtraeger.step |  |
-| 013 | auflageleiste | 22 | Stahl | 530 × 50 × 3 | Untertisch | auflage/auflageleiste.step |  |
+| 013 | auflageleiste | 22 | Stahl | 524 × 50 × 3 | Untertisch | auflage/auflageleiste.step |  |
 | 014 | Schiene_HGR15_1300 | 2 | Kaufteil | 1300 × 15 × 15 | Oberrahmen |  |  |
 | 015 | OR_Laengstraeger_L | 1 | Stahl | 1556 × 40 × 40 | Oberrahmen |  |  |
 | 016 | OR_Laengstraeger_R | 1 | Stahl | 1556 × 40 × 40 | Oberrahmen |  |  |
@@ -127,5 +127,6 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 129 | UT_Eckplatte | 4 | Stahl | 175 × 175 × 10 | Untertisch |  |  |
 | 130 | UT_Schweissmutter_M16 | 4 | Stahl | 28 × 24 × 13 | Untertisch |  |  |
 | 131 | UT_Stellfuss_M16 | 4 | Stahl | 215 × 50 × 50 | Untertisch |  |  |
+| 132 | schutzleiste | 2 | Stahl | 1080 × 115 × 3 | Untertisch | auflage/schutzleiste.step |  |
 
-123 verschiedene Teile, 205 Stück.
+124 verschiedene Teile, 207 Stück.

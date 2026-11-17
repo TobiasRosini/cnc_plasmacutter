@@ -7,7 +7,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 1. [x] **Stellfüße und Rollen** (17.11.2026): Eckplatte 175 × 175 × 10 unter Bein, Längs- und Querrohr; Lenkrolle Ø125 (4× M8) diagonal innen, Stellfuß Gewindestange M16 in Schweißmutter unter der Beinmitte (taucht eingedreht ins Bein). Rahmen-OK im Betrieb 922 über Boden (`cad/grundrahmen/README.md`). **Offen:** Lagerung/Teller unten am Fuß (Tobi, Drehmaschine).
 2. [x] **Wasserschutz über dem Geräteraum** (15.11.2026): Haube aus Alu 0,5 als U auf dem Kopf, so lang wie der Geräteboden, an Geräteboden, vorderen Beinen und Wannenkäfig; Querkanal durch eine gedruckte Rosette (`cad/unterbau/README.md`).
 3. [x] **Wannenablauf** (15.11.2026): Messing-Tankdurchführung hinter der Haube (440 hinter der Wannenmitte), Klemmwinkel 90°, gerades HDPE-Rohr d25 nach hinten, Kugelhahn und Schlauchtülle an der Rahmenrückseite, Ablaufhalter (Druck) am hinteren Querrohr. Maße beim Kauf prüfen.
-4. [ ] **Schutz der PE-Wanne** vor Plasmastrahl und heißer Schlacke (Projektstand Abschnitt 6, „sicherheitsrelevant“): Boden- und Wandschutz konstruktiv vorsehen oder bewusst über Wasserstand und Schnittbereich lösen. Entscheidung offen.
+4. [x] **Bördelrand der Wanne schützen** (17.11.2026): Boden und Wände liegen unter Wasser und brauchen keinen Schutz, gefährdet ist nur der PE-Bördel (über dem Wasser, 1 mm unter dem Blech). Schutzleisten aus Blech 3 mm innen vor dem Bördel der Längswände, Auflageleisten auf 524 gekürzt, Softlimit X ±260 (`cad/auflage/README.md`).
 5. [ ] **Anschlusskasten** an der Kastenseite des rechten Y-Winkels (Übergang Y-/X-Kette, Lötstellen der LJ12A3-Leitungen).
 6. [ ] **Leitungsführung**: Clips für den Bogen über dem Y-Ende und am Abgang hinter der Ablage; Funkenschutz der Adern am Brenner (Gewebe- oder Silikonschlauch).
 7. [ ] **Stopfen links in der X-Ablage sichern** (kleben oder Querstift).
@@ -31,6 +31,6 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 ## D. Elektrik und Steuerung
 
 18. [ ] **Schaltschrank** 400 × 500 × 200: Stromlaufplan, Not-Aus/Sicherheitskreis, Schütz, Netzteile, Treiber, Mesa 7i96S, THCAD, Erdung/EMV (Plasma!), Belegung im Schrank, Klemmenplan.
-19. [ ] **LinuxCNC/QtPlasmaC**: Konfiguration Mesa 7i96S, Gantry-Squaring mit zwei Y-Referenzschaltern, Z-Untergrenze ca. 3 mm unter Blechunterseite (Bördel an den X-Enden), Schwimmkopf-Antastung, THC.
+19. [ ] **LinuxCNC/QtPlasmaC**: Konfiguration Mesa 7i96S, Gantry-Squaring mit zwei Y-Referenzschaltern, Softlimit Schneidbereich X ±260 um die Wannenmitte (Bördel), Z-Untergrenze ca. 3 mm unter Blechunterseite, Mindestwasserstand (Markierung oder Schwimmerschalter, optional), Schwimmkopf-Antastung, THC.
 20. [ ] **Druckluft**: Wasserabscheider, Filter, Druckregler nach SPARTUS-Handbuch, Kompressor prüfen.
 21. [ ] **Lüftung/Absaugung** der Werkstatt (das Wasserbett ersetzt sie nicht).

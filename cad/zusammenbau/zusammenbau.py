@@ -131,7 +131,7 @@ def main():
     plk = App.Placement(V(rahmen_bb.Center.x, wy, rahmen_bb.ZMax), App.Rotation())
     link(doc, "W_Wannenkaefig", dk.getObject("Wannenkaefig"), plk, g_w)
     da = fc_dok.quelle(AUFLAGE)                      # Kammträger und Leisten (gleiche Koordinaten)
-    for n in ("Kammtraeger", "Auflageleisten"):
+    for n in ("Kammtraeger", "Auflageleisten", "Schutzleisten"):
         link(doc, "W_" + n, da.getObject(n), plk, g_w)
     zw = rahmen_bb.ZMax + dk.getObject("Wannenkaefig").Shape.BoundBox.ZMin + 20.0
     link(doc, "W_Wanne", wobj,
