@@ -29,7 +29,8 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Ablaufhalter an Querrohr Untertisch hinten | 2× M5 in Nietmuttern (Innenseite) | **neu** |
 | Schellendeckel Ablaufhalter | 2× M4 von unten in seitlich eingeschobene Muttern | **neu** |
 | Rosette Kanal | 3× M3 durch das Blech in eingepresste Muttern | **neu** |
-| Stellfüße / Rollen | Fußplatte 8 mm mit Ø13 | offen: M12 schneiden (nur gut 4 Gänge) oder Mutter aufschweißen |
+| Stellfüße an Fußplatten | Fixfuß M12 in Schweißmutter DIN 929 M12 oben auf der Fußplatte (im Bein), Kontermutter DIN 439 unten | **neu** |
+| Lenkrollen an Rollenplatten | 4× M8 von unten direkt ins Flacheisen 10 mm (Lochbild 80 × 60) | **neu** |
 
 ## Portal und Wagen
 

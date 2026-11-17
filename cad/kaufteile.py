@@ -193,3 +193,54 @@ def kette_endstueck(h=35.0, b=54.0, D=55.0, C=25.0, F=6.1, laenge=40.0, flansch=
     for x in (-C / 2, C / 2):
         s = s.cut(Part.makeCylinder(F / 2, h + 2, V(x, loch, -1)))
     return s.removeSplitter()
+
+
+def sechskant(sw, h, z0=0.0):
+    """Sechskant SW sw, Höhe h ab z0, Achse Z (Mutter ohne Bohrung)."""
+    r = sw / math.sqrt(3)
+    pts = [V(r * math.cos(math.radians(60 * i)), r * math.sin(math.radians(60 * i)), z0)
+           for i in range(7)]
+    return Part.Face(Part.makePolygon(pts)).extrude(V(0, 0, h))
+
+
+def stellfuss_m12(teller_d=60.0, teller_h=20.0, stange_l=80.0, ueberstand=27.0,
+                  konter=True):
+    """Fixfuß (Maschinenfuß ohne Gelenk) M12: Teller mit Gummiauflage, Gewindestange
+    M12 x stange_l, Kontermutter M12 (SW19 x 10) direkt unter der Platte.
+    Lage: Achse Z, Unterkante Platte (Anlage der Kontermutter) in z = 0, Teller-
+    Unterseite in z = -ueberstand - teller_h; die Stange ragt nach oben durch Platte
+    und Schweißmutter. Maße Platzhalter bis zum Kauf."""
+    z_t = -ueberstand - teller_h
+    s = Part.makeCylinder(teller_d / 2, teller_h, V(0, 0, z_t))
+    s = s.fuse(Part.makeCylinder(6.0, stange_l, V(0, 0, -ueberstand)))
+    if konter:
+        s = s.fuse(sechskant(19.0, 10.0, -10.0))
+    return s.removeSplitter()
+
+
+def lenkrolle(rad_d=100.0, rad_b=32.0, bauhoehe=125.0, ausladung=38.0,
+              platte=(85.0, 100.0), lochbild=(60.0, 80.0), loch_d=9.0, platte_t=4.0):
+    """Lenkrolle mit Anschraubplatte (z. B. Ø100, Bauhöhe 125, Platte 100 x 85,
+    Lochbild 80 x 60). Lage: Plattenoberseite z = 0, Lenkachse = Z, Rad unten in
+    z = -bauhoehe, Rad nachlaufend in +Y, Laufrichtung Y. Maße Platzhalter bis zum Kauf.
+    Gibt (form, daten) zurück; daten['huell_r'] = Radius des Schwenkkreises."""
+    px, py = platte
+    s = Part.makeBox(px, py, platte_t, V(-px / 2, -py / 2, -platte_t))
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            s = s.cut(Part.makeCylinder(loch_d / 2, platte_t + 2,
+                                        V(sx * lochbild[0] / 2, sy * lochbild[1] / 2, -platte_t - 1)))
+    r = rad_d / 2
+    z_achse = -bauhoehe + r
+    drehkranz = Part.makeCylinder(0.35 * px, 12.0, V(0, 0, -platte_t - 12.0))
+    gabel_b = rad_b + 12.0
+    z_kranz = -platte_t - 12.0
+    gabel = Part.makeBox(gabel_b, ausladung + 26.0, z_kranz - z_achse + 8.0,
+                         V(-gabel_b / 2, -14.0, z_achse - 8.0))
+    gabel = gabel.cut(Part.makeBox(rad_b + 2, ausladung + 28.0, 2 * r + 4.0,
+                                   V(-rad_b / 2 - 1, -15.0, z_achse - r - 1)))
+    rad = Part.makeCylinder(r, rad_b, V(-rad_b / 2, ausladung, z_achse), V(1, 0, 0))
+    achse = Part.makeCylinder(5.0, gabel_b, V(-gabel_b / 2, ausladung, z_achse), V(1, 0, 0))
+    form = s.fuse([drehkranz, gabel, rad, achse]).removeSplitter()
+    huell_r = math.hypot(ausladung + r, rad_b / 2)
+    return form, dict(huell_r=huell_r, bauhoehe=bauhoehe, lochbild=lochbild, platte=platte)

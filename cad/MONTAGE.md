@@ -23,6 +23,8 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 
 ## Rahmen
 
+- Schweißen Untertisch: **zuerst** die Schweißmuttern M12 (DIN 929) oben auf die Fußplatten über die Bohrung Ø13, dann erst die Beine auf die Platten (die Mutter sitzt danach im Bein). Rollenplatten (Flacheisen 120 × 10, 140 lang, 4× M8 vorher geschnitten) quer unter die unteren Längsrohre, außen bündig, Lenkachse 195 mm vom Rahmenende.
+- Stellfüße (Fixfuß M12) von unten eindrehen, Kontermutter; Lenkrollen mit 4× M8 von unten an die Rollenplatten. Zum Verfahren Füße eindrehen, im Betrieb ausdrehen (Räder 12 mm frei) und kontern.
 - Oberrahmen auf den Untertisch: 6× M8×16 durch die Unterseite der oberen Querrohre (Zugang Ø16 von oben) in Nietmuttern M8 in den unteren Querrohren.
 - Y-Motor- und Umlenkhalter: **M6-Nietmuttern** im Längsträger (Ø9), die 3-mm-Wand trägt kein gutes M6-Gewinde.
 - Y-Schienen: M4 direkt in die 3-mm-Wand (gut 4 Gänge).
@@ -41,4 +43,3 @@ Vorher in alle Druckteile die Muttern einpressen bzw. seitlich in ihre Schlitze 
 - Stopfen links in der X-Ablage sichern (kleben oder Querstift).
 - Leitungen sind als Hüllrohre vereinfacht (Ø20 / Ø16). Führung des Bogens über dem Y-Ende und am Abgang hinter der Ablage (Clips) noch offen; Adern am Brenner gegen Funken schützen (Gewebe- oder Silikonschlauch).
 - Anschlusskasten noch nicht gezeichnet.
-- Stellfüße und Rollen an den Fußplatten.

@@ -44,7 +44,9 @@ KAUFNAMEN = [(r"Referenzschalter.*|Schalter_Schwimmkopf", "Naeherungsschalter_LJ
              (r"(Dummy_)?Schienen?_HGR15", "Schiene_HGR15"),
              (r"Wagen_HGH15CA|Wagen_X_.*", "Wagen_HGH15CA"),
              (r"Riemen_.*", "Riemen_HTD5M_15"),
-             (r"Umlenkrollen?.*", "Umlenkrolle")]
+             (r"Umlenkrollen?.*", "Umlenkrolle"),
+             (r"UT_Stellfuss_M12.*", "Stellfuss_M12"),
+             (r"UT_Lenkrolle.*", "Lenkrolle_100")]
 ART = {"stahl": "Stahl", "alu": "Alu", "druck": "Druck", "zukauf": "Kaufteil",
        "riemen": "Kaufteil (Riemen)", "wanne": "Stahl (Wanne)"}
 BAUGRUPPE = {"Untertisch": "Untertisch", "Oberrahmen": "Oberrahmen", "Portal": "Portal",

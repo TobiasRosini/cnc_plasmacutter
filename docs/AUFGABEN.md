@@ -4,7 +4,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 
 ## A. Konstruktion abschließen (CAD)
 
-1. [ ] **Stellfüße und Rollen** an den Fußplatten (100 × 100 × 8, Ø13). Konzept laut Rahmen-README: Im Betrieb heben die Füße den Rahmen über die Rollen, zum Verfahren werden sie hochgedreht. Zu entscheiden: Fußtyp (Gelenkfuß M12?), Rollen (Lenk-/Bockrollen, Feststeller, Lochbild), Anbindung (M12 in 8 mm schneiden = gut 4 Gänge, oder Mutter aufschweißen), Lage der Rollen (eigene Laschen?). Grenze 800 mm Breite beachten (heute 793).
+1. [x] **Stellfüße und Rollen** (17.11.2026): Fixfuß M12 in Schweißmutter auf der Fußplatte (im Bein), Lenkrollen Ø100 innen auf Rollenplatten (Flacheisen 120 × 10) unter den unteren Längsrohren, 4× M8 ins Flacheisen. Rahmen-OK im Betrieb 897 über Boden (`cad/grundrahmen/README.md`). Maße beim Kauf prüfen.
 2. [x] **Wasserschutz über dem Geräteraum** (15.11.2026): Haube aus Alu 0,5 als U auf dem Kopf, so lang wie der Geräteboden, an Geräteboden, vorderen Beinen und Wannenkäfig; Querkanal durch eine gedruckte Rosette (`cad/unterbau/README.md`).
 3. [x] **Wannenablauf** (15.11.2026): Messing-Tankdurchführung hinter der Haube (440 hinter der Wannenmitte), Klemmwinkel 90°, gerades HDPE-Rohr d25 nach hinten, Kugelhahn und Schlauchtülle an der Rahmenrückseite, Ablaufhalter (Druck) am hinteren Querrohr. Maße beim Kauf prüfen.
 4. [ ] **Schutz der PE-Wanne** vor Plasmastrahl und heißer Schlacke (Projektstand Abschnitt 6, „sicherheitsrelevant“): Boden- und Wandschutz konstruktiv vorsehen oder bewusst über Wasserstand und Schnittbereich lösen. Entscheidung offen.
@@ -25,7 +25,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 
 ## C. Beschaffung
 
-16. [ ] **Kaufteile festlegen und bestellen**: Schienen HGR15 (Längen aus dem Modell) und Wagen HGH15CA (X mit Metallabstreifer), Riemen HTD5M/15 (Längen) und Scheiben, SFU1204 mit FK10, Motoren NEMA23 (2 × 1,9 Nm, 2 × 1,2 Nm), 4 Step/Dir-Treiber, Netzteile 48 V/24 V, Mesa THCAD (Variante), igus-Ketten und chainflex-Leitungen (Kabelliste), Referenz- und Schwimmkopfschalter LJ12A3, Präzisionswellen Ø8.
+16. [ ] **Kaufteile festlegen und bestellen**: Schienen HGR15 (Längen aus dem Modell) und Wagen HGH15CA (X mit Metallabstreifer), Riemen HTD5M/15 (Längen) und Scheiben, SFU1204 mit FK10, Motoren NEMA23 (2 × 1,9 Nm, 2 × 1,2 Nm), 4 Step/Dir-Treiber, Netzteile 48 V/24 V, Mesa THCAD (Variante), igus-Ketten und chainflex-Leitungen (Kabelliste), Referenz- und Schwimmkopfschalter LJ12A3, Präzisionswellen Ø8, 4 Fixfüße M12 (Teller Ø40) und 4 Lenkrollen Ø100 (Platte 100 × 85, Lochbild 80 × 60, ≥ 80 kg).
 17. [ ] Bei Lieferung prüfen: Lochbild FK10, Schaltabstand LJ12A3 auf den Stift 6 mm, Länge Schlauchpaket SP80M (mind. 5,0 m), Längen der fest verlegten Y-Leitungen.
 
 ## D. Elektrik und Steuerung

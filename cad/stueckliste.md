@@ -25,7 +25,7 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 020 | flachstange_40x15 | 2 | Alu | 180 × 40 × 15 | Portal | y_portalwinkel/flachstange_40x15.step |  |
 | 021 | spannschlitten | 2 | Druck | 43 × 24 × 7 | Portal | y_portalwinkel/spannschlitten.step |  |
 | 022 | klemmplatte_fest | 2 | Druck | 48 × 40 × 6 | Portal | y_portalwinkel/klemmplatte_fest.step |  |
-| 023 | klemmplatte_schlitten | 2 | Druck | 35 × 28 × 17 | Portal | y_portalwinkel/klemmplatte_schlitten.step |  |
+| 023 | klemmplatte_schlitten | 2 | Druck | 36 × 28 × 17 | Portal | y_portalwinkel/klemmplatte_schlitten.step |  |
 | 024 | Wagen_HGH15CA | 8 | Kaufteil | 61 × 34 × 24 | Portal, X-Achse, Z-Achse |  |  |
 | 025 | winkel_fest | 1 | Druck | 180 × 94 × 52 | Portal | y_portalwinkel/winkel_fest.step |  |
 | 026 | x_klemmplatte | 2 | Druck | 40 × 36 × 6 | Portal | y_portalwinkel/x_klemmplatte.step |  |
@@ -95,9 +95,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 090 | Kette_igus_2400_03_R75 | 1 | Kaufteil | 400 × 186 × 55 | Energieketten |  |  |
 | 091 | Kette_igus_2400_03_R125 | 1 | Kaufteil | 539 × 285 × 55 | Energieketten |  |  |
 | 092 | ek_kabelkanal | 1 | Kaufteil | 582 × 40 × 40 | Energieketten |  |  |
-| 093 | ek_leitungsbogen_a | 1 | Druck | 157 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
-| 094 | ek_leitungsbogen_steg | 1 | Druck | 130 × 107 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
-| 095 | ek_leitungsbogen_b | 1 | Druck | 157 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
+| 093 | ek_leitungsbogen_a | 1 | Druck | 158 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
+| 094 | ek_leitungsbogen_steg | 1 | Druck | 126 × 116 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
+| 095 | ek_leitungsbogen_b | 1 | Druck | 158 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
 | 096 | ekx_mast | 1 | Alu | 356 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
 | 101 | ek_verbindungsplatte | 1 | Druck | 90 × 60 × 15 | Energieketten | energiekette/ek_verbindungsplatte.step |  |
 | 102 | ek_leitungsschelle | 5 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
@@ -108,9 +108,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 108 | Schaltschrank_400x500x200 | 1 | Kaufteil | 500 × 400 × 200 | Unterbau |  |  |
 | 109 | ub_kabelkanal_senkrecht | 1 | Kaufteil | 250 × 60 × 25 | Unterbau |  |  |
 | 110 | ub_kabelkanal_quer | 1 | Kaufteil | 305 × 60 × 25 | Unterbau |  |  |
-| 111 | ub_uebergang_unten | 1 | Druck | 64 × 53 × 53 | Unterbau | unterbau/ub_uebergang_unten.step |  |
-| 112 | ub_uebergang_unten_deckel | 1 | Druck | 53 × 53 × 3 | Unterbau | unterbau/ub_uebergang_unten_deckel.step |  |
-| 113 | ub_kanalknoten | 1 | Druck | 206 × 78 × 67 | Unterbau | unterbau/ub_kanalknoten.step |  |
+| 111 | ub_uebergang_unten | 1 | Druck | 64 × 54 × 54 | Unterbau | unterbau/ub_uebergang_unten.step |  |
+| 112 | ub_uebergang_unten_deckel | 1 | Druck | 54 × 54 × 3 | Unterbau | unterbau/ub_uebergang_unten_deckel.step |  |
+| 113 | ub_kanalknoten | 1 | Druck | 207 × 78 × 67 | Unterbau | unterbau/ub_kanalknoten.step |  |
 | 114 | ekx_umlenkkopf | 1 | Druck | 152 × 117 × 60 | Energieketten | energiekette/ekx_umlenkkopf.step |  |
 | 115 | ekx_distanzstueck | 1 | Druck | 80 × 44 × 14 | Energieketten | energiekette/ekx_distanzstueck.step |  |
 | 116 | ekx_mastwinkel | 1 | Druck | 106 × 94 × 38 | Energieketten | energiekette/ekx_mastwinkel.step |  |
@@ -124,5 +124,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 125 | UT_Querrohr_oben_V | 1 | Stahl | 640 × 40 × 40 | Untertisch |  |  |
 | 126 | ub_ablauf_halter | 1 | Druck | 155 × 148 × 50 | Unterbau | unterbau/ub_ablauf_halter.step |  |
 | 127 | ub_ablauf_deckel | 1 | Druck | 50 × 30 × 18 | Unterbau | unterbau/ub_ablauf_deckel.step |  |
+| 128 | UT_Schweissmutter_M12 | 4 | Stahl | 21 × 18 × 10 | Untertisch |  |  |
+| 129 | UT_Rollenplatte | 4 | Stahl | 140 × 120 × 10 | Untertisch |  |  |
+| 130 | Stellfuss_M12 | 4 | Kaufteil | 98 × 40 × 40 | Untertisch |  |  |
+| 131 | Lenkrolle_100 | 4 | Kaufteil | 161 × 101 × 85 | Untertisch |  |  |
 
-120 verschiedene Teile, 193 Stück.
+124 verschiedene Teile, 209 Stück.

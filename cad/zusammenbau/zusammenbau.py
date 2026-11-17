@@ -104,7 +104,8 @@ def main():
     rahmen_bb = App.BoundBox()
     for o in dr.Objects:
         if o.Name not in RAHMEN_TEILE_AUS and o.Name != "Dummy_Schienen_HGR15" \
-                and "Spritzschutz" not in o.Name:          # steht über die Rahmenoberkante
+                and "Spritzschutz" not in o.Name \
+                and not any(k in o.Name for k in ("Lenkrolle", "Stellfuss")):  # über OK / unter den Fußplatten
             rahmen_bb.add(o.Shape.BoundBox)
     w_schiene = dp.getObject("Schiene_HGR15").Shape.BoundBox
     w_bruecke = dp.getObject("Bruecke_80x40x4").Shape.BoundBox
