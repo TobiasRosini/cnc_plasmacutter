@@ -225,6 +225,7 @@ P = dict(
     ad_vs_links_y=-100.0,       # Verschraubung links (Achse x): CF9 aus dem Strang
     ad_vs_rechts_y=-82.0,       # Verschraubung rechts (Achse x): PVC zum Schalter
     ad_saeule=9.0,              # Ecksäulen für die Deckelschrauben
+    stopfen_m4_dx=18.0,         # Stopfen links: M4 von unten durch die Ablage, ab Ablage-Ende (Mutter oben im Stopfen)
     zkopf_hinten_y=28.0,        # Rückseite Z-Kopf-Sockel (X-Wagen-y)
     zkopf_uk=270.0,             # Unterkante Z-Kopf-Sockel (X-Wagen-z)
     xk_halter_loecher=[-28.0, 2.0],     # x der M5-Muttern in der Z-Kopf-Rückseite (= z_achse xk_halter_x)
@@ -1330,6 +1331,7 @@ def ablage_x():
     tr = tr.cut(box(x0 - 1, x1 + 1, ym - 18, ym + 18, z0 + 2, z0 + P["traeger_h"] - 2))
     for x, y in zapfen_loecher():                                  # M5 von unten in den Zapfen
         tr = tr.cut(Part.makeCylinder(2.75, 4, V(x, y, z0 - 1)))
+    tr = tr.cut(Part.makeCylinder(2.25, 4, V(x1 - P["stopfen_m4_dx"], ym, z0 - 1)))   # M4 Stopfen
     for x in rh_halter_xs():                                       # Nietmuttern M5 für die Rinnenhalter
         for y in (ym - 10.0, ym + 10.0):
             tr = tr.cut(Part.makeCylinder(3.5, 4, V(x + P["rh_halter_b"] / 2, y, z0 - 1)))
@@ -1363,6 +1365,10 @@ def stopfen_x():
             sy = -1 if y < ym else 1
             st = st.cut(fc_dok.mutter(5, V(xa + richt * 8, y, z), V(1, 0, 0), V(0, sy, 0),
                                       abs(ym + sy * 17.8 - y) + 1))
+        xm = xa + richt * P["stopfen_m4_dx"]            # Sicherung im Rohr: M4 von unten,
+        zo = z0 + P["traeger_h"] - 2.2                  # Mutter von oben eingelegt
+        st = st.cut(Part.makeCylinder(2.25, zo - z0, V(xm, ym, z0)))
+        st = st.cut(fc_dok.mutter(4, V(xm, ym, zo - 1.7), V(0, 0, 1)))
         res = st if res is None else res.fuse(st)
     return res
 

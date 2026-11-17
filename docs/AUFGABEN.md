@@ -10,7 +10,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 4. [x] **Bördelrand der Wanne schützen** (17.11.2026): Boden und Wände liegen unter Wasser und brauchen keinen Schutz, gefährdet ist nur der PE-Bördel (über dem Wasser, 1 mm unter dem Blech). Schutzleisten aus Blech 3 mm innen vor dem Bördel der Längswände, Auflageleisten auf 524 gekürzt, Softlimit X ±260 (`cad/auflage/README.md`).
 5. [x] **Anschlussdose X-Referenzschalter** (17.11.2026): Druckteil auf dem rechten Rinnenhalter, CF9 aus dem Strang und PVC-Kabel des Schalters über je eine Kabelverschraubung M12, gelötet (`cad/energiekette/README.md`). Z und Schwimmkopf werden weiter am X-Wagen gelötet.
 6. [x] **Leitungsführung** (17.11.2026): Bogen über dem Y-Ende und Abgang hinter der Ablage waren mit Leitungsbogen, Umlenkkopf, Distanzstück und Schellen schon erledigt. Funkenschutz: Feuerschutzschlauch innen 20 über die Brenneradern (X-Kettenende bis Tülle), innen 6 über das PVC-Kabel des Schwimmkopf-Schalters (`cad/energiekette/README.md`).
-7. [ ] **Stopfen links in der X-Ablage sichern** (kleben oder Querstift).
+7. [x] **Stopfen links in der X-Ablage sichern** (17.11.2026): 1× M4 von unten durch die Ablage in eine Mutter im Stopfen.
 8. [ ] Rinnen (Y, X) und Kabelkanal auf den Trägern: Blindnieten Ø4 bzw. Schrauben, Lage festlegen (sonst beim Bau).
 9. [ ] Optional: Außenkanten der Rippen am Mastwinkel ohne Fase (Rippen 1–2 mm einrücken, dann geht die Fase).
 

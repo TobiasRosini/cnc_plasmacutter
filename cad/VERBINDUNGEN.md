@@ -29,6 +29,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Ablaufhalter an Querrohr Untertisch hinten | 2× M5 in Nietmuttern (Innenseite) | **neu** |
 | Schellendeckel Ablaufhalter | 2× M4 von unten in seitlich eingeschobene Muttern | **neu** |
 | Rosette Kanal | 3× M3 durch das Blech in eingepresste Muttern | **neu** |
+| Stopfen links in der X-Ablage | 1× M4 × 10 von unten durch die Ablage in eine Mutter, oben in den Stopfen eingelegt | **neu** |
 | Anschlussdose auf Rinnenhalter rechts | 2× M4 × 25 von innen durch Boden und Halter in Muttern (unten in den Halter eingepresst) | **neu** |
 | Deckel Anschlussdose | 2× M3 in seitlich eingeschobene Muttern in Ecksäulen | **neu** |
 | Stellfüße an Eckplatten | Gewindestange M16 in Schweißmutter M16 oben auf der Eckplatte (im Bein), Kontermutter flach unten | **neu** |
