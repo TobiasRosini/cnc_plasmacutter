@@ -9,7 +9,7 @@ gleiche Teile gleiche Nummer, Spiegelteile eigene Nummer, Kaufteile nach Bezeich
 Außenmaßen. Ergebnis in `cad/stueckliste.md`, die Nummer steht außerdem vorn in der
 Beschriftung im Zusammenbau. Vergebene Nummern bleiben in `cad/teilenummern.json` fest.
 
-Schrauben, Muttern, Nietmuttern und Scheiben stehen in `cad/normteile.md` (`python3 cad/normteile.py`).
+Schrauben, Muttern, Nietmuttern und Scheiben stehen in `cad/normteile.md` (`python3 cad/normteile.py`), Einkauf und Zuschnitt der Halbzeuge in `cad/halbzeuge.md` (`python3 cad/halbzeuge.py`, nach der Stückliste).
 
 ## Radien an Druckteilen
 

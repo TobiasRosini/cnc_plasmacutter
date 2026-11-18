@@ -52,7 +52,7 @@ GELB  winkel_fest                  Lage +Z oben, Auflage 5349 mm², Höhe 94 mm,
 GELB  winkel_kasten                Lage +Z oben, Auflage 5348 mm², Höhe 118 mm, 50 kleine Stellen, 2 größere:
         waagerecht   2848 mm², Spannweite  16.5, Länge 178.0,   9.0 mm über dem Bett, Mitte (0, 0)
         schräg        193 mm², Spannweite   8.7, Länge  20.0, 112.2 mm über dem Bett, Mitte (10, -25)
-GRÜN  x_klemmplatte                Lage +Y oben, Auflage 1400 mm², Höhe 6 mm, 0 kleine Stellen
+GRÜN  x_klemmplatte                Lage +Y oben, Auflage 1400 mm², Höhe 5 mm, 0 kleine Stellen
 GRÜN  z_halter                     Lage +Z oben, Auflage 2863 mm², Höhe 90 mm, 10 kleine Stellen
 GRÜN  z_halter_oben                Lage +Z oben, Auflage 3790 mm², Höhe 15 mm, 2 kleine Stellen
 GRÜN  z_klemmdeckel                Lage -Y oben, Auflage 4135 mm², Höhe 22 mm, 1 kleine Stellen

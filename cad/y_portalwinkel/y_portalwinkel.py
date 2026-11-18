@@ -179,7 +179,7 @@ P = dict(
     # X-Riemen (Omega auf dem X-Wagen): Enden hinten an den Sätteln geklemmt
     x_riemen_z=61.0,            # Mitte X-Riemen (hochkant) über Basisoberkante
     xk_hoehe=36.0,              # Klemmplatte senkrecht
-    xk_dicke=6.0,
+    xk_dicke=5.0,               # M3 x 16 greift die volle Mutter und bleibt vor der Brücke
     xk_einsatz_x=15.0,          # 4x M3-Gewindeeinsatz in der Sattelrückwand
     xk_einsatz_dz=13.0,         # über/unter Riemenmitte
     xk_zaehne=4,                # Zahnlücken in der Rückwand (mittig, zwischen den Einsätzen)

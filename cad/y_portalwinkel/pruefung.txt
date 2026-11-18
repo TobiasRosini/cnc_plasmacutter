@@ -3,15 +3,15 @@ winkel_kasten          gültig: True, 52.0 x 180.0 x 118.0 mm, PETG ca. 368 g (1
 spannschlitten         gültig: True, 43.1 x 24.0 x 6.7 mm, PETG ca. 6 g (100 % Füllung)
 klemmplatte_fest       gültig: True, 48.0 x 40.0 x 6.0 mm, PETG ca. 14 g (100 % Füllung)
 klemmplatte_schlitten  gültig: True, 35.4 x 28.0 x 17.3 mm, PETG ca. 9 g (100 % Füllung)
-x_klemmplatte          gültig: True, 40.0 x 6.0 x 36.0 mm, PETG ca. 11 g (100 % Füllung)
+x_klemmplatte          gültig: True, 40.0 x 5.0 x 36.0 mm, PETG ca. 9 g (100 % Füllung)
 Flachstange gültig: True
 
-Radien winkel_fest: R2 an 26 von 28 senkrechten Kanten, Fase an 71 von 89 waagerechten (148 s)
-Radien winkel_kasten: R2 an 32 von 34 senkrechten Kanten, Fase an 92 von 106 waagerechten (183 s)
-Radien spannschlitten: R2 an 4 von 4 senkrechten Kanten, Fase an 18 von 18 waagerechten (17 s)
-Radien klemmplatte_fest: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (4 s)
-Radien klemmplatte_schlitten: R2 an 6 von 6 senkrechten Kanten, Fase an 15 von 15 waagerechten (5 s)
-Radien x_klemmplatte: R2 an 4 von 4 senkrechten Kanten, Fase an 8 von 8 waagerechten (3 s)
+Radien winkel_fest: R2 an 26 von 28 senkrechten Kanten, Fase an 71 von 89 waagerechten (138 s)
+Radien winkel_kasten: R2 an 32 von 34 senkrechten Kanten, Fase an 92 von 106 waagerechten (168 s)
+Radien spannschlitten: R2 an 4 von 4 senkrechten Kanten, Fase an 18 von 18 waagerechten (20 s)
+Radien klemmplatte_fest: R2 an 4 von 4 senkrechten Kanten, Fase an 0 von 0 waagerechten (3 s)
+Radien klemmplatte_schlitten: R2 an 6 von 6 senkrechten Kanten, Fase an 15 von 15 waagerechten (7 s)
+Radien x_klemmplatte: R2 an 4 von 4 senkrechten Kanten, Fase an 8 von 8 waagerechten (2 s)
 
 Wand an Bohrungen winkel_fest: ok (>= 3.0 mm)
 Wand an Bohrungen winkel_kasten: ok (>= 3.0 mm)

@@ -1,6 +1,6 @@
 # Normteile
 
-Erzeugt von `cad/normteile.py` (dort ändern, nicht hier). Anzahl und Längen sind aus den Bohrungen des Zusammenbaus ermittelt. Die Teile aus `cad/stueckliste.md` (Wellen Ø8, Zylinderstifte, Schmiernippel, Gewindestangen M16) stehen nur dort. Muttern M12 liegen den Schaltern LJ12A3 bei. Kabelbinder und Kabelverschraubungen: `docs/AUFGABEN.md`, Punkt 16.
+Erzeugt von `cad/normteile.py` (dort ändern, nicht hier). Anzahl und Längen sind aus den Bohrungen des Zusammenbaus ermittelt. Die Teile aus `cad/stueckliste.md` (Wellen Ø8, Zylinderstifte, Schmiernippel, Gewindestangen M16) stehen nur dort. Muttern M12 liegen den Schaltern LJ12A3 bei. Kabelbinder und Kabelverschraubungen: `docs/AUFGABEN.md`, Punkt 16. Nietmuttern mit Klemmbereich bis 3 mm kaufen: Der Untertisch hat 2 mm Wand, der Oberrahmen 3 mm.
 
 ## Gesamtliste
 

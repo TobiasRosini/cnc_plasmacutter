@@ -11,7 +11,7 @@ Kompakter, möglichst rollbarer CNC-Plasmaschneidtisch für die Werkstatt. Grö�
 | X-Achse (kurze Achse) | Brennerwagen auf dem Portal; ein Motor |
 | Portalbrücke | Alu-Rechteckrohr **80 × 40 × 4 mm** (80 hoch, 40 tief), X-Schienen oben und unten |
 | Z-Achse | Spindelantrieb mit automatischer Brennerhöhenregelung (THC) |
-| Rahmen | Geschweißtes Stahl-Rechteckrohr 40 × 40 × 3, nur gerade Schnitte (keine Gehrungen); zwei verschraubte Baugruppen: **Untertisch** (Beine, Wannenkäfig, Wanne) und **Oberrahmen** (Schienen, Portal), 6× M8 |
+| Rahmen | Geschweißtes Stahl-Rechteckrohr (Oberrahmen 40 × 40 × 3, Untertisch 40 × 40 × 2), nur gerade Schnitte (keine Gehrungen); zwei verschraubte Baugruppen: **Untertisch** (Beine, Wannenkäfig, Wanne) und **Oberrahmen** (Schienen, Portal), 6× M8 |
 | **Maximale Gesamtbreite** | **800 mm** über alles (Tür Werkstatt–Garage 820 mm lichte Weite) |
 | Aufstellung | Einstellfüße und Rollen: Zum Betrieb wird der Rahmen mit den Füßen über die Rollen angehoben und steht fest; zum Verfahren Füße hochdrehen |
 | CAD | **FreeCAD** (statt Fusion 360) |
@@ -152,7 +152,7 @@ Die tatsächlichen Schienenlängen folgen aus der FreeCAD-Konstruktion, Wagenabs
 ### Halbzeuge (vereinheitlicht 03.11.2026)
 
 - **Alu:** Rechteckrohr 80 × 40 × 4 (Brücke; Reststück für die Halter des X-Spritzschutzes), Flachstange 40 × 15 (Y-Flachstangen), Flachstange 40 × 8 (Kettenturm, Platte links, Mast, Ablage hinten), Rechteckrohr 40 × 20 × 2 (X-Ablage), U-Profil 20 × 60 × 20 × 2 (Rinnen Y und X, Handel), Platte 12 (Z-Grundplatte, Z-Schlitten), Vierkant 20 × 20 (Z-Leisten), Blech 0,5 (Haube über dem Geräteraum, 1250 × 2500).
-- **Stahl:** Rechteckrohr 40 × 40 × 3, 80 × 40 × 4, 20 × 20 × 2, 20 × 40 × 2, 40 × 20 × 2 (Y-Kettenträger), Flachstahl 50 × 3 (Auflageleisten, Spritzschutz X und Y), Blech 3 (Kammträger, Geräteboden), Fußplatten 8, Blech 1 (Spritzschutz am X-Wagen).
+- **Stahl:** Rechteckrohr 40 × 40 × 3 (Oberrahmen), 40 × 40 × 2 (Untertisch), 80 × 40 × 4, 20 × 20 × 2, 20 × 40 × 2, 40 × 20 × 2 (Y-Kettenträger), Flachstahl 50 × 3 (Auflageleisten, Spritzschutz X und Y), Blech 3 (Kammträger, Geräteboden), Fußplatten 8, Blech 1 (Spritzschutz am X-Wagen).
 
 ### Unterbau, Schaltschrank und Kabelweg (Stand 03.11.2026)
 

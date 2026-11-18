@@ -1,6 +1,6 @@
-Zuschnitt Rechteckrohr 40x40x3 Stahl, alle Schnitte gerade (90°)
+Zuschnitt Rechteckrohr Stahl, alle Schnitte gerade (90°)
 
-Untertisch
+Untertisch (40x40x2)
 Teil                           Länge mm    Stk
 Längsrohr Untertisch oben        1436.0      2
 Längsrohr unten                  1436.0      2
@@ -8,9 +8,9 @@ Bein                              710.0      4
 Querrohr Untertisch oben          640.0      2
 Querrohr unten                    640.0      2
 Querrohr Mitte (unten)            640.0      2
-Summe: 12.42 m (43.3 kg)
+Summe: 12.42 m (29.6 kg)
 
-Oberrahmen
+Oberrahmen (40x40x3)
 Teil                           Länge mm    Stk
 Längsträger oben                 1556.0      2
 Querträger oben                   640.0      1

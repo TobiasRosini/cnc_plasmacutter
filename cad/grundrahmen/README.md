@@ -1,6 +1,6 @@
 # Grundrahmen
 
-Stahl-Rechteckrohr 40×40×3, nur gerade Schnitte (keine Gehrungen), alles stumpf verschweißt.
+Stahl-Rechteckrohr, nur gerade Schnitte (keine Gehrungen), alles stumpf verschweißt: **Oberrahmen 40×40×3** (trägt Schienen und Portal), **Untertisch komplett 40×40×2** (Stand 18.11.2026).
 Parametrisch aus `grundrahmen.py` (Parameter oben im Skript):
 
 ```

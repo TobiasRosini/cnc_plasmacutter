@@ -24,10 +24,10 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 020 | flachstange_40x15 | 2 | Alu | 180 × 40 × 15 | Portal | y_portalwinkel/flachstange_40x15.step |  |
 | 021 | spannschlitten | 2 | Druck | 43 × 24 × 7 | Portal | y_portalwinkel/spannschlitten.step |  |
 | 022 | klemmplatte_fest | 2 | Druck | 48 × 40 × 6 | Portal | y_portalwinkel/klemmplatte_fest.step |  |
-| 023 | klemmplatte_schlitten | 2 | Druck | 36 × 28 × 17 | Portal | y_portalwinkel/klemmplatte_schlitten.step |  |
+| 023 | klemmplatte_schlitten | 2 | Druck | 35 × 28 × 17 | Portal | y_portalwinkel/klemmplatte_schlitten.step |  |
 | 024 | Wagen_HGH15CA | 8 | Kaufteil | 61 × 34 × 24 | Portal, X-Achse, Z-Achse |  |  |
 | 025 | winkel_fest | 1 | Druck | 180 × 94 × 52 | Portal | y_portalwinkel/winkel_fest.step |  |
-| 026 | x_klemmplatte | 2 | Druck | 40 × 36 × 6 | Portal | y_portalwinkel/x_klemmplatte.step |  |
+| 026 | x_klemmplatte | 2 | Druck | 40 × 36 × 5 | Portal | y_portalwinkel/x_klemmplatte.step |  |
 | 027 | y_ref_fahne | 1 | Stahl | 46 × 32 × 15 | Portal |  | Spiegelteil zu 029 |
 | 028 | winkel_kasten | 1 | Druck | 180 × 118 × 52 | Portal | y_portalwinkel/winkel_kasten.step |  |
 | 029 | y_ref_fahne_rechts | 1 | Stahl | 46 × 32 × 15 | Portal |  | Spiegelteil zu 027 |
@@ -94,9 +94,9 @@ Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). 
 | 090 | Kette_igus_2400_03_R75 | 1 | Kaufteil | 400 × 186 × 55 | Energieketten |  |  |
 | 091 | Kette_igus_2400_03_R125 | 1 | Kaufteil | 539 × 285 × 55 | Energieketten |  |  |
 | 092 | ek_kabelkanal | 1 | Kaufteil | 582 × 40 × 40 | Energieketten |  |  |
-| 093 | ek_leitungsbogen_a | 1 | Druck | 157 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
-| 094 | ek_leitungsbogen_steg | 1 | Druck | 130 × 107 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
-| 095 | ek_leitungsbogen_b | 1 | Druck | 157 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
+| 093 | ek_leitungsbogen_a | 1 | Druck | 158 × 121 × 28 | Energieketten | energiekette/ek_leitungsbogen_a.step |  |
+| 094 | ek_leitungsbogen_steg | 1 | Druck | 126 × 116 × 3 | Energieketten | energiekette/ek_leitungsbogen_steg.step |  |
+| 095 | ek_leitungsbogen_b | 1 | Druck | 158 × 121 × 29 | Energieketten | energiekette/ek_leitungsbogen_b.step |  |
 | 096 | ekx_mast | 1 | Alu | 356 × 40 × 8 | Energieketten | energiekette/ekx_mast.step |  |
 | 101 | ek_verbindungsplatte | 1 | Druck | 90 × 60 × 15 | Energieketten | energiekette/ek_verbindungsplatte.step |  |
 | 102 | ek_leitungsschelle | 5 | Druck | 57 × 17 × 15 | Energieketten | energiekette/ek_leitungsschelle.step |  |
