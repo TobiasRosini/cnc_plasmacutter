@@ -1,6 +1,6 @@
 # Bestellung igus
 
-Stand 18.11.2026. Artikelnummern aus dem igus-Datenblatt der Serie 2400 (22.08.2025) und den chainflex-Datenblättern. Preise und Lieferbarkeit im Shop prüfen.
+**Bestellt am 18.11.2026.** Artikelnummern aus dem igus-Datenblatt der Serie 2400 (22.08.2025) und den chainflex-Datenblättern. Preise und Lieferbarkeit im Shop prüfen.
 
 | Pos. | Artikelnummer | Menge | Wofür |
 |---:|---|---|---|
