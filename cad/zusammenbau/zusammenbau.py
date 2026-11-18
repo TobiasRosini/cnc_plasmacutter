@@ -346,13 +346,14 @@ def main():
         f.write("Kollision Wanne / Rahmen: %.3f mm³\n" % wanne.common(rahmen).Volume)
         f.write("Kollision Wanne / Brücke: %.3f mm³\n" % wanne.common(br).Volume)
         f.write("Abstand Brücke UK zu Rahmen OK: %.0f mm\n" % (z0 - rahmen_bb.ZMax))
-        # Alle Teile paarweise (außer Rahmenrohre untereinander: Stoßflächen)
+        # Alle Teile paarweise (außer Rahmenrohre untereinander: Stoßflächen; Füße und Rollen zählen mit)
         teile = [o for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
                  and o.Shape.Volume > 0]
         n = 0
         for i, a in enumerate(teile):
             for c in teile[i + 1:]:
-                if a.Name.startswith("R_") and c.Name.startswith("R_"):
+                if a.Name.startswith("R_") and c.Name.startswith("R_") \
+                        and not any(k in a.Name + c.Name for k in ("Eckplatte", "Lenkrolle", "Stellfuss", "Schweissmutter")):
                     continue
                 paar = a.Name + c.Name
                 if "Riemen_HTD5M" in paar and ("Riemenscheibe" in paar or "Umlenkrolle" in paar):
@@ -452,6 +453,47 @@ def main():
                 f.write("Y-Kette, Portal %s, X-Wagen bei %.0f: Kollision %.1f mm³\n" % (name, xl, v))
         mo = doc.getObject("Y_hl_Motor_Y").Shape.BoundBox
         f.write("Y-Motor hinten: Oberkante %.1f mm über Boden, innen bis x %.1f\n" % (mo.ZMax, mo.XMax))
+
+        # X-Kette und Brennerleitung in den Endlagen, Fahrt gegen Wanne und feste Teile
+        def versetzt(s, dx=0.0, dy=0.0, dz=0.0):
+            t = s.copy()
+            t.translate(V(dx, dy, dz))
+            return t
+        fahrt = {o.Name: o.Shape for o in doc.Objects if o.TypeId in ("App::Link", "Part::Feature")
+                 and o.Name[:2] in ("X_", "Z_")
+                 and o.Name not in ("X_Schienen_HGR15", "X_Riemen_HTD5M_15", "X_Kette_igus_2400_03_R75")}
+        brenner = fahrt.pop("Z_Brenner_SP80M")
+        leitung_b = fahrt.pop("X_ekx_Leitung_Brenner")
+        kettenhalter = fahrt.pop("X_ekx_halter")         # Kettenende ist daran verschraubt
+        rest = Part.makeCompound(list(fahrt.values()))
+        gegen_portal = Part.makeCompound(portal_teile + [doc.getObject("X_Riemen_HTD5M_15").Shape])
+        w_alle = [doc.getObject(n).Shape for n in ("W_Wanne", "W_Wannenkaefig", "W_Kammtraeger", "W_Schutzleisten")]
+        wanne_teile = Part.makeCompound(w_alle)
+        fest_wanne = Part.makeCompound([fest_teile, doc.getObject("W_Auflageleisten").Shape] + w_alle)
+        ylagen = (yb + hl - py, y_vorn - py)
+        for xl in (xmin, xmax):
+            kk = ek.kette_x(xl)
+            kk.translate(V(sx[0], py, z_schiene_rahmen))
+            kk = fc_dok.fest(kk)
+            lb = versetzt(leitung_b, xl - xw)
+            r = versetzt(rest, xl - xw)
+            v = kk.common(gegen_portal).Volume + lb.common(gegen_portal).Volume + kk.common(r).Volume
+            f.write("X-Kette und Brennerleitung, X-Wagen bei %.0f, gegen Portal und Wagen: %.1f mm³\n" % (xl, v))
+            v = sum(versetzt(t, 0.0, dy).common(fest_wanne).Volume for t in (kk, lb, r, versetzt(kettenhalter, xl - xw))
+                    for dy in ylagen)
+            f.write("Fahrt in beiden Y-Endlagen, X-Wagen bei %.0f (ohne Brenner), gegen Wanne und feste Teile: %.1f mm³\n"
+                    % (xl, v))
+        # Brenner: im Softlimit X ±260 um die Wannenmitte frei, außerhalb nur mit Z oben
+        xm = wanne.BoundBox.Center.x
+        z_u = rahmen_bb.ZMax - 3.0                       # Z-Untergrenze: 3 mm unter der Blechunterseite
+        v = sum(versetzt(brenner, xm + s - xw, dy, z_u - brenner.BoundBox.ZMin).common(wanne_teile).Volume
+                for s in (-260.0, 260.0) for dy in ylagen + (0.0,))
+        f.write("Brenner im Softlimit X ±260, Düse %.0f (Y hinten/Mitte/vorn) gegen Wanne und Schutzleisten: %.1f mm³\n"
+                % (z_u, v))
+        v = max(versetzt(brenner, xl - xw).common(wanne).Volume for xl in (xmin, xmax))
+        f.write("Hinweis: Brenner außerhalb des Softlimits (X %.0f/%.0f, Z ganz unten, Düse %.0f) im Wannenbördel: "
+                "%.0f mm³ (Z referenziert zuerst, docs/AUFGABEN.md Punkt 19)\n"
+                % (xmin, xmax, brenner.BoundBox.ZMin, v))
 
 
 main()

@@ -20,3 +20,9 @@ Y-Kette, Portal hinten, X-Wagen bei 644: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 78: Kollision 0.0 mm³
 Y-Kette, Portal vorn, X-Wagen bei 644: Kollision 0.0 mm³
 Y-Motor hinten: Oberkante 944.0 mm über Boden, innen bis x 694.1
+X-Kette und Brennerleitung, X-Wagen bei 78, gegen Portal und Wagen: 0.0 mm³
+Fahrt in beiden Y-Endlagen, X-Wagen bei 78 (ohne Brenner), gegen Wanne und feste Teile: 0.0 mm³
+X-Kette und Brennerleitung, X-Wagen bei 644, gegen Portal und Wagen: 0.0 mm³
+Fahrt in beiden Y-Endlagen, X-Wagen bei 644 (ohne Brenner), gegen Wanne und feste Teile: 0.0 mm³
+Brenner im Softlimit X ±260, Düse 847 (Y hinten/Mitte/vorn) gegen Wanne und Schutzleisten: 0.0 mm³
+Hinweis: Brenner außerhalb des Softlimits (X 78/644, Z ganz unten, Düse 842) im Wannenbördel: 465 mm³ (Z referenziert zuerst, docs/AUFGABEN.md Punkt 19)
