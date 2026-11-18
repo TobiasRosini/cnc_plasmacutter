@@ -1,6 +1,6 @@
 # Stückliste
 
-Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). Gleiche Teile haben die gleiche Nummer, Spiegelteile eine eigene. Nummern stehen fest in `cad/teilenummern.json`; neue Teile bekommen die nächste freie Nummer. Im Zusammenbau steht die Nummer vorn in der Beschriftung. Leitungen (Hüllrohre) sind keine Teile. Schrauben, Muttern, Nietmuttern noch nicht enthalten.
+Erzeugt von `cad/teilenummern.py` aus dem Zusammenbau (nicht von Hand ändern). Gleiche Teile haben die gleiche Nummer, Spiegelteile eine eigene. Nummern stehen fest in `cad/teilenummern.json`; neue Teile bekommen die nächste freie Nummer. Im Zusammenbau steht die Nummer vorn in der Beschriftung. Leitungen (Hüllrohre) sind keine Teile. Schrauben, Muttern und Nietmuttern stehen in `cad/normteile.md`.
 
 | Nr. | Teil | Stk. | Art | Maße (mm) | Baugruppe | Datei | Bemerkung |
 |---:|---|---:|---|---|---|---|---|

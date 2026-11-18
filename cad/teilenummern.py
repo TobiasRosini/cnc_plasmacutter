@@ -291,8 +291,8 @@ def main():
                 "Gleiche Teile haben die gleiche Nummer, Spiegelteile eine eigene. "
                 "Nummern stehen fest in `cad/teilenummern.json`; neue Teile bekommen die nächste "
                 "freie Nummer. Im Zusammenbau steht die Nummer vorn in der Beschriftung. "
-                "Leitungen (Hüllrohre) sind keine Teile. Schrauben, Muttern, Nietmuttern noch nicht "
-                "enthalten.\n\n")
+                "Leitungen (Hüllrohre) sind keine Teile. Schrauben, Muttern und Nietmuttern stehen in "
+                "`cad/normteile.md`.\n\n")
         f.write("| Nr. | Teil | Stk. | Art | Maße (mm) | Baugruppe | Datei | Bemerkung |\n")
         f.write("|---:|---|---:|---|---|---|---|---|\n")
         for t in teile:

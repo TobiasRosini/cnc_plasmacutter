@@ -29,7 +29,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Ablaufhalter an Querrohr Untertisch hinten | 2× M5 in Nietmuttern (Innenseite) | **neu** |
 | Schellendeckel Ablaufhalter | 2× M4 von unten in seitlich eingeschobene Muttern | **neu** |
 | Rosette Kanal | 3× M3 durch das Blech in eingepresste Muttern | **neu** |
-| Stopfen links in der X-Ablage | 1× M4 × 10 von unten durch die Ablage in eine Mutter, oben in den Stopfen eingelegt | **neu** |
+| Stopfen links in der X-Ablage | 1× M4 × 18 mit Scheibe von unten durch die Ablage in eine Mutter, oben in den Stopfen eingelegt | **neu** |
 | Anschlussdose auf Rinnenhalter rechts | 2× M4 × 25 von innen durch Boden und Halter in Muttern (unten in den Halter eingepresst) | **neu** |
 | Deckel Anschlussdose | 2× M3 in seitlich eingeschobene Muttern in Ecksäulen | **neu** |
 | Stellfüße an Eckplatten | Gewindestange M16 in Schweißmutter M16 oben auf der Eckplatte (im Bein), Kontermutter flach unten | **neu** |
@@ -40,7 +40,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Verbindung | Ausführung | Stand |
 |---|---|---|
 | Flachstange auf Y-Wagen | 4× M4 von oben, gesenkt | ok |
-| Y-Winkel (Druck) auf Flachstange | M4 gesenkt in Gewinde in der Flachstange, Riemenklemme M5×65 durch Turm und Basis in Gewinde | ok (lange Schraube, aber in Gewinde) |
+| Y-Winkel (Druck) auf Flachstange | M4 gesenkt in Gewinde in der Flachstange, Riemenklemme M5×60 durch Turm und Basis in Gewinde | ok (lange Schraube, aber in Gewinde) |
 | Sattel ↔ Brücke | 4× M6×60 quer durch Sattel, Brücke und Einsteckteil, Muttern vorn eingepresst, Köpfe hinten | bleibt. Zugang geprüft: Muttern sind gefangen, die unteren Köpfe immer frei, die oberen liegen unter Y-Klemmplatte und Fahne → Brücke vor der Riemenklemme montieren |
 | Kettenturm / linke Platte an Einsteckteil | 4× M6 in Muttern, seitlich in Schlitze geschoben | links Löcher verlegt (schnitten die Sattel-M6) |
 | X-Schienen an Brücke | M4 in die 4-mm-Alu-Wand | ok |
@@ -67,12 +67,12 @@ Keine Gewindeeinsätze mehr. Wo die Schraube die Mutter in eine Tasche an der Au
 | ek_halter_y | 2× M5 oben (Kettenende), 2× M5 von oben in Schlitze (Turm) |
 | ekx_ablagehalter | 2× M5 von unten (Turm), 2× M5 seitlich im Zapfen |
 | ekx_rinnenhalter | je 2× M5 von unten in Nietmuttern der Ablage, 1× M4 seitlich (Ablage hinten); der dritte zusätzlich 1× M5 seitlich (hinteres M5 des festen X-Kettenendes) |
-| ek_leitungsbogen (a, steg, b) | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich; 2× M3 × 55 quer durch alle drei Teile, Mutter außen in Tasche |
+| ek_leitungsbogen (a, steg, b) | 2× M5 (Kettenende) von unten, 2× M4 Verbindungsplatte, Muttern seitlich; 2× M3 × 60 (auf 57 mm gekürzt) quer durch alle drei Teile, Mutter außen in Tasche |
 | ekx_umlenkkopf | 2× M4 vom Mast (Muttern seitlich), 2× M4 Verbindungsplatte (Muttern von unten eingepresst); Leitungsschelle oben; am senkrechten Lauf Spezialschelle: rechts 1× M3, links Nippel in Vertiefung der Wange |
-| ekx_mastwinkel | 2× M4 × 25 durch Winkel und Mast in Gewinde in der Ablagestirn (ersetzt die kurzen Mastschrauben), 2× M4 in Gewinde im Mast, 2× M4 von unten in Gewinde in der Ablage |
+| ekx_mastwinkel | 2× M4 × 20 durch Winkel und Mast in Gewinde in der Ablagestirn (ersetzt die kurzen Mastschrauben), 2× M4 in Gewinde im Mast, 2× M4 von unten in Gewinde in der Ablage |
 | ekx_distanzstueck | 2× M4 × 20 von hinten durch den Mast, Muttern von links eingeschoben; 2 Kabelbinder quer |
 | ek_verbindungsplatte | je 2× M4 von oben in Bogen und Kopf, 2× M3 Leitungsschelle (Muttern von unten) |
-| ek_leitungsschelle | 2× M3 × 25 durch die Schenkel in Muttern der Unterlage (Bogen, Kopf oben, Sockel seitlich eingeschoben; Platte von unten) |
+| ek_leitungsschelle | 2× M3 × 30 (auf der Verbindungsplatte M3 × 35, auf 32 mm gekürzt) durch die Schenkel in Muttern der Unterlage (Bogen, Kopf oben, Sockel seitlich eingeschoben; Platte von unten) |
 | ekx_schelle_einseitig | 1× M3 × 25 rechts durch den Schenkel in Mutter in der Rückwand des Umlenkkopfs (seitlich eingeschoben), links Nippel in Vertiefung der Wange |
 | ekx_leitungssockel | 2× M3 von unten durch die Ablage hinten in eingepresste Muttern |
 | ekx_halter | 2× M5 oben (Kettenende) |

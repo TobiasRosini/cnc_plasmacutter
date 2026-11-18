@@ -17,8 +17,8 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 ## B. Prüfen und Unterlagen fertig machen
 
 10. [x] **Montageprüfung und Kollisionsprüfung** (18.11.2026): 0 offene Bohrungen, 0 Kollisionen im Zusammenbau. Zusätzlich nachgerechnet: neue Rahmenteile (Eckplatten, Rollen, Stellfüße) untereinander, X-Kette und Brennerleitung in den Endlagen, Fahrt gegen die Wanne. **Einziger Befund:** Der Brenner trifft den Wannenbördel, wenn er bei tiefem Z über X ±260 hinausfährt (mechanisch bis −282/+284 möglich); Absicherung über die Steuerung, siehe Punkt 19.
-11. [ ] **7 gelbe Druckteile** in `cad/druckbarkeit.txt` ansehen: ub_kanalknoten, x_motorbock, x_wagenkoerper, y_motorhalter (+ _l), winkel_fest, winkel_kasten. Brücken/Überhänge akzeptieren oder ändern.
-12. [ ] **Normteile in die Stückliste**: Schrauben, Muttern, Einpress- und Nietmuttern, Blindnieten, Stäbe (heute nicht enthalten), aus `VERBINDUNGEN.md` und dem Modell.
+11. [x] **7 gelbe Druckteile** (18.11.2026): ub_kanalknoten, x_motorbock, x_wagenkoerper, y_motorhalter (+ _l), winkel_fest, winkel_kasten angesehen, Brücken und Überhänge bleiben so. Brückenkühlung im Slicer aktiv; Schalterbohrungen M12 bei Bedarf mit Ø12 nachbohren, Langloch-Ende am Motorbock bei Bedarf nachfeilen.
+12. [x] **Normteile** (18.11.2026): eigene Liste `cad/normteile.md` (erzeugt von `cad/normteile.py`) mit Bedarf und Bestellmenge, Anzahl und Längen aus den Bohrungen des Zusammenbaus. Drei Schrauben werden gekürzt (Motorhalter Z, Leitungsbogen quer, Schelle auf der Verbindungsplatte).
 13. [ ] **Zuschnitt- und Einkaufsliste Halbzeuge** (Stahl, Alu, Bleche, Siebdruckplatte) über alle Baugruppen zusammengefasst.
 14. [ ] **Druckliste**: alle STL mit Anzahl, Material (PETG/ASA), Drucklage, geschätztem Gewicht.
 15. [ ] **Dokumente nachziehen**: veraltete „Offen“-Zeile im X-Wagen-README, Beschaffungsstand und „Nächste Schritte“ im Projektstand, Montageanleitung um die neuen Teile ergänzen.
