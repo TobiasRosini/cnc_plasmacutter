@@ -10,11 +10,11 @@ Stand 03.11.2026. Seiten von vorn gesehen. Schaltschrank und Plasmagerät stehen
 | 2 | Brenner: Stromkabel | Plasmagerät | Brenner | im Schlauchpaket, min. R60 | 6,3 | ✓ | ✓ | 5,0 m ab Gerät |
 | 3 | Brenner: Pilot | Plasmagerät | Brenner | im Schlauchpaket | 3 | ✓ | ✓ | 5,0 m ab Gerät |
 | 4 | Brenner: Start/Stopp (2 Adern) | Plasmagerät | Brenner | im Schlauchpaket; bei CNC-Start ungenutzt, im Paket lassen | 2 × 2 | ✓ | ✓ | 5,0 m ab Gerät |
-| 5 | Motor X | Schaltschrank (Treiber) | X-Motor auf dem Wagen | igus CF10.07.05, (5 G 0,75)C: 4 Phasen + PE ans Motorgehäuse, Schirm | 7,5 | ✓ | ✓ | 5,0 m |
-| 6 | Motor Z | Schaltschrank (Treiber) | Z-Motor auf dem Z-Kopf | igus CF10.07.05 | 7,5 | ✓ | ✓ | 5,0 m |
-| 7 | Referenzschalter X | Schaltschrank (24 V, Eingang) | LJ12A3 am rechten Y-Winkel | igus CF9.02.03.INI, 3 × 0,25 | 4,5 | ✓ | – | 3,1 m |
-| 8 | Referenzschalter Z | Schaltschrank | LJ12A3 im Z-Kopf | igus CF9.02.03.INI | 4,5 | ✓ | ✓ | 5,0 m |
-| 9 | Schalter Schwimmkopf | Schaltschrank (24 V, Eingang) | LJ12A3-4-Z/AY im oberen Steg des Schwimmkopf-Halters (fährt mit Z) | igus CF9.02.03.INI, 3 × 0,25 | 4,5 | ✓ | ✓ | 5,3 m |
+| 5 | Motor X | Schaltschrank (Treiber) | X-Motor auf dem Wagen | igus CF10.07.05, (5 G 0,75)C: 4 Phasen + PE ans Motorgehäuse, Schirm | 8,0 | ✓ | ✓ | 5,0 m |
+| 6 | Motor Z | Schaltschrank (Treiber) | Z-Motor auf dem Z-Kopf | igus CF10.07.05 | 8,0 | ✓ | ✓ | 5,0 m |
+| 7 | Referenzschalter X | Schaltschrank (24 V, Eingang) | LJ12A3 am rechten Y-Winkel | igus CF9.02.03.INI, 3 × 0,25 | 5,0 | ✓ | – | 3,1 m |
+| 8 | Referenzschalter Z | Schaltschrank | LJ12A3 im Z-Kopf | igus CF9.02.03.INI | 5,0 | ✓ | ✓ | 5,0 m |
+| 9 | Schalter Schwimmkopf | Schaltschrank (24 V, Eingang) | LJ12A3-4-Z/AY im oberen Steg des Schwimmkopf-Halters (fährt mit Z) | igus CF9.02.03.INI, 3 × 0,25 | 5,0 | ✓ | ✓ | 5,3 m |
 | (10) | Ohmsche Antastung (falls gewählt) | Schaltschrank | Brennerkappe | 1 Ader, hochspannungsfest isoliert | ~3 | ✓ | ✓ | 5,0 m |
 
 Längen bis zu den Klemmen im Schaltschrank (bzw. bis zum Brenneranschluss vorn am Plasmagerät), aus dem Modell, ohne Reserve:
@@ -28,12 +28,14 @@ Kabelweg: `cad/unterbau/README.md`.
 
 Die LJ12A3 haben ein fest angespritztes PVC-Kabel, das nicht für Schleppketten gedacht ist. Es wird kurz vor der Kette (X: in der Anschlussdose auf dem rechten Rinnenhalter, `cad/energiekette/README.md`; Z und Schwimmkopf: am X-Wagen) auf die Kettenleitung verlötet und mit Schrumpfschlauch isoliert.
 
-## Bestellung igus (chainflex, auf Länge geschnitten)
+## Bestellung igus (chainflex)
+
+Artikelnummern und Mengen der ganzen Bestellung: `docs/Bestellung_igus.md`.
 
 | Artikel | Aufbau | Ø | Biegeradius in der Kette | Menge |
 |---|---|---|---|---|
-| CF10.07.05 | (5 G 0,75)C, TPE, geschirmt | 7,5 | 5 × d | X und Z je 5,5 m = 11 m; dazu Y-Motoren (fest verlegt) je etwa 3 m |
-| CF9.02.03.INI | 3 × 0,25, TPE (für Initiatoren) | 4,5 | 5 × d | X 3,5 m, Z 5,5 m, Schwimmkopf 6 m = 15 m; dazu Y-Schalter (fest verlegt) je etwa 3 m |
+| CF10.07.05 | (5 G 0,75)C, TPE, geschirmt | 8,0 | 5 × d | X und Z je 5,5 m, Y-Motoren (fest verlegt) je etwa 3,5 m = 18 m, bestellt 20 m |
+| CF9.02.03.INI | 3 × 0,25, TPE (für Initiatoren) | 5,0 | 5 × d | X 3,5 m, Z 5,5 m, Schwimmkopf 6 m, Y-Schalter (fest verlegt) je etwa 3,5 m = 22 m, bestellt 25 m |
 
 Warum 5 G statt 4 G: Grün-gelb ist für den Schutzleiter reserviert. Bei 4 G müsste eine Phase auf Grün-gelb laufen; mit 5 G gehen die vier schwarzen nummerierten Adern auf die Phasen und Grün-gelb an das Motorgehäuse. Der Schirm wird am Treiber bzw. im Schaltschrank aufgelegt. Die Y-Motoren (fest verlegt) können dieselbe Leitung bekommen.
 
@@ -41,14 +43,14 @@ Mengen mit etwa 0,5 m Reserve je Leitung. Werte aus dem igus-Leitungskatalog (ä
 
 ## Belegung der Ketten
 
-Ein Trennsteg igus 211 in jedem zweiten Glied (Y: 11 Stück, X: 7 Stück) teilt den Innenraum:
+Ein Trennsteg igus 201 (lose, selbst einsetzen) in jedem zweiten Glied (Y: 11 Stück, X: 7 Stück) teilt den Innenraum:
 
 | Fach | Breite | Inhalt | Belegung |
 |---|---|---|---|
 | Brenner | ca. 19 | Nr. 1–4 (+10) | unten Luft 8, Strom 6,3, Pilot 3 nebeneinander (17,3), darüber die beiden Start/Stopp-Adern |
-| Steuerung (innen) | ca. 17 | Nr. 5–9 | unten die zwei Motorleitungen (2 × 7,5 = 15), darüber die Schalterleitungen (3 × 4,5 = 13,5) |
+| Steuerung (innen) | ca. 17 | Nr. 5–9 | unten die zwei Motorleitungen (2 × 8 = 16), darüber die Schalterleitungen (3 × 5 = 15) |
 
-Höhe je Fach höchstens 7,5 + 4,5 = 12 von 25 mm. Die Plasmaleitungen (Pilot, Strom) liegen so nicht direkt neben den Schalterleitungen. Im Brennerfach liegt das Stromkabel unten in der Mitte (Luft und Pilot außen), weil es im Versatz zwischen den Ketten auf der Innenseite R60 braucht.
+Höhe je Fach höchstens 8 + 5 = 13 von 25 mm. Die Plasmaleitungen (Pilot, Strom) liegen so nicht direkt neben den Schalterleitungen. Im Brennerfach liegt das Stromkabel unten in der Mitte (Luft und Pilot außen), weil es im Versatz zwischen den Ketten auf der Innenseite R60 braucht.
 
 Zwischen Y- und X-Kette bleiben die beiden Fächer als getrennte Pfade erhalten: Trennsteg in Leitungsbogen und Umlenkkopf, Leitungsschellen mit Mittelsteg (`cad/energiekette/README.md`). In der Y-Kette liegt die Steuerung innen, in der X-Kette hinten.
 
@@ -59,8 +61,8 @@ Leitungen, die innen in der Kehre anliegen, biegen sich enger als der Kettenradi
 | Kette | Leitung | Biegung innen | Anforderung |
 |---|---|---|---|
 | X (R75) | Stromkabel Ø6,3 | ca. 66 | min. 60 ✓ |
-| X (R75) | Motorleitung CF10 Ø7,5 | ca. 66 | CF10: 5 × d = 38 ✓ |
-| X (R75) | Schalterleitung Ø4,5 | ca. 65 | CF9: 5 × d = 23 ✓ |
+| X (R75) | Motorleitung CF10 Ø8 | ca. 67 | CF10: 5 × d = 40 ✓ |
+| X (R75) | Schalterleitung Ø5 | ca. 65 | CF9: 5 × d = 25 ✓ |
 | Y (R125) | alle | über 115 | ✓ |
 
 ## Fest verlegt (nicht in den Ketten)

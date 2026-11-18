@@ -7,7 +7,7 @@ Beide Ketten: **igus E2/000 Serie 2400.03** (innen 38 × 25, außen 54 × 35, Te
 | Y-Kette | 2400.03.125.0 | 23 | 1058 mm (igus-Formel 1056) |
 | X-Kette | 2400.03.075.0 | 14 | 644 mm (igus-Formel 629) |
 | Anschlussteile | 2030.12PZ.A1 (vormontiert, Einbaulage A1) | 2 Sätze | |
-| Trennstege | 211, jedes 2. Glied | Y 11, X 7 | |
+| Trennstege | 201 (lose), jedes 2. Glied | Y 11, X 7 | |
 
 Belegung und Leitungen: `docs/Kabelliste.md`.
 
