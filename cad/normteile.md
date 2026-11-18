@@ -75,8 +75,9 @@ Summe 4 Stück.
 | ISO 4032 M5 | 41 | 46 |
 | ISO 4032 M6 | 16 | 18 |
 | ISO 4032 M8 | 4 | 6 |
+| ISO 4032 M16 | 8 | 10 |
 
-Summe 155 Stück.
+Summe 163 Stück.
 
 ### Nietmuttern
 
@@ -124,7 +125,7 @@ Summe 24 Stück.
 | Spritzschutz Y an den Längsträgern | 12× Blindniet Ø4 × 8 Stahl |  |
 | Geräteboden auf untere Längsrohre | 6× ISO 4762 M6 × 16, 6× Nietmutter M6 |  |
 | Lenkrollen an den Eckplatten | 16× DIN 933 M8 × 16 | Länge an der Rollenplatte prüfen |
-| Stellfüße (Kontermutter) | 4× DIN 439 M16 | Gewindestange und Schweißmutter: Stückliste 130, 131 |
+| Stellfüße | 8× ISO 4032 M16, 4× DIN 439 M16 | je Fuß 1 Schweißmutter auf der Eckplatte, 1 Mutter unten an der Stange, 1 Kontermutter |
 
 ### Portal
 

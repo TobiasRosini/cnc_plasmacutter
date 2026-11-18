@@ -32,7 +32,8 @@ V = [
     ("Rahmen", "Spritzschutz Y an den Längsträgern", [("Blindniet Ø4 × 8 Stahl", 12)], ""),
     ("Rahmen", "Geräteboden auf untere Längsrohre", [(ZS % "6 × 16", 6), (NM % 6, 6)], ""),
     ("Rahmen", "Lenkrollen an den Eckplatten", [(SK % "8 × 16", 16)], "Länge an der Rollenplatte prüfen"),
-    ("Rahmen", "Stellfüße (Kontermutter)", [("DIN 439 M16", 4)], "Gewindestange und Schweißmutter: Stückliste 130, 131"),
+    ("Rahmen", "Stellfüße", [(MU % 16, 8), ("DIN 439 M16", 4)],
+     "je Fuß 1 Schweißmutter auf der Eckplatte, 1 Mutter unten an der Stange, 1 Kontermutter"),
 
     ("Portal", "Flachstange auf Y-Wagen", [(ZS % "4 × 12", 16)], ""),
     ("Portal", "Winkel auf Flachstange", [(ZS % "4 × 18", 8)], ""),
