@@ -16,7 +16,7 @@ Geprüft mit `python3 cad/live.py cad/pruefe_montage.py`. Die Prüfung meldet je
 | Y-Kettenträger auf Stützkopf hinten | 2× M6 von unten in Nietmuttern in der Trägerunterseite | **neu** |
 | Kanalknoten (Druck) auf vorderer Stütze | 2× M5 von vorn durch die Schürze in Nietmuttern in der Vorderwand der Stütze | **neu** (ersetzt den vorderen Stützkopf) |
 | Y-Kettenträger im Kanalknoten | 2× M5 von innen durch die Knotenwand in Nietmuttern in der Innenseite des Trägers | **neu** |
-| Rinnen auf den Trägern | Blindnieten Ø4 | offen (Lage beim Bau) |
+| Rinnen auf den Trägern (Y, X) | je 2× M3 × 6 Senkkopf (DIN 7991, bündig im Rinnenboden) in Gewinde in der Oberwand des Trägers bzw. der Ablage (Kernloch Ø2,5), dazu die 2× M5 des festen Kettenendes | **neu** |
 | Geräteboden (Siebdruck 9) auf untere Längsrohre | 6× M6 von oben in Nietmuttern M6 | **neu** |
 | Spritzschutz Y an Längsträgern | je 6 Blindnieten Ø4 | **neu** |
 | Halter Spritzschutz X an Flachstange | 2× M4 in Gewinde in der vorderen Stirn | **neu** |

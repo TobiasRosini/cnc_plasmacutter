@@ -57,6 +57,8 @@ P = dict(
     kanal_h=40.0,               # Kabelkanal 40 x 40 (PVC, Wand 2) auf dem Träger
     kanal_t=2.0,
     kanal_schraub_y=[950.0, 1150.0, 1350.0],   # M4 durch den Kanalboden in Nietmuttern im Träger
+    rinne_m3=(3.4, 6.3, 2.5),   # Rinnen: M3 Senkkopf (DIN 7991, bündig im 2-mm-Boden), Gewinde direkt
+                                # im Träger bzw. in der Ablage (Kernloch 2,5)
     rinne_luft=1.0,             # Kette 54, festes Anschlussteil 51 (bewegte Enden liegen nicht in der Rinne)
     # Anschlussteile igus 2030.12PZ (Kunststoff, verriegelt): Platte 7 dick, Ba + 1 = 55
     # breit, 40 lang, 2 Bohrungen Ø6,1 im Abstand A = 25 quer zur Kette, 10 mm vom äußeren Ende
@@ -285,6 +287,8 @@ def traeger_rinne():
                                                 P["traeger_uk"] + th - 3)))
     for y in P["kanal_schraub_y"]:                       # Nietmuttern M4 für den Kabelkanal
         tr = tr.cut(Part.makeCylinder(3.0, 4, V(xm, y, P["traeger_uk"] + th - 3)))
+    for y in rinne_schraub_y():                          # M3 Rinne: Gewinde in der Oberwand
+        tr = tr.cut(Part.makeCylinder(P["rinne_m3"][2] / 2, 4, V(xm, y, P["traeger_uk"] + th - 3)))
     t = P["rinne_t"]
     y0 = yh                                              # Rinne hinten bis hinter das feste Kettenende
     y1 = rinne_ende_y()
@@ -292,9 +296,32 @@ def traeger_rinne():
     xc = (g["k_x0"] + g["k_x1"]) / 2
     for dx in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende, M5
         ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(xc + dx, g["y_fest"] + loch_versatz(), g["z_rinne"] - 1)))
+    for y in rinne_schraub_y():                          # M3 Senkkopf
+        ri = ri.cut(senkschraube_m3(xm, y, g["z_rinne"] + t, t))
     for x0 in (g["r_x0"], g["r_x1"] - t):
         ri = ri.fuse(box(x0, x0 + t, y0, y1, g["z_rinne"], g["z_rinne"] + P["rinne_rand"]))
     return tr, ri.removeSplitter()
+
+
+def senkschraube_m3(x, y, z_oben, tiefe):
+    """Senkung + Durchgang M3 von oben (z_oben = Oberseite des Rinnenbodens)."""
+    d, dk, _ = P["rinne_m3"]
+    k = (dk - d) / 2
+    s = Part.makeCone(d / 2, dk / 2 + 0.5, k + 0.5, V(x, y, z_oben - k))
+    return s.fuse(Part.makeCylinder(d / 2, tiefe + 1, V(x, y, z_oben - tiefe)))
+
+
+def rinne_schraub_y():
+    """Y-Rinne: M3 hinten und in der Mitte bis zum festen Kettenende (dort 2x M5)."""
+    g = geo()
+    y0 = g["y_hinten"] + 30.0
+    return [y0, (y0 + g["y_fest"]) / 2]
+
+
+def rinne_schraub_x():
+    """X-Rinne: M3 rechts hinter dem Zapfen des Ablagehalters und in der Mitte bis zum festen Kettenende."""
+    x0 = ablage_x0() + 40.0
+    return [x0, (x0 + x_fest_loch()) / 2]
 
 
 def rinne_ende_y():
@@ -1332,6 +1359,8 @@ def ablage_x():
     for x, y in zapfen_loecher():                                  # M5 von unten in den Zapfen
         tr = tr.cut(Part.makeCylinder(2.75, 4, V(x, y, z0 - 1)))
     tr = tr.cut(Part.makeCylinder(2.25, 4, V(x1 - P["stopfen_m4_dx"], ym, z0 - 1)))   # M4 Stopfen
+    for x in rinne_schraub_x():                                    # M3 Rinne: Gewinde in der Oberwand
+        tr = tr.cut(Part.makeCylinder(P["rinne_m3"][2] / 2, 4, V(x, ym, z0 + P["traeger_h"] - 3)))
     for x in rh_halter_xs():                                       # Nietmuttern M5 für die Rinnenhalter
         for y in (ym - 10.0, ym + 10.0):
             tr = tr.cut(Part.makeCylinder(3.5, 4, V(x + P["rh_halter_b"] / 2, y, z0 - 1)))
@@ -1347,6 +1376,8 @@ def ablage_x():
     yc = (gx["y0"] + gx["y1"]) / 2
     for dy in (-P["end_C"] / 2, P["end_C"] / 2):                  # festes Kettenende
         ri = ri.cut(Part.makeCylinder(2.75, t + 2, V(gx["xf"] + loch_versatz(), yc + dy, gx["z_ri"] - 1)))
+    for x in rinne_schraub_x():                                    # M3 Senkkopf
+        ri = ri.cut(senkschraube_m3(x, ym, gx["z_ri"] + t, t))
     return tr, ri.removeSplitter()
 
 
