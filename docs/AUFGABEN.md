@@ -16,7 +16,7 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 
 ## B. Prüfen und Unterlagen fertig machen
 
-10. [ ] **Montageprüfung** (`pruefe_montage.py`, letzter Lauf 12.11.) und Kollisionsprüfung im Zusammenbau nach allen Änderungen seit dem 12.11. (Spezialschelle, Verbindungsplatte, Radien/Fasen).
+10. [x] **Montageprüfung und Kollisionsprüfung** (18.11.2026): 0 offene Bohrungen, 0 Kollisionen im Zusammenbau. Zusätzlich nachgerechnet: neue Rahmenteile (Eckplatten, Rollen, Stellfüße) untereinander, X-Kette und Brennerleitung in den Endlagen, Fahrt gegen die Wanne. **Einziger Befund:** Der Brenner trifft den Wannenbördel, wenn er bei tiefem Z über X ±260 hinausfährt (mechanisch bis −282/+284 möglich); Absicherung über die Steuerung, siehe Punkt 19.
 11. [ ] **7 gelbe Druckteile** in `cad/druckbarkeit.txt` ansehen: ub_kanalknoten, x_motorbock, x_wagenkoerper, y_motorhalter (+ _l), winkel_fest, winkel_kasten. Brücken/Überhänge akzeptieren oder ändern.
 12. [ ] **Normteile in die Stückliste**: Schrauben, Muttern, Einpress- und Nietmuttern, Blindnieten, Stäbe (heute nicht enthalten), aus `VERBINDUNGEN.md` und dem Modell.
 13. [ ] **Zuschnitt- und Einkaufsliste Halbzeuge** (Stahl, Alu, Bleche, Siebdruckplatte) über alle Baugruppen zusammengefasst.
@@ -31,6 +31,6 @@ Stand 15.11.2026. Gesammelt aus den READMEs, `cad/MONTAGE.md`, `cad/VERBINDUNGEN
 ## D. Elektrik und Steuerung
 
 18. [ ] **Schaltschrank** 400 × 500 × 200: Stromlaufplan, Not-Aus/Sicherheitskreis, Schütz, Netzteile, Treiber, Mesa 7i96S, THCAD, Erdung/EMV (Plasma!), Belegung im Schrank, Klemmenplan.
-19. [ ] **LinuxCNC/QtPlasmaC**: Konfiguration Mesa 7i96S, Gantry-Squaring mit zwei Y-Referenzschaltern, Softlimit Schneidbereich X ±260 um die Wannenmitte (Bördel), Z-Untergrenze ca. 3 mm unter Blechunterseite, Mindestwasserstand (Markierung oder Schwimmerschalter, optional), Schwimmkopf-Antastung, THC.
+19. [ ] **LinuxCNC/QtPlasmaC**: Konfiguration Mesa 7i96S, Gantry-Squaring mit zwei Y-Referenzschaltern, Softlimit Schneidbereich X ±260 um die Wannenmitte (Bördel), **Z referenziert zuerst und fährt nach oben, bevor X und Y fahren** (Düse unter Bördel-Oberkante, 1 mm unter der Blechunterseite, trifft außerhalb X ±260 den Bördel), Z-Untergrenze ca. 3 mm unter Blechunterseite, Mindestwasserstand (Markierung oder Schwimmerschalter, optional), Schwimmkopf-Antastung, THC.
 20. [ ] **Druckluft**: Wasserabscheider, Filter, Druckregler nach SPARTUS-Handbuch, Kompressor prüfen.
 21. [ ] **Lüftung/Absaugung** der Werkstatt (das Wasserbett ersetzt sie nicht).
